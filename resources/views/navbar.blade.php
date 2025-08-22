@@ -20,7 +20,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center h-28 w-full">
                 <!-- Logo & Judul -->
-                <a href="index" class="flex items-center -ml-24 space-x-4">
+                <a href="index" class="flex items-center -ml-44 space-x-4">
                     <div class="w-24 h-24 rounded-full overflow-hidden flex-shrink-0">
                         <img src="{{ asset('images/logo.png') }}" alt="Logo INNDESA" class="object-cover w-full h-full" />
                     </div>
@@ -31,7 +31,7 @@
                 </a>
 
                 <!-- Menu Desktop -->
-                <div class="hidden md:flex flex-col font-semibold select-none ml-20">
+                <div class="hidden md:flex flex-col font-semibold select-none ml-32">
 
                     <!-- Baris atas -->
                     <div class="flex space-x-8 text-gray-800 mb-1 items-center">
