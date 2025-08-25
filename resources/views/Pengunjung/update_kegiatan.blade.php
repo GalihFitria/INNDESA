@@ -11,13 +11,10 @@
 
 <body class="bg-white">
 
-    <!-- Navbar -->
     @include('navbar')
 
-    <!-- Konten -->
     <div class="container mx-auto pt-8">
         <div class="flex flex-wrap -mx-4">
-            <!-- Main Content dan Artikel Lainnya -->
             <div class="w-full lg:w-full px-4">
                 <div class="w-full px-4 mb-6">
                     <h1 class="text-3xl font-bold text-black mb-2 leading-snug">
@@ -26,12 +23,10 @@
                     <p class="text-gray-500 mb-4">Rabu, 01 Mei 2024</p>
                 </div>
                 <div class="flex flex-wrap -mx-4">
-                    <!-- Foto Kegiatan Utama -->
                     <div class="w-full lg:w-2/3 px-4">
                         <img src="{{ asset('images/berita_dummy.jpg') }}"
                             alt="Pelatihan"
                             class="rounded-lg w-full max-w-4xl mb-2">
-                        <!-- Sumber Berita, Deskripsi, dan Tombol langsung di bawah foto -->
                         <div class="mb-2">
                             <h2 class="text-xl font-semibold text-gray-800 mb-1">Sumber Berita</h2>
                             <ul class="list-disc list-inside text-blue-600 space-y-1">
@@ -93,7 +88,6 @@
                             </a>
                         </div>
                     </div>
-                    <!-- Artikel Lainnya -->
                     <div class="w-full lg:w-1/3 px-4">
                         <div class="bg-white shadow-lg rounded-lg p-4">
                             <h2 class="text-xl font-semibold text-gray-800 mb-4">Kegiatan Lainnya</h2>

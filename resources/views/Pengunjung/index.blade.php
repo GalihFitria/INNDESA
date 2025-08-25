@@ -65,17 +65,14 @@
 </head>
 
 <body class="min-h-screen bg-white">
-    <!-- Navbar -->
+
     @include('navbar')
 
-    <!-- Hero Section -->
-    <!-- Tambahkan link font Poppins di head -->
+
 
     <section class="relative text-white text-center overflow-hidden min-h-[550px] flex items-center justify-center"
         style="background-image: url('{{ asset('images/background_beranda_INNDESA.jpeg') }}'); background-size: cover; background-position: center; font-family: 'Poppins', sans-serif;">
-
         <div class="relative z-10 max-w-6xl mx-auto px-5">
-            <!-- Judul INNDESA -->
             <div class="relative inline-block mb-5">
                 <span class="absolute inset-0 text-8xl md:text-9xl font-extrabold text-white"
                     style="z-index:-1; -webkit-text-stroke: 10px white;">INNDESA</span>
@@ -83,8 +80,6 @@
                     INNDESA
                 </span>
             </div>
-
-            <!-- Subjudul -->
             <h2 class="text-3xl md:text-5xl font-bold mb-4" style="color:#0097D4;">
                 Inovasi Nusantara Desa Integratif Pangan
             </h2>
@@ -101,12 +96,10 @@
         </div>
     </section>
 
-    <!-- Statistik -->
+
     <section class="relative -mt-20 z-10 pb-10">
         <div class="max-w-6xl mx-auto px-5">
             <div class="flex flex-col items-center gap-5">
-
-                <!-- Row 1 -->
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-3xl">
                     <div class="bg-white border border-gray-200 rounded-xl shadow-lg p-6 text-center">
                         <h3 class="text-gray-700 font-bold mb-3 text-lg">Total Kelompok</h3>
@@ -122,7 +115,6 @@
                     </div>
                 </div>
 
-                <!-- Row 2 -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-xl">
                     <div class="bg-white border border-gray-200 rounded-xl shadow-lg p-6 text-center">
                         <h3 class="text-gray-700 font-bold mb-3 text-lg">Total Kelompok Rentan</h3>
@@ -139,11 +131,9 @@
     </section>
 
 
-
-    <!-- Program Overview -->
     <section class="py-16 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <!-- Gambaran Umum Program -->
+
             <div class="text-center mb-16">
                 <h2 class="text-4xl font-bold text-blue-600 mb-8">Gambaran Umum Program</h2>
                 <h3 class="text-xl font-semibold text-gray-800 mb-6">Inovasi Nusantara Desa Integratif Pangan</h3>
@@ -160,7 +150,7 @@
                 </div>
             </div>
 
-            <!-- Tujuan Program -->
+
             <div class="text-center">
                 <h2 class="text-4xl font-bold text-blue-600 mb-8">Tujuan Program</h2>
 
@@ -177,7 +167,7 @@
         </div>
     </section>
 
-    <!-- Problem Categories -->
+
     <section class="py-16 ">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
@@ -185,7 +175,6 @@
             </div>
 
             <div class="max-w-4xl mx-auto">
-                <!-- Top row - Ekonomi and Lingkungan -->
                 <div class="grid md:grid-cols-2 gap-6 mb-6">
                     <div class="card p-8 bg-yellow-400 text-black">
                         <h3 class="text-xl font-bold mb-6 text-center">Ekonomi</h3>
@@ -229,7 +218,6 @@
         </div>
     </section>
 
-    <!-- Integration Chart -->
     <section class="py-16 bg-white">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
@@ -244,7 +232,6 @@
         </div>
     </section>
 
-    <!-- Activity Updates -->
     <section class="py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
@@ -407,7 +394,6 @@
                 </div>
             </div>
 
-            <!-- Pagination Dots -->
             <div class="flex justify-center space-x-2">
                 <div class="w-3 h-3 bg-blue-600 rounded-full"></div>
                 <div class="w-3 h-3 bg-gray-300 rounded-full"></div>
@@ -440,9 +426,7 @@
                     </div>
                 </div>
 
-                <!-- Konten -->
                 <div class="p-6">
-
                     <div class="flex gap-3">
                         <a href="https://youtu.be/A4Bc6Z7VyaU" target="_blank"
                             class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium flex items-center gap-2">
@@ -468,7 +452,6 @@
         </div>
     </section>
 
-    <!-- Modal Video -->
     <div id="videoModal" class="fixed inset-0 bg-black/70 hidden items-center justify-center z-50">
         <div class="relative w-full max-w-3xl aspect-video">
             <iframe id="youtubeFrame" class="w-full h-full" src="" frameborder="0"
@@ -516,20 +499,17 @@
         navigator.clipboard.writeText('https://youtu.be/A4Bc6Z7VyaU');
         alert('Link video berhasil disalin!');
     }
-    // Ambil jumlah views dari localStorage, default 0
     let views = localStorage.getItem("page_views") || 0;
     views = parseInt(views);
 
-    // Cek apakah user nge-refresh (F5 / Ctrl+R / tombol reload)
     const navEntries = performance.getEntriesByType("navigation");
     const isReload = navEntries.length > 0 && navEntries[0].type === "reload";
 
     if (isReload) {
-        views += 1; // tambah kalau reload
+        views += 1;
         localStorage.setItem("page_views", views);
     }
 
-    // Kalau ada elemen viewCount di halaman, tampilkan
     const viewCountEl = document.getElementById("viewCount");
     if (viewCountEl) {
         viewCountEl.textContent = views;

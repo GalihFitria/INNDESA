@@ -35,10 +35,10 @@
 </head>
 
 <body class="min-h-screen bg-white font-poppins">
-    <!-- Navbar -->
+    
     @include('navbar')
 
-    <!-- Hero Section -->
+    
     <section class="relative text-white overflow-hidden min-h-[550px] flex flex-col items-center pt-32 bg-[url('{{ asset('images/background_beranda_INNDESA.jpeg') }}')] bg-cover bg-center">
         <div class="text-center space-y-5 mt-16">
             <h2 class="text-7xl md:text-7xl font-bold text-[#0097D4]">
@@ -47,7 +47,7 @@
         </div>
     </section>
 
-    <!-- Profile Section -->
+    
     <h2 class="text-4xl font-bold text-blue-600 text-center mb-8 mt-10">Profile Kelompok</h2>
     <div class="w-full border-t border-gray-200 pt-4 box-border">
         <div class="bg-white p-6 max-w-4xl mx-auto">
@@ -169,7 +169,7 @@
         </div>
     </div>
 
-    <!-- Informasi Section -->
+    
     <h2 class="text-4xl font-bold text-blue-600 text-center mb-8">Informasi</h2>
     <div class="w-full border-t border-gray-200 pt-4 box-border">
         <div class="bg-white p-6 max-w-4xl mx-auto">
@@ -189,13 +189,10 @@
                         </a>
                     </div>
                     <div class="flex items-center gap-x-4">
-                        <!-- Link ke file katalog -->
                         <a href="{{ asset('katalog/pdf_dumy.pdf') }}"
                             class="flex items-center gap-1 text-gray-800 hover:text-sky-600 transition-colors font-medium">
                             Katalog
                         </a>
-
-                        <!-- Input pencarian produk -->
                         <input type="text" placeholder="Cari Produk..."
                             class="border rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-sky-500" />
                     </div>
@@ -395,7 +392,6 @@
         </div>
     </div>
 
-    <!-- Preview Modal -->
     <div id="previewModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
         <div class="bg-white rounded-lg p-6 max-w-3xl w-full">
             <div class="flex justify-between items-center mb-4">
@@ -406,13 +402,13 @@
         </div>
     </div>
 
-    <!-- Footer -->
+    
     <div class="w-full">
         @include('footer')
     </div>
 
     <script>
-        // Tab navigation
+        
         function openProfileTab(tabId) {
             const tabs = document.querySelectorAll('.profile-tab-content');
             const buttons = document.querySelectorAll('.profile-tab-button');
@@ -448,7 +444,7 @@
         }
 
 
-        // Carousel navigation
+
         const carousels = {
             'sk-desa': {
                 current: 0,
@@ -540,7 +536,7 @@
             updateCarousel(section);
         }
 
-        // Initialize carousels and dots
+        
         createDots('sk-desa');
         createDots('produk');
         createDots('kegiatan');
@@ -550,7 +546,7 @@
         updateCarousel('kegiatan');
         updateCarousel('inovasi');
 
-        // Keyboard navigation for accessibility
+        
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') closePreview();
             if (e.key === 'ArrowRight') {
@@ -567,7 +563,7 @@
             }
         });
 
-        // Add keyboard focus for buttons
+        
         document.querySelectorAll('.btn-outline').forEach(btn => {
             btn.setAttribute('tabindex', '0');
             btn.addEventListener('keypress', (e) => {

@@ -65,22 +65,16 @@
 </head>
 
 <body class="min-h-screen bg-white">
-    <!-- Navbar -->
     @include('navbar')
-
-    <!-- Hero Section -->
-    <!-- Tambahkan link font Poppins di head -->
 
     <section class="relative text-white overflow-hidden min-h-[550px] flex flex-col items-center pt-32"
         style="background-image: url('{{ asset('images/background_beranda_INNDESA.jpeg') }}'); background-size: cover; background-position: center; font-family: 'Poppins', sans-serif;">
 
-        <!-- Logo di atas sebelah kiri -->
         <div class="absolute top-10 left-14 flex items-center space-x-2">
             <img src="{{ asset('images/logo_BUMN.png') }}" alt="Logo" class="h-8 w-auto">
             <img src="{{ asset('images/logo_pln.png') }}" alt="Logo" class="h-8 w-auto">
         </div>
 
-        <!-- Judul dinaikkan ke atas -->
         <div class="text-center space-y-4">
             <h2 class="text-5xl md:text-5xl font-bold" style="color:#0097D4; line-height:1.2;">
                 PT. PLN Indonesia Power
@@ -92,7 +86,6 @@
     </section>
 
     <section class="py-16 bg-white font-poppins">
-        <!-- Profil Perusahaan -->
         <div class="max-w-3xl mx-auto text-center mb-12">
             <h2 class="text-3xl md:text-4xl font-bold text-blue-600 mb-6">Profil Perusahaan</h2>
             <div class="bg-white border border-gray-300 rounded-lg p-8 shadow-sm">
@@ -102,9 +95,7 @@
             </div>
         </div>
 
-        <!-- Visi & Misi -->
         <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
-            <!-- Visi -->
             <div class="flex flex-col h-full text-center">
                 <h3 class="text-2xl md:text-3xl font-bold text-blue-600 mb-4">Visi</h3>
                 <div class="flex-1 bg-white border border-gray-300 rounded-lg p-6 shadow-sm flex items-center justify-center">
@@ -114,7 +105,6 @@
                 </div>
             </div>
 
-            <!-- Misi -->
             <div class="flex flex-col h-full text-center">
                 <h3 class="text-2xl md:text-3xl font-bold text-blue-600 mb-4">Misi</h3>
                 <div class="flex-1 bg-white border border-gray-300 rounded-lg p-6 shadow-sm flex items-center justify-center">

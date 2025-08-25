@@ -42,33 +42,23 @@
 </head>
 
 <body class="bg-white">
-
     @include('navbar')
-
-    <!-- Detail Produk -->
     <div class="content w-full mt-6 px-6 lg:px-12">
         <div class="bg-white card p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Gambar Produk -->
             <div class="flex justify-center">
                 <div class="w-100 h-100 overflow-hidden rounded-lg">
                     <img src="{{ asset('images/Abon Lele.jpeg') }}" alt="Abon Lele" class="product-image">
                 </div>
             </div>
-
-            <!-- Informasi Produk -->
             <div class="space-y-4">
-                <!-- Nama Produk -->
                 <h1 class="text-4xl font-bold text-gray-900">Abon Lele</h1>
-
-                <!-- Harga & Stok sejajar -->
                 <div class="flex items-center gap-x-6 border-b pb-2">
                     <p class="text-xl font-semibold text-gray-900">Rp. 25.000</p>
                     <p class="text-xl font-semibold text-gray-900">Stok: 5</p>
                 </div>
 
-                <!-- Tab Deskripsi dan Sertifikat -->
+                
                 <div class="w-full mt-6">
-                    <!-- Tabs -->
                     <div class="flex bg-gray-200 rounded-lg overflow-hidden">
                         <button id="tab-deskripsi"
                             onclick="openTab('deskripsi')"
@@ -82,7 +72,7 @@
                         </button>
                     </div>
 
-                    <!-- Isi Konten -->
+
                     <div id="content-deskripsi" class="mt-4">
                         <p class="text-gray-700 leading-relaxed mb-4">
                             Produk ini merupakan hasil inovasi masyarakat desa yang mengedepankan kualitas dan keberlanjutan.
@@ -103,35 +93,27 @@
                     </div>
                 </div>
 
-                <!-- Konten Tab -->
-                <div class="flex flex-col border-t border-gray-300 mt-4 pt-4">
-                    <!-- Teks di atas -->
-                    <span class="text-gray-700 mb-2">Untuk pemesanan dapat menghubungi kami:</span>
 
-                    <!-- Foto + Username + Button -->
+                <div class="flex flex-col border-t border-gray-300 mt-4 pt-4">
+                    <span class="text-gray-700 mb-2">Untuk pemesanan dapat menghubungi kami:</span>
                     <div class="flex items-center space-x-4">
-                        <!-- Foto + Username -->
                         <div class="flex items-center space-x-2">
                             <img src="{{ asset('images/Abon Lele.jpeg') }}" alt="Nama Penanggung Jawab" class="w-10 h-10 rounded-full">
                             <span class="text-gray-700 font-bold">USERNAME</span>
                         </div>
 
-                        <!-- Button + Dropdown -->
                         <div class="relative">
                             <button onclick="toggleContactDropdown()"
                                 class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
                                 Hubungi Kami
                             </button>
 
-                            <!-- Dropdown -->
                             <div id="contactDropdownMenu" class="hidden absolute left-0 mt-2 w-56 bg-white border rounded-lg shadow-lg">
-                                <!-- WhatsApp -->
                                 <a href="https://wa.me/6281327661330"
                                     class="flex flex-col px-4 py-2 text-gray-700 hover:bg-gray-100">
                                     <span class="font-semibold">WhatsApp</span>
                                     <span class="text-sm text-gray-500">+62 813-2766-1330</span>
                                 </a>
-                                <!-- Instagram -->
                                 <a href="https://www.instagram.com/fijarrfqh_/"
                                     class="flex flex-col px-4 py-2 text-gray-700 hover:bg-gray-100">
                                     <span class="font-semibold">Instagram</span>
@@ -144,7 +126,6 @@
 
             </div>
 
-            <!-- Produk Terkait -->
             <div class="mt-8">
                 <h2 class="text-xl font-bold text-[#0097D4] mb-4">Produk dari toko yang sama</h2>
             </div>
@@ -156,14 +137,12 @@
     </footer>
 
     <script>
-        // Fungsi untuk tab Deskripsi & Sertifikat
+            <!-- Produk Terkait -->
         function openTab(tab) {
-            // Konten
             document.getElementById('content-deskripsi').classList.add('hidden');
             document.getElementById('content-sertifikat').classList.add('hidden');
             document.getElementById('content-' + tab).classList.remove('hidden');
 
-            // Tab aktif
             document.getElementById('tab-deskripsi').classList.remove('bg-[#0097D4]', 'text-white');
             document.getElementById('tab-deskripsi').classList.add('bg-gray-200', 'text-gray-700');
             document.getElementById('tab-sertifikat').classList.remove('bg-[#0097D4]', 'text-white');
@@ -173,12 +152,10 @@
             document.getElementById('tab-' + tab).classList.add('bg-[#0097D4]', 'text-white');
         }
 
-        // Fungsi untuk dropdown Hubungi Kami
         function toggleContactDropdown() {
             document.getElementById("contactDropdownMenu").classList.toggle("hidden");
         }
 
-        // Event listener untuk menutup dropdown jika klik di luar
         document.addEventListener("click", function(event) {
             const dropdown = document.getElementById("contactDropdownMenu");
             const button = event.target.closest("button[onclick='toggleContactDropdown()']");

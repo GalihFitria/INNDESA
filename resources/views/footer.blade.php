@@ -14,7 +14,6 @@
                 <h2 class="text-2xl font-bold mb-8">Narahubung INNDESA</h2>
 
                 <div class="grid md:grid-cols-2 gap-8 max-w-2xl mx-auto">
-                    <!-- Phone Contact -->
                     <div class="flex items-center justify-center space-x-3">
                         <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
                             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -27,7 +26,6 @@
                         </div>
                     </div>
 
-                    <!-- Email Contact -->
                     <div class="flex items-center justify-center space-x-3">
                         <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
                             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">

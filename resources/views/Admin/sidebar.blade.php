@@ -10,7 +10,6 @@
 </head>
 
 <body class="bg-gray-100">
-    <!-- Top Navbar -->
     <nav class="bg-white shadow-sm border-b px-6 py-4">
         <div class="flex items-center justify-between">
             <div class="flex items-center space-x-3">
@@ -32,7 +31,6 @@
     </nav>
 
     <div class="flex">
-        <!-- Sidebar -->
         <aside class="w-64 bg-white shadow-sm min-h-screen">
             <div class="p-4">
                 <ul class="space-y-2">
@@ -95,7 +93,6 @@
             </div>
         </aside>
 
-        <!-- Main Content -->
         <main class="flex-1 p-6">
             @yield('content')
         </main>
