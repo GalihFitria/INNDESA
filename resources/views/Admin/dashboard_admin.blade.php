@@ -97,28 +97,46 @@
                     <div class="bg-white p-6 rounded-lg shadow-sm border">
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-sm text-gray-600">Total Produk</p>
+                                <p class="text-sm text-gray-600">Total Kelompok</p>
                                 <p class="text-2xl font-bold text-gray-800">24</p>
                             </div>
-                            <i class="fas fa-box text-3xl text-yellow-600"></i>
+                            <i class="fas fa-users text-3xl text-yellow-600"></i>
                         </div>
                     </div>
                     <div class="bg-white p-6 rounded-lg shadow-sm border">
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-sm text-gray-600">Perusahaan Pembina</p>
+                                <p class="text-sm text-gray-600">Total Anggota Kelompok</p>
                                 <p class="text-2xl font-bold text-gray-800">8</p>
                             </div>
-                            <i class="fas fa-building text-3xl text-purple-600"></i>
+                            <i class="fas fa-user-friends text-3xl text-purple-600"></i>
                         </div>
                     </div>
                     <div class="bg-white p-6 rounded-lg shadow-sm border">
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-sm text-gray-600">Kelompok Integrasi</p>
+                                <p class="text-sm text-gray-600">Total Produk</p>
                                 <p class="text-2xl font-bold text-gray-800">12</p>
                             </div>
-                            <i class="fas fa-users text-3xl text-orange-600"></i>
+                            <i class="fas fa-box-open text-3xl text-orange-600"></i>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-600">Total Kelompok Rentan</p>
+                                <p class="text-2xl font-bold text-gray-800">12</p>
+                            </div>
+                            <i class="fas fa-user-shield text-3xl text-orange-600"></i>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-600">Total Views</p>
+                                <p class="text-2xl font-bold text-gray-800">12</p>
+                            </div>
+                            <i class="fas fa-eye text-3xl text-orange-600"></i>
                         </div>
                     </div>
                 </div>

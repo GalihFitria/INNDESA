@@ -202,85 +202,88 @@
 
                 </div>
                 <div class="relative">
-                    <div id="produk-carousel" class="carousel grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-                        <div class="border rounded-lg shadow-md p-3 max-w-[200px] mx-auto cursor-pointer">
-                            <img src="{{ asset('images/Abon Lele.jpeg') }}" alt="Abon Lele" class="w-full h-40 object-cover rounded-lg">
-                            <h3 class="mt-3 font-semibold text-lg">Abon Lele</h3>
-                            <div class="flex items-center gap-x-6 pb-2">
-                                <p class="text-green-600 font-bold text-lg">Rp. 15.000</p>
-                                <p class="text-black-500">stok: 5</p>
+                    <a href="{{ route('detail_produk.index', ['id' => 1]) }}" class="block no-underline">
+                      <div id="produk-carousel" class="carousel grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                            <div class="border rounded-lg shadow-md p-3 max-w-[200px] mx-auto cursor-pointer">
+                                <img src="{{ asset('images/Abon Lele.jpeg') }}" alt="Abon Lele" class="w-full h-40 object-cover rounded-lg">
+                                <h3 class="mt-3 font-semibold text-lg">Abon Lele</h3>
+                                <div class="flex items-center gap-x-6 pb-2">
+                                    <p class="text-green-600 font-bold text-lg">Rp. 15.000</p>
+                                    <p class="text-black-500">stok: 5</p>
+                                </div>
+                            </div>
+    </a>
+    
+                            <div class="border rounded-lg shadow-md p-3 max-w-[200px] mx-auto cursor-pointer">
+                                <img src="{{ asset('images/Jahe Instan.jpeg') }}" alt="Jahe Instant" class="w-full h-40 object-cover rounded-lg">
+                                <h3 class="mt-3 font-semibold text-lg">Jahe Instant</h3>
+                                <div class="flex items-center gap-x-6 pb-2">
+                                    <p class="text-green-600 font-bold text-lg">Rp. 15.000</p>
+                                    <p class="text-black-500">stok: 20</p>
+                                </div>
+                            </div>
+                            <div class="border rounded-lg shadow-md p-3 max-w-[200px] mx-auto cursor-pointer">
+                                <img src="{{ asset('images/Kripik Pisang.jpeg') }}" alt="Kripik Pisang" class="w-full h-40 object-cover rounded-lg">
+                                <h3 class="mt-3 font-semibold text-lg">Kripik Pisang</h3>
+                                <div class="flex items-center gap-x-6 pb-2">
+                                    <p class="text-green-600 font-bold text-lg">Rp. 15.000</p>
+                                    <p class="text-black-500">stok: 10</p>
+                                </div>
+                            </div>
+                            <div class="border rounded-lg shadow-md p-3 max-w-[200px] mx-auto cursor-pointer">
+                                <img src="{{ asset('images/Kripik Tempe.jpeg') }}" alt="Kripik Tempe" class="w-full h-40 object-cover rounded-lg">
+                                <h3 class="mt-3 font-semibold text-lg">Kripik Tempe</h3>
+                                <div class="flex items-center gap-x-6 pb-2">
+                                    <p class="text-green-600 font-bold text-lg">Rp. 12.000</p>
+                                    <p class="text-black-500">stok: 8</p>
+                                </div>
+                            </div>
+                            <div class="border rounded-lg shadow-md p-3 max-w-[200px] mx-auto cursor-pointer">
+                                <img src="{{ asset('images/Sambal Bawang.jpeg') }}" alt="Sambal Bawang" class="w-full h-40 object-cover rounded-lg">
+                                <h3 class="mt-3 font-semibold text-lg">Sambal Bawang</h3>
+                                <div class="flex items-center gap-x-6 pb-2">
+                                    <p class="text-green-600 font-bold text-lg">Rp. 20.000</p>
+                                    <p class="text-black-500">stok: 6</p>
+                                </div>
+                            </div>
+                            <div class="border rounded-lg shadow-md p-3 max-w-[200px] mx-auto cursor-pointer">
+                                <img src="{{ asset('images/Kopi Bubuk.jpeg') }}" alt="Kopi Bubuk" class="w-full h-40 object-cover rounded-lg">
+                                <h3 class="mt-3 font-semibold text-lg">Kopi Bubuk</h3>
+                                <div class="flex items-center gap-x-6 pb-2">
+                                    <p class="text-green-600 font-bold text-lg">Rp. 15.000</p>
+                                    <p class="text-black-500">stok: 5</p>
+                                </div>
+                            </div>
+                            <div class="border rounded-lg shadow-md p-3 max-w-[200px] mx-auto cursor-pointer">
+                                <img src="{{ asset('images/Teh Herbal.jpeg') }}" alt="Teh Herbal" class="w-full h-40 object-cover rounded-lg">
+                                <h3 class="mt-3 font-semibold text-lg">Teh Herbal</h3>
+                                <div class="flex items-center gap-x-6 pb-2">
+                                    <p class="text-green-600 font-bold text-lg">Rp. 18.000</p>
+                                    <p class="text-black-500">stok: 15</p>
+                                </div>
+                            </div>
+                            <div class="border rounded-lg shadow-md p-3 max-w-[200px] mx-auto cursor-pointer">
+                                <img src="{{ asset('images/Sirup Jahe.jpeg') }}" alt="Sirup Jahe" class="w-full h-40 object-cover rounded-lg">
+                                <h3 class="mt-3 font-semibold text-lg">Sirup Jahe</h3>
+                                <div class="flex items-center gap-x-6 pb-2">
+                                    <p class="text-green-600 font-bold text-lg">Rp. 22.000</p>
+                                    <p class="text-black-500">stok: 7</p>
+                                </div>
+                            </div>
+                            <div class="border rounded-lg shadow-md p-3 max-w-[200px] mx-auto cursor-pointer hidden">
+                                <img src="{{ asset('images/Kue Kering.jpeg') }}" alt="Kue Kering" class="w-full h-40 object-cover rounded-lg">
+                                <h3 class="mt-3 font-semibold text-lg">Kue Kering</h3>
+                                <div class="flex items-center gap-x-6 pb-2">
+                                    <p class="text-green-600 font-bold text-lg">Rp. 30.000</p>
+                                    <p class="text-black-500">stok: 9</p>
+                                </div>
                             </div>
                         </div>
-                        <div class="border rounded-lg shadow-md p-3 max-w-[200px] mx-auto cursor-pointer">
-                            <img src="{{ asset('images/Jahe Instan.jpeg') }}" alt="Jahe Instant" class="w-full h-40 object-cover rounded-lg">
-                            <h3 class="mt-3 font-semibold text-lg">Jahe Instant</h3>
-                            <div class="flex items-center gap-x-6 pb-2">
-                                <p class="text-green-600 font-bold text-lg">Rp. 15.000</p>
-                                <p class="text-black-500">stok: 20</p>
-                            </div>
+                        <div class="flex justify-center space-x-2 mt-4 hidden" id="produk-dots"></div>
+                        <div class="flex justify-center mt-4 hidden" id="produk-nav">
+                            <button class="btn btn-outline mr-2" onclick="prevSlide('produk')">←</button>
+                            <button class="btn btn-outline" onclick="nextSlide('produk')">→</button>
                         </div>
-                        <div class="border rounded-lg shadow-md p-3 max-w-[200px] mx-auto cursor-pointer">
-                            <img src="{{ asset('images/Kripik Pisang.jpeg') }}" alt="Kripik Pisang" class="w-full h-40 object-cover rounded-lg">
-                            <h3 class="mt-3 font-semibold text-lg">Kripik Pisang</h3>
-                            <div class="flex items-center gap-x-6 pb-2">
-                                <p class="text-green-600 font-bold text-lg">Rp. 15.000</p>
-                                <p class="text-black-500">stok: 10</p>
-                            </div>
-                        </div>
-                        <div class="border rounded-lg shadow-md p-3 max-w-[200px] mx-auto cursor-pointer">
-                            <img src="{{ asset('images/Kripik Tempe.jpeg') }}" alt="Kripik Tempe" class="w-full h-40 object-cover rounded-lg">
-                            <h3 class="mt-3 font-semibold text-lg">Kripik Tempe</h3>
-                            <div class="flex items-center gap-x-6 pb-2">
-                                <p class="text-green-600 font-bold text-lg">Rp. 12.000</p>
-                                <p class="text-black-500">stok: 8</p>
-                            </div>
-                        </div>
-                        <div class="border rounded-lg shadow-md p-3 max-w-[200px] mx-auto cursor-pointer">
-                            <img src="{{ asset('images/Sambal Bawang.jpeg') }}" alt="Sambal Bawang" class="w-full h-40 object-cover rounded-lg">
-                            <h3 class="mt-3 font-semibold text-lg">Sambal Bawang</h3>
-                            <div class="flex items-center gap-x-6 pb-2">
-                                <p class="text-green-600 font-bold text-lg">Rp. 20.000</p>
-                                <p class="text-black-500">stok: 6</p>
-                            </div>
-                        </div>
-                        <div class="border rounded-lg shadow-md p-3 max-w-[200px] mx-auto cursor-pointer">
-                            <img src="{{ asset('images/Kopi Bubuk.jpeg') }}" alt="Kopi Bubuk" class="w-full h-40 object-cover rounded-lg">
-                            <h3 class="mt-3 font-semibold text-lg">Kopi Bubuk</h3>
-                            <div class="flex items-center gap-x-6 pb-2">
-                                <p class="text-green-600 font-bold text-lg">Rp. 15.000</p>
-                                <p class="text-black-500">stok: 5</p>
-                            </div>
-                        </div>
-                        <div class="border rounded-lg shadow-md p-3 max-w-[200px] mx-auto cursor-pointer">
-                            <img src="{{ asset('images/Teh Herbal.jpeg') }}" alt="Teh Herbal" class="w-full h-40 object-cover rounded-lg">
-                            <h3 class="mt-3 font-semibold text-lg">Teh Herbal</h3>
-                            <div class="flex items-center gap-x-6 pb-2">
-                                <p class="text-green-600 font-bold text-lg">Rp. 18.000</p>
-                                <p class="text-black-500">stok: 15</p>
-                            </div>
-                        </div>
-                        <div class="border rounded-lg shadow-md p-3 max-w-[200px] mx-auto cursor-pointer">
-                            <img src="{{ asset('images/Sirup Jahe.jpeg') }}" alt="Sirup Jahe" class="w-full h-40 object-cover rounded-lg">
-                            <h3 class="mt-3 font-semibold text-lg">Sirup Jahe</h3>
-                            <div class="flex items-center gap-x-6 pb-2">
-                                <p class="text-green-600 font-bold text-lg">Rp. 22.000</p>
-                                <p class="text-black-500">stok: 7</p>
-                            </div>
-                        </div>
-                        <div class="border rounded-lg shadow-md p-3 max-w-[200px] mx-auto cursor-pointer hidden">
-                            <img src="{{ asset('images/Kue Kering.jpeg') }}" alt="Kue Kering" class="w-full h-40 object-cover rounded-lg">
-                            <h3 class="mt-3 font-semibold text-lg">Kue Kering</h3>
-                            <div class="flex items-center gap-x-6 pb-2">
-                                <p class="text-green-600 font-bold text-lg">Rp. 30.000</p>
-                                <p class="text-black-500">stok: 9</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex justify-center space-x-2 mt-4 hidden" id="produk-dots"></div>
-                    <div class="flex justify-center mt-4 hidden" id="produk-nav">
-                        <button class="btn btn-outline mr-2" onclick="prevSlide('produk')">←</button>
-                        <button class="btn btn-outline" onclick="nextSlide('produk')">→</button>
-                    </div>
                 </div>
             </div>
             <div id="kegiatan" class="info-tab-content hidden py-4">
