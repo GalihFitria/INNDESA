@@ -65,10 +65,10 @@
 </head>
 
 <body class="min-h-screen bg-white">
-
+    
     @include('navbar')
 
-
+    
 
     <section class="relative text-white text-center overflow-hidden min-h-[550px] flex items-center justify-center"
         style="background-image: url('{{ asset('images/background_beranda_INNDESA.jpeg') }}'); background-size: cover; background-position: center; font-family: 'Poppins', sans-serif;">
@@ -96,7 +96,7 @@
         </div>
     </section>
 
-
+    
     <section class="relative -mt-20 z-10 pb-10">
         <div class="max-w-6xl mx-auto px-5">
             <div class="flex flex-col items-center gap-5">
@@ -114,7 +114,7 @@
                         <p class="text-emerald-500 font-extrabold text-4xl">15</p>
                     </div>
                 </div>
-
+                
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-xl">
                     <div class="bg-white border border-gray-200 rounded-xl shadow-lg p-6 text-center">
                         <h3 class="text-gray-700 font-bold mb-3 text-lg">Total Kelompok Rentan</h3>
@@ -130,10 +130,10 @@
         </div>
     </section>
 
-
+    
     <section class="py-16 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
+            
             <div class="text-center mb-16">
                 <h2 class="text-4xl font-bold text-blue-600 mb-8">Gambaran Umum Program</h2>
                 <h3 class="text-xl font-semibold text-gray-800 mb-6">Inovasi Nusantara Desa Integratif Pangan</h3>
@@ -167,7 +167,7 @@
         </div>
     </section>
 
-
+    
     <section class="py-16 ">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
@@ -506,7 +506,7 @@
     const isReload = navEntries.length > 0 && navEntries[0].type === "reload";
 
     if (isReload) {
-        views += 1;
+        views += 1; 
         localStorage.setItem("page_views", views);
     }
 

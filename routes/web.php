@@ -1,11 +1,14 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\InovasiController;
+use App\Http\Controllers\Admin\KatalogController;
 use App\Http\Controllers\Admin\KegiatanController;
 use App\Http\Controllers\Admin\KelompokController as AdminKelompokController;
 use App\Http\Controllers\Admin\KelompokIntegritasController;
 use App\Http\Controllers\Admin\ProdukController as AdminProdukController;
 use App\Http\Controllers\Admin\SidebarController;
+use App\Http\Controllers\Admin\StrukturController;
 use App\Http\Controllers\DetailProdukController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\KelompokController;
@@ -40,6 +43,7 @@ Route::resource('update_kegiatan', Update_KegiatanController::class);
 Route::resource('detail_produk', DetailProdukController::class);
 Route::resource('kelompok', KelompokController::class);
 
+
 //ADMIN
 Route::prefix('Admin')->name('Admin.')->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
@@ -48,4 +52,8 @@ Route::prefix('Admin')->name('Admin.')->group(function () {
     Route::resource('kelompok_integritas', KelompokIntegritasController::class);
     Route::resource('kelompok', AdminKelompokController::class);
     Route::resource('kegiatan', KegiatanController::class);
+    Route::resource('struktur', StrukturController::class);
+    Route::resource('inovasi', InovasiController::class);
+    Route::resource('katalog', KatalogController::class);
+
 });

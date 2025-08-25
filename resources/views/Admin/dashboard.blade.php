@@ -45,10 +45,21 @@
         <div class="flex items-center justify-between">
             <div>
                 <p class="text-sm text-gray-600">Total Views</p>
-                <p class="text-2xl font-bold text-gray-800">12</p>
+                <p id="viewCount" class="text-2xl font-bold text-gray-800">0</p>
             </div>
             <i class="fas fa-eye text-3xl text-orange-600"></i>
         </div>
     </div>
 </div>
+
+<script>
+    // View-display logic (only read from localStorage, do not increment)
+    let views = localStorage.getItem("page_views") || 0;
+    views = parseInt(views);
+
+    const viewCountEl = document.getElementById("viewCount");
+    if (viewCountEl) {
+        viewCountEl.textContent = views;
+    }
+</script>
 @endsection
