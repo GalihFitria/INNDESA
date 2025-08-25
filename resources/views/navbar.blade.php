@@ -97,7 +97,7 @@
                                         </svg>
                                     </button>
                                     <div id="pertanianDropdown" class="mt-1 ml-6 w-44 rounded-md shadow-lg bg-sky-100 ring-1 ring-sky-200 ring-opacity-50 hidden">
-                                        <a href="#" class="submenu-item block px-4 py-2 text-sky-800 hover:bg-sky-200 transition-colors duration-150" data-parent="pertanian" data-submenu="pertanian-petani">Kelompok Petani</a>
+                                        <a href="#" class="submenu-item block px-4 py-2 text-sky-800 hover:bg-sky-200 transition-colors duration-150" data-parent="pertanian" data-submenu="pertanian-petani">Kelompok Tani Milenial</a>
                                         <a href="#" class="submenu-item block px-4 py-2 text-sky-800 hover:bg-sky-200 transition-colors duration-150" data-parent="pertanian" data-submenu="pertanian-subB">Submenu B</a>
                                     </div>
                                 </div>

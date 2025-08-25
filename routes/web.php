@@ -1,6 +1,11 @@
 <?php
 
-use App\Http\Controllers\DashboardAdminController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\KegiatanController;
+use App\Http\Controllers\Admin\KelompokController as AdminKelompokController;
+use App\Http\Controllers\Admin\KelompokIntegritasController;
+use App\Http\Controllers\Admin\ProdukController as AdminProdukController;
+use App\Http\Controllers\Admin\SidebarController;
 use App\Http\Controllers\DetailProdukController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\KelompokController;
@@ -27,12 +32,20 @@ Route::get('/', function () {
 })->name('beranda');
 
 
-
+//PENGUNJUNG
 Route::resource('publikasi', PublikasiController::class);
 Route::resource('pt', PtIpController::class);
 Route::resource('produk', ProdukController::class);
 Route::resource('update_kegiatan', Update_KegiatanController::class);
 Route::resource('detail_produk', DetailProdukController::class);
 Route::resource('kelompok', KelompokController::class);
-Route::resource('dashboard_admin',DashboardAdminController::class);
 
+//ADMIN
+Route::prefix('Admin')->name('Admin.')->group(function () {
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+    Route::get('sidebar', [SidebarController::class]);
+    Route::resource('produk', AdminProdukController::class);
+    Route::resource('kelompok_integritas', KelompokIntegritasController::class);
+    Route::resource('kelompok', AdminKelompokController::class);
+    Route::resource('kegiatan', KegiatanController::class);
+});
