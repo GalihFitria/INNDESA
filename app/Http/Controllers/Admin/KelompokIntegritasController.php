@@ -3,66 +3,71 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\KategoriKelompok;
 use Illuminate\Http\Request;
 
 class KelompokIntegritasController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
-        //
-        return view('Admin.kelompok_integritas.index');
+        
+        $kategori = KategoriKelompok::all();
+        return view('Admin.kelompok_integritas.index', compact('kategori'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+
     public function create()
     {
-        //
+        
         return view('Admin.kelompok_integritas.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+
     public function store(Request $request)
     {
-        //
-        return view('Admin.kelompok_integritas.store');
+       
+        $request->validate([
+            // 'id_kategori' => 'required|string|unique:kategori_kelompok,id_kategori',
+            'nama' => 'required|string',
+        ]);
+
+        KategoriKelompok::create([
+            // 'id_kategori' => $request->id_kategori,
+            'nama' => $request->nama,
+        ]);
+
+        return redirect()->route('Admin.kelompok_integritas.index')->with('success', 'Data berhasil ditambahkan.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
-        //
+        $kategori = KategoriKelompok::findOrFail($id);
+        return view('Admin.kelompok_integritas.edit', compact('kategori'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+  
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'nama' => 'required|string',
+        ]);
+
+        $kategori = KategoriKelompok::findOrFail($id);
+        $kategori->update([
+            'nama' => $request->nama,
+        ]);
+
+        return redirect()->route('Admin.kelompok_integritas.index')->with('success', 'Data berhasil diperbarui.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
-        //
-    }
+        $kategori = KategoriKelompok::findOrFail($id);
+        $kategori->delete();
+
+        return redirect()->route('Admin.kelompok_integritas.index')->with('success', 'Data berhasil dihapus.');
+    }   
+    
 }
