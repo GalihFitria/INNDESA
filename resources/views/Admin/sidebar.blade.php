@@ -13,12 +13,12 @@
     <nav class="bg-white shadow-sm border-b px-6 py-4">
         <div class="flex items-center justify-between">
             <div class="flex items-center space-x-3">
-                <div class="w-14 h-14 rounded-full overflow-hidden flex-shrink-0">
+                <div class="w-24 h-24 rounded-full overflow-hidden flex-shrink-0">
                     <img src="{{ asset('images/logo.png') }}" alt="Logo INNDESA" class="object-cover w-full h-full" />
                 </div>
                 <div>
-                    <h1 class="font-extrabold text-xl leading-tight text-gray-900 select-none">INNDESA</h1>
-                    <p class="text-xs leading-snug text-gray-600 select-none">Inovasi Nusantara Desa Integratif Pangan</p>
+                    <h1 class="font-extrabold text-3xl leading-tight text-gray-900 select-none">INNDESA</h1>
+                    <p class="text-base leading-snug text-gray-600 select-none">Inovasi Nusantara Desa Integratif Pangan</p>
                 </div>
             </div>
             <div class="flex items-center space-x-2">

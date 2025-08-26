@@ -17,9 +17,9 @@
 
     <nav class="bg-white shadow-md sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center h-28 w-full">
+            <div class="flex items-center h-32 w-full">
                 <a href="index" class="flex items-center -ml-44 space-x-4">
-                    <div class="w-24 h-24 rounded-full overflow-hidden flex-shrink-0">
+                    <div class="w-28 h-28 rounded-full overflow-hidden flex-shrink-0">
                         <img src="{{ asset('images/logo.png') }}" alt="Logo INNDESA" class="object-cover w-full h-full" />
                     </div>
                     <div>

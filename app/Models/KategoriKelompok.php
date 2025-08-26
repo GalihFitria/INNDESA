@@ -16,4 +16,9 @@ class KategoriKelompok extends Model
     public $timestamps = false;   
 
     protected $fillable = ['nama'];
+
+    public function getKodeKategoriAttribute()
+    {
+        return 'KT' . str_pad($this->id_kategori, 1, STR_PAD_LEFT);
+    }
 }

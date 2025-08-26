@@ -27,11 +27,11 @@
                 @foreach ($kategori as $index => $item)
                 <tr>
                     <td class="border border-gray-300 p-3 text-center text-sm text-gray-900">{{ $index + 1 }}</td>
-                    <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $item->id_kategori }}</td>
+                    <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $item->kode_kategori }}</td>
                     <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $item->nama }}</td>
                     <td class="border border-gray-300 p-3 text-center text-sm">
                         <a href="{{ route('Admin.kelompok_integritas.edit', $item->id_kategori) }}" class="text-blue-600 hover:underline mr-2">Edit</a>
-                        <form action="{{ route('Admin.kelompok_integritas.destroy', $item->id_kategori) }}" method="POST" class="inline-block" onsubmit="return confirm('Yakin ingin menghapus data?');">
+                        <form action="{{ route('Admin.kelompok_integritas.destroy', $item->id_kategori) }}" method="POST" class="inline-block delete-form">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="text-red-600 hover:underline">Hapus</button>
@@ -43,4 +43,38 @@
         </table>
     </div>
 </div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    @if(session('success'))
+    const message = @json(session('success'));
+    Swal.fire({
+        icon: 'success',
+        title: 'Sukses!',
+        text: message,
+        timer: 2000,
+        showConfirmButton: false
+    });
+    @endif
+
+    document.querySelectorAll('.delete-form').forEach(function(form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            Swal.fire({
+                title: 'Yakin ingin menghapus data?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Hapus',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        });
+    });
+</script>
 @endsection
