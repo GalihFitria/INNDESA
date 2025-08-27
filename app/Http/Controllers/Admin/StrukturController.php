@@ -3,64 +3,75 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\StrukturOrganisasi;
+use App\Models\Kelompok;
 use Illuminate\Http\Request;
 
 class StrukturController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    
     public function index()
     {
-        //
-        return view ('Admin.struktur.index');
+        $struktur = StrukturOrganisasi::with('kelompok')->get();
+        return view ('Admin.struktur.index', compact('struktur'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+
     public function create()
     {
-        //
+        $kelompok = Kelompok::all();
+        return view('Admin.struktur.create', compact('kelompok'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'id_kelompok' => 'required|exists:kelompok,id_kelompok',
+            'nama' => 'required|string|max:255',
+            'jabatan' => 'required|string|max:50',
+            'rentan' => 'nullable|string|max:255',
+        ]);
+
+        StrukturOrganisasi::create($request->all());
+
+        return redirect()->route('Admin.struktur.index')->with('success', 'Data berhasil ditambahkan!');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
-        //
+        $struktur = StrukturOrganisasi::findOrFail($id);
+        $kelompok = Kelompok::all(); // Untuk dropdown/select
+
+        return view('Admin.struktur.edit', compact('struktur', 'kelompok'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'id_kelompok' => 'required|exists:kelompok,id_kelompok',
+            'nama' => 'required|string|max:255',
+            'jabatan' => 'required|string|max:50',
+            'rentan' => 'nullable|string|max:255',
+        ]);
+
+        // Ambil data yang akan diupdate
+        $struktur = StrukturOrganisasi::findOrFail($id);
+
+        // Update data
+        $struktur->update($request->all());
+
+        return redirect()->route('Admin.struktur.index')->with('success', 'Data berhasil diperbarui!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+
     public function destroy(string $id)
     {
-        //
+        $struktur = StrukturOrganisasi::findOrFail($id);
+        $struktur->delete();
+
+        return redirect()->route('Admin.struktur.index')->with('success', 'Data berhasil dihapus!');
     }
 }
