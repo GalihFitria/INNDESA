@@ -5,24 +5,24 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class StrukturOrganisasi extends Model
+class InovasiPenghargaan extends Model
 {
     use HasFactory;
-    protected $table = 'struktur_organisasi';
-    protected $primaryKey = 'id_struktur';
+    protected $table = 'inovasi_penghargaan';
+    protected $primaryKey = 'id_inovasi';
     public $incrementing = true;
     protected $keyType = 'int';
     public $timestamps = false;
 
-    protected $fillable = ['id_kelompok', 'nama', 'jabatan', 'rentan'];
+    protected $fillable = ['id_kelompok', 'foto'];
 
     public function kelompok()
     {
         return $this->belongsTo(Kelompok::class, 'id_kelompok', 'id_kelompok');
     }
 
-    public function getKodeStrukturAttribute()
+    public function getKodeInovasiAttribute()
     {
-        return 'ST' . str_pad($this->id_struktur, 1, STR_PAD_LEFT);
+        return 'S' . str_pad($this->id_inovasi, 1, STR_PAD_LEFT);
     }
 }

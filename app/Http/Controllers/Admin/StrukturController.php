@@ -42,7 +42,7 @@ class StrukturController extends Controller
     public function edit(string $id)
     {
         $struktur = StrukturOrganisasi::findOrFail($id);
-        $kelompok = Kelompok::all(); // Untuk dropdown/select
+        $kelompok = Kelompok::all(); 
 
         return view('Admin.struktur.edit', compact('struktur', 'kelompok'));
     }
@@ -57,10 +57,10 @@ class StrukturController extends Controller
             'rentan' => 'nullable|string|max:255',
         ]);
 
-        // Ambil data yang akan diupdate
+        
         $struktur = StrukturOrganisasi::findOrFail($id);
 
-        // Update data
+        
         $struktur->update($request->all());
 
         return redirect()->route('Admin.struktur.index')->with('success', 'Data berhasil diperbarui!');

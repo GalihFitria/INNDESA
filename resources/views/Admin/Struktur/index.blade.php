@@ -1,9 +1,9 @@
 @extends('Admin.sidebar')
 
-@section('title', 'Kelola Struktur - INNDESA')
+@section('title', 'Kelola Struktur Organisasi - INNDESA')
 
 @section('content')
-<h2 class="text-center text-4xl font-bold text-gray-800 mb-6">.::Kelola Struktur::.</h2>
+<h2 class="text-center text-4xl font-bold text-gray-800 mb-6">.::Kelola Struktur Organisasi::.</h2>
 <div class="bg-white shadow-md p-4 rounded-lg">
     <div class="flex justify-between mb-4">
         <a href="{{ route('Admin.struktur.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 flex items-center">
@@ -33,7 +33,7 @@
                     <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $s->jabatan }}</td>
                     <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $s->rentan }}</td>
                     <td class="border border-gray-300 p-3 text-center text-sm">
-                        <a href="{{ route('Admin.struktur.edit', $s->id_sruktur) }}" class="text-blue-600 hover:underline mr-2">Edit</a>
+                        <a href="{{ route('Admin.struktur.edit', $s->id_struktur) }}" class="text-blue-600 hover:underline mr-2">Edit</a>
                         <form action="{{ route('Admin.struktur.destroy', $s->id_struktur) }}" method="POST" class="inline-block delete-form">
                             @csrf
                             @method('DELETE')

@@ -37,7 +37,7 @@ class KelompokIntegritasController extends Controller
             'nama' => $request->nama,
         ]);
 
-        return redirect()->route('Admin.kelompok_integritas.index')->with('success', 'Data berhasil ditambahkan.');
+        return redirect()->route('Admin.kelompok_integritas.index')->with('success', 'Data berhasil ditambahkan!');
     }
 
 
@@ -59,7 +59,7 @@ class KelompokIntegritasController extends Controller
             'nama' => $request->nama,
         ]);
 
-        return redirect()->route('Admin.kelompok_integritas.index')->with('success', 'Data berhasil diperbarui.');
+        return redirect()->route('Admin.kelompok_integritas.index')->with('success', 'Data berhasil diperbarui!');
     }
 
     public function destroy(string $id)
@@ -67,7 +67,7 @@ class KelompokIntegritasController extends Controller
         $kategori = KategoriKelompok::findOrFail($id);
         $kategori->delete();
 
-        return redirect()->route('Admin.kelompok_integritas.index')->with('success', 'Data berhasil dihapus.');
+        return redirect()->route('Admin.kelompok_integritas.index')->with('success', 'Data berhasil dihapus!');
     }   
     
 }
