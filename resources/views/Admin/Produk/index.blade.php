@@ -9,7 +9,7 @@
         <a href="{{ route('Admin.produk.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 flex items-center">
             <i class="fas fa-plus mr-2"></i>Tambah Produk
         </a>
-        <input type="text" id="searchInput" placeholder="Cari..." class="w-1/3 border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
+        <input type="text" id="searchInput" placeholder="Cari..." value="{{ request('search') }}" class="w-1/3 border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
     </div>
     <div class="overflow-x-auto">
         <table class="w-full border-collapse border border-gray-300">
@@ -30,9 +30,9 @@
             </thead>
             <tbody id="tableBody">
                 @forelse ($produk as $index => $p)
-                <tr class='data-row'>
+                <tr class="data-row">
                     <td class="border border-gray-300 p-3 text-center text-sm text-gray-900">{{ $index + 1 }}</td>
-                    <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $p->kode_produk }}</td>
+                    <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $p->id_produk }}</td>
                     <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $p->kelompok->nama ?? '-' }}</td>
                     <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $p->nama }}</td>
                     <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $p->harga }}</td>
@@ -46,7 +46,7 @@
                         <span class="text-gray-400">-</span>
                         @endif
                     </td>
-                    <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $p->deskripsi }}</td>
+                    <td class="border border-gray-300 p-3 text-sm text-gray-900 break-words max-w-xs">{{ $p->deskripsi }}</td>
                     <td class="border border-gray-300 p-3 text-sm text-gray-900 text-center">
                         @if($p->sertifikat)
                         <img src="{{ asset('Uploads/sertifikat/' . $p->sertifikat) }}"
@@ -133,9 +133,10 @@
         const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
 
         filteredRows = Array.from(rows).filter(row => {
-            const kodeInovasi = row.cells[1].textContent.toLowerCase(); // Kolom Id Inovasi
+            const kodeProduk = row.cells[1].textContent.toLowerCase(); // Kolom Id Produk
             const namaKelompok = row.cells[2].textContent.toLowerCase(); // Kolom Nama Kelompok
-            return kodeInovasi.includes(searchTerm) || namaKelompok.includes(searchTerm);
+            const namaProduk = row.cells[3].textContent.toLowerCase(); // Kolom Nama Produk
+            return kodeProduk.includes(searchTerm) || namaKelompok.includes(searchTerm) || namaProduk.includes(searchTerm);
         });
 
         rows.forEach(row => row.style.display = 'none');
@@ -179,7 +180,6 @@
         }
     });
 
-    // Inisialisasi tabel saat halaman dimuat
     updateTable();
 </script>
 @endsection
