@@ -15,14 +15,14 @@ class Produk extends Model
     protected $keyType = 'int';
     public $timestamps = false;
 
-    protected $fillable = ['id_kelompok', 'nama', 'harga', 'stok', 'foto', 'deskripsi', 'sertifikat'];
+    protected $fillable = ['id_kelompok', 'nama', 'harga', 'stok', 'foto', 'deskripsi', 'sertifikat', 'produk_terjual'];
 
     public function kelompok()
     {
         return $this->belongsTo(Kelompok::class, 'id_kelompok', 'id_kelompok');
     }
 
-    public function getProdukAttribute()
+    public function getKodeProdukAttribute()
     {
         return 'P' . str_pad($this->id_produk, 1, STR_PAD_LEFT);
     }

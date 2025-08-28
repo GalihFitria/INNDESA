@@ -15,14 +15,14 @@
         <table class="w-full border-collapse border border-gray-300">
             <thead class="bg-gray-50">
                 <tr>
-                    <th class="border border-gray-300 p-3 text-left text-xs font-medium text-gray-500 uppercase">No</th>
-                    <th class="border border-gray-300 p-3 text-left text-xs font-medium text-gray-500 uppercase">Id Kegiatan</th>
-                    <th class="border border-gray-300 p-3 text-left text-xs font-medium text-gray-500 uppercase">Nama Kelompok</th>
-                    <th class="border border-gray-300 p-3 text-left text-xs font-medium text-gray-500 uppercase">Judul </th>
-                    <th class="border border-gray-300 p-3 text-left text-xs font-medium text-gray-500 uppercase">Deskripsi</th>
-                    <th class="border border-gray-300 p-3 text-left text-xs font-medium text-gray-500 uppercase">Foto Kegiatan</th>
-                    <th class="border border-gray-300 p-3 text-left text-xs font-medium text-gray-500 uppercase">Tanggal</th>
-                    <th class="border border-gray-300 p-3 text-left text-xs font-medium text-gray-500 uppercase">Sumber Berita</th>
+                    <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">No</th>
+                    <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">Id Kegiatan</th>
+                    <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">Nama Kelompok</th>
+                    <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">Judul </th>
+                    <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">Deskripsi</th>
+                    <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">Foto Kegiatan</th>
+                    <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">Tanggal</th>
+                    <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">Sumber Berita</th>
                     <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">Aksi</th>
                 </tr>
             </thead>
@@ -33,7 +33,7 @@
                     <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $kg->kode_kegiatan}}</td>
                     <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $kg->kelompok->nama ?? '-'}}</td>
                     <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $kg->judul}}</td>
-                    <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $kg->deskripsi}}</td>
+                    <td class="border border-gray-300 p-3 text-sm text-gray-900 break-words max-w-xs">{{ $kg->deskripsi}}</td>
                     <td class="border border-gray-300 p-3 text-sm text-gray-900 text-center">
                         @if($kg->foto)
                         <img src="{{ asset('Uploads/foto/' . $kg->foto) }}"

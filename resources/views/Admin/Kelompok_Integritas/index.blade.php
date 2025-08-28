@@ -19,9 +19,9 @@
         <table class="w-full border-collapse border border-gray-300" id="dataTable">
             <thead class="bg-gray-50">
                 <tr>
-                    <th class="border border-gray-300 p-3 text-left text-xs font-medium text-gray-500 uppercase">No</th>
-                    <th class="border border-gray-300 p-3 text-left text-xs font-medium text-gray-500 uppercase">Id Kategori</th>
-                    <th class="border border-gray-300 p-3 text-left text-xs font-medium text-gray-500 uppercase">Nama Kelompok Integritas</th>
+                    <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">No</th>
+                    <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">Id Kategori</th>
+                    <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">Nama Kelompok Integritas</th>
                     <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">Aksi</th>
                 </tr>
             </thead>
