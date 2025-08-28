@@ -31,17 +31,4 @@
         </div>
     </form>
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-    @if(session('success'))
-    Swal.fire({
-        icon: 'success',
-        title: 'Sukses!',
-        text: @json(session('success')),
-        timer: 2000,
-        showConfirmButton: false
-    });
-    @endif
-</script>
 @endsection

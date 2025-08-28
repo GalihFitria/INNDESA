@@ -9,7 +9,7 @@
         <div class="flex items-center justify-between">
             <div>
                 <p class="text-sm text-gray-600">Total Kelompok</p>
-                <p class="text-2xl font-bold text-gray-800">24</p>
+                <p class="text-2xl font-bold text-gray-800">{{ $totalKelompok }}</p>
             </div>
             <i class="fas fa-users text-3xl text-yellow-600"></i>
         </div>
@@ -18,7 +18,7 @@
         <div class="flex items-center justify-between">
             <div>
                 <p class="text-sm text-gray-600">Total Anggota Kelompok</p>
-                <p class="text-2xl font-bold text-gray-800">8</p>
+                <p class="text-2xl font-bold text-gray-800">{{ $totalAnggota }}</p>
             </div>
             <i class="fas fa-user-friends text-3xl text-purple-600"></i>
         </div>
@@ -27,7 +27,7 @@
         <div class="flex items-center justify-between">
             <div>
                 <p class="text-sm text-gray-600">Total Produk</p>
-                <p class="text-2xl font-bold text-gray-800">12</p>
+                <p class="text-2xl font-bold text-gray-800">{{ $totalProduk }}</p>
             </div>
             <i class="fas fa-box-open text-3xl text-orange-600"></i>
         </div>
@@ -36,7 +36,7 @@
         <div class="flex items-center justify-between">
             <div>
                 <p class="text-sm text-gray-600">Total Kelompok Rentan</p>
-                <p class="text-2xl font-bold text-gray-800">12</p>
+                <p class="text-2xl font-bold text-gray-800">{{ $totalKelompokRentan }}</p>
             </div>
             <i class="fas fa-user-shield text-3xl text-orange-600"></i>
         </div>

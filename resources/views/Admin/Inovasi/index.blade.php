@@ -9,9 +9,7 @@
         <a href="{{ route('Admin.inovasi.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 flex items-center">
             <i class="fas fa-plus mr-2"></i>Tambah
         </a>
-        <form action="{{ route('Admin.inovasi.index') }}" method="GET" class="w-1/3">
-            <input type="text" name="search" id="searchInput" placeholder="Cari ..." value="{{ request('search') }}" class="w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
-        </form>
+        <input type="text" id="searchInput" placeholder="Cari ..." value="{{ request('search') }}" class="w-1/3 border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
     </div>
     <div class="overflow-x-auto">
         <table class="w-full border-collapse border border-gray-300">
@@ -26,7 +24,7 @@
             </thead>
             <tbody id="tableBody">
                 @forelse ($inovasi as $index => $i)
-                <tr>
+                <tr class="data-row">
                     <td class="border border-gray-300 p-3 text-center text-sm text-gray-900">{{ $index + 1 }}</td>
                     <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $i->kode_inovasi }}</td>
                     <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $i->kelompok->nama ?? '-' }}</td>
@@ -50,7 +48,7 @@
                 </tr>
                 @empty
                 <tr id="noDataRow">
-                    <td colspan="4" class="border border-gray-300 p-3 text-center text-sm text-gray-900">Tidak ada data ditemukan</td>
+                    <td colspan="5" class="border border-gray-300 p-3 text-center text-sm text-gray-900">Tidak ada data ditemukan</td>
                 </tr>
                 @endforelse
             </tbody>
@@ -110,12 +108,14 @@
         const prevButton = document.getElementById('prevPage');
         const nextButton = document.getElementById('nextPage');
         const pageInfo = document.getElementById('pageInfo');
+        const searchInput = document.getElementById('searchInput');
 
-        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
+
         filteredRows = Array.from(rows).filter(row => {
-            const nama = row.cells[2].textContent.toLowerCase();
-            const kodeKategori = row.cells[1].textContent.toLowerCase();
-            return nama.includes(searchTerm) || kodeKategori.includes(searchTerm);
+            const kodeInovasi = row.cells[1].textContent.toLowerCase(); // Kolom Id Inovasi
+            const namaKelompok = row.cells[2].textContent.toLowerCase(); // Kolom Nama Kelompok
+            return kodeInovasi.includes(searchTerm) || namaKelompok.includes(searchTerm);
         });
 
         rows.forEach(row => row.style.display = 'none');
@@ -133,7 +133,7 @@
         pageInfo.textContent = totalRows > 0 ? `Page ${currentPage} of ${totalPages}` : '';
 
         if (noDataRow) {
-            noDataRow.parentElement.style.display = rows.length === 0 ? '' : 'none';
+            noDataRow.style.display = rows.length === 0 ? '' : 'none';
         }
         noSearchResults.classList.toggle('hidden', totalRows > 0 || rows.length === 0);
     }
@@ -158,6 +158,8 @@
             updateTable();
         }
     });
+
+    // Inisialisasi tabel saat halaman dimuat
     updateTable();
 </script>
 @endsection

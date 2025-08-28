@@ -9,7 +9,7 @@
         <a href="{{ route('Admin.struktur.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 flex items-center">
             <i class="fas fa-plus mr-2"></i>Tambah
         </a>
-        <input type="text" placeholder="Cari..." class="w-1/3 border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
+        <input type="text" id="searchInput" placeholder="Cari..." class="w-1/3 border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
     </div>
     <div class="overflow-x-auto">
         <table class="w-full border-collapse border border-gray-300">
@@ -21,14 +21,15 @@
                     <th class="border border-gray-300 p-3 text-left text-xs font-medium text-gray-500 uppercase">Nama</th>
                     <th class="border border-gray-300 p-3 text-left text-xs font-medium text-gray-500 uppercase">Posisi</th>
                     <th class="border border-gray-300 p-3 text-left text-xs font-medium text-gray-500 uppercase">Kelompok Rentan</th>
+                    <th class="border border-gray-300 p-3 text-left text-xs font-medium text-gray-500 uppercase">Aksi</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="tableBody">
                 @forelse ($struktur as $index => $s)
-                <tr>
+                <tr class="data-row">
                     <td class="border border-gray-300 p-3 text-center text-sm text-gray-900">{{ $index + 1 }}</td>
                     <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $s->kode_struktur }}</td>
-                    <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $s->kelompok->nama ?? '-'}}</td>
+                    <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $s->kelompok->nama ?? '-' }}</td>
                     <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $s->nama }}</td>
                     <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $s->jabatan }}</td>
                     <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $s->rentan }}</td>
@@ -43,7 +44,7 @@
                 </tr>
                 @empty
                 <tr id="noDataRow">
-                    <td colspan="4" class="border border-gray-300 p-3 text-center text-sm text-gray-900">Tidak ada data ditemukan</td>
+                    <td colspan="7" class="border border-gray-300 p-3 text-center text-sm text-gray-900">Tidak ada data ditemukan</td>
                 </tr>
                 @endforelse
             </tbody>
@@ -103,12 +104,15 @@
         const prevButton = document.getElementById('prevPage');
         const nextButton = document.getElementById('nextPage');
         const pageInfo = document.getElementById('pageInfo');
+        const searchInput = document.getElementById('searchInput');
 
-        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
+
         filteredRows = Array.from(rows).filter(row => {
-            const nama = row.cells[2].textContent.toLowerCase();
-            const kodeKategori = row.cells[1].textContent.toLowerCase();
-            return nama.includes(searchTerm) || kodeKategori.includes(searchTerm);
+            const nama = row.cells[3].textContent.toLowerCase(); // Kolom Nama
+            const kodeStruktur = row.cells[1].textContent.toLowerCase(); // Kolom Id Struktur
+            const namaKelompok = row.cells[2].textContent.toLowerCase(); // Kolom Nama Kelompok
+            return nama.includes(searchTerm) || kodeStruktur.includes(searchTerm) || namaKelompok.includes(searchTerm);
         });
 
         rows.forEach(row => row.style.display = 'none');
@@ -126,7 +130,7 @@
         pageInfo.textContent = totalRows > 0 ? `Page ${currentPage} of ${totalPages}` : '';
 
         if (noDataRow) {
-            noDataRow.parentElement.style.display = rows.length === 0 ? '' : 'none';
+            noDataRow.style.display = rows.length === 0 ? '' : 'none';
         }
         noSearchResults.classList.toggle('hidden', totalRows > 0 || rows.length === 0);
     }
@@ -151,6 +155,8 @@
             updateTable();
         }
     });
+
+    // Inisialisasi tabel saat halaman dimuat
     updateTable();
 </script>
 @endsection

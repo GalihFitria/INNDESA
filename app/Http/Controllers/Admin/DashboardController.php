@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Kelompok;
+use App\Models\Produk;
+use App\Models\StrukturOrganisasi;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -12,8 +16,21 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        //
-        return view('Admin.dashboard');
+       
+        $totalKelompok = Kelompok::count();
+        $totalAnggota = StrukturOrganisasi::count();
+        $totalProduk = Produk::count();
+        $totalKelompokRentan = StrukturOrganisasi::whereNotNull('rentan')
+            ->where('rentan', '!=', '-')
+            ->where('rentan', '!=', '')
+            ->count();
+
+        return view('Admin.dashboard', compact(
+            'totalKelompok',
+            'totalAnggota',
+            'totalProduk',
+            'totalKelompokRentan'
+        ));
     }
 
     /**

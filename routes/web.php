@@ -30,9 +30,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('Pengunjung.index');
-})->name('beranda');
+Route::get('/', [IndexController::class, 'index'])->name('beranda');
+Route::get('/api/statistik', [App\Http\Controllers\IndexController::class, 'getStatistik']);
 
 
 //PENGUNJUNG

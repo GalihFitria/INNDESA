@@ -103,22 +103,22 @@
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-3xl">
                     <div class="bg-white border border-gray-200 rounded-xl shadow-lg p-6 text-center">
                         <h3 class="text-gray-700 font-bold mb-3 text-lg">Total Kelompok</h3>
-                        <p class="text-emerald-500 font-extrabold text-4xl">15</p>
+                        <p class="text-emerald-500 font-extrabold text-4xl" id="totalKelompok">{{ $totalKelompok }}</p>
                     </div>
                     <div class="bg-white border border-gray-200 rounded-xl shadow-lg p-6 text-center">
                         <h3 class="text-gray-700 font-bold mb-3 text-lg">Total Anggota Kelompok</h3>
-                        <p class="text-emerald-500 font-extrabold text-4xl">15</p>
+                        <p class="text-emerald-500 font-extrabold text-4xl" id="totalAnggota">{{ $totalAnggota }}</p>
                     </div>
                     <div class="bg-white border border-gray-200 rounded-xl shadow-lg p-6 text-center">
                         <h3 class="text-gray-700 font-bold mb-3 text-lg">Total Produk</h3>
-                        <p class="text-emerald-500 font-extrabold text-4xl">15</p>
+                        <p class="text-emerald-500 font-extrabold text-4xl" id="totslProduk">{{ $totalProduk }}</p>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-xl">
                     <div class="bg-white border border-gray-200 rounded-xl shadow-lg p-6 text-center">
                         <h3 class="text-gray-700 font-bold mb-3 text-lg">Total Kelompok Rentan</h3>
-                        <p class="text-emerald-500 font-extrabold text-4xl">15</p>
+                        <p class="text-emerald-500 font-extrabold text-4xl" id="totalKelompokRentan">{{ $totalKelompokRentan }}</p>
                     </div>
                     <div class="bg-white border border-gray-200 rounded-xl shadow-lg p-6 text-center">
                         <h3 class="text-gray-700 font-bold mb-3 text-lg">Total Views</h3>
@@ -466,10 +466,9 @@
 
 </body>
 <script>
-
     let views = localStorage.getItem("page_views") || 0;
     views = parseInt(views);
-    views += 1; 
+    views += 1;
     localStorage.setItem("page_views", views);
 
     const viewCountEl = document.getElementById("viewCount");
@@ -493,6 +492,26 @@
         navigator.clipboard.writeText('https://youtu.be/A4Bc6Z7VyaU');
         alert('Link video berhasil disalin!');
     }
+
+    async function updateStatistik() {
+        try {
+            const response = await fetch("/api/statistik");
+            const data = await response.json();
+
+            document.getElementById("totalKelompok").textContent = data.totalKelompok;
+            document.getElementById("totalAnggota").textContent = data.totalAnggota;
+            document.getElementById("totalProduk").textContent = data.totalProduk;
+            document.getElementById("totalKelompokRentan").textContent = data.totalKelompokRentan;
+        } catch (error) {
+            console.error("Gagal fetch statistik:", error);
+        }
+    }
+
+    // jalankan langsung pas load
+    updateStatistik();
+
+    // refresh tiap 10 detik
+    setInterval(updateStatistik, 10000);
 </script>
 
 </html>
