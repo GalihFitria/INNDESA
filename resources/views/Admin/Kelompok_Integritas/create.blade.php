@@ -4,16 +4,16 @@
 
 @section('content')
 <h2 class="text-center text-4xl font-bold text-gray-800 mb-6">.::Tambah Kelompok Integritas::.</h2>
+
 <div class="bg-white shadow-md p-4 rounded-lg max-w-2xl mx-auto">
     <form action="{{ route('Admin.kelompok_integritas.store') }}" method="POST" class="space-y-6">
         @csrf
-        <!-- <div>
-            <label for="id_kategori" class="block text-sm font-medium text-gray-700">ID Kategori</label>
-            <input type="text" name="id_kategori" id="id_kategori" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Masukkan ID Kategori" required>
-        </div> -->
         <div>
             <label for="nama" class="block text-sm font-medium text-gray-700">Nama</label>
-            <input type="text" name="nama" id="nama" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Masukkan Nama Kelompok" required>
+            <input type="text" name="nama" id="nama"
+                value="{{ old('nama') }}"
+                class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="Masukkan Nama Kelompok" required>
         </div>
         <div class="flex justify-end space-x-4">
             <a href="{{ route('Admin.kelompok_integritas.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 flex items-center">
@@ -25,4 +25,20 @@
         </div>
     </form>
 </div>
+
+
+<input type="hidden" id="error-message" value="{{ $errors->first('nama') ?? '' }}">
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    const errorMessage = document.getElementById('error-message').value;
+    if (errorMessage) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops!',
+            text: errorMessage,
+            confirmButtonText: 'OK'
+        });
+    }
+</script>
 @endsection

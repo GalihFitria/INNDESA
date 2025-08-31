@@ -62,32 +62,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                                 </svg>
                             </button>
-
-                            <div id="kelompokDropdown" class="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden z-50">
-                                <div class="relative">
-                                    <button id="kwtButton" onclick="toggleDropdown('kwtDropdown')" class="dropdown-submenu-item w-full text-left px-4 py-2 hover:bg-sky-100 hover:text-sky-600 flex justify-between items-center transition-colors duration-150" data-menu="kwt">
-                                        Kelompok Wanita Tani (KWT)
-                                        <svg id="kwtArrow" class="w-3 h-3 ml-2 text-gray-600 flex-shrink-0 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                                        </svg>
-                                    </button>
-                                    <div id="kwtDropdown" class="mt-1 ml-6 w-44 rounded-md shadow-lg bg-sky-100 ring-1 ring-sky-200 ring-opacity-50 hidden">
-                                        <a href="{{ route('kelompok.index') }}" class="submenu-item block px-4 py-2 text-sky-800 hover:bg-sky-200 transition-colors duration-150" data-parent="kwt" data-submenu="kwt-sida">Kelompok Tani Sida Megar</a>
-                                    </div>
-                                </div>
-
-                                <div class="relative">
-                                    <button id="pertanianButton" onclick="toggleDropdown('pertanianDropdown')" class="dropdown-submenu-item w-full text-left px-4 py-2 hover:bg-sky-100 hover:text-sky-600 flex justify-between items-center transition-colors duration-150" data-menu="pertanian">
-                                        Pertanian
-                                        <svg id="pertanianArrow" class="w-3 h-3 ml-2 text-gray-600 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                                        </svg>
-                                    </button>
-                                    <div id="pertanianDropdown" class="mt-1 ml-6 w-44 rounded-md shadow-lg bg-sky-100 ring-1 ring-sky-200 ring-opacity-50 hidden">
-                                        <a href="#" class="submenu-item block px-4 py-2 text-sky-800 hover:bg-sky-200 transition-colors duration-150" data-parent="pertanian" data-submenu="pertanian-petani">Kelompok Tani Milenial</a>
-                                    </div>
-                                </div>
-                            </div>
+                            <div id="kelompokDropdown" class="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden z-50"></div>
                         </div>
 
                         <a href="https://wa.me/6289647038212?text=Halo%20saya%20tertarik%20dengan%20produk%20Anda"
@@ -134,10 +109,65 @@
         </div>
     </nav>
 
-
     <script>
-        // let currentActiveMenu = 'kontak'; 
-        // let activeSubmenuItem = null;
+        // Data dari database disuntikkan menggunakan Blade (perbaikan sintaks)
+        const kelompokIntegrasiData = @json(\App\Models\KategoriKelompok::with('kelompok') -> get());
+
+        // Fungsi untuk mengisi dropdown dengan data
+        function populateKelompokDropdown(data) {
+            const dropdown = document.getElementById('kelompokDropdown');
+            dropdown.innerHTML = ''; // Kosongkan dropdown sebelum diisi
+
+            data.forEach(category => {
+                const categoryDiv = document.createElement('div');
+                categoryDiv.className = 'relative';
+
+                const button = document.createElement('button');
+                button.id = `${category.nama.toLowerCase().replace(/\s+/g, '-')}-button`;
+                button.onclick = () => toggleDropdown(`${category.nama.toLowerCase().replace(/\s+/g, '-')}-dropdown`);
+                button.className = 'dropdown-submenu-item w-full text-left px-4 py-2 hover:bg-sky-100 hover:text-sky-600 flex justify-between items-center transition-colors duration-150';
+                button.setAttribute('data-menu', category.nama.toLowerCase().replace(/\s+/g, '-'));
+                button.textContent = category.nama; // Menggunakan 'nama' dari KategoriKelompok
+                const arrow = document.createElement('svg');
+                arrow.id = `${category.nama.toLowerCase().replace(/\s+/g, '-')}-arrow`;
+                arrow.className = 'w-3 h-3 ml-2 text-gray-600 flex-shrink-0 transform transition-transform duration-200';
+                arrow.setAttribute('fill', 'none');
+                arrow.setAttribute('stroke', 'currentColor');
+                arrow.setAttribute('viewBox', '0 0 24 24');
+                arrow.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />';
+                button.appendChild(arrow);
+
+                const subDropdown = document.createElement('div');
+                subDropdown.id = `${category.nama.toLowerCase().replace(/\s+/g, '-')}-dropdown`;
+                subDropdown.className = 'mt-1 ml-6 w-44 rounded-md shadow-lg bg-sky-100 ring-1 ring-sky-200 ring-opacity-50 hidden';
+
+                category.kelompok.forEach(kelompok => {
+                    const link = document.createElement('a');
+                    link.href = `{{ url('kelompok') }}/${kelompok.id_kelompok}`;; // Sesuaikan dengan route
+                    link.className = 'submenu-item block px-4 py-2 text-sky-800 hover:bg-sky-200 transition-colors duration-150';
+                    link.setAttribute('data-parent', category.nama.toLowerCase().replace(/\s+/g, '-'));
+                    link.setAttribute('data-submenu', kelompok.id_kelompok);
+                    link.textContent = kelompok.nama; // Menggunakan 'nama' dari Kelompok
+                    subDropdown.appendChild(link);
+                });
+
+                categoryDiv.appendChild(button);
+                categoryDiv.appendChild(subDropdown);
+                dropdown.appendChild(categoryDiv);
+            });
+
+            // Tambahkan event listener untuk submenu item
+            document.querySelectorAll('.submenu-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    const parentMenu = this.getAttribute('data-parent');
+                    if (parentMenu) {
+                        setActiveMenu(parentMenu);
+                    }
+                    setActiveSubmenuItem(this);
+                });
+            });
+        }
+
         let path = window.location.pathname;
 
         let currentActiveMenu = 'beranda';
@@ -150,7 +180,7 @@
         } else if (path.includes('pt')) {
             currentActiveMenu = 'pt';
         } else if (path.includes('kelompok')) {
-            currentActiveMenu = 'kwt-sida';
+            currentActiveMenu = 'kelompok';
         }
 
         function setActiveMenu(menuId) {
@@ -236,7 +266,7 @@
                     setActiveMenu('kelompok');
                     rotateArrow('kelompokArrow', isCurrentlyHidden);
                 } else if (id === 'perusahaanDropdown') {
-                    setActiveMenu('perusahaan');
+                    setActiveMenu('pt');
                     rotateArrow('perusahaanArrow', isCurrentlyHidden);
                 }
             }
@@ -312,6 +342,7 @@
         });
 
         document.addEventListener('DOMContentLoaded', function() {
+            populateKelompokDropdown(kelompokIntegrasiData);
             setActiveMenu(currentActiveMenu);
         });
     </script>

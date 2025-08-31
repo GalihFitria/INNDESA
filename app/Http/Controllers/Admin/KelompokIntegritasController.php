@@ -26,14 +26,14 @@ class KelompokIntegritasController extends Controller
 
     public function store(Request $request)
     {
-       
-        $request->validate([
-            // 'id_kategori' => 'required|string|unique:kategori_kelompok,id_kategori',
-            'nama' => 'required|string',
-        ]);
 
+        $request->validate([
+            'nama' => 'required|string|unique:kategori_kelompok,nama',
+        ], [
+            'nama.required' => 'Nama Kelompok Integritas wajib diisi.',
+            'nama.unique'   => 'Kelompok Integritas sudah ada.',
+        ]);
         KategoriKelompok::create([
-            // 'id_kategori' => $request->id_kategori,
             'nama' => $request->nama,
         ]);
 
@@ -51,7 +51,10 @@ class KelompokIntegritasController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'nama' => 'required|string',
+            'nama' => 'required|string|unique:kategori_kelompok,nama',
+        ], [
+            'nama.required' => 'Nama Kelompok Integritas wajib diisi.',
+            'nama.unique'   => 'Kelompok Integritas sudah ada.',
         ]);
 
         $kategori = KategoriKelompok::findOrFail($id);

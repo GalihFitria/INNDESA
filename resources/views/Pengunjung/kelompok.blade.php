@@ -35,19 +35,19 @@
 </head>
 
 <body class="min-h-screen bg-white font-poppins">
-    
+
     @include('navbar')
 
-    
+
     <section class="relative text-white overflow-hidden min-h-[550px] flex flex-col items-center pt-32 bg-[url('{{ asset('images/background_beranda_INNDESA.jpeg') }}')] bg-cover bg-center">
         <div class="text-center space-y-5 mt-16">
             <h2 class="text-7xl md:text-7xl font-bold text-[#0097D4]">
-                Kelompok Tani Sida Megar
+                Kelompok {{ $kelompok->nama }}
             </h2>
         </div>
     </section>
 
-    
+
     <h2 class="text-4xl font-bold text-blue-600 text-center mb-8 mt-10">Profile Kelompok</h2>
     <div class="w-full border-t border-gray-200 pt-4 box-border">
         <div class="bg-white p-6 max-w-4xl mx-auto">
@@ -59,59 +59,33 @@
                 <button class="profile-tab-button flex-1 py-2 px-4 font-semibold text-center transition-colors bg-gray-200 text-gray-700" onclick="openProfileTab('total-produk')">Total Produk</button>
             </div>
             <div id="struktur" class="profile-tab-content block py-4">
-                <table class="w-full border-collapse mt-4 border border-gray-200">
-                    <tr>
-                        <th class="border border-gray-200 p-2 text-left">Posisi</th>
-                        <th class="border border-gray-200 p-2 text-left">Nama</th>
-                    </tr>
-                    <tr>
-                        <td class="border border-gray-200 p-2">Ketua</td>
-                        <td class="border border-gray-200 p-2">Susanto</td>
-                    </tr>
-                    <tr>
-                        <td class="border border-gray-200 p-2">Sekretaris</td>
-                        <td class="border border-gray-200 p-2">Ariel</td>
-                    </tr>
-                    <tr>
-                        <td class="border border-gray-200 p-2">Bendahara</td>
-                        <td class="border border-gray-200 p-2">Aji</td>
-                    </tr>
-                    <tr>
-                        <td class="border border-gray-200 p-2">Anggota</td>
-                        <td class="border border-gray-200 p-2">Lili</td>
-                    </tr>
-                    <tr>
-                        <td class="border border-gray-200 p-2"></td>
-                        <td class="border border-gray-200 p-2">Mawar</td>
-                    </tr>
-                    <tr>
-                        <td class="border border-gray-200 p-2"></td>
-                        <td class="border border-gray-200 p-2">Bunga</td>
-                    </tr>
+                <table class="w-full border-collapse mb-6 border border-gray-200">
+                    <thead>
+                        <tr class="bg-gray-50">
+                            <th class="border border-gray-200 p-3 text-left font-semibold">Posisi</th>
+                            <th class="border border-gray-200 p-3 text-left font-semibold">Nama</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($struktur as $item)
+                        <tr>
+                            <td class="border border-gray-200 p-3">{{ $item->jabatan }}</td>
+                            <td class="border border-gray-200 p-3">{{ $item->nama }}</td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="2" class="text-center p-4 text-gray-500">
+                                Tidak ada data struktur organisasi
+                            </td>
+                        </tr>
+                        @endforelse
+                    </tbody>
                 </table>
             </div>
             <div id="sejarah" class="profile-tab-content hidden py-4">
                 <div class="prose prose-lg max-w-none text-gray-700 leading-relaxed text-justify">
                     <p class="indent-8">
-                        Kelompok Tani Sida Megar didirikan pada tahun 2005 sebagai wadah kebersamaan para petani di desa
-                        untuk meningkatkan hasil pertanian dan memperkuat solidaritas antarwarga. Awalnya kelompok ini hanya terdiri dari
-                        beberapa petani yang fokus pada budidaya padi dan palawija, namun seiring waktu mulai mengembangkan berbagai
-                        komoditas lain sesuai potensi lahan.
-                    </p>
-                    <p class="indent-8">
-                        Sejak awal berdiri, Sida Megar aktif mengikuti berbagai program pemerintah dan pelatihan yang diselenggarakan oleh
-                        dinas pertanian. Melalui kegiatan tersebut, para anggota mampu menerapkan teknologi pertanian yang lebih modern
-                        serta mengelola usaha tani secara lebih efektif dan berkelanjutan.
-                    </p>
-                    <p class="indent-8">
-                        Saat ini, Sida Megar telah berkembang menjadi salah satu kelompok tani yang berperan penting dalam menjaga
-                        ketahanan pangan lokal. Anggotanya tidak hanya memproduksi hasil pertanian, tetapi juga mulai mengolah produk
-                        turunan untuk meningkatkan nilai tambah dan membuka peluang usaha baru di tingkat desa.
-                    </p>
-                    <p class="indent-8">
-                        Kehadiran Sida Megar mendapatkan dukungan positif dari masyarakat dan pemerintah desa karena dinilai mampu
-                        memberdayakan petani secara mandiri. Dengan semangat kebersamaan, kelompok ini terus berkomitmen untuk
-                        meningkatkan kesejahteraan anggotanya sekaligus menjaga kelestarian lingkungan sekitar.
+                        {{ $kelompok->sejarah ?? 'Belum ada data sejarah untuk kelompok ini.' }}
                     </p>
                 </div>
             </div>
@@ -169,7 +143,7 @@
         </div>
     </div>
 
-    
+
     <h2 class="text-4xl font-bold text-blue-600 text-center mb-8">Informasi</h2>
     <div class="w-full border-t border-gray-200 pt-4 box-border">
         <div class="bg-white p-6 max-w-4xl mx-auto">
@@ -200,7 +174,7 @@
                 </div>
                 <div class="relative">
                     <a href="{{ route('detail_produk.index', ['id' => 1]) }}" class="block no-underline">
-                      <div id="produk-carousel" class="carousel grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                        <div id="produk-carousel" class="carousel grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                             <div class="border rounded-lg shadow-md p-3 max-w-[200px] mx-auto cursor-pointer">
                                 <img src="{{ asset('images/Abon Lele.jpeg') }}" alt="Abon Lele" class="w-full h-40 object-cover rounded-lg">
                                 <h3 class="mt-3 font-semibold text-lg">Abon Lele</h3>
@@ -209,187 +183,187 @@
                                     <p class="text-black-500">stok: 5</p>
                                 </div>
                             </div>
-    </a>
-    
-                            <div class="border rounded-lg shadow-md p-3 max-w-[200px] mx-auto cursor-pointer">
-                                <img src="{{ asset('images/Jahe Instan.jpeg') }}" alt="Jahe Instant" class="w-full h-40 object-cover rounded-lg">
-                                <h3 class="mt-3 font-semibold text-lg">Jahe Instant</h3>
-                                <div class="flex items-center gap-x-6 pb-2">
-                                    <p class="text-green-600 font-bold text-lg">Rp. 15.000</p>
-                                    <p class="text-black-500">stok: 20</p>
-                                </div>
-                            </div>
-                            <div class="border rounded-lg shadow-md p-3 max-w-[200px] mx-auto cursor-pointer">
-                                <img src="{{ asset('images/Kripik Pisang.jpeg') }}" alt="Kripik Pisang" class="w-full h-40 object-cover rounded-lg">
-                                <h3 class="mt-3 font-semibold text-lg">Kripik Pisang</h3>
-                                <div class="flex items-center gap-x-6 pb-2">
-                                    <p class="text-green-600 font-bold text-lg">Rp. 15.000</p>
-                                    <p class="text-black-500">stok: 10</p>
-                                </div>
-                            </div>
-                            <div class="border rounded-lg shadow-md p-3 max-w-[200px] mx-auto cursor-pointer">
-                                <img src="{{ asset('images/Kripik Tempe.jpeg') }}" alt="Kripik Tempe" class="w-full h-40 object-cover rounded-lg">
-                                <h3 class="mt-3 font-semibold text-lg">Kripik Tempe</h3>
-                                <div class="flex items-center gap-x-6 pb-2">
-                                    <p class="text-green-600 font-bold text-lg">Rp. 12.000</p>
-                                    <p class="text-black-500">stok: 8</p>
-                                </div>
-                            </div>
-                            <div class="border rounded-lg shadow-md p-3 max-w-[200px] mx-auto cursor-pointer">
-                                <img src="{{ asset('images/Sambal Bawang.jpeg') }}" alt="Sambal Bawang" class="w-full h-40 object-cover rounded-lg">
-                                <h3 class="mt-3 font-semibold text-lg">Sambal Bawang</h3>
-                                <div class="flex items-center gap-x-6 pb-2">
-                                    <p class="text-green-600 font-bold text-lg">Rp. 20.000</p>
-                                    <p class="text-black-500">stok: 6</p>
-                                </div>
-                            </div>
-                            <div class="border rounded-lg shadow-md p-3 max-w-[200px] mx-auto cursor-pointer">
-                                <img src="{{ asset('images/Kopi Bubuk.jpeg') }}" alt="Kopi Bubuk" class="w-full h-40 object-cover rounded-lg">
-                                <h3 class="mt-3 font-semibold text-lg">Kopi Bubuk</h3>
-                                <div class="flex items-center gap-x-6 pb-2">
-                                    <p class="text-green-600 font-bold text-lg">Rp. 15.000</p>
-                                    <p class="text-black-500">stok: 5</p>
-                                </div>
-                            </div>
-                            <div class="border rounded-lg shadow-md p-3 max-w-[200px] mx-auto cursor-pointer">
-                                <img src="{{ asset('images/Teh Herbal.jpeg') }}" alt="Teh Herbal" class="w-full h-40 object-cover rounded-lg">
-                                <h3 class="mt-3 font-semibold text-lg">Teh Herbal</h3>
-                                <div class="flex items-center gap-x-6 pb-2">
-                                    <p class="text-green-600 font-bold text-lg">Rp. 18.000</p>
-                                    <p class="text-black-500">stok: 15</p>
-                                </div>
-                            </div>
-                            <div class="border rounded-lg shadow-md p-3 max-w-[200px] mx-auto cursor-pointer">
-                                <img src="{{ asset('images/Sirup Jahe.jpeg') }}" alt="Sirup Jahe" class="w-full h-40 object-cover rounded-lg">
-                                <h3 class="mt-3 font-semibold text-lg">Sirup Jahe</h3>
-                                <div class="flex items-center gap-x-6 pb-2">
-                                    <p class="text-green-600 font-bold text-lg">Rp. 22.000</p>
-                                    <p class="text-black-500">stok: 7</p>
-                                </div>
-                            </div>
-                            <div class="border rounded-lg shadow-md p-3 max-w-[200px] mx-auto cursor-pointer hidden">
-                                <img src="{{ asset('images/Kue Kering.jpeg') }}" alt="Kue Kering" class="w-full h-40 object-cover rounded-lg">
-                                <h3 class="mt-3 font-semibold text-lg">Kue Kering</h3>
-                                <div class="flex items-center gap-x-6 pb-2">
-                                    <p class="text-green-600 font-bold text-lg">Rp. 30.000</p>
-                                    <p class="text-black-500">stok: 9</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flex justify-center space-x-2 mt-4 hidden" id="produk-dots"></div>
-                        <div class="flex justify-center mt-4 hidden" id="produk-nav">
-                            <button class="btn btn-outline mr-2" onclick="prevSlide('produk')">←</button>
-                            <button class="btn btn-outline" onclick="nextSlide('produk')">→</button>
-                        </div>
-                </div>
-            </div>
-            <div id="kegiatan" class="info-tab-content hidden py-4">
-                <div class="relative">
-                    <div id="kegiatan-carousel" class="carousel grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-                        <div class="bg-red-500 text-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow max-w-[250px] mx-auto cursor-pointer">
-                            <div class="h-32">
-                                <img src="{{ asset('images/Abon Lele.jpeg') }}" alt="Rapat Kelompok Tani Sida Megar" class="w-full h-full object-cover" />
-                            </div>
-                            <div class="p-6">
-                                <h3 class="font-bold text-sm mb-2 leading-tight">Rapat Kelompok Tani Sida Megar</h3>
-                                <p class="text-xs opacity-75 mb-4">20 Agustus 2025</p>
-                            </div>
-                        </div>
-                        <div class="bg-red-500 text-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow max-w-[250px] mx-auto cursor-pointer">
-                            <div class="h-32">
-                                <img src="{{ asset('images/Jahe Instan.jpeg') }}" alt="Menanam Kelompok Tani Sida Megar" class="w-full h-full object-cover" />
-                            </div>
-                            <div class="p-6">
-                                <h3 class="font-bold text-sm mb-2 leading-tight">Menanam Kelompok Tani Sida Megar</h3>
-                                <p class="text-xs opacity-75 mb-4">18 Agustus 2025</p>
-                            </div>
-                        </div>
-                        <div class="bg-red-500 text-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow max-w-[250px] mx-auto cursor-pointer">
-                            <div class="h-32">
-                                <img src="{{ asset('images/Kripik Pisang.jpeg') }}" alt="Pelatihan Kelompok Tani" class="w-full h-full object-cover" />
-                            </div>
-                            <div class="p-6">
-                                <h3 class="font-bold text-sm mb-2 leading-tight">Pelatihan Kelompok Tani</h3>
-                                <p class="text-xs opacity-75 mb-4">15 Agustus 2025</p>
-                            </div>
-                        </div>
-                        <div class="bg-red-500 text-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow max-w-[250px] mx-auto cursor-pointer">
-                            <div class="h-32">
-                                <img src="{{ asset('images/Kripik Tempe.jpeg') }}" alt="Sosialisasi Program INNDESA" class="w-full h-full object-cover" />
-                            </div>
-                            <div class="p-6">
-                                <h3 class="font-bold text-sm mb-2 leading-tight">Sosialisasi Program INNDESA</h3>
-                                <p class="text-xs opacity-75 mb-4">12 Agustus 2025</p>
-                            </div>
-                        </div>
-                        <div class="bg-red-500 text-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow max-w-[250px] mx-auto cursor-pointer">
-                            <div class="h-32">
-                                <img src="{{ asset('images/Sambal Bawang.jpeg') }}" alt="Workshop Pertanian" class="w-full h-full object-cover" />
-                            </div>
-                            <div class="p-6">
-                                <h3 class="font-bold text-sm mb-2 leading-tight">Workshop Pertanian</h3>
-                                <p class="text-xs opacity-75 mb-4">10 Agustus 2025</p>
-                            </div>
-                        </div>
-                        <div class="bg-red-500 text-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow max-w-[250px] mx-auto cursor-pointer">
-                            <div class="h-32">
-                                <img src="{{ asset('images/Kopi Bubuk.jpeg') }}" alt="Pendampingan Petani" class="w-full h-full object-cover" />
-                            </div>
-                            <div class="p-6">
-                                <h3 class="font-bold text-sm mb-2 leading-tight">Pendampingan Petani</h3>
-                                <p class="text-xs opacity-75 mb-4">8 Agustus 2025</p>
-                            </div>
-                        </div>
-                        <div class="bg-red-500 text-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow max-w-[250px] mx-auto cursor-pointer">
-                            <div class="h-32">
-                                <img src="{{ asset('images/Teh Herbal.jpeg') }}" alt="Pameran Produk Lokal" class="w-full h-full object-cover" />
-                            </div>
-                            <div class="p-6">
-                                <h3 class="font-bold text-sm mb-2 leading-tight">Pameran Produk Lokal</h3>
-                                <p class="text-xs opacity-75 mb-4">5 Agustus 2025</p>
-                            </div>
-                        </div>
-                        <div class="bg-red-500 text-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow max-w-[250px] mx-auto cursor-pointer">
-                            <div class="h-32">
-                                <img src="{{ asset('images/Sirup Jahe.jpeg') }}" alt="Pelatihan Pengolahan Pangan" class="w-full h-full object-cover" />
-                            </div>
-                            <div class="p-6">
-                                <h3 class="font-bold text-sm mb-2 leading-tight">Pelatihan Pengolahan Pangan</h3>
-                                <p class="text-xs opacity-75 mb-4">3 Agustus 2025</p>
-                            </div>
-                        </div>
-                        <div class="bg-red-500 text-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow max-w-[250px] mx-auto cursor-pointer hidden">
-                            <div class="h-32">
-                                <img src="{{ asset('images/Kue Kering.jpeg') }}" alt="Kunjungan Lapangan" class="w-full h-full object-cover" />
-                            </div>
-                            <div class="p-6">
-                                <h3 class="font-bold text-sm mb-2 leading-tight">Kunjungan Lapangan</h3>
-                                <p class="text-xs opacity-75 mb-4">1 Agustus 2025</p>
-                            </div>
+                    </a>
+
+                    <div class="border rounded-lg shadow-md p-3 max-w-[200px] mx-auto cursor-pointer">
+                        <img src="{{ asset('images/Jahe Instan.jpeg') }}" alt="Jahe Instant" class="w-full h-40 object-cover rounded-lg">
+                        <h3 class="mt-3 font-semibold text-lg">Jahe Instant</h3>
+                        <div class="flex items-center gap-x-6 pb-2">
+                            <p class="text-green-600 font-bold text-lg">Rp. 15.000</p>
+                            <p class="text-black-500">stok: 20</p>
                         </div>
                     </div>
-                    <div class="flex justify-center space-x-2 mt-4 hidden" id="kegiatan-dots"></div>
-                    <div class="flex justify-center mt-4 hidden" id="kegiatan-nav">
-                        <button class="btn btn-outline mr-2" onclick="prevSlide('kegiatan')">←</button>
-                        <button class="btn btn-outline" onclick="nextSlide('kegiatan')">→</button>
+                    <div class="border rounded-lg shadow-md p-3 max-w-[200px] mx-auto cursor-pointer">
+                        <img src="{{ asset('images/Kripik Pisang.jpeg') }}" alt="Kripik Pisang" class="w-full h-40 object-cover rounded-lg">
+                        <h3 class="mt-3 font-semibold text-lg">Kripik Pisang</h3>
+                        <div class="flex items-center gap-x-6 pb-2">
+                            <p class="text-green-600 font-bold text-lg">Rp. 15.000</p>
+                            <p class="text-black-500">stok: 10</p>
+                        </div>
+                    </div>
+                    <div class="border rounded-lg shadow-md p-3 max-w-[200px] mx-auto cursor-pointer">
+                        <img src="{{ asset('images/Kripik Tempe.jpeg') }}" alt="Kripik Tempe" class="w-full h-40 object-cover rounded-lg">
+                        <h3 class="mt-3 font-semibold text-lg">Kripik Tempe</h3>
+                        <div class="flex items-center gap-x-6 pb-2">
+                            <p class="text-green-600 font-bold text-lg">Rp. 12.000</p>
+                            <p class="text-black-500">stok: 8</p>
+                        </div>
+                    </div>
+                    <div class="border rounded-lg shadow-md p-3 max-w-[200px] mx-auto cursor-pointer">
+                        <img src="{{ asset('images/Sambal Bawang.jpeg') }}" alt="Sambal Bawang" class="w-full h-40 object-cover rounded-lg">
+                        <h3 class="mt-3 font-semibold text-lg">Sambal Bawang</h3>
+                        <div class="flex items-center gap-x-6 pb-2">
+                            <p class="text-green-600 font-bold text-lg">Rp. 20.000</p>
+                            <p class="text-black-500">stok: 6</p>
+                        </div>
+                    </div>
+                    <div class="border rounded-lg shadow-md p-3 max-w-[200px] mx-auto cursor-pointer">
+                        <img src="{{ asset('images/Kopi Bubuk.jpeg') }}" alt="Kopi Bubuk" class="w-full h-40 object-cover rounded-lg">
+                        <h3 class="mt-3 font-semibold text-lg">Kopi Bubuk</h3>
+                        <div class="flex items-center gap-x-6 pb-2">
+                            <p class="text-green-600 font-bold text-lg">Rp. 15.000</p>
+                            <p class="text-black-500">stok: 5</p>
+                        </div>
+                    </div>
+                    <div class="border rounded-lg shadow-md p-3 max-w-[200px] mx-auto cursor-pointer">
+                        <img src="{{ asset('images/Teh Herbal.jpeg') }}" alt="Teh Herbal" class="w-full h-40 object-cover rounded-lg">
+                        <h3 class="mt-3 font-semibold text-lg">Teh Herbal</h3>
+                        <div class="flex items-center gap-x-6 pb-2">
+                            <p class="text-green-600 font-bold text-lg">Rp. 18.000</p>
+                            <p class="text-black-500">stok: 15</p>
+                        </div>
+                    </div>
+                    <div class="border rounded-lg shadow-md p-3 max-w-[200px] mx-auto cursor-pointer">
+                        <img src="{{ asset('images/Sirup Jahe.jpeg') }}" alt="Sirup Jahe" class="w-full h-40 object-cover rounded-lg">
+                        <h3 class="mt-3 font-semibold text-lg">Sirup Jahe</h3>
+                        <div class="flex items-center gap-x-6 pb-2">
+                            <p class="text-green-600 font-bold text-lg">Rp. 22.000</p>
+                            <p class="text-black-500">stok: 7</p>
+                        </div>
+                    </div>
+                    <div class="border rounded-lg shadow-md p-3 max-w-[200px] mx-auto cursor-pointer hidden">
+                        <img src="{{ asset('images/Kue Kering.jpeg') }}" alt="Kue Kering" class="w-full h-40 object-cover rounded-lg">
+                        <h3 class="mt-3 font-semibold text-lg">Kue Kering</h3>
+                        <div class="flex items-center gap-x-6 pb-2">
+                            <p class="text-green-600 font-bold text-lg">Rp. 30.000</p>
+                            <p class="text-black-500">stok: 9</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div id="inovasi" class="info-tab-content hidden py-4">
-                <div class="relative">
-                    <div id="inovasi-carousel" class="carousel">
-                        <img src="{{ asset('images/Abon Lele.jpeg') }}" alt="Inovasi 1" class="w-full max-w-[36rem] mx-auto h-64 object-cover rounded-lg shadow-md border border-gray-200 cursor-pointer block">
-                        <img src="{{ asset('images/Jahe Instan.jpeg') }}" alt="Inovasi 2" class="w-full max-w-[36rem] mx-auto h-64 object-cover rounded-lg shadow-md border border-gray-200 cursor-pointer hidden">
-                        <img src="{{ asset('images/Kripik Pisang.jpeg') }}" alt="Inovasi 3" class="w-full max-w-[36rem] mx-auto h-64 object-cover rounded-lg shadow-md border border-gray-200 cursor-pointer hidden">
-                    </div>
-                    <div class="flex justify-center space-x-2 mt-4" id="inovasi-dots"></div>
-                    <div class="flex justify-center mt-4">
-                        <button class="btn btn-outline mr-2" onclick="prevSlide('inovasi')">←</button>
-                        <button class="btn btn-outline" onclick="nextSlide('inovasi')">→</button>
-                    </div>
+                <div class="flex justify-center space-x-2 mt-4 hidden" id="produk-dots"></div>
+                <div class="flex justify-center mt-4 hidden" id="produk-nav">
+                    <button class="btn btn-outline mr-2" onclick="prevSlide('produk')">←</button>
+                    <button class="btn btn-outline" onclick="nextSlide('produk')">→</button>
                 </div>
             </div>
         </div>
+        <div id="kegiatan" class="info-tab-content hidden py-4">
+            <div class="relative">
+                <div id="kegiatan-carousel" class="carousel grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="bg-red-500 text-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow max-w-[250px] mx-auto cursor-pointer">
+                        <div class="h-32">
+                            <img src="{{ asset('images/Abon Lele.jpeg') }}" alt="Rapat Kelompok Tani Sida Megar" class="w-full h-full object-cover" />
+                        </div>
+                        <div class="p-6">
+                            <h3 class="font-bold text-sm mb-2 leading-tight">Rapat Kelompok Tani Sida Megar</h3>
+                            <p class="text-xs opacity-75 mb-4">20 Agustus 2025</p>
+                        </div>
+                    </div>
+                    <div class="bg-red-500 text-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow max-w-[250px] mx-auto cursor-pointer">
+                        <div class="h-32">
+                            <img src="{{ asset('images/Jahe Instan.jpeg') }}" alt="Menanam Kelompok Tani Sida Megar" class="w-full h-full object-cover" />
+                        </div>
+                        <div class="p-6">
+                            <h3 class="font-bold text-sm mb-2 leading-tight">Menanam Kelompok Tani Sida Megar</h3>
+                            <p class="text-xs opacity-75 mb-4">18 Agustus 2025</p>
+                        </div>
+                    </div>
+                    <div class="bg-red-500 text-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow max-w-[250px] mx-auto cursor-pointer">
+                        <div class="h-32">
+                            <img src="{{ asset('images/Kripik Pisang.jpeg') }}" alt="Pelatihan Kelompok Tani" class="w-full h-full object-cover" />
+                        </div>
+                        <div class="p-6">
+                            <h3 class="font-bold text-sm mb-2 leading-tight">Pelatihan Kelompok Tani</h3>
+                            <p class="text-xs opacity-75 mb-4">15 Agustus 2025</p>
+                        </div>
+                    </div>
+                    <div class="bg-red-500 text-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow max-w-[250px] mx-auto cursor-pointer">
+                        <div class="h-32">
+                            <img src="{{ asset('images/Kripik Tempe.jpeg') }}" alt="Sosialisasi Program INNDESA" class="w-full h-full object-cover" />
+                        </div>
+                        <div class="p-6">
+                            <h3 class="font-bold text-sm mb-2 leading-tight">Sosialisasi Program INNDESA</h3>
+                            <p class="text-xs opacity-75 mb-4">12 Agustus 2025</p>
+                        </div>
+                    </div>
+                    <div class="bg-red-500 text-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow max-w-[250px] mx-auto cursor-pointer">
+                        <div class="h-32">
+                            <img src="{{ asset('images/Sambal Bawang.jpeg') }}" alt="Workshop Pertanian" class="w-full h-full object-cover" />
+                        </div>
+                        <div class="p-6">
+                            <h3 class="font-bold text-sm mb-2 leading-tight">Workshop Pertanian</h3>
+                            <p class="text-xs opacity-75 mb-4">10 Agustus 2025</p>
+                        </div>
+                    </div>
+                    <div class="bg-red-500 text-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow max-w-[250px] mx-auto cursor-pointer">
+                        <div class="h-32">
+                            <img src="{{ asset('images/Kopi Bubuk.jpeg') }}" alt="Pendampingan Petani" class="w-full h-full object-cover" />
+                        </div>
+                        <div class="p-6">
+                            <h3 class="font-bold text-sm mb-2 leading-tight">Pendampingan Petani</h3>
+                            <p class="text-xs opacity-75 mb-4">8 Agustus 2025</p>
+                        </div>
+                    </div>
+                    <div class="bg-red-500 text-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow max-w-[250px] mx-auto cursor-pointer">
+                        <div class="h-32">
+                            <img src="{{ asset('images/Teh Herbal.jpeg') }}" alt="Pameran Produk Lokal" class="w-full h-full object-cover" />
+                        </div>
+                        <div class="p-6">
+                            <h3 class="font-bold text-sm mb-2 leading-tight">Pameran Produk Lokal</h3>
+                            <p class="text-xs opacity-75 mb-4">5 Agustus 2025</p>
+                        </div>
+                    </div>
+                    <div class="bg-red-500 text-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow max-w-[250px] mx-auto cursor-pointer">
+                        <div class="h-32">
+                            <img src="{{ asset('images/Sirup Jahe.jpeg') }}" alt="Pelatihan Pengolahan Pangan" class="w-full h-full object-cover" />
+                        </div>
+                        <div class="p-6">
+                            <h3 class="font-bold text-sm mb-2 leading-tight">Pelatihan Pengolahan Pangan</h3>
+                            <p class="text-xs opacity-75 mb-4">3 Agustus 2025</p>
+                        </div>
+                    </div>
+                    <div class="bg-red-500 text-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow max-w-[250px] mx-auto cursor-pointer hidden">
+                        <div class="h-32">
+                            <img src="{{ asset('images/Kue Kering.jpeg') }}" alt="Kunjungan Lapangan" class="w-full h-full object-cover" />
+                        </div>
+                        <div class="p-6">
+                            <h3 class="font-bold text-sm mb-2 leading-tight">Kunjungan Lapangan</h3>
+                            <p class="text-xs opacity-75 mb-4">1 Agustus 2025</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-center space-x-2 mt-4 hidden" id="kegiatan-dots"></div>
+                <div class="flex justify-center mt-4 hidden" id="kegiatan-nav">
+                    <button class="btn btn-outline mr-2" onclick="prevSlide('kegiatan')">←</button>
+                    <button class="btn btn-outline" onclick="nextSlide('kegiatan')">→</button>
+                </div>
+            </div>
+        </div>
+        <div id="inovasi" class="info-tab-content hidden py-4">
+            <div class="relative">
+                <div id="inovasi-carousel" class="carousel">
+                    <img src="{{ asset('images/Abon Lele.jpeg') }}" alt="Inovasi 1" class="w-full max-w-[36rem] mx-auto h-64 object-cover rounded-lg shadow-md border border-gray-200 cursor-pointer block">
+                    <img src="{{ asset('images/Jahe Instan.jpeg') }}" alt="Inovasi 2" class="w-full max-w-[36rem] mx-auto h-64 object-cover rounded-lg shadow-md border border-gray-200 cursor-pointer hidden">
+                    <img src="{{ asset('images/Kripik Pisang.jpeg') }}" alt="Inovasi 3" class="w-full max-w-[36rem] mx-auto h-64 object-cover rounded-lg shadow-md border border-gray-200 cursor-pointer hidden">
+                </div>
+                <div class="flex justify-center space-x-2 mt-4" id="inovasi-dots"></div>
+                <div class="flex justify-center mt-4">
+                    <button class="btn btn-outline mr-2" onclick="prevSlide('inovasi')">←</button>
+                    <button class="btn btn-outline" onclick="nextSlide('inovasi')">→</button>
+                </div>
+            </div>
+        </div>
+    </div>
     </div>
 
     <div id="previewModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
@@ -402,13 +376,12 @@
         </div>
     </div>
 
-    
+
     <div class="w-full">
         @include('footer')
     </div>
 
     <script>
-        
         function openProfileTab(tabId) {
             const tabs = document.querySelectorAll('.profile-tab-content');
             const buttons = document.querySelectorAll('.profile-tab-button');
@@ -536,7 +509,7 @@
             updateCarousel(section);
         }
 
-        
+
         createDots('sk-desa');
         createDots('produk');
         createDots('kegiatan');
@@ -546,7 +519,7 @@
         updateCarousel('kegiatan');
         updateCarousel('inovasi');
 
-        
+
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') closePreview();
             if (e.key === 'ArrowRight') {
@@ -563,7 +536,7 @@
             }
         });
 
-        
+
         document.querySelectorAll('.btn-outline').forEach(btn => {
             btn.setAttribute('tabindex', '0');
             btn.addEventListener('keypress', (e) => {

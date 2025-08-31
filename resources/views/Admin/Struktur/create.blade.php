@@ -29,7 +29,7 @@
             <input type="text" name="rentan" id="rentan" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Masukkan Jenis kelompok rentannya(Pengangguran,Lansia,Janda,dll" required>
         </div>
         <div class="flex justify-end space-x-4">
-            <a href="{{ route('Admin.kelompok_integritas.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 flex items-center">
+            <a href="{{ route('Admin.struktur.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 flex items-center">
                 <i class="fas fa-arrow-left mr-2"></i>Kembali
             </a>
             <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 flex items-center">
