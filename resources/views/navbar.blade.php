@@ -73,7 +73,6 @@
                                     </button>
                                     <div id="kwtDropdown" class="mt-1 ml-6 w-44 rounded-md shadow-lg bg-sky-100 ring-1 ring-sky-200 ring-opacity-50 hidden">
                                         <a href="{{ route('kelompok.index') }}" class="submenu-item block px-4 py-2 text-sky-800 hover:bg-sky-200 transition-colors duration-150" data-parent="kwt" data-submenu="kwt-sida">Kelompok Tani Sida Megar</a>
-                                        <a href="#" class="submenu-item block px-4 py-2 text-sky-800 hover:bg-sky-200 transition-colors duration-150" data-parent="kwt" data-submenu="kwt-sub2">Submenu 2</a>
                                     </div>
                                 </div>
 
@@ -86,7 +85,6 @@
                                     </button>
                                     <div id="pertanianDropdown" class="mt-1 ml-6 w-44 rounded-md shadow-lg bg-sky-100 ring-1 ring-sky-200 ring-opacity-50 hidden">
                                         <a href="#" class="submenu-item block px-4 py-2 text-sky-800 hover:bg-sky-200 transition-colors duration-150" data-parent="pertanian" data-submenu="pertanian-petani">Kelompok Tani Milenial</a>
-                                        <a href="#" class="submenu-item block px-4 py-2 text-sky-800 hover:bg-sky-200 transition-colors duration-150" data-parent="pertanian" data-submenu="pertanian-subB">Submenu B</a>
                                     </div>
                                 </div>
                             </div>
@@ -142,7 +140,7 @@
         // let activeSubmenuItem = null;
         let path = window.location.pathname;
 
-        let currentActiveMenu = 'beranda'; 
+        let currentActiveMenu = 'beranda';
         if (path.includes('publikasi')) {
             currentActiveMenu = 'publikasi';
         } else if (path.includes('produk')) {
@@ -195,7 +193,7 @@
             const arrow = document.getElementById(arrowId);
             if (arrow) {
                 if (isOpen) {
-                    arrow.style.transform = 'rotate(90deg)'; 
+                    arrow.style.transform = 'rotate(90deg)';
                 } else {
                     arrow.style.transform = 'rotate(0deg)';
                 }

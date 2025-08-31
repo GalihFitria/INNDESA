@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\ProdukController as AdminProdukController;
 use App\Http\Controllers\Admin\SidebarController;
 use App\Http\Controllers\Admin\StrukturController;
 use App\Http\Controllers\DetailProdukController;
+use App\Http\Controllers\FotoController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\KelompokController;
 use App\Http\Controllers\PublikasiController;
@@ -56,3 +57,4 @@ Route::prefix('Admin')->name('Admin.')->group(function () {
     Route::resource('katalog', KatalogController::class);
 
 });
+

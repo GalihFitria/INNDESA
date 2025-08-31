@@ -19,7 +19,16 @@
         </div>
         <div>
             <label for="katalog" class="block text-sm font-medium text-gray-700">Katalog</label>
-            <input type="file" name="katalog" id="katalog" accept=".pdf" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
+            <input type="file" name="katalog" id="katalog" accept=".pdf,.jpg,.jpeg,.png" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
+
+            @if($katalog->katalog)
+            <p class="mt-2 text-sm text-gray-700">
+                File saat ini:
+                <a href="https://drive.google.com/file/d/{{ $katalog->katalog }}/view" target="_blank" class="text-blue-600 hover:underline">
+                    Lihat Katalog
+                </a>
+            </p>
+            @endif
         </div>
         <div class="flex justify-end space-x-4">
             <a href="{{ route('Admin.katalog.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 flex items-center">

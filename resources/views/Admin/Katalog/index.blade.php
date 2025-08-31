@@ -31,10 +31,8 @@
                     <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $kt->kode_katalog }}</td>
                     <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $kt->kelompok->nama ?? '-' }}</td>
                     <td class="border border-gray-300 p-3 text-sm text-gray-900 text-center">
-                        @if($kt->katalog)
-                        <a href="{{ asset('Uploads/katalog/' . $kt->katalog) }}"
-                            target="_blank"
-                            class="text-blue-600 hover:underline">
+                        @if ($kt->file_url)
+                        <a href="{{ $kt->file_url }}" target="_blank" class="text-blue-600 hover:underline">
                             Lihat File
                         </a>
                         @else

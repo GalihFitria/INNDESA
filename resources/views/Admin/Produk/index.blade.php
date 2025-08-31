@@ -32,7 +32,7 @@
                 @forelse ($produk as $index => $p)
                 <tr class="data-row">
                     <td class="border border-gray-300 p-3 text-center text-sm text-gray-900">{{ $index + 1 }}</td>
-                    <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $p->id_produk }}</td>
+                    <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $p->kode_produk }}</td>
                     <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $p->kelompok->nama ?? '-' }}</td>
                     <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $p->nama }}</td>
                     <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $p->harga }}</td>
