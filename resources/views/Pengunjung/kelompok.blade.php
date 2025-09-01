@@ -37,16 +37,41 @@
 <body class="min-h-screen bg-white font-poppins">
 
     @include('navbar')
+    <section class="relative text-white overflow-hidden min-h-[550px] flex flex-col items-center pt-32 {{ $kelompok->background ? 'bg-[url(\'' . asset('storage/' . $kelompok->background) . '\')]' : 'bg-gray-800' }} bg-cover bg-center">
+        <div class="text-center space-y-5 mt-20">
+            <div class="absolute top-12 left-16 flex items-center space-x-3">
+                @if (!empty($kelompok->logo) && Storage::disk('public')->exists($kelompok->logo))
+                @php
+                $extension = pathinfo($kelompok->logo, PATHINFO_EXTENSION);
+                $isImage = in_array(strtolower($extension), ['jpg', 'jpeg', 'png']);
+                @endphp
+                @if ($isImage)
+                <img
+                    src="{{ asset('storage/' . $kelompok->logo) }}"
+                    alt="Logo {{ $kelompok->getKodeKelompokAttribute() }}"
+                    class="h-24 w-auto max-h-32 object-contain"
+                    onerror="this.src='{{ asset('images/fallback-logo.png') }}'">
+                @else
+                <a
+                    href="{{ asset('storage/' . $kelompok->logo) }}"
+                    target="_blank"
+                    class="text-blue-400 hover:text-blue-600 text-xl">
+                    View Logo (PDF)
+                </a>
+                @endif
+                @else
+                <img
+                    src="{{ asset('images/fallback-logo.png') }}"
+                    alt="Default Logo"
+                    class="h-24 w-auto max-h-32 object-contain">
+                @endif
+            </div>
 
-
-    <section class="relative text-white overflow-hidden min-h-[550px] flex flex-col items-center pt-32 bg-[url('{{ asset('images/background_beranda_INNDESA.jpeg') }}')] bg-cover bg-center">
-        <div class="text-center space-y-5 mt-16">
             <h2 class="text-7xl md:text-7xl font-bold text-[#0097D4]">
                 Kelompok {{ $kelompok->nama }}
             </h2>
         </div>
     </section>
-
 
     <h2 class="text-4xl font-bold text-blue-600 text-center mb-8 mt-10">Profile Kelompok</h2>
     <div class="w-full border-t border-gray-200 pt-4 box-border">
@@ -91,54 +116,90 @@
             </div>
             <div id="sk-desa" class="profile-tab-content hidden py-4">
                 <div class="relative">
+                    @if ($kelompok && $kelompok->sk_desa)
                     <div id="sk-desa-carousel" class="carousel">
-                        <img src="{{ asset('images/Abon Lele.jpeg') }}" alt="SK Desa 1" class="w-full max-w-[36rem] mx-auto h-64 object-cover rounded-lg shadow-md border border-gray-200 cursor-pointer block">
-                        <img src="{{ asset('images/Jahe Instan.jpeg') }}" alt="SK Desa 2" class="w-full max-w-[36rem] mx-auto h-64 object-cover rounded-lg shadow-md border border-gray-200 cursor-pointer hidden">
-                        <img src="{{ asset('images/Kripik Pisang.jpeg') }}" alt="SK Desa 3" class="w-full max-w-[36rem] mx-auto h-64 object-cover rounded-lg shadow-md border border-gray-200 cursor-pointer hidden">
+                        @php
+                        $skDesaFiles = [$kelompok->sk_desa]; // Ambil sk_desa sebagai array tunggal
+                        $extension = pathinfo($kelompok->sk_desa, PATHINFO_EXTENSION);
+                        $isImage = in_array(strtolower($extension), ['jpg', 'jpeg', 'png', 'gif']);
+                        @endphp
+                        @foreach ($skDesaFiles as $index => $file)
+                        @if ($isImage)
+                        <img
+                            src="{{ asset('storage/' . $file) }}"
+                            alt="SK Desa {{ $kelompok->getKodeKelompokAttribute() }}"
+                            class="w-full max-w-[30rem] mx-auto h-60 object-contain rounded-lg shadow-md border border-gray-200 cursor-pointer {{ $index === 0 ? 'block' : 'hidden' }}"
+                            onclick="openPreview('{{ asset('storage/' . $file) }}', 'SK Desa {{ $kelompok->getKodeKelompokAttribute() }}')">
+                        @else
+                        <iframe
+                            src="{{ asset('storage/' . $file) }}"
+                            type="application/pdf"
+                            class="w-full max-w-[30rem] mx-auto h-60 rounded-lg shadow-md border border-gray-200 {{ $index === 0 ? 'block' : 'hidden' }}"
+                            onclick="openPreview('{{ asset('storage/' . $file) }}', 'SK Desa {{ $kelompok->getKodeKelompokAttribute() }}')">
+                        </iframe>
+                        @endif
+                        @endforeach
                     </div>
                     <div class="flex justify-center space-x-2 mt-4" id="sk-desa-dots"></div>
                     <div class="flex justify-center mt-4">
                         <button class="btn btn-outline mr-2" onclick="prevSlide('sk-desa')">←</button>
                         <button class="btn btn-outline" onclick="nextSlide('sk-desa')">→</button>
                     </div>
+                    @else
+                    <p class="text-center text-gray-500">Tidak ada data SK Desa yang tersedia.</p>
+                    @endif
                 </div>
             </div>
             <div id="kelompok-rentan" class="profile-tab-content hidden py-4">
+                @if ($rentanCategories->isNotEmpty())
                 <table class="w-full border-collapse mt-4 border border-gray-200">
                     <tr>
-                        <th class="border border-gray-200 p-2 text-left">Janda</th>
-                        <th class="border border-gray-200 p-2 text-left">Lansia</th>
-                        <th class="border border-gray-200 p-2 text-left">Pengangguran</th>
-                        <th class="border border-gray-200 p-2 text-left">Disabilitas</th>
-                        <th class="border border-gray-200 p-2 text-left">Kurang Mampu</th>
+                        @foreach ($rentanCategories as $category)
+                        <th class="border border-gray-200 p-2 text-left">{{ $category }}</th>
+                        @endforeach
                     </tr>
-                    <tr>
-                        <td class="border border-gray-200 p-2">Siti</td>
-                        <td class="border border-gray-200 p-2">Ana</td>
-                        <td class="border border-gray-200 p-2">Rudi</td>
-                        <td class="border border-gray-200 p-2">Budi</td>
-                        <td class="border border-gray-200 p-2">Agus</td>
-                    </tr>
-                    <tr>
-                        <td class="border border-gray-200 p-2">Ani</td>
-                        <td class="border border-gray-200 p-2">Niko</td>
-                        <td class="border border-gray-200 p-2"></td>
-                        <td class="border border-gray-200 p-2"></td>
-                        <td class="border border-gray-200 p-2"></td>
-                    </tr>
+                    @php
+                    // Hitung jumlah baris maksimum untuk setiap kategori
+                    $maxRows = max(array_map(function($category) use ($rentanGrouped) {
+                    return isset($rentanGrouped[$category]) ? $rentanGrouped[$category]->count() : 0;
+                    }, $rentanCategories->toArray()));
+                    @endphp
+                    @for ($i = 0; $i < $maxRows; $i++)
+                        <tr>
+                        @foreach ($rentanCategories as $category)
+                        <td class="border border-gray-200 p-2">
+                            @if (isset($rentanGrouped[$category]) && isset($rentanGrouped[$category][$i]))
+                            {{ $rentanGrouped[$category][$i]->nama_anggota }}
+                            @else
+                            &nbsp;
+                            @endif
+                        </td>
+                        @endforeach
+                        </tr>
+                        @endfor
                 </table>
+                @else
+                <p>Tidak ada data kelompok rentan yang tersedia.</p>
+                @endif
             </div>
+
             <div id="total-produk" class="profile-tab-content hidden py-4">
+                @if ($produk->isNotEmpty())
                 <table class="w-full border-collapse mt-4 border border-gray-200">
                     <tr>
                         <th class="border border-gray-200 p-2 text-left">Nama Produk</th>
                         <th class="border border-gray-200 p-2 text-left">Total</th>
                     </tr>
+                    @foreach ($produk as $item)
                     <tr>
-                        <td class="border border-gray-200 p-2">Abon Lele</td>
-                        <td class="border border-gray-200 p-2">5 pcs</td>
+                        <td class="border border-gray-200 p-2">{{ $item->nama }}</td>
+                        <td class="border border-gray-200 p-2">{{ $item->stok }} pcs</td>
                     </tr>
+                    @endforeach
                 </table>
+                @else
+                <p>Tidak ada data produk yang tersedia.</p>
+                @endif
             </div>
         </div>
     </div>
@@ -155,7 +216,7 @@
             <div id="produk" class="info-tab-content block py-4">
                 <div class="flex items-center justify-between mb-4">
                     <div class="flex items-center gap-x-6">
-                        <div class="text-green-600 font-medium">Total Produk yang terjual: 4</div>
+                        <div class="text-green-600 font-medium">Total Produk yang terjual: {{ $totalProdukTerjual }}</div>
                         <a href="https://wa.me/6289647038212?text=Halo%20saya%20tertarik%20dengan%20produk%20Anda"
                             rel="noopener noreferrer"
                             class="flex items-center gap-1 text-gray-800 hover:text-sky-600 transition-colors font-medium">
@@ -163,10 +224,14 @@
                         </a>
                     </div>
                     <div class="flex items-center gap-x-4">
-                        <a href="{{ asset('katalog/pdf_dumy.pdf') }}"
+                        @if($katalog && $katalog->katalog)
+                        <a href="{{ asset('storage/' . $katalog->katalog) }}"
                             class="flex items-center gap-1 text-gray-800 hover:text-sky-600 transition-colors font-medium">
                             Katalog
                         </a>
+                        @else
+                        <span class="text-gray-500">Katalog tidak tersedia</span>
+                        @endif
                         <input type="text" placeholder="Cari Produk..."
                             class="border rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-sky-500" />
                     </div>
@@ -351,16 +416,38 @@
         </div>
         <div id="inovasi" class="info-tab-content hidden py-4">
             <div class="relative">
+                @if ($inovasiImages->isNotEmpty())
                 <div id="inovasi-carousel" class="carousel">
-                    <img src="{{ asset('images/Abon Lele.jpeg') }}" alt="Inovasi 1" class="w-full max-w-[36rem] mx-auto h-64 object-cover rounded-lg shadow-md border border-gray-200 cursor-pointer block">
-                    <img src="{{ asset('images/Jahe Instan.jpeg') }}" alt="Inovasi 2" class="w-full max-w-[36rem] mx-auto h-64 object-cover rounded-lg shadow-md border border-gray-200 cursor-pointer hidden">
-                    <img src="{{ asset('images/Kripik Pisang.jpeg') }}" alt="Inovasi 3" class="w-full max-w-[36rem] mx-auto h-64 object-cover rounded-lg shadow-md border border-gray-200 cursor-pointer hidden">
+                    @foreach ($inovasiImages as $index => $inovasi)
+                    @php
+                    $extension = pathinfo($inovasi->foto, PATHINFO_EXTENSION);
+                    $isImage = in_array(strtolower($extension), ['jpg', 'jpeg', 'png', 'gif']);
+                    @endphp
+
+                    @if ($isImage)
+                    <img
+                        src="{{ asset('storage/' . $inovasi->foto) }}"
+                        alt="Inovasi {{ $inovasi->getKodeInovasiAttribute() }}"
+                        class="w-full max-w-[30rem] mx-auto h-60 object-contain rounded-lg shadow-md border border-gray-200 cursor-pointer {{ $index === 0 ? 'block' : 'hidden' }}"
+                        onclick="openPreview('{{ asset('storage/' . $inovasi->foto) }}', 'Inovasi {{ $inovasi->getKodeInovasiAttribute() }}')">
+                    @else
+                    <iframe
+                        src="{{ asset('storage/' . $inovasi->foto) }}"
+                        type="application/pdf"
+                        class="w-full max-w-[30rem] mx-auto h-60 rounded-lg shadow-md border border-gray-200 {{ $index === 0 ? 'block' : 'hidden' }}"
+                        onclick="openPreview('{{ asset('storage/' . $inovasi->foto) }}', 'Inovasi {{ $inovasi->getKodeInovasiAttribute() }}', {{ json_encode($inovasi->materi) }})">
+                    </iframe>
+                    @endif
+                    @endforeach
                 </div>
                 <div class="flex justify-center space-x-2 mt-4" id="inovasi-dots"></div>
                 <div class="flex justify-center mt-4">
                     <button class="btn btn-outline mr-2" onclick="prevSlide('inovasi')">←</button>
                     <button class="btn btn-outline" onclick="nextSlide('inovasi')">→</button>
                 </div>
+                @else
+                <p class="text-center text-gray-500">Tidak ada data inovasi atau penghargaan yang tersedia.</p>
+                @endif
             </div>
         </div>
     </div>
@@ -416,7 +503,19 @@
             document.getElementById(tabId).classList.add('block');
         }
 
+        function openPreview(imageSrc, title) {
+            const modal = document.getElementById('previewModal');
+            const previewImage = document.getElementById('previewImage');
+            const previewTitle = document.getElementById('previewTitle');
+            previewImage.src = imageSrc;
+            previewTitle.textContent = title;
+            modal.classList.remove('hidden');
+        }
 
+        function closePreview() {
+            const modal = document.getElementById('previewModal');
+            modal.classList.add('hidden');
+        }
 
         const carousels = {
             'sk-desa': {
@@ -509,7 +608,6 @@
             updateCarousel(section);
         }
 
-
         createDots('sk-desa');
         createDots('produk');
         createDots('kegiatan');
@@ -518,7 +616,6 @@
         updateCarousel('produk');
         updateCarousel('kegiatan');
         updateCarousel('inovasi');
-
 
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') closePreview();
@@ -535,7 +632,6 @@
                 prevSlide('inovasi');
             }
         });
-
 
         document.querySelectorAll('.btn-outline').forEach(btn => {
             btn.setAttribute('tabindex', '0');

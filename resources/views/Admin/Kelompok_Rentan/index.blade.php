@@ -1,16 +1,16 @@
 @extends('Admin.sidebar')
 
-@section('title', 'Kelola Kelompok - INNDESA')
+@section('title', 'Kelola Kelompok Rentan - INNDESA')
 
 @section('content')
-<h2 class="text-center text-4xl font-bold text-gray-800 mb-6">.::Kelola Kelompok::.</h2>
+<h2 class="text-center text-4xl font-bold text-gray-800 mb-6">.::Kelola Kelompok Rentan::.</h2>
 
 <div class="bg-white shadow-md p-4 rounded-lg">
     <div class="flex justify-between mb-4">
-        <a href="{{ route('Admin.kelompok.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 flex items-center">
+        <a href="{{ route('Admin.kelompok_rentan.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 flex items-center">
             <i class="fas fa-plus mr-2"></i>Tambah
         </a>
-        <form action="{{ route('Admin.kelompok.index') }}" method="GET" class="w-1/3">
+        <form action="{{ route('Admin.kelompok_rentan.index') }}" method="GET" class="w-1/3">
             <input type="text" name="search" id="searchInput" placeholder="Cari ..." value="{{ request('search') }}" class="w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
         </form>
     </div>
@@ -20,54 +20,20 @@
             <thead class="bg-gray-50">
                 <tr>
                     <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">No</th>
-                    <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">Id Kelompok</th>
-                    <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">Nama Kelompok Integrasi</th>
-                    <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">Nama Kelompok</th>
-                    <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">Sejarah</th>
-                    <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">SK Desa</th>
-                    <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">Background</th>
-                    <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">Logo</th>
+                    <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">Id Kelompok Rentan</th>
+                    <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">Nama Kelompok Rentan</th>
                     <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">Aksi</th>
                 </tr>
             </thead>
             <tbody id="tableBody">
-                @forelse ($kelompok as $index => $k)
+                @forelse ($rentan as $index => $r)
                 <tr class="data-row">
                     <td class="border border-gray-300 p-3 text-center text-sm text-gray-900">{{ $index + 1 }}</td>
-                    <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $k->kode_kelompok }}</td>
-                    <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $k->kategori->nama ?? '-' }}</td>
-                    <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $k->nama }}</td>
-                    <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $k->sejarah }}</td>
-                    <td class="border border-gray-300 p-3 text-sm text-gray-900 text-center">
-                        @if ($k->sk_desa)
-                        <a href="{{ asset('storage/' . $k->sk_desa) }}" class="text-blue-600 hover:underline">
-                            {{ basename($k->sk_desa) }}
-                        </a>
-                        @else
-                        <span class="text-gray-400">-</span>
-                        @endif
-                    </td>
-                    <td class="border border-gray-300 p-3 text-sm text-gray-900 text-center">
-                        @if ($k->background)
-                        <a href="{{ asset('storage/' . $k->background) }}" class="text-blue-600 hover:underline">
-                            {{ basename($k->background) }}
-                        </a>
-                        @else
-                        <span class="text-gray-400">-</span>
-                        @endif
-                    </td>
-                    <td class="border border-gray-300 p-3 text-sm text-gray-900 text-center">
-                        @if ($k->logo)
-                        <a href="{{ asset('storage/' . $k->logo) }}" class="text-blue-600 hover:underline">
-                            {{ basename($k->logo) }}
-                        </a>
-                        @else
-                        <span class="text-gray-400">-</span>
-                        @endif
-                    </td>
+                    <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $r->kode_rentan }}</td>
+                    <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $r->nama_rentan }}</td>
                     <td class="border border-gray-300 p-3 text-center text-sm">
-                        <a href="{{ route('Admin.kelompok.edit', $k->id_kelompok) }}" class="text-blue-600 hover:underline mr-2">Edit</a>
-                        <form action="{{ route('Admin.kelompok.destroy', $k->id_kelompok) }}" method="POST" class="inline-block delete-form">
+                        <a href="{{ route('Admin.kelompok_rentan.edit', $r->id_rentan) }}" class="text-blue-600 hover:underline mr-2">Edit</a>
+                        <form action="{{ route('Admin.kelompok_rentan.destroy', $r->id_rentan) }}" method="POST" class="inline-block delete-form">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="text-red-600 hover:underline">Hapus</button>
@@ -76,7 +42,7 @@
                 </tr>
                 @empty
                 <tr id="noDataRow">
-                    <td colspan="9" class="border border-gray-300 p-3 text-center text-sm text-gray-900">Tidak ada data ditemukan</td>
+                    <td colspan="4" class="border border-gray-300 p-3 text-center text-sm text-gray-900">Tidak ada data ditemukan</td>
                 </tr>
                 @endforelse
             </tbody>
@@ -140,12 +106,9 @@
 
         const searchTerm = document.getElementById('searchInput').value.toLowerCase();
         filteredRows = Array.from(rows).filter(row => {
-            const kodeKelompok = row.cells[1].textContent.toLowerCase();
-            const namaKelompokIntegrasi = row.cells[2].textContent.toLowerCase();
-            const namaKelompok = row.cells[3].textContent.toLowerCase();
-            return kodeKelompok.includes(searchTerm) ||
-                namaKelompokIntegrasi.includes(searchTerm) ||
-                namaKelompok.includes(searchTerm);
+            const nama = row.cells[2].textContent.toLowerCase();
+            const kodeKategori = row.cells[1].textContent.toLowerCase();
+            return nama.includes(searchTerm) || kodeKategori.includes(searchTerm);
         });
 
         rows.forEach(row => row.style.display = 'none');

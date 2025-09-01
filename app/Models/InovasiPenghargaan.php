@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\PdfToImage\Pdf;
 
 class InovasiPenghargaan extends Model
 {
@@ -25,4 +26,5 @@ class InovasiPenghargaan extends Model
     {
         return 'S' . str_pad($this->id_inovasi, 1, STR_PAD_LEFT);
     }
+
 }

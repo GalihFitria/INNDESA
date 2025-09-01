@@ -3,16 +3,26 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\DriveGoogleController;
 use App\Models\Katalog;
 use App\Models\Kelompok;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 
 class KatalogController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $katalog = Katalog::with('kelompok')->get();
+        $search = $request->query('search');
+        $katalog = Katalog::with('kelompok')
+            ->when($search, function ($query, $search) {
+                return $query->where('id_katalog', 'like', "%{$search}%")
+                    ->orWhereHas('kelompok', function ($q) use ($search) {
+                        $q->where('nama', 'like', "%{$search}%");
+                    });
+            })
+            ->get();
         return view('Admin.katalog.index', compact('katalog'));
     }
 
@@ -24,24 +34,29 @@ class KatalogController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validate = $request->validate([
             'id_kelompok' => 'required|exists:kelompok,id_kelompok',
-            'katalog' => 'nullable|mimes:pdf,jpg,jpeg,png|max:2048',
+            'katalog' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
         ]);
 
         $data = $request->except('katalog');
 
         if ($request->hasFile('katalog')) {
-            $googleDrive = new DriveGoogleController();
-            $response = $googleDrive->upload($request);
+            $originalName = $request->file('katalog')->getClientOriginalName(); 
+            $baseName = pathinfo($originalName, PATHINFO_FILENAME); 
+            $extension = $request->file('katalog')->getClientOriginalExtension();
+            $fileName = $originalName;
+            $counter = 1;
 
-            // Cek apakah upload berhasil
-            if ($response->getStatusCode() == 200) {
-                $responseData = json_decode($response->getContent(), true);
-                $data['katalog'] = $responseData['file_name']; // Simpan nama file
-            } else {
-                return redirect()->back()->with('error', 'Gagal mengunggah file ke Google Drive');
+    
+            while (Storage::disk('public')->exists('uploads/' . $fileName)) {
+                $fileName = $baseName . '_' . $counter . '.' . $extension; 
+                $counter++;
             }
+
+            $path = $request->file('katalog')->storeAs('uploads', $fileName, 'public'); 
+            Log::info('Stored file: ' . $path); 
+            $data['katalog'] = $path;
         }
 
         Katalog::create($data);
@@ -58,33 +73,33 @@ class KatalogController extends Controller
 
     public function update(Request $request, string $id)
     {
-        $request->validate([
+        $validate = $request->validate([
             'id_kelompok' => 'required|exists:kelompok,id_kelompok',
-            'katalog' => 'nullable|mimes:pdf,jpg,jpeg,png|max:2048',
+            'katalog' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
         ]);
 
         $data = $request->except('katalog');
         $katalog = Katalog::findOrFail($id);
 
         if ($request->hasFile('katalog')) {
-            $googleDrive = new DriveGoogleController();
-
-            // Hapus file lama dari Google Drive jika ada
             if ($katalog->katalog) {
-                $deleteResponse = $googleDrive->destroy($katalog->katalog);
-                if ($deleteResponse->getStatusCode() != 200) {
-                    return redirect()->back()->with('error', 'Gagal menghapus file lama dari Google Drive');
-                }
+                Storage::disk('public')->delete($katalog->katalog);
             }
 
-            // Unggah file baru
-            $response = $googleDrive->upload($request);
-            if ($response->getStatusCode() == 200) {
-                $responseData = json_decode($response->getContent(), true);
-                $data['katalog'] = $responseData['file_name']; // Simpan nama file baru
-            } else {
-                return redirect()->back()->with('error', 'Gagal mengunggah file ke Google Drive');
+            $originalName = $request->file('katalog')->getClientOriginalName();
+            $baseName = pathinfo($originalName, PATHINFO_FILENAME); 
+            $extension = $request->file('katalog')->getClientOriginalExtension(); 
+            $fileName = $originalName; 
+            $counter = 1;
+
+            while (Storage::disk('public')->exists('uploads/' . $fileName)) {
+                $fileName = $baseName . '_' . $counter . '.' . $extension; 
+                $counter++;
             }
+
+            $path = $request->file('katalog')->storeAs('uploads', $fileName, 'public'); 
+            Log::info('Updated file: ' . $path); 
+            $data['katalog'] = $path; 
         }
 
         $katalog->update($data);
@@ -96,13 +111,9 @@ class KatalogController extends Controller
     {
         $katalog = Katalog::findOrFail($id);
 
-        // Hapus file dari Google Drive jika ada
+        
         if ($katalog->katalog) {
-            $googleDrive = new DriveGoogleController();
-            $deleteResponse = $googleDrive->destroy($katalog->katalog);
-            if ($deleteResponse->getStatusCode() != 200) {
-                return redirect()->back()->with('error', 'Gagal menghapus file dari Google Drive');
-            }
+            Storage::disk('public')->delete($katalog->katalog);
         }
 
         $katalog->delete();

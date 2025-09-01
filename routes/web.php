@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\KatalogController;
 use App\Http\Controllers\Admin\KegiatanController;
 use App\Http\Controllers\Admin\KelompokController as AdminKelompokController;
 use App\Http\Controllers\Admin\KelompokIntegritasController;
+use App\Http\Controllers\Admin\KelompokRentanController;
 use App\Http\Controllers\Admin\ProdukController as AdminProdukController;
 use App\Http\Controllers\Admin\SidebarController;
 use App\Http\Controllers\Admin\StrukturController;
@@ -51,6 +52,7 @@ Route::prefix('Admin')->name('Admin.')->group(function () {
     Route::resource('produk', AdminProdukController::class);
     Route::resource('kelompok_integritas', KelompokIntegritasController::class);
     Route::resource('kelompok', AdminKelompokController::class);
+    Route::resource('kelompok_rentan', KelompokRentanController::class);
     Route::resource('kegiatan', KegiatanController::class);
     Route::resource('struktur', StrukturController::class);
     Route::resource('inovasi', InovasiController::class);

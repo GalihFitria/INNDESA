@@ -29,10 +29,10 @@
                     <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $i->kode_inovasi }}</td>
                     <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $i->kelompok->nama ?? '-' }}</td>
                     <td class="border border-gray-300 p-3 text-sm text-gray-900 text-center">
-                        @if($i->foto)
-                        <img src="{{ asset('Uploads/foto/' . $i->foto) }}"
-                            alt="Foto"
-                            class="w-16 h-16 object-cover mx-auto rounded">
+                        @if ($i->foto)
+                        <a href="{{ asset('storage/' . $i->foto) }}" class="text-blue-600 hover:underline">
+                            {{ basename($i->foto) }}
+                        </a>
                         @else
                         <span class="text-gray-400">-</span>
                         @endif

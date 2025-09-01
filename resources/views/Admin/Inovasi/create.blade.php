@@ -18,7 +18,10 @@
         </div>
         <div>
             <label for="foto" class="block text-sm font-medium text-gray-700">Sertifikat Inovasi & Penghargaan</label>
-            <input type="file" name="foto" id="foto" accept=".pdf" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
+            <input type="file" name="foto" id="foto" accept=".pdf,.jpg,.jpeg,.png" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
+            @error('foto')
+            <span class="text-red-500 text-sm">{{ $message }}</span>
+            @enderror
         </div>
         <div class="flex justify-end space-x-4">
             <a href="{{ route('Admin.inovasi.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 flex items-center">

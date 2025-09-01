@@ -16,20 +16,30 @@ class DashboardController extends Controller
      */
     public function index()
     {
-       
+
         $totalKelompok = Kelompok::count();
         $totalAnggota = StrukturOrganisasi::count();
         $totalProduk = Produk::count();
-        $totalKelompokRentan = StrukturOrganisasi::whereNotNull('rentan')
-            ->where('rentan', '!=', '-')
-            ->where('rentan', '!=', '')
+
+        $totalKelompokRentan = DB::table('v_struktur_rentan')
+            ->whereNotNull('nama_rentan')
+            ->where('nama_rentan', '!=', '-')
+            ->where('nama_rentan', '!=', '')
             ->count();
+
+        $anggotaRentan = DB::table('v_struktur_rentan')
+            ->select('nama_anggota', 'nama_rentan')
+            ->whereNotNull('nama_rentan')
+            ->where('nama_rentan', '!=', '-')
+            ->where('nama_rentan', '!=', '')
+            ->get();
 
         return view('Admin.dashboard', compact(
             'totalKelompok',
             'totalAnggota',
             'totalProduk',
-            'totalKelompokRentan'
+            'totalKelompokRentan',
+            'anggotaRentan'
         ));
     }
 

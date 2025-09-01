@@ -14,11 +14,16 @@ class StrukturOrganisasi extends Model
     protected $keyType = 'int';
     public $timestamps = false;
 
-    protected $fillable = ['id_kelompok', 'nama', 'jabatan', 'rentan'];
+    protected $fillable = ['id_kelompok', 'nama', 'jabatan', 'id_rentan']; // ubah rentan menjadi id_rentan
 
     public function kelompok()
     {
         return $this->belongsTo(Kelompok::class, 'id_kelompok', 'id_kelompok');
+    }
+
+    public function rentan()
+    {
+        return $this->belongsTo(KelompokRentan::class, 'id_rentan', 'id_rentan'); // relasi ke tabel rentan
     }
 
     public function getKodeStrukturAttribute()

@@ -6,12 +6,24 @@ use App\Http\Controllers\Controller;
 use App\Models\KategoriKelompok;
 use App\Models\Kelompok;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class KelompokController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $kelompok = Kelompok::with('kategori')->get();
+        $search = $request->query('search');
+        $kelompok = Kelompok::with('kategori')
+            ->when($search, function ($query, $search) {
+                return $query->where('id_kelompok', 'like', "%{$search}%")
+                    ->orWhere('nama', 'like', "%{$search}%")
+                    ->orWhereHas('kategori', function ($q) use ($search) {
+                        $q->where('nama_kategori', 'like', "%{$search}%");
+                    });
+            })
+            ->get();
+
         return view('Admin.kelompok.index', compact('kelompok'));
     }
 
@@ -23,26 +35,69 @@ class KelompokController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $request->validate([
             'id_kategori' => 'required|exists:kategori_kelompok,id_kategori',
             'nama' => 'required|string|max:255',
             'sejarah' => 'required|string',
-            'sk_desa' => 'nullable|mimes:pdf|max:2048',
-            'background' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
-            'logo' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
+            'sk_desa' => 'nullable|mimes:jpg,png,jpeg,pdf|max:2048',
+            'background' => 'nullable|image|mimes:jpg,png,jpeg,pdf|max:2048',
+            'logo' => 'nullable|image|mimes:jpg,png,jpeg,pdf|max:2048',
         ]);
 
+        $data = $request->except(['sk_desa', 'background', 'logo']);
+
         if ($request->hasFile('sk_desa')) {
-            $validated['sk_desa'] = $request->file('sk_desa')->store('sk_desa', 'public');
-        }
-        if ($request->hasFile('background')) {
-            $validated['background'] = $request->file('background')->store('background', 'public');
-        }
-        if ($request->hasFile('logo')) {
-            $validated['logo'] = $request->file('logo')->store('logo', 'public');
+            $originalName = $request->file('sk_desa')->getClientOriginalName();
+            $baseName = pathinfo($originalName, PATHINFO_FILENAME);
+            $extension = $request->file('sk_desa')->getClientOriginalExtension();
+            $fileName = $originalName;
+            $counter = 1;
+
+            while (Storage::disk('public')->exists('sk_desa/' . $fileName)) {
+                $fileName = $baseName . '_' . $counter . '.' . $extension;
+                $counter++;
+            }
+
+            $path = $request->file('sk_desa')->storeAs('sk_desa', $fileName, 'public');
+            Log::info('Stored SK Desa file: ' . $path);
+            $data['sk_desa'] = $path;
         }
 
-        Kelompok::create($validated);
+        if ($request->hasFile('background')) {
+            $originalName = $request->file('background')->getClientOriginalName();
+            $baseName = pathinfo($originalName, PATHINFO_FILENAME);
+            $extension = $request->file('background')->getClientOriginalExtension();
+            $fileName = $originalName;
+            $counter = 1;
+
+            while (Storage::disk('public')->exists('background/' . $fileName)) {
+                $fileName = $baseName . '_' . $counter . '.' . $extension;
+                $counter++;
+            }
+
+            $path = $request->file('background')->storeAs('background', $fileName, 'public');
+            Log::info('Stored background file: ' . $path);
+            $data['background'] = $path;
+        }
+
+        if ($request->hasFile('logo')) {
+            $originalName = $request->file('logo')->getClientOriginalName();
+            $baseName = pathinfo($originalName, PATHINFO_FILENAME);
+            $extension = $request->file('logo')->getClientOriginalExtension();
+            $fileName = $originalName;
+            $counter = 1;
+
+            while (Storage::disk('public')->exists('logo/' . $fileName)) {
+                $fileName = $baseName . '_' . $counter . '.' . $extension;
+                $counter++;
+            }
+
+            $path = $request->file('logo')->storeAs('logo', $fileName, 'public');
+            Log::info('Stored logo file: ' . $path);
+            $data['logo'] = $path;
+        }
+
+        Kelompok::create($data);
 
         return redirect()->route('Admin.kelompok.index')->with('success', 'Data berhasil ditambahkan!');
     }
@@ -57,36 +112,78 @@ class KelompokController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'id_kategori' => 'required|integer',
-            'nama' => 'required|string',
+            'id_kategori' => 'required|exists:kategori_kelompok,id_kategori',
+            'nama' => 'required|string|max:255',
             'sejarah' => 'required|string',
-            'sk_desa' => 'nullable|mimes:pdf|max:2048',
-            'background' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-            'logo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'sk_desa' => 'nullable|mimes:jpg,png,jpeg,pdf|max:2048',
+            'background' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
+            'logo' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
         ]);
 
+        $data = $request->except(['sk_desa', 'background', 'logo']);
         $kelompok = Kelompok::findOrFail($id);
 
-        $data = $request->only(['id_kategori', 'nama', 'sejarah']);
-
-        
         if ($request->hasFile('sk_desa')) {
-            $skName = time() . '_sk.' . $request->sk_desa->extension();
-            $request->sk_desa->move(public_path('uploads/skdesa'), $skName);
-            $data['sk_desa'] = $skName;
+            if ($kelompok->sk_desa) {
+                Storage::disk('public')->delete($kelompok->sk_desa);
+            }
+
+            $originalName = $request->file('sk_desa')->getClientOriginalName();
+            $baseName = pathinfo($originalName, PATHINFO_FILENAME);
+            $extension = $request->file('sk_desa')->getClientOriginalExtension();
+            $fileName = $originalName;
+            $counter = 1;
+
+            while (Storage::disk('public')->exists('sk_desa/' . $fileName)) {
+                $fileName = $baseName . '_' . $counter . '.' . $extension;
+                $counter++;
+            }
+
+            $path = $request->file('sk_desa')->storeAs('sk_desa', $fileName, 'public');
+            Log::info('Updated SK Desa file: ' . $path);
+            $data['sk_desa'] = $path;
         }
 
-        
         if ($request->hasFile('background')) {
-            $bgName = time() . '_bg.' . $request->background->extension();
-            $request->background->move(public_path('uploads/background'), $bgName);
-            $data['background'] = $bgName;
+            if ($kelompok->background) {
+                Storage::disk('public')->delete($kelompok->background);
+            }
+
+            $originalName = $request->file('background')->getClientOriginalName();
+            $baseName = pathinfo($originalName, PATHINFO_FILENAME);
+            $extension = $request->file('background')->getClientOriginalExtension();
+            $fileName = $originalName;
+            $counter = 1;
+
+            while (Storage::disk('public')->exists('background/' . $fileName)) {
+                $fileName = $baseName . '_' . $counter . '.' . $extension;
+                $counter++;
+            }
+
+            $path = $request->file('background')->storeAs('background', $fileName, 'public');
+            Log::info('Updated background file: ' . $path);
+            $data['background'] = $path;
         }
 
         if ($request->hasFile('logo')) {
-            $logoName = time() . '_logo.' . $request->logo->extension();
-            $request->logo->move(public_path('uploads/logo'), $logoName);
-            $data['logo'] = $logoName;
+            if ($kelompok->logo) {
+                Storage::disk('public')->delete($kelompok->logo);
+            }
+
+            $originalName = $request->file('logo')->getClientOriginalName();
+            $baseName = pathinfo($originalName, PATHINFO_FILENAME);
+            $extension = $request->file('logo')->getClientOriginalExtension();
+            $fileName = $originalName;
+            $counter = 1;
+
+            while (Storage::disk('public')->exists('logo/' . $fileName)) {
+                $fileName = $baseName . '_' . $counter . '.' . $extension;
+                $counter++;
+            }
+
+            $path = $request->file('logo')->storeAs('logo', $fileName, 'public');
+            Log::info('Updated logo file: ' . $path);
+            $data['logo'] = $path;
         }
 
         $kelompok->update($data);
@@ -97,6 +194,17 @@ class KelompokController extends Controller
     public function destroy(string $id)
     {
         $kelompok = Kelompok::findOrFail($id);
+
+        if ($kelompok->sk_desa) {
+            Storage::disk('public')->delete($kelompok->sk_desa);
+        }
+        if ($kelompok->background) {
+            Storage::disk('public')->delete($kelompok->background);
+        }
+        if ($kelompok->logo) {
+            Storage::disk('public')->delete($kelompok->logo);
+        }
+
         $kelompok->delete();
 
         return redirect()->route('Admin.kelompok.index')->with('success', 'Data berhasil dihapus!');

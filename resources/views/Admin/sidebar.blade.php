@@ -53,6 +53,18 @@
                         </a>
                     </li>
                     <li>
+                        <a href="{{ route('Admin.kelompok_rentan.index') }}" class="menu-item w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition-colors flex items-center {{ Route::is('Admin.kelompok_rentan.index') ? 'bg-blue-100 text-blue-700' : '' }}">
+                            <i class="fas fa-user-shield mr-3 text-orange-600"></i>
+                            <span>Kelompok Rentan</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('Admin.struktur.index') }}" class="menu-item w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition-colors flex items-center {{ Route::is('Admin.struktur.index') ? 'bg-blue-100 text-blue-700' : '' }}">
+                            <i class="fas fa-layer-group mr-3 text-purple-600"></i>
+                            <span>Struktur Organisasi</span>
+                        </a>
+                    </li>
+                    <li>
                         <a href="{{ route('Admin.produk.index') }}" class="menu-item w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition-colors flex items-center {{ Route::is('Admin.produk.index') ? 'bg-blue-100 text-blue-700' : '' }}">
                             <i class="fas fa-box mr-3 text-yellow-600"></i>
                             <span>Produk</span>
@@ -63,12 +75,6 @@
                         <a href="{{ route('Admin.kegiatan.index') }}" class="menu-item w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition-colors flex items-center {{ Route::is('Admin.kegiatan.index') ? 'bg-blue-100 text-blue-700' : '' }}">
                             <i class="fas fa-calendar-alt mr-3 text-green-600"></i>
                             <span>Kegiatan</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('Admin.struktur.index') }}" class="menu-item w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition-colors flex items-center {{ Route::is('Admin.struktur.index') ? 'bg-blue-100 text-blue-700' : '' }}">
-                            <i class="fas fa-layer-group mr-3 text-purple-600"></i>
-                            <span>Struktur Organisasi</span>
                         </a>
                     </li>
                     <li>

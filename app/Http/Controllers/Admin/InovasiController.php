@@ -7,12 +7,21 @@ use App\Models\InovasiPenghargaan;
 use App\Models\Kelompok;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class InovasiController extends Controller
 {
-    public function index()
+    public function index(Request $request) // Tambahkan Request $request sebagai parameter
     {
-        $inovasi = InovasiPenghargaan::with('kelompok')->get();
+        $search = $request->query('search');
+        $inovasi = InovasiPenghargaan::with('kelompok') // Diperbaiki dari 'inovasi' ke 'kelompok' berdasarkan konteks
+            ->when($search, function ($query, $search) {
+                return $query->where('id_inovasi', 'like', "%{$search}%")
+                    ->orWhereHas('kelompok', function ($q) use ($search) {
+                        $q->where('nama', 'like', "%{$search}%");
+                    });
+            })
+            ->get();
         return view('Admin.inovasi.index', compact('inovasi'));
     }
 
@@ -26,15 +35,26 @@ class InovasiController extends Controller
     {
         $request->validate([
             'id_kelompok' => 'required|exists:kelompok,id_kelompok',
-            'foto' => 'nullable|mimes:pdf,jpg,jpeg,png|max:2048', // Tambah jpg, jpeg, png
+            'foto' => 'nullable|mimes:pdf,jpg,jpeg,png|max:2048',
         ]);
 
-        $data = $request->except('foto'); // Ambil semua data kecuali foto
+        $data = $request->except('foto');
+
         if ($request->hasFile('foto')) {
-            $file = $request->file('foto');
-            $fileName = time() . '_' . $file->getClientOriginalName(); // Nama unik
-            $file->storeAs('public/inovasi', $fileName); // Simpan di storage/app/public/inovasi
-            $data['foto'] = 'inovasi/' . $fileName; // Simpan path relatif
+            $originalName = $request->file('foto')->getClientOriginalName();
+            $baseName = pathinfo($originalName, PATHINFO_FILENAME);
+            $extension = $request->file('foto')->getClientOriginalExtension();
+            $fileName = $originalName;
+            $counter = 1;
+
+            while (Storage::disk('public')->exists('uploads/' . $fileName)) {
+                $fileName = $baseName . '_' . $counter . '.' . $extension;
+                $counter++;
+            }
+
+            $path = $request->file('foto')->storeAs('uploads', $fileName, 'public');
+            Log::info('Stored file: ' . $path);
+            $data['foto'] = $path;
         }
 
         InovasiPenghargaan::create($data);
@@ -53,20 +73,31 @@ class InovasiController extends Controller
     {
         $request->validate([
             'id_kelompok' => 'required|exists:kelompok,id_kelompok',
-            'foto' => 'nullable|mimes:pdf,jpg,jpeg,png|max:2048', // Tambah jpg, jpeg, png
+            'foto' => 'nullable|mimes:pdf,jpg,jpeg,png|max:2048',
         ]);
 
+        $data = $request->except('foto');
         $inovasi = InovasiPenghargaan::findOrFail($id);
-        $data = $request->except('foto'); // Ambil semua data kecuali foto
+
         if ($request->hasFile('foto')) {
-            // Hapus file lama kalau ada
             if ($inovasi->foto) {
                 Storage::disk('public')->delete($inovasi->foto);
             }
-            $file = $request->file('foto');
-            $fileName = time() . '_' . $file->getClientOriginalName(); // Nama unik
-            $file->storeAs('public/inovasi', $fileName); // Simpan di storage/app/public/inovasi
-            $data['foto'] = 'inovasi/' . $fileName; // Simpan path relatif
+
+            $originalName = $request->file('foto')->getClientOriginalName();
+            $baseName = pathinfo($originalName, PATHINFO_FILENAME);
+            $extension = $request->file('foto')->getClientOriginalExtension();
+            $fileName = $originalName;
+            $counter = 1;
+
+            while (Storage::disk('public')->exists('uploads/' . $fileName)) {
+                $fileName = $baseName . '_' . $counter . '.' . $extension;
+                $counter++;
+            }
+
+            $path = $request->file('foto')->storeAs('uploads', $fileName, 'public');
+            Log::info('Updated file: ' . $path);
+            $data['foto'] = $path;
         }
 
         $inovasi->update($data);
@@ -77,7 +108,7 @@ class InovasiController extends Controller
     public function destroy(string $id)
     {
         $inovasi = InovasiPenghargaan::findOrFail($id);
-        // Hapus file kalau ada
+
         if ($inovasi->foto) {
             Storage::disk('public')->delete($inovasi->foto);
         }

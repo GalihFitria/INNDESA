@@ -24,9 +24,19 @@
             <label for="jabatan" class="block text-sm font-medium text-gray-700">Posisi</label>
             <input type="text" name="jabatan" id="jabatan" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Masukkan Posisi Anda(Ketua/Anggota)" required>
         </div>
-        <div>
+        <!-- <div>
             <label for="rentan" class="block text-sm font-medium text-gray-700">Kelompok Rentan</label>
             <input type="text" name="rentan" id="rentan" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Masukkan Jenis kelompok rentannya(Pengangguran,Lansia,Janda,dll" required>
+        </div> -->
+
+        <div class="mb-4">
+            <label for="id_rentan" class="block text-sm font-medium text-gray-700">Kelompok Rentan</label>
+            <select name="id_rentan" id="id_rentan" class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+                <option value="">-- Pilih Kelompok Rentan --</option>
+                @foreach ($rentan as $r)
+                <option value="{{ $r->id_rentan }}">{{ $r->nama_rentan }}</option>
+                @endforeach
+            </select>
         </div>
         <div class="flex justify-end space-x-4">
             <a href="{{ route('Admin.struktur.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 flex items-center">

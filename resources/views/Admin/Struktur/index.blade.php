@@ -32,7 +32,7 @@
                     <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $s->kelompok->nama ?? '-' }}</td>
                     <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $s->nama }}</td>
                     <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $s->jabatan }}</td>
-                    <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $s->rentan }}</td>
+                    <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $s->rentan->nama_rentan ?? '-' }}</td>
                     <td class="border border-gray-300 p-3 text-center text-sm">
                         <a href="{{ route('Admin.struktur.edit', $s->id_struktur) }}" class="text-blue-600 hover:underline mr-2">Edit</a>
                         <form action="{{ route('Admin.struktur.destroy', $s->id_struktur) }}" method="POST" class="inline-block delete-form">

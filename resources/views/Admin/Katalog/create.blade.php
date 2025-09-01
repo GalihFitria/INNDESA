@@ -15,12 +15,17 @@
                 <option value="{{ $k->id_kelompok }}">{{ $k->nama }}</option>
                 @endforeach
             </select>
+            @error('id_kelompok')
+            <span class="text-red-500 text-sm">{{ $message }}</span>
+            @enderror
         </div>
         <div>
             <label for="katalog" class="block text-sm font-medium text-gray-700">Katalog</label>
             <input type="file" name="katalog" id="katalog" accept=".pdf,.jpg,.jpeg,.png" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
+            @error('katalog')
+            <span class="text-red-500 text-sm">{{ $message }}</span>
+            @enderror
         </div>
-
         <div class="flex justify-end space-x-4">
             <a href="{{ route('Admin.katalog.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 flex items-center">
                 <i class="fas fa-arrow-left mr-2"></i>Kembali

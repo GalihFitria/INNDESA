@@ -25,26 +25,35 @@
             <label for="sejarah" class="block text-sm font-medium text-gray-700">Sejarah</label>
             <input type="text" name="sejarah" id="sejarah" value="{{ $kelompok->sejarah }}" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Masukkan Sejarah Kelompok" required>
         </div>
-        <div>
-            <label for="sk_desa" class="block text-sm font-medium text-gray-700">SK Desa (PDF)</label>
-            <input type="file" name="sk_desa" id="sk_desa" accept=".pdf" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
+        <div class="mb-4">
+            <label for="sk_desa" class="block text-sm font-medium text-gray-700">SK Desa</label>
             @if ($kelompok->sk_desa)
-            <p class="text-sm text-gray-500 mt-1">File saat ini: {{ basename($kelompok->sk_desa) }}</p>
+            <a href="{{ asset('storage/' . $kelompok->sk_desa) }}" target="_blank" class="text-blue-600 hover:underline">{{ basename($kelompok->sk_desa) }}</a>
             @endif
+            <input type="file" name="sk_desa" id="sk_desa" accept=".pdf,.jpg,.jpeg,.png" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
+            @error('kelompok')
+            <span class="text-red-500 text-sm">{{ $message }}</span>
+            @enderror
         </div>
-        <div>
-            <label for="background" class="block text-sm font-medium text-gray-700">Background (JPG/PNG)</label>
-            <input type="file" name="background" id="background" accept="image/*" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
+        <div class="mb-4">
+            <label for="background" class="block text-sm font-medium text-gray-700">Background</label>
             @if ($kelompok->background)
-            <p class="text-sm text-gray-500 mt-1">File saat ini: {{ basename($kelompok->background) }}</p>
+            <a href="{{ asset('storage/' . $kelompok->background) }}" target="_blank" class="text-blue-600 hover:underline">{{ basename($kelompok->background) }}</a>
             @endif
+            <input type="file" name="background" id="background" accept=".pdf,.jpg,.jpeg,.png" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
+            @error('kelompok')
+            <span class="text-red-500 text-sm">{{ $message }}</span>
+            @enderror
         </div>
-        <div>
-            <label for="logo" class="block text-sm font-medium text-gray-700">Logo (JPG/PNG)</label>
-            <input type="file" name="logo" id="logo" accept="image/*" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
+        <div class="mb-4">
+            <label for="logo" class="block text-sm font-medium text-gray-700">Logo</label>
             @if ($kelompok->logo)
-            <p class="text-sm text-gray-500 mt-1">File saat ini: {{ basename($kelompok->logo) }}</p>
+            <a href="{{ asset('storage/' . $kelompok->logo) }}" target="_blank" class="text-blue-600 hover:underline">{{ basename($kelompok->logo) }}</a>
             @endif
+            <input type="file" name="logo" id="logo" accept=".pdf,.jpg,.jpeg,.png" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
+            @error('kelompok')
+            <span class="text-red-500 text-sm">{{ $message }}</span>
+            @enderror
         </div>
         <div class="flex justify-end space-x-4">
             <a href="{{ route('Admin.kelompok.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 flex items-center">

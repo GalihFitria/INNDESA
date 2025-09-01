@@ -25,16 +25,25 @@
             <input type="text" name="sejarah" id="sejarah" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Masukkan Sejarah Kelompok" required>
         </div>
         <div>
-            <label for="sk_desa" class="block text-sm font-medium text-gray-700">SK Desa (PDF)</label>
-            <input type="file" name="sk_desa" id="sk_desa" accept=".pdf" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
+            <label for="sk_desa" class="block text-sm font-medium text-gray-700">SK Desa</label>
+            <input type="file" name="sk_desa" id="sk_desa" accept=".pdf,.jpg,.jpeg,.png" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
+            @error('sk_desa')
+            <span class="text-red-500 text-sm">{{ $message }}</span>
+            @enderror
         </div>
         <div>
-            <label for="background" class="block text-sm font-medium text-gray-700">Background (JPG/PNG)</label>
-            <input type="file" name="background" id="background" accept="image/*" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
+            <label for="background" class="block text-sm font-medium text-gray-700">Background</label>
+            <input type="file" name="background" id="background" accept=".pdf,.jpg,.jpeg,.png" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
+            @error('background')
+            <span class="text-red-500 text-sm">{{ $message }}</span>
+            @enderror
         </div>
         <div>
-            <label for="logo" class="block text-sm font-medium text-gray-700">Logo (JPG/PNG)</label>
-            <input type="file" name="logo" id="logo" accept="image/*" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
+            <label for="logo" class="block text-sm font-medium text-gray-700">Logo</label>
+            <input type="file" name="logo" id="logo" accept=".pdf,.jpg,.jpeg,.png" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
+            @error('logo')
+            <span class="text-red-500 text-sm">{{ $message }}</span>
+            @enderror
         </div>
         <div class="flex justify-end space-x-4">
             <a href="{{ route('Admin.kelompok.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 flex items-center">
