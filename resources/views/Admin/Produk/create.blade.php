@@ -42,7 +42,7 @@
         </div>
         <div>
             <label for="foto" class="block text-sm font-medium text-gray-700">Foto Produk</label>
-            <input type="file" name="foto" id="foto" accept=".jpg,.jpeg,.png" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
+            <input type="file" name="foto" id="foto" accept=".pdf,.jpg,.jpeg,.png" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
             @error('foto')
             <span class="text-red-500 text-sm">{{ $message }}</span>
             @enderror
@@ -56,7 +56,7 @@
         </div>
         <div>
             <label for="sertifikat" class="block text-sm font-medium text-gray-700">Sertifikat</label>
-            <input type="file" name="sertifikat" id="sertifikat" accept=".jpg,.jpeg,.png" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
+            <input type="file" name="sertifikat" id="sertifikat" accept=".pdf,.jpg,.jpeg,.png" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
             @error('sertifikat')
             <span class="text-red-500 text-sm">{{ $message }}</span>
             @enderror

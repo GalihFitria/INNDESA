@@ -29,23 +29,29 @@
             <label for="stok" class="block text-sm font-medium text-gray-700">Stok</label>
             <input type="text" name="stok" id="stok" value="{{ $produk->stok }}" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Masukkan Stok Produk" required>
         </div>
-        <div>
-            <label for="foto" class="block text-sm font-medium text-gray-700">Foto</label>
-            <input type="file" name="foto" id="foto" accept=".jpg,.jpeg,.png" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
+        <div class="mb-4">
+            <label for="foto" class="block text-sm font-medium text-gray-700">Foto Produk</label>
             @if ($produk->foto)
-            <p class="text-sm text-gray-500 mt-1">File saat ini: {{ basename($produk->foto) }}</p>
+            <a href="{{ asset('storage/' . $produk->foto) }}" target="_blank" class="text-blue-600 hover:underline">{{ basename($produk->foto) }}</a>
             @endif
+            <input type="file" name="foto" id="foto" accept=".pdf,.jpg,.jpeg,.png" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
+            @error('produk')
+            <span class="text-red-500 text-sm">{{ $message }}</span>
+            @enderror
         </div>
         <div>
             <label for="deskripsi" class="block text-sm font-medium text-gray-700">Deskripsi</label>
             <input type="text" name="deskripsi" id="deskripsi" value="{{ $produk->deskripsi }}" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Masukkan Deskripsi" required>
         </div>
-        <div>
+        <div class="mb-4">
             <label for="sertifikat" class="block text-sm font-medium text-gray-700">Sertifikat</label>
-            <input type="file" name="sertifikat" id="sertifikat" accept=".jpg,.jpeg,.png" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
             @if ($produk->sertifikat)
-            <p class="text-sm text-gray-500 mt-1">File saat ini: {{ basename($produk->sertifikat) }}</p>
+            <a href="{{ asset('storage/' . $produk->sertifikat) }}" target="_blank" class="text-blue-600 hover:underline">{{ basename($produk->sertifikat) }}</a>
             @endif
+            <input type="file" name="sertifikat" id="sertifikat" accept=".pdf,.jpg,.jpeg,.png" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
+            @error('produk')
+            <span class="text-red-500 text-sm">{{ $message }}</span>
+            @enderror
         </div>
         <div>
             <label for="produk_terjual" class="block text-sm font-medium text-gray-700">Produk Terjual</label>

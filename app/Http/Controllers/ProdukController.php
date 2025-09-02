@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Produk;
 use Illuminate\Http\Request;
 
 class ProdukController extends Controller
@@ -9,10 +10,20 @@ class ProdukController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         //
-        return view ('Pengunjung.produk');
+
+        $query = Produk::select('nama', 'stok', 'harga', 'foto', 'id_produk');
+
+        if ($request->has('kategori') && !empty($request->input('kategori'))) {
+            $query->whereHas('kelompok', function ($q) use ($request) {
+                $q->where('nama', $request->input('kategori'));
+            });
+        }
+
+        $produk = $query->paginate(15);
+        return view('Pengunjung.produk', compact('produk'));
     }
 
     /**
@@ -36,7 +47,8 @@ class ProdukController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $produk = Produk::where('id_produk', $id)->firstOrFail();
+        return view('Pengunjung.detail_produk', compact('produk'));
     }
 
     /**

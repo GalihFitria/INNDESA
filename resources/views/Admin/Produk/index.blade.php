@@ -38,20 +38,20 @@
                     <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $p->harga }}</td>
                     <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $p->stok }}</td>
                     <td class="border border-gray-300 p-3 text-sm text-gray-900 text-center">
-                        @if($p->foto)
-                        <img src="{{ asset('Uploads/foto/' . $p->foto) }}"
-                            alt="Foto"
-                            class="w-16 h-16 object-cover mx-auto rounded">
+                        @if ($p->foto)
+                        <a href="{{ asset('storage/' . $p->foto) }}" class="text-blue-600 hover:underline">
+                            {{ basename($p->foto) }}
+                        </a>
                         @else
                         <span class="text-gray-400">-</span>
                         @endif
                     </td>
                     <td class="border border-gray-300 p-3 text-sm text-gray-900 break-words max-w-xs">{{ $p->deskripsi }}</td>
                     <td class="border border-gray-300 p-3 text-sm text-gray-900 text-center">
-                        @if($p->sertifikat)
-                        <img src="{{ asset('Uploads/sertifikat/' . $p->sertifikat) }}"
-                            alt="Sertifikat"
-                            class="w-16 h-16 object-cover mx-auto rounded">
+                        @if ($p->sertifikat)
+                        <a href="{{ asset('storage/' . $p->sertifikat) }}" class="text-blue-600 hover:underline">
+                            {{ basename($p->sertifikat) }}
+                        </a>
                         @else
                         <span class="text-gray-400">-</span>
                         @endif

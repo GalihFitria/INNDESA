@@ -23,14 +23,17 @@
         </div>
         <div>
             <label for="deskripsi" class="block text-sm font-medium text-gray-700">Deskripsi</label>
-            <input type="text" name="deskripsi" id="deskripsi" value="{{ $kegiatan->deskripsi }}" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Masukkan Deskripsi Kegiatan" required>
+            <textarea name="deskripsi" id="deskripsi" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Masukkan Deskripsi Kegiatan" required>{{ $kegiatan->deskripsi ?? '' }}</textarea>
         </div>
-        <div>
-            <label for="foto" class="block text-sm font-medium text-gray-700">Foto</label>
-            <input type="file" name="foto" id="foto" accept=".pdf" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
+        <div class="mb-4">
+            <label for="foto" class="block text-sm font-medium text-gray-700">Foto Kegiatan</label>
             @if ($kegiatan->foto)
-            <p class="text-sm text-gray-500 mt-1">File saat ini: {{ basename($kegiatan->foto) }}</p>
+            <a href="{{ asset('storage/' . $kegiatan->foto) }}" target="_blank" class="text-blue-600 hover:underline">{{ basename($kegiatan->foto) }}</a>
             @endif
+            <input type="file" name="foto" id="foto" accept=".pdf,.jpg,.jpeg,.png" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
+            @error('foto')
+            <span class="text-red-500 text-sm">{{ $message }}</span>
+            @enderror
         </div>
 
         <div>
@@ -39,7 +42,10 @@
         </div>
         <div>
             <label for="sumber_berita" class="block text-sm font-medium text-gray-700">Sumber Berita</label>
-            <input type="text" name="sumber_berita" id="sumber_berita" value="{{ $kegiatan->sumber_berita }}" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Masukkan Link Sumber Berita" required>
+            <textarea name="sumber_berita" id="sumber_berita" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Masukkan Link Sumber Berita (pisahkan dengan koma, contoh: https://example1.com, https://example2.com)">{{ $kegiatan->sumber_berita }}</textarea>
+            @error('sumber_berita')
+            <span class="text-red-500 text-sm">{{ $message }}</span>
+            @enderror
         </div>
         <div class="flex justify-end space-x-4">
             <a href="{{ route('Admin.kegiatan.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 flex items-center">

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kegiatan;
 use Illuminate\Http\Request;
 
 class Update_KegiatanController extends Controller
@@ -36,9 +37,22 @@ class Update_KegiatanController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $kegiatan = Kegiatan::select('id_kegiatan', 'id_kelompok', 'judul', 'deskripsi', 'foto', 'tanggal', 'sumber_berita')
+            ->with('kelompok')
+            ->findOrFail($id);
+
+        $sumberBerita = $kegiatan->sumber_berita ? explode(', ', $kegiatan->sumber_berita) : [];
+
+        $kegiatanLainnya = Kegiatan::select('id_kegiatan', 'judul', 'foto', 'tanggal')
+            ->where('id_kegiatan', '!=', $id)
+            ->latest('tanggal')
+            ->take(12)
+            ->get();
+
+        return view('Pengunjung.update_kegiatan', compact('kegiatan', 'sumberBerita', 'kegiatanLainnya'));
     }
 
+    
     /**
      * Show the form for editing the specified resource.
      */

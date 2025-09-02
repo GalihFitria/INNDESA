@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail Produk - Abon Lele</title>
+    <title>Detail Produk</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
@@ -44,20 +44,21 @@
 <body class="bg-white">
     @include('navbar')
     <div class="content w-full mt-6 px-6 lg:px-12">
-        <div class="bg-white card p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-white card p-6 grid grid-cols-1 md:grid-cols-2 gap-6 min-h-[450px]">
             <div class="flex justify-center">
-                <div class="w-100 h-100 overflow-hidden rounded-lg">
-                    <img src="{{ asset('images/Abon Lele.jpeg') }}" alt="Abon Lele" class="product-image">
+                <div class="flex justify-center items-center">
+                    <div class="w-[450px] h-[450px] overflow-hidden rounded-lg">
+                        <img src="{{ asset('storage/' . $produk->foto) }}" alt="{{ $produk->nama }}" class="product-image w-full h-full">
+                    </div>
                 </div>
             </div>
             <div class="space-y-4">
-                <h1 class="text-4xl font-bold text-gray-900">Abon Lele</h1>
+                <h1 class="text-4xl font-bold text-gray-900">{{ $produk->nama }}</h1>
                 <div class="flex items-center gap-x-6 border-b pb-2">
-                    <p class="text-xl font-semibold text-gray-900">Rp. 25.000</p>
-                    <p class="text-xl font-semibold text-gray-900">Stok: 5</p>
+                    <p class="text-xl font-semibold text-gray-900">Rp. {{ number_format($produk->harga, 0, ',', '.') }}</p>
+                    <p class="text-xl font-semibold text-gray-900">Stok: {{ $produk->stok }}</p>
                 </div>
 
-                
                 <div class="w-full mt-6">
                     <div class="flex bg-gray-200 rounded-lg overflow-hidden">
                         <button id="tab-deskripsi"
@@ -72,34 +73,25 @@
                         </button>
                     </div>
 
-
                     <div id="content-deskripsi" class="mt-4">
                         <p class="text-gray-700 leading-relaxed mb-4">
-                            Produk ini merupakan hasil inovasi masyarakat desa yang mengedepankan kualitas dan keberlanjutan.
-                            Dibuat dari bahan-bahan pilihan dan diproduksi dengan standar higienis yang tinggi, produk ini
-                            sangat cocok untuk memenuhi kebutuhan sehari-hari konsumen.
-                        </p>
-                        <p class="text-gray-700 leading-relaxed">
-                            Selain itu, produk ini dikembangkan dengan memperhatikan aspek ramah lingkungan dan mendukung
-                            pemberdayaan ekonomi lokal. Dengan membeli produk ini, Anda tidak hanya mendapatkan manfaat secara
-                            langsung, tetapi juga ikut serta dalam mendukung perekonomian masyarakat desa.
+                            {{ $produk->deskripsi }}
                         </p>
                     </div>
 
                     <div id="content-sertifikat" class="hidden mt-4">
-                        <img src="{{ asset('images/Abon Lele.jpeg') }}"
+                        <img src="{{ asset('storage/' . $produk->sertifikat) }}"
                             alt="Sertifikat Produk"
                             class="product-image mx-auto mt-4 rounded-lg shadow-md border border-gray-200">
                     </div>
                 </div>
 
-
                 <div class="flex flex-col border-t border-gray-300 mt-4 pt-4">
                     <span class="text-gray-700 mb-2">Untuk pemesanan dapat menghubungi kami:</span>
                     <div class="flex items-center space-x-4">
                         <div class="flex items-center space-x-2">
-                            <img src="{{ asset('images/Abon Lele.jpeg') }}" alt="Nama Penanggung Jawab" class="w-10 h-10 rounded-full">
-                            <span class="text-gray-700 font-bold">USERNAME</span>
+                            <img src="{{ asset('storage/' . $produk->kelompok->foto) }}" alt="Nama Penanggung Jawab" class="w-10 h-10 rounded-full">
+                            <span class="text-gray-700 font-bold">{{ $produk->kelompok->nama }}</span>
                         </div>
 
                         <div class="relative">
@@ -123,12 +115,9 @@
                         </div>
                     </div>
                 </div>
-
             </div>
 
-            <div class="mt-8">
-                <h2 class="text-xl font-bold text-[#0097D4] mb-4">Produk dari toko yang sama</h2>
-            </div>
+
         </div>
     </div>
 
@@ -137,7 +126,6 @@
     </footer>
 
     <script>
-            <!-- Produk Terkait -->
         function openTab(tab) {
             document.getElementById('content-deskripsi').classList.add('hidden');
             document.getElementById('content-sertifikat').classList.add('hidden');

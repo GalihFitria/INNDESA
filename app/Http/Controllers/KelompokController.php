@@ -3,19 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\Katalog;
+use App\Models\Kegiatan;
 use App\Models\Kelompok;
 use App\Models\KelompokRentan;
 use App\Models\Produk;
 use App\Models\StrukturOrganisasi;
-use App\Models\V_Struktur_Rentan;
-use App\Models\Rentan;
 use App\Models\V_Struktur__Rentan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class KelompokController extends Controller
 {
-    
     public function index()
     {
         $jabatanOrder = [
@@ -34,14 +32,12 @@ class KelompokController extends Controller
                 return $jabatanOrder[$item->jabatan] ?? 999;
             });
 
-
         $katalog = Katalog::first();
         $totalProdukTerjual = Produk::sum('produk_terjual');
 
         return view('Pengunjung.kelompok', compact('kelompok', 'struktur', 'katalog', 'totalProdukTerjual'));
     }
 
-    
     public function show(string $id)
     {
         $jabatanOrder = [
@@ -75,14 +71,14 @@ class KelompokController extends Controller
             ->values();
 
         $kelompokRentan = V_Struktur__Rentan::where('id_kelompok', $id)
-            ->where('nama_rentan', '!=', '-') 
+            ->where('nama_rentan', '!=', '-')
             ->select('nama_anggota', 'nama_rentan')
             ->get();
 
         $rentanGrouped = $kelompokRentan->groupBy('nama_rentan');
 
         $produk = Produk::where('id_kelompok', $id)
-            ->select('nama', 'stok')
+            ->select('nama', 'stok', 'harga', 'foto', 'id_produk')
             ->get();
 
         $katalog = Katalog::where('id_kelompok', $id)->first();
@@ -90,6 +86,10 @@ class KelompokController extends Controller
         $totalProdukTerjual = Produk::where('id_kelompok', $id)->sum('produk_terjual');
 
         $inovasiImages = \App\Models\InovasiPenghargaan::where('id_kelompok', $id)->get();
+
+        $kegiatan = Kegiatan::where('id_kelompok', $id)
+            ->select('judul', 'foto', 'tanggal', 'deskripsi', 'id_kegiatan')
+            ->get();
 
         return view('Pengunjung.kelompok', [
             'kelompok' => $kelompok,
@@ -99,20 +99,19 @@ class KelompokController extends Controller
             'produk' => $produk,
             'katalog' => $katalog,
             'totalProdukTerjual' => $totalProdukTerjual,
-            'inovasiImages' => $inovasiImages
+            'inovasiImages' => $inovasiImages,
+            'kegiatan' => $kegiatan
         ]);
     }
 
-   
     public function create()
     {
-        
+        //
     }
 
- 
     public function store(Request $request)
     {
-        
+        //
     }
 
     public function edit(string $id)
@@ -120,17 +119,11 @@ class KelompokController extends Controller
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         //

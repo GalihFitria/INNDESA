@@ -16,9 +16,9 @@
             <thead class="bg-gray-50">
                 <tr>
                     <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">No</th>
-                    <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">Id Kegiatan</th>
+                    <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">Kode Kegiatan</th>
                     <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">Nama Kelompok</th>
-                    <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">Judul </th>
+                    <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">Judul</th>
                     <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">Deskripsi</th>
                     <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">Foto Kegiatan</th>
                     <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">Tanggal</th>
@@ -30,21 +30,50 @@
                 @forelse ($kegiatan as $index => $kg)
                 <tr class="data-row">
                     <td class="border border-gray-300 p-3 text-center text-sm text-gray-900">{{ $index + 1 }}</td>
-                    <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $kg->kode_kegiatan}}</td>
-                    <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $kg->kelompok->nama ?? '-'}}</td>
-                    <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $kg->judul}}</td>
-                    <td class="border border-gray-300 p-3 text-sm text-gray-900 break-words max-w-xs">{{ $kg->deskripsi}}</td>
+                    <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $kg->kode_kegiatan }}</td>
+                    <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $kg->kelompok->nama ?? '-' }}</td>
+                    <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $kg->judul }}</td>
+                    <td class="border border-gray-300 p-3 text-sm text-gray-900 break-words max-w-xs">{{ $kg->deskripsi }}</td>
                     <td class="border border-gray-300 p-3 text-sm text-gray-900 text-center">
-                        @if($kg->foto)
-                        <img src="{{ asset('Uploads/foto/' . $kg->foto) }}"
-                            alt="Foto"
-                            class="w-16 h-16 object-cover mx-auto rounded">
+                        @if ($kg->foto)
+                        <a href="{{ asset('storage/' . $kg->foto) }}" class="text-blue-600 hover:underline">
+                            {{ basename($kg->foto) }}
+                        </a>
                         @else
                         <span class="text-gray-400">-</span>
                         @endif
                     </td>
-                    <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $kg->tanggal}}</td>
-                    <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $kg->sumber_berita}}</td>
+                    <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $kg->tanggal }}</td>
+                    <td class="border border-gray-300 p-3 text-sm text-gray-900">
+                        @if($kg->sumber_berita && $kg->sumber_berita !== '[]')
+                        @php
+                        $sources = json_decode($kg->sumber_berita, true);
+                        $sources = is_array($sources) ? $sources : [];
+                        $groupedLinks = [];
+                        foreach ($sources as $source) {
+                        if (filter_var($source, FILTER_VALIDATE_URL)) {
+                        $parsedUrl = parse_url($source);
+                        $domain = $parsedUrl['host'] ?? 'unknown';
+                        $groupedLinks[$domain][] = $source;
+                        }
+                        }
+                        @endphp
+                        @if(!empty($groupedLinks))
+                        @foreach($groupedLinks as $domain => $links)
+                        <p><strong>{{ $domain }}:</strong>
+                            @foreach($links as $index => $link)
+                            <a href="{{ $link }}" target="_blank" class="text-blue-500 underline">{{ $link }}</a>
+                            @if(!$loop->last && !$loop->parent->last) | @endif
+                            @endforeach
+                        </p>
+                        @endforeach
+                        @else
+                        -
+                        @endif
+                        @else
+                        -
+                        @endif
+                    </td>
                     <td class="border border-gray-300 p-3 text-center text-sm">
                         <a href="{{ route('Admin.kegiatan.edit', $kg->id_kegiatan) }}" class="text-blue-600 hover:underline mr-2">Edit</a>
                         <form action="{{ route('Admin.kegiatan.destroy', $kg->id_kegiatan) }}" method="POST" class="inline-block delete-form">
@@ -121,9 +150,10 @@
         const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
 
         filteredRows = Array.from(rows).filter(row => {
-            const kodeInovasi = row.cells[1].textContent.toLowerCase(); // Kolom Id Inovasi
+            const kodeKegiatan = row.cells[1].textContent.toLowerCase(); // Kolom Kode Kegiatan
             const namaKelompok = row.cells[2].textContent.toLowerCase(); // Kolom Nama Kelompok
-            return kodeInovasi.includes(searchTerm) || namaKelompok.includes(searchTerm);
+            const judul = row.cells[3].textContent.toLowerCase(); // Kolom Judul
+            return kodeKegiatan.includes(searchTerm) || namaKelompok.includes(searchTerm) || judul.includes(searchTerm);
         });
 
         rows.forEach(row => row.style.display = 'none');
