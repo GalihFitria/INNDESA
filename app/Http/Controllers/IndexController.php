@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kegiatan;
 use App\Models\Kelompok;
 use App\Models\Produk;
 use App\Models\StrukturOrganisasi;
@@ -30,12 +31,17 @@ class IndexController extends Controller
             ->where('nama_rentan', '!=', '')
             ->get();
 
+        $kegiatans = Kegiatan::select('id_kegiatan', 'foto', 'judul', 'deskripsi', 'tanggal')
+            ->orderBy('tanggal', 'desc')
+            ->paginate(4);
+
         return view('Pengunjung.index', compact(
             'totalKelompok',
             'totalAnggota',
             'totalProduk',
             'totalKelompokRentan',
-            'anggotaRentan'
+            'anggotaRentan',
+            'kegiatans'
         ));
     }
 

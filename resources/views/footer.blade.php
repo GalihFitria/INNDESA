@@ -5,14 +5,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        /* Custom shadow tipis dan hitam di bagian atas footer */
+        .custom-shadow {
+            box-shadow: 0 -8px 15px -3px rgba(0, 0, 0, 0.3);
+        }
+    </style>
 </head>
 
 <body>
-    <footer class="bg-gradient-to-r from-blue-600 to-cyan-500 text-white py-12">
+    <footer class="bg-gradient-to-r from-blue-800 to-cyan-400 text-white py-12 custom-shadow">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center">
                 <h2 class="text-2xl font-bold mb-8">Narahubung INNDESA</h2>
-
                 <div class="grid md:grid-cols-2 gap-8 max-w-2xl mx-auto">
                     <div class="flex items-center justify-center space-x-3">
                         <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
@@ -25,7 +30,6 @@
                             <p class="text-sm opacity-90">+62 8192-7681-300</p>
                         </div>
                     </div>
-
                     <div class="flex items-center justify-center space-x-3">
                         <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
                             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -38,7 +42,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="mt-8 pt-8 border-t border-white/20">
                     <p class="text-sm opacity-75">© 2024 INNDESA - Inovasi Nusantara Desa Integratif Pangan</p>
                     <p class="text-xs opacity-60 mt-1">PT PLN Indonesia Power UBP Jawa Tengah 2 Adipala</p>

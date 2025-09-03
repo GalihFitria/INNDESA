@@ -49,7 +49,7 @@
         </div>
         <div>
             <label for="deskripsi" class="block text-sm font-medium text-gray-700">Deskripsi</label>
-            <input type="text" name="deskripsi" id="deskripsi" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Masukkan Deskripsi Produk" required>
+            <textarea name="deskripsi" id="deskripsi" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Masukkan Deskripsi Produk" required>{{ old('deskripsi') }}</textarea>
             @error('deskripsi')
             <span class="text-red-500 text-sm">{{ $message }}</span>
             @enderror

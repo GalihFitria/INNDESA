@@ -257,7 +257,7 @@
                         @else
                         <span class="text-gray-500">Katalog tidak tersedia</span>
                         @endif
-                        <input type="text" placeholder="Cari Produk..."
+                        <input type="text" id="searchProduk" placeholder="Cari Produk..."
                             class="border rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-sky-500"
                             aria-label="Cari Produk">
                     </div>
@@ -351,7 +351,7 @@
                         @foreach ($inovasiImages as $index => $inovasi)
                         @php
                         $extension = pathinfo($inovasi->foto, PATHINFO_EXTENSION);
-                        $isImage = in_array(strtolower($extension), ['jpg', 'jpeg', 'png', 'pdf']);
+                        $isImage = in_array(strtolower($extension), ['jpg', 'jpeg', 'png']);
                         @endphp
                         @if ($isImage)
                         <img
@@ -361,12 +361,19 @@
                             onclick="openPreview('{{ asset('storage/' . $inovasi->foto) }}', 'Inovasi {{ $inovasi->getKodeInovasiAttribute() }}')"
                             onerror="this.src='{{ asset('images/placeholder.jpg') }}'">
                         @else
-                        <iframe
-                            src="{{ asset('storage/' . $inovasi->foto) }}"
-                            type="application/pdf"
-                            class="w-full max-w-[30rem] mx-auto h-60 rounded-lg shadow-md border border-gray-200 {{ $index === 0 ? 'block' : 'hidden' }}"
-                            title="Inovasi {{ $inovasi->getKodeInovasiAttribute() }}">
-                        </iframe>
+
+                        <div
+                            class="w-full max-w-[30rem] mx-auto h-60 rounded-lg shadow-md border border-gray-200 cursor-pointer {{ $index === 0 ? 'block' : 'hidden' }}"
+                            onclick="openPreview('{{ asset('storage/' . $inovasi->foto) }}', 'Inovasi {{ $inovasi->getKodeInovasiAttribute() }}', 'pdf')">
+                            <object
+                                data="{{ asset('storage/' . $inovasi->foto) }}#view=FitH"
+                                type="application/pdf"
+                                class="w-full h-full rounded-lg"
+                                title="Inovasi {{ $inovasi->getKodeInovasiAttribute() }}">
+                                <p>PDF tidak dapat ditampilkan. <a href="{{ asset('storage/' . $inovasi->foto) }}" target="_blank">Klik untuk membuka di tab baru</a></p>
+                            </object>
+                        </div>
+
                         @endif
                         @endforeach
                     </div>
@@ -396,6 +403,42 @@
     @include('footer')
 
     <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Inisialisasi carousel
+            ['sk-desa', 'produk', 'kegiatan', 'inovasi'].forEach(section => initializeCarousel(section));
+
+            // Fungsi pencarian produk
+            const searchInput = document.getElementById('searchProduk');
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    const searchTerm = this.value.toLowerCase().trim();
+                    const produkItems = document.querySelectorAll('.produk-item');
+
+                    // Jika kosong, tampilkan semua
+                    if (searchTerm === '') {
+                        produkItems.forEach(item => {
+                            item.style.display = 'block';
+                        });
+                    } else {
+                        // Filter berdasarkan nama produk
+                        produkItems.forEach(item => {
+                            const productName = item.getAttribute('data-nama');
+                            if (productName.includes(searchTerm)) {
+                                item.style.display = 'block';
+                            } else {
+                                item.style.display = 'none';
+                            }
+                        });
+                    }
+
+                    // Reset carousel ke halaman pertama dan perbarui
+                    carousels['produk'].current = 0;
+                    initializeCarousel('produk');
+                });
+            }
+        });
+
+
         function openTab(tabId, tabType) {
             const tabClass = tabType === 'profile' ? 'profile-tab-content' : 'info-tab-content';
             const buttonClass = tabType === 'profile' ? 'profile-tab-button' : 'info-tab-button';

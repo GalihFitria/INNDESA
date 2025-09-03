@@ -37,11 +37,11 @@ class KegiatanController extends Controller
     {
         $request->validate([
             'id_kelompok'   => 'required|exists:kelompok,id_kelompok',
-            'judul'         => 'required|string|max:255',
-            'deskripsi'     => 'required|string',
+            'judul'         => 'required|string|max:200',
+            'deskripsi'     => 'required|text',
             'tanggal'       => 'required|date',
             'sumber_berita' => 'nullable|string|max:255',
-            'foto'          => 'nullable|mimes:jpg,jpeg,png,pdf|max:1024',
+            'foto'          => 'required|mimes:jpg,jpeg,png,pdf|max:1024',
         ]);
 
         $data = $request->except('foto');

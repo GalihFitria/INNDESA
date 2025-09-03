@@ -9,6 +9,7 @@
         <a href="{{ route('Admin.struktur.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 flex items-center">
             <i class="fas fa-plus mr-2"></i>Tambah
         </a>
+        
         <input type="text" id="searchInput" placeholder="Cari..." class="w-1/3 border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
     </div>
     <div class="overflow-x-auto">

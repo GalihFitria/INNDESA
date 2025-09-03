@@ -86,13 +86,6 @@
             <p class="text-2xl md:text-3xl font-bold mb-10" style="color:#FFA500;">
                 PT PLN Indonesia Power UBP Jawa Tengah 2 Adipala
             </p>
-
-            <!-- <div class="flex flex-wrap justify-center gap-5 mb-10">
-                <a href="#"
-                    class="px-6 py-3 rounded-xl font-semibold bg-white text-blue-600 hover:bg-slate-100 transition">Profile</a>
-                <a href="#"
-                    class="px-6 py-3 rounded-xl font-semibold bg-emerald-500 text-white hover:bg-emerald-600 transition">Bagan Integritas</a>
-            </div> -->
         </div>
     </section>
 
@@ -239,170 +232,46 @@
             </div>
 
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                <div class="card bg-red-500 text-white overflow-hidden hover:shadow-lg transition-shadow">
+                @foreach ($kegiatans as $kegiatan)
+                <div class="card bg-blue-500 text-white overflow-hidden hover:shadow-lg transition-shadow">
                     <div class="h-32 bg-black/20">
                         <img
-                            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/attachments/gen-images/public/pln-inndesa-training-5ZHDJ7mmSqAXQnhvu7MmJ8M5mhRmw8.png"
-                            alt="PLN UPJP JAWA TENGAH DUKUNG PROGRAM INNDESA MELALUI PELATIHAN"
+                            src="{{ asset('storage/' . $kegiatan->foto) }}"
+                            alt="{{ $kegiatan->judul }}"
                             class="w-full h-full object-cover" />
                     </div>
                     <div class="p-6">
-                        <h3 class="font-bold text-sm mb-2 leading-tight">PLN UPJP JAWA TENGAH DUKUNG PROGRAM INNDESA MELALUI PELATIHAN</h3>
-                        <p class="text-xs opacity-90 mb-3">Program pelatihan untuk mendukung pengembangan inovasi nusantara desa integratif pangan</p>
-                        <p class="text-xs opacity-75 mb-4">15 Desember 2024</p>
-                        <a href="{{ route('update_kegiatan.index') }}"
+                        <h3 class="font-bold text-sm mb-2 leading-tight">{{ $kegiatan->judul }}</h3>
+                        <p class="text-xs opacity-90 mb-3">{{ Str::limit($kegiatan->deskripsi, 100) }}</p>
+                        <p class="text-xs opacity-75 mb-4">{{ \Carbon\Carbon::parse($kegiatan->tanggal)->translatedFormat('d F Y') }}</p>
+                        <a href="{{ route('update_kegiatan.show', $kegiatan->id_kegiatan) }}"
                             class="btn w-full bg-white/20 hover:bg-white/30 text-white border-white/30 text-center block">
                             Baca Selengkapnya
                         </a>
                     </div>
                 </div>
-
-                <div class="card bg-gray-500 text-white overflow-hidden hover:shadow-lg transition-shadow">
-                    <div class="h-32 bg-black/20">
-                        <img
-                            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/attachments/gen-images/public/sustainable-farm-workshop-OAt66DVmtx6DMlcB56QGKEJ7m23ohm.png"
-                            alt="PLN UPJP JAWA TENGAH DUKUNG PROGRAM INNDESA MELALUI WORKSHOP"
-                            class="w-full h-full object-cover" />
-                    </div>
-                    <div class="p-6">
-                        <h3 class="font-bold text-sm mb-2 leading-tight">PLN UPJP JAWA TENGAH DUKUNG PROGRAM INNDESA MELALUI WORKSHOP</h3>
-                        <p class="text-xs opacity-90 mb-3">Workshop pengembangan kapasitas masyarakat dalam bidang pertanian berkelanjutan</p>
-                        <p class="text-xs opacity-75 mb-4">12 Desember 2024</p>
-                        <button class="btn w-full bg-white/20 hover:bg-white/30 text-white border-white/30">
-                            Baca Selengkapnya
-                        </button>
-                    </div>
-                </div>
-
-                <div class="card bg-green-600 text-white overflow-hidden hover:shadow-lg transition-shadow">
-                    <div class="h-32 bg-black/20">
-                        <img
-                            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/attachments/gen-images/public/farmer-livestock-tech-assistance-mKH30H7UEnN1GoAYOc62yTeqJusFEb.png"
-                            alt="PLN UPJP JAWA TENGAH DUKUNG PROGRAM INNDESA MELALUI PENDAMPINGAN"
-                            class="w-full h-full object-cover" />
-                    </div>
-                    <div class="p-6">
-                        <h3 class="font-bold text-sm mb-2 leading-tight">PLN UPJP JAWA TENGAH DUKUNG PROGRAM INNDESA MELALUI PENDAMPINGAN</h3>
-                        <p class="text-xs opacity-90 mb-3">Program pendampingan teknis untuk kelompok tani dan peternak lokal</p>
-                        <p class="text-xs opacity-75 mb-4">10 Desember 2024</p>
-                        <button class="btn w-full bg-white/20 hover:bg-white/30 text-white border-white/30">
-                            Baca Selengkapnya
-                        </button>
-                    </div>
-                </div>
-
-                <div class="card bg-pink-500 text-white overflow-hidden hover:shadow-lg transition-shadow">
-                    <div class="h-32 bg-black/20">
-                        <img
-                            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/attachments/gen-images/public/inndesa-socialization-wHDM9f4IhzYOCuJ8CccpKwL8IjN06m.png"
-                            alt="PLN UPJP JAWA TENGAH DUKUNG PROGRAM INNDESA MELALUI SOSIALISASI"
-                            class="w-full h-full object-cover" />
-                    </div>
-                    <div class="p-6">
-                        <h3 class="font-bold text-sm mb-2 leading-tight">PLN UPJP JAWA TENGAH DUKUNG PROGRAM INNDESA MELALUI SOSIALISASI</h3>
-                        <p class="text-xs opacity-90 mb-3">Sosialisasi program INNDESA kepada masyarakat desa dan stakeholder terkait</p>
-                        <p class="text-xs opacity-75 mb-4">8 Desember 2024</p>
-                        <button class="btn w-full bg-white/20 hover:bg-white/30 text-white border-white/30">
-                            Baca Selengkapnya
-                        </button>
-                    </div>
-                </div>
-
-                <div class="card bg-pink-500 text-white overflow-hidden hover:shadow-lg transition-shadow">
-                    <div class="h-32 bg-black/20">
-                        <img
-                            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/attachments/gen-images/public/inndesa-socialization-wHDM9f4IhzYOCuJ8CccpKwL8IjN06m.png"
-                            alt="PLN UPJP JAWA TENGAH DUKUNG PROGRAM INNDESA MELALUI SOSIALISASI"
-                            class="w-full h-full object-cover" />
-                    </div>
-                    <div class="p-6">
-                        <h3 class="font-bold text-sm mb-2 leading-tight">PLN UPJP JAWA TENGAH DUKUNG PROGRAM INNDESA MELALUI SOSIALISASI</h3>
-                        <p class="text-xs opacity-90 mb-3">Sosialisasi program INNDESA kepada masyarakat desa dan stakeholder terkait</p>
-                        <p class="text-xs opacity-75 mb-4">8 Desember 2024</p>
-                        <button class="btn w-full bg-white/20 hover:bg-white/30 text-white border-white/30">
-                            Baca Selengkapnya
-                        </button>
-                    </div>
-                </div>
-
-                <div class="card bg-pink-500 text-white overflow-hidden hover:shadow-lg transition-shadow">
-                    <div class="h-32 bg-black/20">
-                        <img
-                            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/attachments/gen-images/public/inndesa-socialization-wHDM9f4IhzYOCuJ8CccpKwL8IjN06m.png"
-                            alt="PLN UPJP JAWA TENGAH DUKUNG PROGRAM INNDESA MELALUI SOSIALISASI"
-                            class="w-full h-full object-cover" />
-                    </div>
-                    <div class="p-6">
-                        <h3 class="font-bold text-sm mb-2 leading-tight">PLN UPJP JAWA TENGAH DUKUNG PROGRAM INNDESA MELALUI SOSIALISASI</h3>
-                        <p class="text-xs opacity-90 mb-3">Sosialisasi program INNDESA kepada masyarakat desa dan stakeholder terkait</p>
-                        <p class="text-xs opacity-75 mb-4">8 Desember 2024</p>
-                        <button class="btn w-full bg-white/20 hover:bg-white/30 text-white border-white/30">
-                            Baca Selengkapnya
-                        </button>
-                    </div>
-                </div>
-
-                <div class="card bg-pink-500 text-white overflow-hidden hover:shadow-lg transition-shadow">
-                    <div class="h-32 bg-black/20">
-                        <img
-                            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/attachments/gen-images/public/inndesa-socialization-wHDM9f4IhzYOCuJ8CccpKwL8IjN06m.png"
-                            alt="PLN UPJP JAWA TENGAH DUKUNG PROGRAM INNDESA MELALUI SOSIALISASI"
-                            class="w-full h-full object-cover" />
-                    </div>
-                    <div class="p-6">
-                        <h3 class="font-bold text-sm mb-2 leading-tight">PLN UPJP JAWA TENGAH DUKUNG PROGRAM INNDESA MELALUI SOSIALISASI</h3>
-                        <p class="text-xs opacity-90 mb-3">Sosialisasi program INNDESA kepada masyarakat desa dan stakeholder terkait</p>
-                        <p class="text-xs opacity-75 mb-4">8 Desember 2024</p>
-                        <button class="btn w-full bg-white/20 hover:bg-white/30 text-white border-white/30">
-                            Baca Selengkapnya
-                        </button>
-                    </div>
-                </div>
-
-                <div class="card bg-pink-500 text-white overflow-hidden hover:shadow-lg transition-shadow">
-                    <div class="h-32 bg-black/20">
-                        <img
-                            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/attachments/gen-images/public/inndesa-socialization-wHDM9f4IhzYOCuJ8CccpKwL8IjN06m.png"
-                            alt="PLN UPJP JAWA TENGAH DUKUNG PROGRAM INNDESA MELALUI SOSIALISASI"
-                            class="w-full h-full object-cover" />
-                    </div>
-                    <div class="p-6">
-                        <h3 class="font-bold text-sm mb-2 leading-tight">PLN UPJP JAWA TENGAH DUKUNG PROGRAM INNDESA MELALUI SOSIALISASI</h3>
-                        <p class="text-xs opacity-90 mb-3">Sosialisasi program INNDESA kepada masyarakat desa dan stakeholder terkait</p>
-                        <p class="text-xs opacity-75 mb-4">8 Desember 2024</p>
-                        <button class="btn w-full bg-white/20 hover:bg-white/30 text-white border-white/30">
-                            Baca Selengkapnya
-                        </button>
-                    </div>
-                </div>
-
-                <div class="card bg-pink-500 text-white overflow-hidden hover:shadow-lg transition-shadow">
-                    <div class="h-32 bg-black/20">
-                        <img
-                            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/attachments/gen-images/public/inndesa-socialization-wHDM9f4IhzYOCuJ8CccpKwL8IjN06m.png"
-                            alt="PLN UPJP JAWA TENGAH DUKUNG PROGRAM INNDESA MELALUI SOSIALISASI"
-                            class="w-full h-full object-cover" />
-                    </div>
-                    <div class="p-6">
-                        <h3 class="font-bold text-sm mb-2 leading-tight">PLN UPJP JAWA TENGAH DUKUNG PROGRAM INNDESA MELALUI SOSIALISASI</h3>
-                        <p class="text-xs opacity-90 mb-3">Sosialisasi program INNDESA kepada masyarakat desa dan stakeholder terkait</p>
-                        <p class="text-xs opacity-75 mb-4">8 Desember 2024</p>
-                        <button class="btn w-full bg-white/20 hover:bg-white/30 text-white border-white/30">
-                            Baca Selengkapnya
-                        </button>
-                    </div>
-                </div>
+                @endforeach
             </div>
 
             <div class="flex justify-center space-x-2">
-                <div class="w-3 h-3 bg-blue-600 rounded-full"></div>
-                <div class="w-3 h-3 bg-gray-300 rounded-full"></div>
-                <div class="w-3 h-3 bg-gray-300 rounded-full"></div>
+                @for ($i = 1; $i <= $kegiatans->lastPage(); $i++)
+                    <a href="{{ $kegiatans->url($i) }}"
+                        class="w-3 h-3 {{ $kegiatans->currentPage() == $i ? 'bg-blue-600' : 'bg-gray-300' }} rounded-full"></a>
+                    @endfor
             </div>
 
             <div class="flex justify-center mt-4">
-                <button class="btn btn-outline mr-2">←</button>
-                <button class="btn btn-outline">→</button>
+                @if ($kegiatans->onFirstPage())
+                <button class="btn btn-outline mr-2" disabled>←</button>
+                @else
+                <a href="{{ $kegiatans->previousPageUrl() }}" class="btn btn-outline mr-2">←</a>
+                @endif
+
+                @if ($kegiatans->hasMorePages())
+                <a href="{{ $kegiatans->nextPageUrl() }}" class="btn btn-outline">→</a>
+                @else
+                <button class="btn btn-outline" disabled>→</button>
+                @endif
             </div>
         </div>
     </section>

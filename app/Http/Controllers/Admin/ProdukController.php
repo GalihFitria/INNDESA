@@ -40,7 +40,7 @@ class ProdukController extends Controller
             'nama' => 'required|string|max:255',
             'harga' => 'required|numeric',
             'stok' => 'required|integer',
-            'foto' => 'nullable|mimes:jpg,jpeg,png|max:2048',
+            'foto' => 'required|mimes:jpg,jpeg,png|max:2048',
             'deskripsi' => 'required|string',
             'sertifikat' => 'nullable|mimes:jpg,jpeg,png|max:2048',
             'produk_terjual' => 'required|integer',

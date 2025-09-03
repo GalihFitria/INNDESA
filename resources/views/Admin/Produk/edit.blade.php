@@ -41,7 +41,7 @@
         </div>
         <div>
             <label for="deskripsi" class="block text-sm font-medium text-gray-700">Deskripsi</label>
-            <input type="text" name="deskripsi" id="deskripsi" value="{{ $produk->deskripsi }}" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Masukkan Deskripsi" required>
+            <textarea name="deskripsi" id="deskripsi" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Masukkan Deskripsi Produk" required>{{ $produk->deskripsi ?? '' }}</textarea>
         </div>
         <div class="mb-4">
             <label for="sertifikat" class="block text-sm font-medium text-gray-700">Sertifikat</label>

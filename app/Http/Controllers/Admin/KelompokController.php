@@ -39,8 +39,8 @@ class KelompokController extends Controller
             'id_kategori' => 'required|exists:kategori_kelompok,id_kategori',
             'nama' => 'required|string|max:255',
             'sejarah' => 'required|string',
-            'sk_desa' => 'nullable|mimes:jpg,png,jpeg,pdf|max:2048',
-            'background' => 'nullable|image|mimes:jpg,png,jpeg,pdf|max:2048',
+            'sk_desa' => 'nulla|mimes:jpg,png,jpeg,pdf|max:2048',
+            'background' => 'required|image|mimes:jpg,png,jpeg,pdf|max:2048',
             'logo' => 'nullable|image|mimes:jpg,png,jpeg,pdf|max:2048',
         ]);
 
