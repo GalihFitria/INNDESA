@@ -96,6 +96,12 @@
                         </a>
                     </li>
                     <li>
+                        <a href="#" class="menu-item w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition-colors flex items-center">
+                            <i class="fas fa-id-card mr-3 text-blue-500"></i>
+                            <span>Informasi User</span>
+                        </a>
+                    </li>
+                    <li>
                         <a href="{{ route('beranda') }}" class="menu-item w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition-colors flex items-center">
                             <i class="fas fa-external-link-alt mr-3 text-blue-600"></i>
                             <span>Lihat Website</span>

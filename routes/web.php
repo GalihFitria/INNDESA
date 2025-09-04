@@ -10,6 +10,8 @@ use App\Http\Controllers\Admin\KelompokRentanController;
 use App\Http\Controllers\Admin\ProdukController as AdminProdukController;
 use App\Http\Controllers\Admin\SidebarController;
 use App\Http\Controllers\Admin\StrukturController;
+use App\Http\Controllers\Admin_Kelompok\BerandaController;
+use App\Http\Controllers\Admin_Kelompok\KelompokController as Admin_KelompokKelompokController;
 use App\Http\Controllers\DetailProdukController;
 use App\Http\Controllers\FotoController;
 use App\Http\Controllers\IndexController;
@@ -60,3 +62,8 @@ Route::prefix('Admin')->name('Admin.')->group(function () {
 
 });
 
+// ADMIN KELOMPOK
+Route::prefix('Admin_Kelompok')->name('Admin_Kelompok.')->group(function() {
+    Route::resource('kelompok', Admin_KelompokKelompokController::class);
+    Route::get('beranda', [BerandaController::class, 'index'])->name('beranda');
+});

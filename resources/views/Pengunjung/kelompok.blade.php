@@ -324,8 +324,8 @@
                                     </div>
                                     <div class="flex justify-between items-center">
                                         <p class="text-xs opacity-75 truncate">{{ \Carbon\Carbon::parse($item->tanggal)->format('d F Y') }}</p>
-                                    </div>
-                                    <button class="btn btn-blue text-xs px-3 py-1">Baca Selengkapnya</button>
+                    </div>
+                                    <button class="text-blue-600 hover:underline text-sm">Baca Selengkapnya</button>
 
                                 </div>
                             </div>
