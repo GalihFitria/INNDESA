@@ -23,6 +23,11 @@
             background: white;
             border-radius: 0.75rem;
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
         }
 
         .btn {
@@ -90,6 +95,11 @@
             overflow: hidden;
             border-radius: 0.75rem;
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .location-card:hover {
+            transform: scale(1.05);
         }
 
         .location-card img {
@@ -124,6 +134,11 @@
             height: 100%;
             display: flex;
             flex-direction: column;
+            transition: transform 0.3s ease;
+        }
+
+        .csr-card:hover {
+            transform: scale(1.05);
         }
 
         .csr-card .image-container {
@@ -239,6 +254,11 @@
             margin-bottom: 1.5rem;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             border-left: 4px solid #0097D4;
+            transition: transform 0.3s ease;
+        }
+
+        .policy-item:hover {
+            transform: scale(1.05);
         }
 
         .policy-item h4 {
@@ -280,7 +300,7 @@
 
     <section class="py-16 bg-white">
         <div class="max-w-3xl mx-auto text-center mb-12">
-            <h2 class="text-3xl md:text-4xl font-bold text-blue-600 mb-6">Profil Perusahaan</h2>
+            <h2 class="text-3xl md:text-4xl font-bold text-blue-600 mb-6">Profile Perusahaan</h2>
             <div class="card p-8">
                 <p class="text-gray-800 text-lg md:text-xl leading-relaxed">
                     Mengoperasikan 1 unit Pembangkit Listrik Tenaga Uap (PLTU) dengan kapasitas 660 MW yang berlokasi di Desa Bunton, Kecamatan Adipala, Kabupaten Cilacap. PLTU Adipala beroperasi dengan menggunakan bahan bakar batubara dan mempunyai teknologi supercritical yang membuat operasional PLTU lebih efisien.
@@ -324,109 +344,73 @@
     <!-- CSR Profile -->
     <section class="py-16 bg-white">
         <div class="max-w-6xl mx-auto px-4">
-            <h2 class="text-3xl md:text-4xl font-bold text-blue-600 mb-12 text-center">Profil CSR</h2>
+            <h2 class="text-3xl md:text-4xl font-bold text-blue-600 mb-12 text-center">Corporate Social Responsibility(CSR)</h2>
 
             <!-- Pengertian CSR -->
             <div class="mb-16">
-                <h3 class="text-2xl font-bold text-blue-600 mb-6 text-center">Pengertian CSR</h3>
+                <h3 class="text-4xl font-bold text-blue-600 mb-6 text-center">Pengertian CSR</h3>
                 <div class="card p-8 max-w-4xl mx-auto">
-                    <p class="text-gray-800 text-lg leading-relaxed">
-                        Corporate Social Responsibility (CSR) atau Tanggung Jawab Sosial Perusahaan adalah konsep bahwa organisasi, khususnya perusahaan, memiliki tanggung jawab terhadap pemangku kepentingan (stakeholders) yang meliputi konsumen, karyawan, pemegang saham, komunitas, dan lingkungan dalam semua aspek operasional perusahaan. CSR bertujuan untuk menciptakan dampak positif bagi masyarakat dan lingkungan sekitar, sejalan dengan prinsip keberlanjutan.
+                    <p class=" text-center text-gray-800 text-lg md:text-xl leading-relaxed">
+                        Corporate Social Responsibility (CSR) atau Tanggung Jawab Sosial dan Lingkungan (TJSL) adalah komitmen Indonesia Power untuk memperhatikan dampak sosial dan lingkungan dari setiap aktivitas bisnis, serta berkontribusi pada pembangunan berkelanjutan.
+                        Bagi Indonesia Power, CSR tidak hanya sebatas kepatuhan, tetapi merupakan tanggung jawab perusahaan terhadap masyarakat, pemangku kepentingan, dan lingkungan agar tercipta manfaat berkesinambungan. Implementasinya diwujudkan melalui program INPOWER-CARE (Community Assistance, Relation, and Empowerment) yang berfokus pada peningkatan kualitas hidup, pemberdayaan masyarakat, dan kelestarian lingkungan.
                     </p>
                 </div>
             </div>
 
-            <!-- Program Unggulan -->
+            <!-- Program CSR -->
             <div class="mb-16">
-                <h3 class="text-2xl font-bold text-blue-600 mb-6 text-center">Program CSR</h3>
+                <h3 class="text-4xl font-bold text-blue-600 mb-6 text-center">Program CSR</h3>
 
                 <div class="csr-grid">
                     <div class="csr-card">
-                        <div class="image-container">
+                        <!-- <div class="image-container">
                             <img src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Bantuan Fasilitas KWT">
                             <div class="icon">
                                 <i class="fas fa-seedling"></i>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="content">
-                            <h4>Bantuan Fasilitas KWT</h4>
+                            <h4>Bantuan Pelayanan Masyarakat</h4>
                             <ul>
-                                <li><i class="fas fa-check-circle"></i> Sarana pendukung untuk Kelompok Wanita Tani</li>
-                                <li><i class="fas fa-check-circle"></i> Pengembangan potensi lokal</li>
-                                <li><i class="fas fa-check-circle"></i> Peningkatan kapasitas produksi</li>
-                                <li><i class="fas fa-check-circle"></i> Pemberdayaan ekonomi perempuan</li>
+                                <li><i class="fas fa-check-circle"></i> Bantuan Sarana dan Prasarana</li>
+                                <li><i class="fas fa-check-circle"></i> Bantuan Pelayanan Kesehatan</li>
+                                <li><i class="fas fa-check-circle"></i> Bantuan Pelayanan Pendidikan</li>
+                                <li><i class="fas fa-check-circle"></i> Bantuan Bencana Alam</li>
                             </ul>
                         </div>
                     </div>
 
                     <div class="csr-card">
-                        <div class="image-container">
+                        <!-- <div class="image-container">
                             <img src="https://images.unsplash.com/photo-1606787366850-de6330128bfc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Penyaluran Paket Sembako">
                             <div class="icon">
                                 <i class="fas fa-box-open"></i>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="content">
-                            <h4>Penyaluran Paket Sembako</h4>
+                            <h4>Bakti Pembinaan Hubungan</h4>
                             <ul>
-                                <li><i class="fas fa-check-circle"></i> Bantuan untuk warga Dusun Bogemanjir</li>
-                                <li><i class="fas fa-check-circle"></i> Program rutin musim kemarau</li>
-                                <li><i class="fas fa-check-circle"></i> Pemenuhan kebutuhan pokok</li>
-                                <li><i class="fas fa-check-circle"></i> Ketahanan pangan lokal</li>
+                                <li><i class="fas fa-check-circle"></i> Komunikasi Sosial</li>
+                                <li><i class="fas fa-check-circle"></i> Partisipasi Peringatan Hari Besar</li>
+                                <li><i class="fas fa-check-circle"></i> Partisipasi Kegiatan Masyarakat</li>
                             </ul>
                         </div>
                     </div>
 
                     <div class="csr-card">
-                        <div class="image-container">
+                        <!-- <div class="image-container">
                             <img src="https://images.unsplash.com/photo-1588702592395-a8f7a407a58d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Pelatihan Pengolahan Limbah Perikanan">
                             <div class="icon">
                                 <i class="fas fa-fish"></i>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="content">
-                            <h4>Pelatihan Pengolahan Limbah Perikanan</h4>
+                            <h4>Bakti Pemberdayaan Masyarakat</h4>
                             <ul>
-                                <li><i class="fas fa-check-circle"></i> Pengolahan limbah ramah lingkungan</li>
-                                <li><i class="fas fa-check-circle"></i> Pelatihan untuk warga Desa Wlahar</li>
-                                <li><i class="fas fa-check-circle"></i> Pembukaan peluang usaha baru</li>
-                                <li><i class="fas fa-check-circle"></i> Peningkatan nilai ekonomis limbah</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="csr-card">
-                        <div class="image-container">
-                            <img src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Pelatihan Pembuatan Pupuk Organik Cair">
-                            <div class="icon">
-                                <i class="fas fa-flask"></i>
-                            </div>
-                        </div>
-                        <div class="content">
-                            <h4>Pelatihan Pembuatan POC</h4>
-                            <ul>
-                                <li><i class="fas fa-check-circle"></i> Pengolahan limbah rumah tangga</li>
-                                <li><i class="fas fa-check-circle"></i> Pelatihan untuk KWT Sidamegar</li>
-                                <li><i class="fas fa-check-circle"></i> Pupuk organik cair bernilai guna</li>
-                                <li><i class="fas fa-check-circle"></i> Alternatif pupuk kimia</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="csr-card">
-                        <div class="image-container">
-                            <img src="https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Bantuan Benih Cabai">
-                            <div class="icon">
-                                <i class="fas fa-pepper-hot"></i>
-                            </div>
-                        </div>
-                        <div class="content">
-                            <h4>Bantuan Benih Cabai</h4>
-                            <ul>
-                                <li><i class="fas fa-check-circle"></i> Benih cabai unggulan untuk petani</li>
-                                <li><i class="fas fa-check-circle"></i> Meningkatkan produktivitas</li>
-                                <li><i class="fas fa-check-circle"></i> Ketahanan pangan lokal</li>
-                                <li><i class="fas fa-check-circle"></i> Dukungan untuk petani Adipala</li>
+                                <li><i class="fas fa-check-circle"></i> Bantuan Pengembangan dan Modal Usaha</li>
+                                <li><i class="fas fa-check-circle"></i> Bantuan Peningkatan Ketrampilan</li>
+                                <li><i class="fas fa-check-circle"></i> Bantuan Pemasaran Produk</li>
+                                <li><i class="fas fa-check-circle"></i> Riset dan Pengembangan</li>
                             </ul>
                         </div>
                     </div>
@@ -435,35 +419,25 @@
 
             <!-- Kebijakan CSR -->
             <div class="mb-16">
-                <h3 class="text-2xl font-bold text-blue-600 mb-6 text-center">Kebijakan CSR</h3>
+                <h3 class="text-4xl font-bold text-blue-600 mb-6 text-center">Kebijakan CSR</h3>
                 <div class="max-w-4xl mx-auto">
+                    <p class=" text-center text-gray-800 text-lg md:text-xl leading-relaxed">Pelaksanaan CSR di Indonesia Power mengacu pada Keputusan Direksi No. 25.K/010/IP/2014 tentang Pedoman Tanggung Jawab Sosial dan Lingkungan Perusahaan.</p><br>
                     <div class="policy-item">
-                        <h4><i class="fas fa-users"></i> Keterlibatan Stakeholder</h4>
-                        <p>Melibatkan masyarakat, pemerintah daerah, dan pemangku kepentingan lainnya dalam perencanaan dan pelaksanaan program CSR.</p>
+                        <h4><i class="fas fa-leaf"></i> Komitmen Ekonomi Berkelanjutan</h4>
+                        <p>CSR adalah komitmen perusahaan untuk pembangunan ekonomi berkelanjutan.</p>
                     </div>
                     <div class="policy-item">
-                        <h4><i class="fas fa-sync-alt"></i> Keberlanjutan</h4>
-                        <p>Memastikan program CSR memberikan dampak jangka panjang dan berkelanjutan bagi masyarakat.</p>
+                        <h4><i class="fas fa-handshake"></i> Tanggung Jawab Bisnis</h4>
+                        <p>CSR dilaksanakan sebagai bentuk tanggung jawab terhadap dampak keputusan dan proses bisnis.</p>
                     </div>
                     <div class="policy-item">
-                        <h4><i class="fas fa-eye"></i> Transparansi</h4>
-                        <p>Menyediakan informasi yang jelas dan akurat mengenai program CSR yang dilaksanakan.</p>
-                    </div>
-                    <div class="policy-item">
-                        <h4><i class="fas fa-balance-scale"></i> Akuntabilitas</h4>
-                        <p>Bertanggung jawab atas dampak dari program CSR yang telah dilaksanakan.</p>
-                    </div>
-                    <div class="policy-item">
-                        <h4><i class="fas fa-link"></i> Keterpaduan</h4>
-                        <p>Mengintegrasikan program CSR dengan kegiatan operasional perusahaan dan program pemerintah.</p>
+                        <h4><i class="fas fa-users"></i> Peningkatan Kualitas Hidup</h4>
+                        <p>Tujuannya meningkatkan kualitas kehidupan masyarakat dan lingkungan yang bermanfaat, baik bagi perusahaan maupun komunitas setempat.</p>
                     </div>
                 </div>
             </div>
 
-            <!-- Roadmap CSR -->
-            <div>
-                <h3 class="text-2xl font-bold text-blue-600 mb-6 text-center">Roadmap CSR</h3>
-            </div>
+
         </div>
     </section>
     <div class="mt-20">
