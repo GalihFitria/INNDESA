@@ -43,7 +43,7 @@
                     </div>
                 </div>
                 <div class="mt-8 pt-8 border-t border-white/20">
-                    <p class="text-sm opacity-75">© 2024 INNDESA - Inovasi Nusantara Desa Integratif Pangan</p>
+                    <p class="text-sm opacity-75">© 2025 INNDESA - Inovasi Nusantara Desa Integratif Pangan</p>
                     <p class="text-xs opacity-60 mt-1">PT PLN Indonesia Power UBP Jawa Tengah 2 Adipala</p>
                 </div>
             </div>

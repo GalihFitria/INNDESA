@@ -277,12 +277,84 @@
         .policy-item p {
             color: #4b5563;
         }
+
+        /* Animasi scroll reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Animasi untuk card */
+        .card-reveal {
+            opacity: 0;
+            transform: scale(0.9);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .card-reveal.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Animasi untuk section judul */
+        .section-title {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+        }
+
+        .section-title.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Animasi untuk CSR card */
+        .csr-card-reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .csr-card-reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Animasi untuk policy item */
+        .policy-reveal {
+            opacity: 0;
+            transform: translateX(-30px);
+            transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+        }
+
+        .policy-reveal:nth-child(even) {
+            transform: translateX(30px);
+        }
+
+        .policy-reveal.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Parallax effect untuk hero background */
+        .parallax-bg {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
     </style>
 </head>
 
 <body class="min-h-screen bg-white font-poppins">
     @include('navbar')
-    <section class="relative text-white overflow-hidden min-h-[550px] flex flex-col items-center pt-32"
+    <section class="relative text-white overflow-hidden min-h-[550px] flex flex-col items-center pt-32 parallax-bg"
         style="background-image: url('{{ asset('images/background_beranda_INNDESA.jpeg') }}'); background-size: cover; background-position: center;">
         <div class="absolute top-10 left-14 flex items-center space-x-2">
             <img src="{{ asset('images/logo_BUMN.png') }}" alt="Logo" class="h-8 w-auto">
@@ -297,28 +369,29 @@
             </h2>
         </div>
     </section>
-
-    <section class="py-16 bg-white">
-        <div class="max-w-3xl mx-auto text-center mb-12">
+    <section class="py-16 bg-white reveal">
+        <div class="max-w-3xl mx-auto text-center mb-12 section-title">
             <h2 class="text-3xl md:text-4xl font-bold text-blue-600 mb-6">Profile Perusahaan</h2>
-            <div class="card p-8">
-                <p class="text-gray-800 text-lg md:text-xl leading-relaxed">
+        </div>
+        <div class="max-w-3xl mx-auto mb-12">
+            <div class="card p-8 border border-gray-300 rounded-lg card-reveal">
+                <p class="text-center text-gray-800 text-lg md:text-xl leading-relaxed">
                     Mengoperasikan 1 unit Pembangkit Listrik Tenaga Uap (PLTU) dengan kapasitas 660 MW yang berlokasi di Desa Bunton, Kecamatan Adipala, Kabupaten Cilacap. PLTU Adipala beroperasi dengan menggunakan bahan bakar batubara dan mempunyai teknologi supercritical yang membuat operasional PLTU lebih efisien.
                 </p>
             </div>
         </div>
         <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
             <div class="flex flex-col h-full text-center">
-                <h3 class="text-2xl md:text-3xl font-bold text-blue-600 mb-4">Visi</h3>
-                <div class="card flex-1 p-6 flex items-center justify-center">
+                <h3 class="text-2xl md:text-3xl font-bold text-blue-600 mb-4 section-title">Visi</h3>
+                <div class="card flex-1 p-6 flex items-center justify-center border border-gray-300 rounded-lg card-reveal">
                     <p class="text-gray-800 text-lg md:text-xl lg:text-xl leading-relaxed">
                         Menjadi Perusahaan Pembangkit Listrik Terkemuka dan Berkelanjutan di Asia Tenggara
                     </p>
                 </div>
             </div>
             <div class="flex flex-col h-full text-center">
-                <h3 class="text-2xl md:text-3xl font-bold text-blue-600 mb-4">Misi</h3>
-                <div class="card flex-1 p-6 flex items-center justify-center">
+                <h3 class="text-2xl md:text-3xl font-bold text-blue-600 mb-4 section-title">Misi</h3>
+                <div class="card flex-1 p-6 flex items-center justify-center border border-gray-300 rounded-lg card-reveal">
                     <p class="text-gray-800 text-lg md:text-xl lg:text-xl leading-relaxed">
                         Menyelenggarakan Bisnis Solusi Energi yang Andal, Efisien, Inovatif, dan Melampaui Harapan Pelanggan, Menuju Energi Bersih yang Terjangkau
                     </p>
@@ -326,43 +399,46 @@
             </div>
         </div>
     </section>
-
-    <section class="py-16 bg-white">
+    <section class="py-16 bg-white reveal">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
+            <div class="text-center mb-12 section-title">
                 <h2 class="text-4xl font-bold text-blue-600 mb-4">Lokasi Perusahaan</h2>
             </div>
-
-            <div class="flex justify-center">
+            <div class="flex justify-center card-reveal">
                 <img
-                    src="{{ asset('images/lokasi.png') }}"
+                    src="{{ asset('images/Denahlokasi.png') }}"
                     class="max-w-full h-auto rounded-lg shadow-lg" />
             </div>
         </div>
     </section>
-
     <!-- CSR Profile -->
-    <section class="py-16 bg-white">
+    <section class="py-16 bg-white reveal">
         <div class="max-w-6xl mx-auto px-4">
-            <h2 class="text-3xl md:text-4xl font-bold text-blue-600 mb-12 text-center">Corporate Social Responsibility(CSR)</h2>
-
+            <h2 class="text-3xl md:text-4xl font-bold text-blue-600 mb-12 text-center section-title"><i>Corporate Social Responsibility</i> (CSR)</h2>
             <!-- Pengertian CSR -->
             <div class="mb-16">
-                <h3 class="text-4xl font-bold text-blue-600 mb-6 text-center">Pengertian CSR</h3>
-                <div class="card p-8 max-w-4xl mx-auto">
+                <h3 class="text-4xl font-bold text-blue-600 mb-6 text-center section-title">Pengertian CSR</h3>
+                <div class="card p-8 border border-gray-300 rounded-lg max-w-4xl mx-auto card-reveal">
                     <p class=" text-center text-gray-800 text-lg md:text-xl leading-relaxed">
-                        Corporate Social Responsibility (CSR) atau Tanggung Jawab Sosial dan Lingkungan (TJSL) adalah komitmen Indonesia Power untuk memperhatikan dampak sosial dan lingkungan dari setiap aktivitas bisnis, serta berkontribusi pada pembangunan berkelanjutan.
-                        Bagi Indonesia Power, CSR tidak hanya sebatas kepatuhan, tetapi merupakan tanggung jawab perusahaan terhadap masyarakat, pemangku kepentingan, dan lingkungan agar tercipta manfaat berkesinambungan. Implementasinya diwujudkan melalui program INPOWER-CARE (Community Assistance, Relation, and Empowerment) yang berfokus pada peningkatan kualitas hidup, pemberdayaan masyarakat, dan kelestarian lingkungan.
+                        <i>Corporate Social Responsibility</i> (CSR) atau Tanggung Jawab Sosial dan Lingkungan (TJSL) adalah komitmen PT.PLN Indonesia Power UBP Jawa Tengah 2 Adipala untuk memperhatikan dampak sosial dan lingkungan dari setiap aktivitas bisnis, serta berkontribusi pada pembangunan berkelanjutan.
+                        Bagi Indonesia Power, CSR tidak hanya sebatas kepatuhan, tetapi merupakan tanggung jawab perusahaan terhadap masyarakat, pemangku kepentingan, dan lingkungan agar tercipta manfaat berkesinambutan. Implementasinya diwujudkan melalui program INPOWER-CARE <i>(Community Assistance, Relation, and Empowerment)</i> yang berfokus pada peningkatan kualitas hidup, pemberdayaan masyarakat, dan kelestarian lingkungan.
                     </p>
                 </div>
             </div>
-
             <!-- Program CSR -->
             <div class="mb-16">
-                <h3 class="text-4xl font-bold text-blue-600 mb-6 text-center">Program CSR</h3>
-
+                <h3 class="text-4xl font-bold text-blue-600 mb-6 text-center section-title">Program INPOWER - CARE</h3>
+                <p class=" text-center text-gray-800 text-lg md:text-xl leading-relaxed card-reveal">
+                    INPOWER-CARE adalah kegiatan pelibatan dan pengembangan komunitas yang dilakukan Perusahaan sebagai wujud tanggung jawab sosial dan tata kelola Perusahaan yang baik. INPOWERCARE bertujuan untuk memperbesar akses masyarakat agar mencapai kondisi sosial, ekonomi, dan budaya yang lebih baik dari sebelumnya. Sehingga, kehidupan masyarakat di sekitar wilayah operasional Perusahaan diharapkan menjadi lebih berdaya dan mandiri dengan kualitas dan kesejahteraan yang lebih baik.
+                    Penyelenggaraan INPOWER-CARE merupakan perwujudan visi dan misi Perusahaan, khususnya bersahabat dengan lingkungan serta perwujudan Tanggung Jawab Sosial dan Lingkungan (TJSL) Perusahaan sebagai bagian dari tata kelola perusahaan yang baik.
+                </p><br>
+                <div class="flex justify-center card-reveal">
+                    <img
+                                src="{{ asset('images/Program_INPOWERCARE.png') }}"
+                                class="max-w-full h-auto rounded-lg shadow-lg" />
+                </div><br>
                 <div class="csr-grid">
-                    <div class="csr-card">
+                    <div class="csr-card border border-gray-300 rounded-lg csr-card-reveal">
                         <!-- <div class="image-container">
                             <img src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Bantuan Fasilitas KWT">
                             <div class="icon">
@@ -379,8 +455,7 @@
                             </ul>
                         </div>
                     </div>
-
-                    <div class="csr-card">
+                    <div class="csr-card  border border-gray-300 rounded-lg csr-card-reveal">
                         <!-- <div class="image-container">
                             <img src="https://images.unsplash.com/photo-1606787366850-de6330128bfc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Penyaluran Paket Sembako">
                             <div class="icon">
@@ -396,8 +471,7 @@
                             </ul>
                         </div>
                     </div>
-
-                    <div class="csr-card">
+                    <div class="csr-card border border-gray-300 rounded-lg csr-card-reveal">
                         <!-- <div class="image-container">
                             <img src="https://images.unsplash.com/photo-1588702592395-a8f7a407a58d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Pelatihan Pengolahan Limbah Perikanan">
                             <div class="icon">
@@ -416,27 +490,43 @@
                     </div>
                 </div>
             </div>
-
             <!-- Kebijakan CSR -->
             <div class="mb-16">
-                <h3 class="text-4xl font-bold text-blue-600 mb-6 text-center">Kebijakan CSR</h3>
+                <h3 class="text-4xl font-bold text-blue-600 mb-6 text-center section-title">Kebijakan</h3>
                 <div class="max-w-4xl mx-auto">
-                    <p class=" text-center text-gray-800 text-lg md:text-xl leading-relaxed">Pelaksanaan CSR di Indonesia Power mengacu pada Keputusan Direksi No. 25.K/010/IP/2014 tentang Pedoman Tanggung Jawab Sosial dan Lingkungan Perusahaan.</p><br>
-                    <div class="policy-item">
+                    <p class=" text-center text-gray-800 text-lg md:text-xl leading-relaxed card-reveal">
+                        Penyelenggaraan program tanggung jawab social terhadap masyarakat di PT.PLN Indonesia Power UBP Jawa Tengah 2 Adipala dilaksanakan berdasarkan pada Keputusan Direksi No. 25.K/010/IP/2014 tentang Pedoman Tanggung Jawab Sosial dan Lingkungan Perusahaan.
+                        Sesuai peraturan internal tersebut, Tanggung Jawab Sosial dan Lingkungan Perusahaan (TJSLP), atau di internal disebut dengan program INPOWER-CARE, merupakan komitmen Perusahaan untuk berperan serta dalam pembangunan ekonomi
+                        berkelanjutan sebagai bentuk tanggung jawab terhadap dampak pengambilan keputusan dan proses bisnis Perusahaan guna meningkatkan kualitas kehidupan dan lingkungan yang bermanfaat, baik bagi Perusahaan maupun komunitas setempat.
+                    </p><br>
+                    <div class="policy-item policy-reveal">
                         <h4><i class="fas fa-leaf"></i> Komitmen Ekonomi Berkelanjutan</h4>
                         <p>CSR adalah komitmen perusahaan untuk pembangunan ekonomi berkelanjutan.</p>
                     </div>
-                    <div class="policy-item">
+                    <div class="policy-item policy-reveal">
                         <h4><i class="fas fa-handshake"></i> Tanggung Jawab Bisnis</h4>
                         <p>CSR dilaksanakan sebagai bentuk tanggung jawab terhadap dampak keputusan dan proses bisnis.</p>
                     </div>
-                    <div class="policy-item">
+                    <div class="policy-item policy-reveal">
                         <h4><i class="fas fa-users"></i> Peningkatan Kualitas Hidup</h4>
                         <p>Tujuannya meningkatkan kualitas kehidupan masyarakat dan lingkungan yang bermanfaat, baik bagi perusahaan maupun komunitas setempat.</p>
                     </div>
                 </div>
-            </div>
 
+                <section class="py-16 bg-white reveal">
+                    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div class="text-center mb-12 section-title">
+                            <h2 class="text-4xl font-bold text-blue-600 mb-4">Roadmap</h2>
+                        </div>
+                        <div class="flex justify-center card-reveal">
+                            <!-- <img
+                                src="{{ asset('images/lokasi.png') }}"
+                                class="max-w-full h-auto rounded-lg shadow-lg" /> -->
+                        </div>
+                    </div>
+                </section>
+
+            </div>
 
         </div>
     </section>
@@ -444,5 +534,37 @@
         @include('footer')
     </div>
 </body>
+<script>
+    // Scroll reveal animation
+    function reveal() {
+        const reveals = document.querySelectorAll('.reveal, .card-reveal, .section-title, .csr-card-reveal, .policy-reveal');
+
+        for (let i = 0; i < reveals.length; i++) {
+            const windowHeight = window.innerHeight;
+            const elementTop = reveals[i].getBoundingClientRect().top;
+            const elementVisible = 150;
+
+            if (elementTop < windowHeight - elementVisible) {
+                reveals[i].classList.add('active');
+            } else {
+                reveals[i].classList.remove('active');
+            }
+        }
+    }
+
+    window.addEventListener('scroll', reveal);
+
+    // Jalankan reveal saat halaman dimuat
+    reveal();
+
+    // Parallax effect untuk hero background
+    window.addEventListener('scroll', () => {
+        const scrolled = window.pageYOffset;
+        const parallax = document.querySelector('.parallax-bg');
+        if (parallax) {
+            parallax.style.backgroundPositionY = -(scrolled * 0.5) + 'px';
+        }
+    });
+</script>
 
 </html>
