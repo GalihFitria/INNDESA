@@ -9,11 +9,14 @@
     <form action="{{ route('Admin.kelompok_rentan.store') }}" method="POST" class="space-y-6">
         @csrf
         <div>
-            <label for="nama_rentan" class="block text-sm font-medium text-gray-700">Nama</label>
+            <label for="nama_rentan" class="block text-sm font-medium text-gray-700">Nama Kelompok Rentan</label>
             <input type="text" name="nama_rentan" id="nama_rentan"
                 value="{{ old('nama_rentan') }}"
                 class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500"
                 placeholder="Masukkan Nama Kelompok Rentan" required>
+            @error('nama_rentan')
+            <span class="text-red-500 text-sm">{{ $message }}</span>
+            @enderror
         </div>
         <div class="flex justify-end space-x-4">
             <a href="{{ route('Admin.kelompok_rentan.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 flex items-center">
@@ -26,8 +29,7 @@
     </form>
 </div>
 
-
-<input type="hidden" id="error-message" value="{{ $errors->first('nama') ?? '' }}">
+<input type="hidden" id="error-message" value="{{ $errors->first('nama_rentan') ?? '' }}">
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>

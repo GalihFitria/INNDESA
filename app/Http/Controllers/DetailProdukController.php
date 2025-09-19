@@ -7,13 +7,16 @@ use Illuminate\Http\Request;
 
 class DetailProdukController extends Controller
 {
-
-     public function index()
+    public function index()
     {
         $produk = Produk::select('id_produk', 'id_kelompok', 'nama', 'harga', 'stok', 'foto', 'deskripsi', 'sertifikat')
             ->with('kelompok')
             ->firstOrFail();
-        return view('Pengunjung.detail_produk', compact('produk'));
+
+        // Prepare certificate data as an array for the carousel
+        $sertifikatImages = $produk->sertifikat ? collect([['file' => $produk->sertifikat, 'nama_sertifikat' => 'Sertifikat Produk ' . $produk->nama]]) : collect([]);
+
+        return view('Pengunjung.detail_produk', compact('produk', 'sertifikatImages'));
     }
 
     public function show(string $id)
@@ -21,37 +24,33 @@ class DetailProdukController extends Controller
         $produk = Produk::select('id_produk', 'id_kelompok', 'nama', 'harga', 'stok', 'foto', 'deskripsi', 'sertifikat')
             ->with('kelompok')
             ->findOrFail($id);
-        return view('Pengunjung.detail_produk', compact('produk'));
-    }
 
-    
+        // Prepare certificate data as an array for the carousel
+        $sertifikatImages = $produk->sertifikat ? collect([['file' => $produk->sertifikat, 'nama_sertifikat' => 'Sertifikat Produk ' . $produk->nama]]) : collect([]);
+
+        return view('Pengunjung.detail_produk', compact('produk', 'sertifikatImages'));
+    }
 
     public function create()
     {
         //
     }
 
-
     public function store(Request $request)
     {
         //
     }
-
 
     public function edit(string $id)
     {
         //
     }
 
-
     public function update(Request $request, string $id)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         //

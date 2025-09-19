@@ -89,6 +89,7 @@ class KelompokController extends Controller
 
         $kegiatan = Kegiatan::where('id_kelompok', $id)
             ->select('judul', 'foto', 'tanggal', 'deskripsi', 'id_kegiatan')
+            ->orderBy('tanggal', 'desc')
             ->get();
 
         return view('Pengunjung.kelompok', [

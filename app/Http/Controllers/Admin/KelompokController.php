@@ -37,9 +37,9 @@ class KelompokController extends Controller
     {
         $request->validate([
             'id_kategori' => 'required|exists:kategori_kelompok,id_kategori',
-            'nama' => 'required|string|max:255',
+            'nama' => 'required|string|max:255|unique:kelompok,nama',
             'sejarah' => 'required|string',
-            'sk_desa' => 'nulla|mimes:jpg,png,jpeg,pdf|max:2048',
+            'sk_desa' => 'nullable|mimes:jpg,png,jpeg,pdf|max:2048',
             'background' => 'required|image|mimes:jpg,png,jpeg,pdf|max:2048',
             'logo' => 'nullable|image|mimes:jpg,png,jpeg,pdf|max:2048',
         ]);
@@ -120,14 +120,19 @@ class KelompokController extends Controller
             'logo' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
         ]);
 
-        $data = $request->except(['sk_desa', 'background', 'logo']);
+        $data = $request->except(['sk_desa', 'background', 'logo', 'remove_sk_desa', 'remove_background', 'remove_logo']);
         $kelompok = Kelompok::findOrFail($id);
 
-        if ($request->hasFile('sk_desa')) {
-            if ($kelompok->sk_desa) {
+        // ===== SK DESA =====
+        if ($request->input('remove_sk_desa') == '1') {
+            if ($kelompok->sk_desa && Storage::disk('public')->exists($kelompok->sk_desa)) {
                 Storage::disk('public')->delete($kelompok->sk_desa);
             }
-
+            $data['sk_desa'] = null;
+        } elseif ($request->hasFile('sk_desa')) {
+            if ($kelompok->sk_desa && Storage::disk('public')->exists($kelompok->sk_desa)) {
+                Storage::disk('public')->delete($kelompok->sk_desa);
+            }
             $originalName = $request->file('sk_desa')->getClientOriginalName();
             $baseName = pathinfo($originalName, PATHINFO_FILENAME);
             $extension = $request->file('sk_desa')->getClientOriginalExtension();
@@ -144,11 +149,16 @@ class KelompokController extends Controller
             $data['sk_desa'] = $path;
         }
 
-        if ($request->hasFile('background')) {
-            if ($kelompok->background) {
+        // ===== BACKGROUND =====
+        if ($request->input('remove_background') == '1') {
+            if ($kelompok->background && Storage::disk('public')->exists($kelompok->background)) {
                 Storage::disk('public')->delete($kelompok->background);
             }
-
+            $data['background'] = null;
+        } elseif ($request->hasFile('background')) {
+            if ($kelompok->background && Storage::disk('public')->exists($kelompok->background)) {
+                Storage::disk('public')->delete($kelompok->background);
+            }
             $originalName = $request->file('background')->getClientOriginalName();
             $baseName = pathinfo($originalName, PATHINFO_FILENAME);
             $extension = $request->file('background')->getClientOriginalExtension();
@@ -165,11 +175,16 @@ class KelompokController extends Controller
             $data['background'] = $path;
         }
 
-        if ($request->hasFile('logo')) {
-            if ($kelompok->logo) {
+        // ===== LOGO =====
+        if ($request->input('remove_logo') == '1') {
+            if ($kelompok->logo && Storage::disk('public')->exists($kelompok->logo)) {
                 Storage::disk('public')->delete($kelompok->logo);
             }
-
+            $data['logo'] = null;
+        } elseif ($request->hasFile('logo')) {
+            if ($kelompok->logo && Storage::disk('public')->exists($kelompok->logo)) {
+                Storage::disk('public')->delete($kelompok->logo);
+            }
             $originalName = $request->file('logo')->getClientOriginalName();
             $baseName = pathinfo($originalName, PATHINFO_FILENAME);
             $extension = $request->file('logo')->getClientOriginalExtension();
@@ -186,10 +201,12 @@ class KelompokController extends Controller
             $data['logo'] = $path;
         }
 
+        // Update DB
         $kelompok->update($data);
 
         return redirect()->route('Admin.kelompok.index')->with('success', 'Data berhasil diperbarui!');
     }
+
 
     public function destroy(string $id)
     {

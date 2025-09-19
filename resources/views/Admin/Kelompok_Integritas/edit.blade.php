@@ -1,24 +1,27 @@
 @extends('Admin.sidebar')
 
-@section('title', 'Edit Kelompok Integritas - INNDESA')
+@section('title', 'Edit Kelompok Integrasi - INNDESA')
 
 @section('content')
-<h2 class="text-center text-4xl font-bold text-gray-800 mb-6">.::Edit Kelompok Integritas::.</h2>
+<h2 class="text-center text-4xl font-bold text-gray-800 mb-6">.::Edit Kelompok Integrasi::.</h2>
 <div class="bg-white shadow-md p-4 rounded-lg max-w-2xl mx-auto">
     <form action="{{ route('Admin.kelompok_integritas.update', $kategori->id_kategori) }}" method="POST" class="space-y-6">
         @csrf
-        @method('PUT') 
+        @method('PUT')
 
         <div>
-            <label for="nama" class="block text-sm font-medium text-gray-700">Nama</label>
+            <label for="nama" class="block text-sm font-medium text-gray-700">Nama Kelompok Integrasi</label>
             <input
                 type="text"
                 name="nama"
                 id="nama"
                 class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="Masukkan Nama Kelompok"
+                placeholder="Masukkan Nama Kelompok Integrasi"
                 value="{{ old('nama', $kategori->nama) }}"
                 required>
+            @error('nama')
+                <span class="text-red-500 text-sm">{{ $message }}</span>
+            @enderror
         </div>
 
         <div class="flex justify-end space-x-4">
@@ -26,9 +29,24 @@
                 <i class="fas fa-arrow-left mr-2"></i>Kembali
             </a>
             <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 flex items-center">
-                <i class="fas fa-save mr-2"></i>Edit
+                <i class="fas fa-save mr-2"></i>Simpan
             </button>
         </div>
     </form>
 </div>
+
+<input type="hidden" id="error-message" value="{{ $errors->first('nama') ?? '' }}">
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    const errorMessage = document.getElementById('error-message').value;
+    if (errorMessage) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops!',
+            text: errorMessage,
+            confirmButtonText: 'OK'
+        });
+    }
+</script>
 @endsection

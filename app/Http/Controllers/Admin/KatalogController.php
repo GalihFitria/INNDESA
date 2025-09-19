@@ -35,8 +35,9 @@ class KatalogController extends Controller
     public function store(Request $request)
     {
         $validate = $request->validate([
-            'id_kelompok' => 'required|exists:kelompok,id_kelompok',
+            'id_kelompok' => 'required|exists:kelompok,id_kelompok|unique:katalog,id_kelompok',
             'katalog' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            
         ]);
 
         $data = $request->except('katalog');

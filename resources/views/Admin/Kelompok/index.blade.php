@@ -1,3 +1,4 @@
+
 @extends('Admin.sidebar')
 
 @section('title', 'Kelola Kelompok - INNDESA')
@@ -7,9 +8,20 @@
 
 <div class="bg-white shadow-md p-4 rounded-lg">
     <div class="flex justify-between mb-4">
-        <a href="{{ route('Admin.kelompok.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 flex items-center">
-            <i class="fas fa-plus mr-2"></i>Tambah
-        </a>
+        <div class="flex items-center space-x-4">
+            <a href="{{ route('Admin.kelompok.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 flex items-center">
+                <i class="fas fa-plus mr-2"></i>Tambah
+            </a>
+            <div class="flex items-center">
+                <label for="rowsPerPage" class="mr-2 text-sm text-gray-600">Tampilkan:</label>
+                <select id="rowsPerPage" class="border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
+                    <option value="5">5</option>
+                    <option value="10" selected>10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                </select>
+            </div>
+        </div>
         <form action="{{ route('Admin.kelompok.index') }}" method="GET" class="w-1/3">
             <input type="text" name="search" id="searchInput" placeholder="Cari ..." value="{{ request('search') }}" class="w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
         </form>
@@ -126,7 +138,7 @@
         });
     });
 
-    const rowsPerPage = 10;
+    let rowsPerPage = parseInt(document.getElementById('rowsPerPage').value);
     let currentPage = 1;
     let filteredRows = [];
 
@@ -173,6 +185,12 @@
         updateTable();
     });
 
+    document.getElementById('rowsPerPage').addEventListener('change', function() {
+        rowsPerPage = parseInt(this.value);
+        currentPage = 1;
+        updateTable();
+    });
+
     document.getElementById('prevPage').addEventListener('click', function() {
         if (currentPage > 1) {
             currentPage--;
@@ -188,6 +206,7 @@
             updateTable();
         }
     });
+
     updateTable();
 </script>
 @endsection

@@ -106,7 +106,7 @@
             transition: all 0.5s ease;
         }
 
-        .location-card:hover img {
+        .location .location-card:hover img {
             transform: scale(1.05);
         }
 
@@ -290,7 +290,6 @@
             transform: translateY(0);
         }
 
-        /* Animasi untuk card */
         .card-reveal {
             opacity: 0;
             transform: scale(0.9);
@@ -302,7 +301,6 @@
             transform: scale(1);
         }
 
-        /* Animasi untuk section judul */
         .section-title {
             opacity: 0;
             transform: translateY(20px);
@@ -314,7 +312,6 @@
             transform: translateY(0);
         }
 
-        /* Animasi untuk CSR card */
         .csr-card-reveal {
             opacity: 0;
             transform: translateY(40px);
@@ -326,7 +323,6 @@
             transform: translateY(0);
         }
 
-        /* Animasi untuk policy item */
         .policy-reveal {
             opacity: 0;
             transform: translateX(-30px);
@@ -342,67 +338,358 @@
             transform: translateX(0);
         }
 
-        /* Parallax effect untuk hero background */
         .parallax-bg {
             background-attachment: fixed;
             background-position: center;
             background-repeat: no-repeat;
             background-size: cover;
         }
+
+        /* Mobile-specific styles */
+        @media (max-width: 640px) {
+            .hero-title {
+                -webkit-text-stroke: 0.3px #ffffff;
+            }
+
+            .hero-subtitle {
+                -webkit-text-stroke: 0.2px #ffffff;
+            }
+
+            section {
+                padding-top: 1rem;
+                padding-bottom: 1rem;
+            }
+
+            .text-7xl {
+                font-size: 1.5rem;
+                line-height: 1;
+            }
+
+            .text-4xl {
+                font-size: 1rem;
+            }
+
+            .text-3xl {
+                font-size: 0.9rem;
+            }
+
+            .text-2xl {
+                font-size: 0.8rem;
+            }
+
+            .text-xl {
+                font-size: 0.7rem;
+            }
+
+            .text-lg {
+                font-size: 0.65rem;
+            }
+
+            .card {
+                padding: 0.5rem;
+                box-hot: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+            }
+
+            .btn {
+                padding: 0.3rem 0.6rem;
+                font-size: 0.7rem;
+            }
+
+            .csr-grid {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+
+            .csr-card .image-container {
+                height: 80px;
+            }
+
+            .csr-card .icon {
+                width: 20px;
+                height: 20px;
+                font-size: 0.8rem;
+            }
+
+            .csr-card .content {
+                padding: 0.4rem;
+            }
+
+            .csr-card h4 {
+                font-size: 0.9rem;
+                margin-bottom: 0.2rem;
+            }
+
+            .csr-card ul li {
+                font-size: 0.65rem;
+                padding: 0.2rem 0;
+            }
+
+            .csr-card ul li i {
+                font-size: 0.7rem;
+                margin-right: 0.2rem;
+            }
+
+            .map-container {
+                padding-bottom: 60%;
+            }
+
+            .location-card .overlay {
+                padding: 0.5rem 0.3rem;
+            }
+
+            .location-card img {
+                width: 100%;
+                height: auto;
+            }
+
+            .timeline {
+                padding-left: 0.5rem;
+            }
+
+            .timeline-item::before {
+                left: -0.625rem;
+                width: 8px;
+                height: 8px;
+                border: 1px solid white;
+            }
+
+            .policy-item {
+                padding: 0.4rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .policy-item h4 {
+                font-size: 0.8rem;
+                margin-bottom: 0.2rem;
+            }
+
+            .policy-item h4 i {
+                font-size: 0.8rem;
+                margin-right: 0.2rem;
+            }
+
+            .policy-item p {
+                font-size: 0.65rem;
+            }
+
+            .section-title {
+                margin-bottom: 0.3rem;
+            }
+
+            .max-w-6xl,
+            .max-w-5xl,
+            .max-w-4xl,
+            .max-w-3xl {
+                padding-left: 0.4rem;
+                padding-right: 0.4rem;
+            }
+
+            section[min-h~="550px"] {
+                min-height: 250px;
+                padding-top: 2rem;
+            }
+
+            section[min-h~="550px"] .absolute {
+                top: 0.2rem;
+                left: 0.2rem;
+            }
+
+            section[min-h~="550px"] img {
+                height: 0.8rem;
+            }
+
+            .parallax-bg {
+                background-attachment: scroll;
+            }
+
+            /* Tambahan untuk responsivitas lebih baik di HP: mengecilkan elemen tambahan */
+            body {
+                font-size: 0.75rem;
+                /* Mengecilkan font keseluruhan di HP */
+            }
+
+            h2 {
+                font-size: 1.2rem;
+                /* Mengecilkan heading utama */
+            }
+
+            h3 {
+                font-size: 1rem;
+                /* Mengecilkan sub-heading */
+            }
+
+            h4 {
+                font-size: 0.85rem;
+                /* Mengecilkan heading kecil */
+            }
+
+            p {
+                font-size: 0.7rem;
+                /* Mengecilkan paragraf */
+            }
+
+            img {
+                max-width: 100%;
+                /* Pastikan gambar tidak melebihi lebar layar */
+                height: auto;
+            }
+
+            .card {
+                margin-bottom: 0.4rem;
+                /* lebih rapat */
+                padding: 0.2rem;
+                /* kotakan lebih kecil */
+                font-size: 0.85rem;
+                /* tulisan agak kecil juga */
+            }
+
+            .btn {
+                width: 100%;
+                /* Membuat tombol full-width di HP */
+                padding: 0.3rem 0.5rem;
+                /* Kurangi padding tombol */
+                font-size: 0.65rem;
+                /* Kurangi ukuran font tombol */
+            }
+
+            .csr-grid {
+                gap: 0.5rem;
+                /* Kurangi gap di grid CSR */
+                grid-template-columns: 1fr;
+                /* Pastikan stack di HP */
+            }
+
+            .policy-item {
+                margin-bottom: 0.5rem;
+                /* Kurangi margin bottom policy item */
+                padding: 0.3rem;
+                /* Kurangi padding policy item */
+            }
+
+            .mb-16 {
+                margin-bottom: 1.5rem;
+                /* Kurangi margin bottom section besar */
+            }
+
+            .mb-12 {
+                margin-bottom: 1rem;
+                /* Kurangi margin bottom */
+            }
+
+            .mb-6 {
+                margin-bottom: 0.5rem;
+                /* Kurangi margin bottom */
+            }
+
+            .mb-4 {
+                margin-bottom: 0.3rem;
+                /* Kurangi margin bottom */
+            }
+
+            .py-16 {
+                padding-top: 1.5rem;
+                /* Kurangi padding vertical section */
+                padding-bottom: 1.5rem;
+            }
+
+            .pt-32 {
+                padding-top: 3rem;
+                /* Kurangi padding top hero */
+            }
+
+            .space-y-4 {
+                margin-top: 0.8rem;
+                /* Kurangi space antar elemen */
+            }
+
+            .grid-cols-1 md:grid-cols-2 {
+                grid-template-columns: 1fr;
+                /* Pastikan stack di HP */
+            }
+
+            /* Mengecilkan ukuran div */
+            .max-w-6xl {
+                max-width: 100%;
+                /* Pastikan div tidak terlalu lebar */
+                padding-left: 0.3rem;
+                padding-right: 0.3rem;
+            }
+
+            .max-w-5xl {
+                max-width: 95%;
+                padding-left: 0.3rem;
+                padding-right: 0.3rem;
+            }
+
+            .max-w-4xl {
+                max-width: 90%;
+                padding-left: 0.3rem;
+                padding-right: 0.3rem;
+            }
+
+            .max-w-3xl {
+                max-width: 85%;
+                padding-left: 0.3rem;
+                padding-right: 0.3rem;
+            }
+        }
     </style>
 </head>
 
 <body class="min-h-screen bg-white font-poppins">
     @include('navbar')
-    <section class="relative text-white overflow-hidden min-h-[550px] flex flex-col items-center pt-32 parallax-bg"
+    
+    <section
+        class="relative text-white overflow-hidden min-h-[300px] sm:min-h-[400px] md:min-h-[550px] flex flex-col items-center pt-20 sm:pt-28 md:pt-32 parallax-bg"
         style="background-image: url('{{ asset('images/background_beranda_INNDESA.jpeg') }}'); background-size: cover; background-position: center;">
-        <div class="absolute top-10 left-14 flex items-center space-x-2">
-            <img src="{{ asset('images/logo_BUMN.png') }}" alt="Logo" class="h-8 w-auto">
-            <img src="{{ asset('images/logo_pln.png') }}" alt="Logo" class="h-8 w-auto">
+        <div class="absolute top-6 left-4 sm:top-10 sm:left-14 flex items-center space-x-2">
+            <img src="{{ asset('images/logo_BUMN.png') }}" alt="Logo" class="h-4 sm:h-6 md:h-8 w-auto">
+            <img src="{{ asset('images/logo_pln.png') }}" alt="Logo" class="h-4 sm:h-6 md:h-8 w-auto">
         </div>
         <div class="text-center space-y-4">
-            <h2 class="text-5xl md:text-5xl font-bold" style="color:#0097D4; line-height:1.2;">
+            <h2 class="text-2xl sm:text-4xl md:text-4xl lg:text-6xl font-bold text-[#0097D4] leading-snug md:leading-tight">
                 PT. PLN Indonesia Power
             </h2>
-            <h2 class="text-5xl md:text-5xl font-bold" style="color:#0097D4; line-height:1.2;">
+            <h2 class="text-2xl sm:text-4xl md:text-4xl lg:text-6xl font-bold text-[#0097D4] leading-snug md:leading-tight">
                 UBP Jawa Tengah 2 Adipala
             </h2>
         </div>
     </section>
+    
     <section class="py-16 bg-white reveal">
-        <div class="max-w-3xl mx-auto text-center mb-12 section-title">
-            <h2 class="text-3xl md:text-4xl font-bold text-blue-600 mb-6">Profile Perusahaan</h2>
+        <div class="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-600 mb-6 text-center section-title">
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-600 mb-6 text-center section-title">Profile Perusahaan</h2>
         </div>
         <div class="max-w-3xl mx-auto mb-12">
             <div class="card p-8 border border-gray-300 rounded-lg card-reveal">
-                <p class="text-center text-gray-800 text-lg md:text-xl leading-relaxed">
+                <p class="text-center text-gray-800 text-base sm:text-lg md:text-xl leading-relaxed sm:leading-relaxed leading-snug card-reveal mb-4">
                     Mengoperasikan 1 unit Pembangkit Listrik Tenaga Uap (PLTU) dengan kapasitas 660 MW yang berlokasi di Desa Bunton, Kecamatan Adipala, Kabupaten Cilacap. PLTU Adipala beroperasi dengan menggunakan bahan bakar batubara dan mempunyai teknologi supercritical yang membuat operasional PLTU lebih efisien.
                 </p>
             </div>
         </div>
-        <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="max-w-5xl mx-auto grid grid-cols-2 sm:gap-6 gap-4">
             <div class="flex flex-col h-full text-center">
-                <h3 class="text-2xl md:text-3xl font-bold text-blue-600 mb-4 section-title">Visi</h3>
-                <div class="card flex-1 p-6 flex items-center justify-center border border-gray-300 rounded-lg card-reveal">
-                    <p class="text-gray-800 text-lg md:text-xl lg:text-xl leading-relaxed">
+                <h3 class="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-600 mb-6 text-center section-title">Visi</h3>
+                <div class="card flex-1 p-3 sm:p-6 flex items-center justify-center border border-gray-300 rounded-lg card-reveal">
+                    <p class="text-center text-gray-800 text-base sm:text-lg md:text-xl leading-relaxed sm:leading-relaxed leading-snug card-reveal mb-4">
                         Menjadi Perusahaan Pembangkit Listrik Terkemuka dan Berkelanjutan di Asia Tenggara
                     </p>
                 </div>
             </div>
             <div class="flex flex-col h-full text-center">
-                <h3 class="text-2xl md:text-3xl font-bold text-blue-600 mb-4 section-title">Misi</h3>
-                <div class="card flex-1 p-6 flex items-center justify-center border border-gray-300 rounded-lg card-reveal">
-                    <p class="text-gray-800 text-lg md:text-xl lg:text-xl leading-relaxed">
+                <h3 class="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-600 mb-6 text-center section-title">Misi</h3>
+                <div class="card flex-1 p-3 sm:p-6 flex items-center justify-center border border-gray-300 rounded-lg card-reveal">
+                    <p class="text-center text-gray-800 text-base sm:text-lg md:text-xl leading-relaxed sm:leading-relaxed leading-snug card-reveal mb-4">
                         Menyelenggarakan Bisnis Solusi Energi yang Andal, Efisien, Inovatif, dan Melampaui Harapan Pelanggan, Menuju Energi Bersih yang Terjangkau
                     </p>
                 </div>
             </div>
         </div>
     </section>
-    <section class="py-16 bg-white reveal">
+    <section class="py-2 sm:py-12 md:py-16 bg-white reveal">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12 section-title">
-                <h2 class="text-4xl font-bold text-blue-600 mb-4">Lokasi Perusahaan</h2>
+                <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-600 mb-6 text-center section-title">Lokasi Perusahaan</h2>
             </div>
             <div class="flex justify-center card-reveal">
                 <img
@@ -414,12 +701,12 @@
     <!-- CSR Profile -->
     <section class="py-16 bg-white reveal">
         <div class="max-w-6xl mx-auto px-4">
-            <h2 class="text-3xl md:text-4xl font-bold text-blue-600 mb-12 text-center section-title"><i>Corporate Social Responsibility</i> (CSR)</h2>
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-600 mb-6 text-center section-title"><i>Corporate Social Responsibility</i> (CSR)</h2>
             <!-- Pengertian CSR -->
             <div class="mb-16">
-                <h3 class="text-4xl font-bold text-blue-600 mb-6 text-center section-title">Pengertian CSR</h3>
+                <h3 class="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-600 mb-6 text-center section-title">Pengertian CSR</h3>
                 <div class="card p-8 border border-gray-300 rounded-lg max-w-4xl mx-auto card-reveal">
-                    <p class=" text-center text-gray-800 text-lg md:text-xl leading-relaxed">
+                    <p class="text-center text-gray-800 text-base sm:text-lg md:text-xl leading-relaxed sm:leading-relaxed leading-snug card-reveal mb-4">
                         <i>Corporate Social Responsibility</i> (CSR) atau Tanggung Jawab Sosial dan Lingkungan (TJSL) adalah komitmen PT.PLN Indonesia Power UBP Jawa Tengah 2 Adipala untuk memperhatikan dampak sosial dan lingkungan dari setiap aktivitas bisnis, serta berkontribusi pada pembangunan berkelanjutan.
                         Bagi Indonesia Power, CSR tidak hanya sebatas kepatuhan, tetapi merupakan tanggung jawab perusahaan terhadap masyarakat, pemangku kepentingan, dan lingkungan agar tercipta manfaat berkesinambutan. Implementasinya diwujudkan melalui program INPOWER-CARE <i>(Community Assistance, Relation, and Empowerment)</i> yang berfokus pada peningkatan kualitas hidup, pemberdayaan masyarakat, dan kelestarian lingkungan.
                     </p>
@@ -427,15 +714,18 @@
             </div>
             <!-- Program CSR -->
             <div class="mb-16">
-                <h3 class="text-4xl font-bold text-blue-600 mb-6 text-center section-title">Program INPOWER - CARE</h3>
-                <p class=" text-center text-gray-800 text-lg md:text-xl leading-relaxed card-reveal">
+                <h3 class="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-600 mb-6 text-center section-title">
+                    Program INPOWER - CARE
+                </h3>
+                <p class="text-center text-gray-800 text-base sm:text-lg md:text-xl leading-relaxed sm:leading-relaxed leading-snug card-reveal mb-4">
                     INPOWER-CARE adalah kegiatan pelibatan dan pengembangan komunitas yang dilakukan Perusahaan sebagai wujud tanggung jawab sosial dan tata kelola Perusahaan yang baik. INPOWERCARE bertujuan untuk memperbesar akses masyarakat agar mencapai kondisi sosial, ekonomi, dan budaya yang lebih baik dari sebelumnya. Sehingga, kehidupan masyarakat di sekitar wilayah operasional Perusahaan diharapkan menjadi lebih berdaya dan mandiri dengan kualitas dan kesejahteraan yang lebih baik.
                     Penyelenggaraan INPOWER-CARE merupakan perwujudan visi dan misi Perusahaan, khususnya bersahabat dengan lingkungan serta perwujudan Tanggung Jawab Sosial dan Lingkungan (TJSL) Perusahaan sebagai bagian dari tata kelola perusahaan yang baik.
-                </p><br>
+                </p>
+
                 <div class="flex justify-center card-reveal">
                     <img
-                                src="{{ asset('images/Program_INPOWERCARE.png') }}"
-                                class="max-w-full h-auto rounded-lg shadow-lg" />
+                        src="{{ asset('images/Program_INPOWERCARE.png') }}"
+                        class="w-full sm:w-3/4 md:w-11/12 lg:w-1/2 h-auto rounded-lg shadow-lg" />
                 </div><br>
                 <div class="csr-grid">
                     <div class="csr-card border border-gray-300 rounded-lg csr-card-reveal">
@@ -492,9 +782,9 @@
             </div>
             <!-- Kebijakan CSR -->
             <div class="mb-16">
-                <h3 class="text-4xl font-bold text-blue-600 mb-6 text-center section-title">Kebijakan</h3>
+                <h3 class="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-600 mb-6 text-center section-title">Kebijakan</h3>
                 <div class="max-w-4xl mx-auto">
-                    <p class=" text-center text-gray-800 text-lg md:text-xl leading-relaxed card-reveal">
+                    <p class="text-center text-gray-800 text-base sm:text-lg md:text-xl leading-relaxed sm:leading-relaxed leading-snug card-reveal mb-4">
                         Penyelenggaraan program tanggung jawab social terhadap masyarakat di PT.PLN Indonesia Power UBP Jawa Tengah 2 Adipala dilaksanakan berdasarkan pada Keputusan Direksi No. 25.K/010/IP/2014 tentang Pedoman Tanggung Jawab Sosial dan Lingkungan Perusahaan.
                         Sesuai peraturan internal tersebut, Tanggung Jawab Sosial dan Lingkungan Perusahaan (TJSLP), atau di internal disebut dengan program INPOWER-CARE, merupakan komitmen Perusahaan untuk berperan serta dalam pembangunan ekonomi
                         berkelanjutan sebagai bentuk tanggung jawab terhadap dampak pengambilan keputusan dan proses bisnis Perusahaan guna meningkatkan kualitas kehidupan dan lingkungan yang bermanfaat, baik bagi Perusahaan maupun komunitas setempat.
@@ -516,7 +806,7 @@
                 <section class="py-16 bg-white reveal">
                     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div class="text-center mb-12 section-title">
-                            <h2 class="text-4xl font-bold text-blue-600 mb-4">Roadmap</h2>
+                            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-600 mb-6 text-center section-title">Roadmap</h2>
                         </div>
                         <div class="flex justify-center card-reveal">
                             <!-- <img
@@ -542,7 +832,7 @@
         for (let i = 0; i < reveals.length; i++) {
             const windowHeight = window.innerHeight;
             const elementTop = reveals[i].getBoundingClientRect().top;
-            const elementVisible = 150;
+            const elementVisible = 100;
 
             if (elementTop < windowHeight - elementVisible) {
                 reveals[i].classList.add('active');
@@ -562,7 +852,7 @@
         const scrolled = window.pageYOffset;
         const parallax = document.querySelector('.parallax-bg');
         if (parallax) {
-            parallax.style.backgroundPositionY = -(scrolled * 0.5) + 'px';
+            parallax.style.backgroundPositionY = -(scrolled * 0.2) + 'px';
         }
     });
 </script>

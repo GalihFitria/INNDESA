@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>INNDESA - Kelompok Contoh</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -102,69 +103,53 @@
             <!-- STRUKTUR -->
             <div id="struktur" class="profile-tab-content block py-4">
                 <div class="flex justify-end mb-4">
-                    <button onclick="openStrukturForm()" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
-                        <i class="fas fa-plus mr-2"></i>Tambah Anggota
+                    {{-- Tambah anggota --}}
+                    <button type="button" onclick="openStrukturForm()"
+                        class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
+                        <i class="fas fa-plus mr-2"></i> Tambah Anggota
                     </button>
                 </div>
+
                 <table class="w-full border-collapse mb-6 border border-gray-200">
                     <thead>
                         <tr class="bg-gray-50">
-                            <th class="border border-gray-200 p-3 text-left font-semibold">Posisi</th>
-                            <th class="border border-gray-200 p-3 text-left font-semibold">Nama</th>
-                            <th class="border border-gray-200 p-3 text-center font-semibold">Aksi</th>
+                            <th class="border border-gray-200 p-3 text-left">Posisi</th>
+                            <th class="border border-gray-200 p-3 text-left">Nama</th>
+
+                            <th class="border border-gray-200 p-3 text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody id="struktur-tbody">
+                        @forelse($struktur as $item)
                         <tr>
-                            <td class="border border-gray-200 p-3">Ketua</td>
-                            <td class="border border-gray-200 p-3">Ahmad Wijaya</td>
+                            <td class="border border-gray-200 p-3">{{ $item->jabatan }}</td>
+                            <td class="border border-gray-200 p-3">{{ $item->nama }}</td>
+
                             <td class="border border-gray-200 p-3 text-center">
-                                <button onclick="editStruktur(this)" class="text-blue-600 hover:text-blue-800 mr-2">
+                                {{-- Edit anggota --}}
+                                <button type="button" onclick="openStrukturForm(true, this.closest('tr'), {{ $item->id_struktur }})"
+                                    class="text-blue-600 hover:text-blue-800 mr-2">
                                     <i class="fas fa-edit"></i>
                                 </button>
-                                <button onclick="deleteStruktur(this)" class="text-red-600 hover:text-red-800">
+                                <button type="button"
+                                    onclick="deleteStruktur(this)"
+                                    data-id="{{ $item->id_struktur }}"
+                                    class="text-red-600 hover:text-red-800">
                                     <i class="fas fa-trash"></i>
                                 </button>
+
                             </td>
                         </tr>
+                        @empty
                         <tr>
-                            <td class="border border-gray-200 p-3">Wakil Ketua</td>
-                            <td class="border border-gray-200 p-3">Siti Nurhaliza</td>
-                            <td class="border border-gray-200 p-3 text-center">
-                                <button onclick="editStruktur(this)" class="text-blue-600 hover:text-blue-800 mr-2">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button onclick="deleteStruktur(this)" class="text-red-600 hover:text-red-800">
-                                    <i class="fas fa-trash"></i>
-                                </button>
+                            <td colspan="4" class="text-center p-4 text-gray-500">
+                                Tidak ada data struktur organisasi
                             </td>
                         </tr>
-                        <tr>
-                            <td class="border border-gray-200 p-3">Sekretaris</td>
-                            <td class="border border-gray-200 p-3">Budi Santoso</td>
-                            <td class="border border-gray-200 p-3 text-center">
-                                <button onclick="editStruktur(this)" class="text-blue-600 hover:text-blue-800 mr-2">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button onclick="deleteStruktur(this)" class="text-red-600 hover:text-red-800">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="border border-gray-200 p-3">Bendahara</td>
-                            <td class="border border-gray-200 p-3">Dewi Lestari</td>
-                            <td class="border border-gray-200 p-3 text-center">
-                                <button onclick="editStruktur(this)" class="text-blue-600 hover:text-blue-800 mr-2">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button onclick="deleteStruktur(this)" class="text-red-600 hover:text-red-800">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
+
             </div>
 
             <!-- SEJARAH -->
@@ -176,112 +161,48 @@
                 </div>
                 <div class="prose prose-lg max-w-none text-gray-700 leading-relaxed text-justify">
                     <p class="indent-8" id="sejarah-content">
-                        Kelompok ini didirikan pada tahun 2010 sebagai wadah untuk mengembangkan potensi masyarakat desa.
-                        Melalui berbagai program dan kegiatan, kelompok ini telah berhasil meningkatkan kesejahteraan anggotanya
-                        dan memberikan kontribusi positif bagi perkembangan desa. Dengan semangat gotong royong dan kebersamaan,
-                        kelompok ini terus berkembang dan berinovasi untuk menghadapi tantangan zaman.
+                        {{ $kelompok->sejarah ?? 'Belum ada sejarah yang diisi.' }}
                     </p>
                 </div>
             </div>
 
             <!-- SK DESA -->
-            <div id="sk-desa" class="profile-tab-content hidden py-4">
-                <div class="flex justify-end mb-4">
-                    <button onclick="openSkDesaForm()" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
-                        <i class="fas fa-plus mr-2"></i>Tambah SK Desa
-                    </button>
-                </div>
-                <div class="relative">
-                    <div id="sk-desa-carousel" class="carousel">
-                        <div class="sk-desa-item">
-                            <img
-                                src="https://via.placeholder.com/800x600"
-                                alt="SK Desa"
-                                class="w-full max-w-[30rem] mx-auto h-60 object-contain rounded-lg shadow-md border border-gray-200 cursor-pointer"
-                                onclick="openPreview('https://via.placeholder.com/800x600', 'SK Desa')">
-                            <div class="text-center mt-2">
-                                <button onclick="editSkDesa(this)" class="text-blue-600 hover:text-blue-800 mr-2">
-                                    <i class="fas fa-edit"></i> Edit
-                                </button>
-                                <button onclick="deleteSkDesa(this)" class="text-red-600 hover:text-red-800">
-                                    <i class="fas fa-trash"></i> Hapus
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex justify-center space-x-2 mt-4 hidden" id="sk-desa-dots"></div>
-                    <div class="flex justify-center mt-4 hidden" id="sk-desa-nav">
-                        <button class="btn btn-outline mr-2" onclick="prevSlide('sk-desa')" aria-label="Previous slide">←</button>
-                        <button class="btn btn-outline" onclick="nextSlide('sk-desa')" aria-label="Next slide">→</button>
-                    </div>
-                </div>
-            </div>
+
 
             <!-- KELOMPOK RENTAN -->
             <div id="kelompok-rentan" class="profile-tab-content hidden py-4">
-                <div class="flex justify-end mb-4">
-                    <button onclick="openRentanForm()" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
-                        <i class="fas fa-plus mr-2"></i>Tambah Data
-                    </button>
-                </div>
                 <table class="w-full border-collapse mt-4 border border-gray-200">
                     <thead>
                         <tr>
-                            <th class="border border-gray-200 p-2 text-left">Lansia</th>
-                            <th class="border border-gray-200 p-2 text-left">Disabilitas</th>
-                            <th class="border border-gray-200 p-2 text-left">Anak Yatim</th>
-                            <th class="border border-gray-200 p-2 text-center">Aksi</th>
+                            @foreach($rentan as $r)
+                            <th class="border border-gray-200 p-2 text-left">{{ ucfirst($r->nama_rentan) }}</th>
+                            @endforeach
                         </tr>
                     </thead>
-                    <tbody id="rentan-tbody">
-                        <tr>
-                            <td class="border border-gray-200 p-2">Suparman</td>
-                            <td class="border border-gray-200 p-2">Siti Aminah</td>
-                            <td class="border border-gray-200 p-2">Budi</td>
-                            <td class="border border-gray-200 p-2 text-center">
-                                <button onclick="editRentan(this)" class="text-blue-600 hover:text-blue-800 mr-2">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button onclick="deleteRentan(this)" class="text-red-600 hover:text-red-800">
-                                    <i class="fas fa-trash"></i>
-                                </button>
+                    <tbody>
+                        @php
+                        $maxRows = max(array_map('count', $dataRentan));
+                        @endphp
+
+                        @for ($i = 0; $i < $maxRows; $i++)
+                            <tr>
+                            @foreach($rentan as $r)
+                            <td class="border border-gray-200 p-2">
+                                {{ $dataRentan[$r->nama_rentan][$i] ?? '-' }}
                             </td>
-                        </tr>
-                        <tr>
-                            <td class="border border-gray-200 p-2">Rahayu</td>
-                            <td class="border border-gray-200 p-2">&nbsp;</td>
-                            <td class="border border-gray-200 p-2">Siti</td>
-                            <td class="border border-gray-200 p-2 text-center">
-                                <button onclick="editRentan(this)" class="text-blue-600 hover:text-blue-800 mr-2">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button onclick="deleteRentan(this)" class="text-red-600 hover:text-red-800">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="border border-gray-200 p-2">&nbsp;</td>
-                            <td class="border border-gray-200 p-2">&nbsp;</td>
-                            <td class="border border-gray-200 p-2">Ahmad</td>
-                            <td class="border border-gray-200 p-2 text-center">
-                                <button onclick="editRentan(this)" class="text-blue-600 hover:text-blue-800 mr-2">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button onclick="deleteRentan(this)" class="text-red-600 hover:text-red-800">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
+                            @endforeach
+                            </tr>
+                            @endfor
                     </tbody>
                 </table>
             </div>
+
 
             <!-- TOTAL PRODUK -->
             <div id="total-produk" class="profile-tab-content hidden py-4">
                 <div class="flex justify-end mb-4">
                     <button onclick="openTotalProdukForm()" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
-                        <i class="fas fa-plus mr-2"></i>Tambah Produk
+                        <i class="fas fa-plus mr-2"></i>Tambah Total Produk
                     </button>
                 </div>
                 <table class="w-full border-collapse mt-4 border border-gray-200">
@@ -345,7 +266,7 @@
                 <button class="info-tab-button flex-1 py-2 px-4 font-semibold text-center transition-colors bg-gray-200 text-gray-700" onclick="openTab('inovasi', 'info')" aria-label="Lihat Inovasi & Penghargaan">Inovasi & Penghargaan</button>
             </div>
 
-            <!-- PRODUK -->
+            <!-- TOTAL PRODAK TERJUAL, KONTAK, KATALOG (blum ada)-->
             <div id="produk" class="info-tab-content block py-4">
                 <div class="flex items-center justify-between mb-4">
                     <div class="flex items-center gap-x-6">
@@ -367,6 +288,7 @@
                     </div>
                 </div>
 
+                <!-- PRODUK -->
                 <div class="relative">
                     <div id="produk-carousel" class="carousel grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                         <div class="produk-item" data-nama="Kerajinan Anyaman">
@@ -664,41 +586,65 @@
         </div>
     </div>
 
-    <!-- Form Modal Struktur -->
-    <div id="strukturModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50 modal">
-        <div class="bg-white rounded-lg p-6 max-w-md w-full">
-            <div class="flex justify-between items-center mb-4">
-                <h3 id="strukturModalTitle" class="text-xl font-semibold text-gray-800">Tambah Anggota Struktur</h3>
-                <button onclick="closeStrukturForm()" class="text-gray-600 hover:text-gray-800 text-2xl" aria-label="Close form">&times;</button>
-            </div>
-            <form id="strukturForm" onsubmit="saveStruktur(event)">
-                <div class="form-group">
-                    <label for="jabatan" class="form-label">Jabatan</label>
-                    <input type="text" id="jabatan" name="jabatan" class="form-input" required>
+
+    <!-- Form TAMBAH STRUKTUR -->
+    <div id="strukturModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-6 w-full max-w-lg">
+            <h2 id="strukturModalTitle" class="text-xl font-bold mb-4">Tambah Anggota Struktur</h2>
+
+            {{-- FORM --}}
+            <form id="strukturForm" method="POST">
+                @csrf
+
+                {{-- id_kelompok hanya 1 hidden input --}}
+                <input type="hidden" name="id_kelompok"
+                    value="{{ $kelompok instanceof \Illuminate\Support\Collection ? ($kelompok->first()->id_kelompok ?? '') : $kelompok->id_kelompok }}">
+
+                <input type="hidden" name="id_struktur" id="id_struktur">
+                {{-- Spoof method, default POST --}}
+                <input type="hidden" name="_method" id="_method" value="POST">
+
+                <div class="mb-3">
+                    <label class="block">Jabatan</label>
+                    <input type="text" id="jabatan" name="jabatan" class="w-full border rounded p-2" required>
                 </div>
-                <div class="form-group">
-                    <label for="nama" class="form-label">Nama</label>
-                    <input type="text" id="nama" name="nama" class="form-input" required>
+
+                <div class="mb-3">
+                    <label class="block">Nama</label>
+                    <input type="text" id="nama" name="nama" class="w-full border rounded p-2" required>
                 </div>
+
+                <div class="mb-3">
+                    <label for="id_rentan" class="block">Kelompok Rentan</label>
+                    <select id="id_rentan" name="id_rentan" class="w-full border rounded p-2" required>
+                        <option value="">-- Pilih Kelompok Rentan --</option>
+                        @foreach($rentan as $r)
+                        <option value="{{ $r->id_rentan }}">{{ $r->nama_rentan }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
                 <div class="flex justify-end space-x-2">
-                    <button type="button" onclick="closeStrukturForm()" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300">Batal</button>
-                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Simpan</button>
+                    <button type="button" onclick="closeStrukturForm()" class="px-4 py-2 bg-gray-300 rounded">Batal</button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Simpan</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Form Modal Sejarah -->
+    <!-- Form EDIT Sejarah -->
     <div id="sejarahModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50 modal">
         <div class="bg-white rounded-lg p-6 max-w-2xl w-full">
             <div class="flex justify-between items-center mb-4">
                 <h3 class="text-xl font-semibold text-gray-800">Edit Sejarah</h3>
                 <button onclick="closeSejarahForm()" class="text-gray-600 hover:text-gray-800 text-2xl" aria-label="Close form">&times;</button>
             </div>
-            <form id="sejarahForm" onsubmit="saveSejarah(event)">
+            <form id="sejarahForm" method="POST" action="{{ route('Admin_Kelompok.updateSejarah', $kelompok->id_kelompok) }}">
+                @csrf
+                @method('PUT')
                 <div class="form-group">
                     <label for="sejarahContent" class="form-label">Isi Sejarah</label>
-                    <textarea id="sejarahContent" name="sejarahContent" class="form-textarea" required></textarea>
+                    <textarea id="sejarahContent" name="sejarah" class="form-textarea w-full border rounded p-2" required>{{ $kelompok->sejarah ?? '' }}</textarea>
                 </div>
                 <div class="flex justify-end space-x-2">
                     <button type="button" onclick="closeSejarahForm()" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300">Batal</button>
@@ -708,63 +654,73 @@
         </div>
     </div>
 
-    <!-- Form Modal SK Desa -->
-    <div id="skDesaModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50 modal">
+    <!-- Form TAMBAH SK Desa -->
+    <div id="skDesaModal"
+        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50 modal">
         <div class="bg-white rounded-lg p-6 max-w-md w-full">
+            <!-- Header -->
             <div class="flex justify-between items-center mb-4">
-                <h3 id="skDesaModalTitle" class="text-xl font-semibold text-gray-800">Tambah SK Desa</h3>
-                <button onclick="closeSkDesaForm()" class="text-gray-600 hover:text-gray-800 text-2xl" aria-label="Close form">&times;</button>
+                <h3 id="skDesaModalTitle" class="text-xl font-semibold text-gray-800">
+                    Tambah SK Desa
+                </h3>
+                <button type="button"
+                    onclick="closeSkDesaForm()"
+                    class="text-gray-600 hover:text-gray-800 text-2xl"
+                    aria-label="Close form">&times;</button>
             </div>
-            <form id="skDesaForm" onsubmit="saveSkDesa(event)">
-                <div class="form-group">
-                    <label for="skJudul" class="form-label">Judul Dokumen</label>
-                    <input type="text" id="skJudul" name="skJudul" class="form-input" placeholder="Contoh: SK Pembentukan Kelompok" required>
+            <form id="skDesaForm"
+                method="POST"
+                action="{{ route('Admin_Kelompok.storeSkDesa', $kelompok->id_kelompok) }}"
+                enctype="multipart/form-data">
+                @csrf
+
+                <!-- Judul -->
+                <div class="form-group mb-4">
+                    <label for="skJudul" class="form-label block mb-1 font-medium">
+                        Judul Dokumen
+                    </label>
+                    <input type="text"
+                        id="judul"
+                        name="judul"
+                        class="form-input w-full border rounded px-3 py-2"
+                        placeholder="Contoh: SK Pembentukan Kelompok"
+                        required>
                 </div>
-                <div class="form-group">
-                    <label for="skFile" class="form-label">Pilih File</label>
-                    <input type="file" id="skFile" name="skFile" class="form-input" accept="image/*,.pdf" required>
+
+                <!-- File -->
+                <div class="form-group mb-4">
+                    <label for="skFile" class="form-label block mb-1 font-medium">
+                        Pilih File
+                    </label>
+                    <input type="file"
+                        id="file"
+                        name="file"
+                        class="form-input w-full border rounded px-3 py-2"
+                        accept="image/*,.pdf"
+                        required>
                 </div>
+
+                <!-- Action buttons -->
                 <div class="flex justify-end space-x-2">
-                    <button type="button" onclick="closeSkDesaForm()" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300">Batal</button>
-                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Simpan</button>
+                    <button type="button"
+                        onclick="closeSkDesaForm()"
+                        class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300">
+                        Batal
+                    </button>
+                    <button type="submit"
+                        class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                        Simpan
+                    </button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Form Modal Kelompok Rentan -->
-    <div id="rentanModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50 modal">
-        <div class="bg-white rounded-lg p-6 max-w-md w-full">
-            <div class="flex justify-between items-center mb-4">
-                <h3 id="rentanModalTitle" class="text-xl font-semibold text-gray-800">Tambah Data Kelompok Rentan</h3>
-                <button onclick="closeRentanForm()" class="text-gray-600 hover:text-gray-800 text-2xl" aria-label="Close form">&times;</button>
-            </div>
-            <form id="rentanForm" onsubmit="saveRentan(event)">
-                <div class="form-group">
-                    <label for="lansia" class="form-label">Lansia</label>
-                    <input type="text" id="lansia" name="lansia" class="form-input">
-                </div>
-                <div class="form-group">
-                    <label for="disabilitas" class="form-label">Disabilitas</label>
-                    <input type="text" id="disabilitas" name="disabilitas" class="form-input">
-                </div>
-                <div class="form-group">
-                    <label for="anakYatim" class="form-label">Anak Yatim</label>
-                    <input type="text" id="anakYatim" name="anakYatim" class="form-input">
-                </div>
-                <div class="flex justify-end space-x-2">
-                    <button type="button" onclick="closeRentanForm()" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300">Batal</button>
-                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Simpan</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Form Modal Total Produk -->
+    <!-- Form TAMBAH Total Produk -->
     <div id="totalProdukModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50 modal">
         <div class="bg-white rounded-lg p-6 max-w-md w-full">
             <div class="flex justify-between items-center mb-4">
-                <h3 id="totalProdukModalTitle" class="text-xl font-semibold text-gray-800">Tambah Produk</h3>
+                <h3 id="totalProdukModalTitle" class="text-xl font-semibold text-gray-800">Tambah Total Produk</h3>
                 <button onclick="closeTotalProdukForm()" class="text-gray-600 hover:text-gray-800 text-2xl" aria-label="Close form">&times;</button>
             </div>
             <form id="totalProdukForm" onsubmit="saveTotalProduk(event)">
@@ -784,7 +740,7 @@
         </div>
     </div>
 
-    <!-- Form Modal Produk -->
+    <!-- Form TAMBAH Produk -->
     <div id="produkModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50 modal">
         <div class="bg-white rounded-lg p-6 max-w-md w-full">
             <div class="flex justify-between items-center mb-4">
@@ -801,12 +757,24 @@
                     <input type="text" id="produkHarga" name="produkHarga" class="form-input" required>
                 </div>
                 <div class="form-group">
-                    <label for="produkStok" class="form-label">Stok</label>
-                    <input type="number" id="produkStok" name="produkStok" class="form-input" required>
+                    <label for="stok" class="form-label">Stok</label>
+                    <input type="number" id="stok" name="stok" class="form-input" required>
                 </div>
                 <div class="form-group">
-                    <label for="produkGambar" class="form-label">Gambar</label>
-                    <input type="file" id="produkGambar" name="produkGambar" class="form-input" accept="image/*">
+                    <label for="foto" class="form-label">Foto</label>
+                    <input type="file" id="foto" name="foto" class="form-input" accept="image/*">
+                </div>
+                <div class="form-group">
+                    <label for="deskripsi" class="form-label">Deskripsi</label>
+                    <input type="file" id="deskripsi" name="deskripsi" class="form-input" accept="image/*">
+                </div>
+                <div class="form-group">
+                    <label for="sertifikiat" class="form-label">Sertifikat</label>
+                    <input type="file" id="sertifikiat" name="sertifikiat" class="form-input" accept="image/*">
+                </div>
+                <div class="form-group">
+                    <label for="produk_terjual" class="form-label">Produk Terjual</label>
+                    <input type="file" id="produk_terjual" name="produk_terjual" class="form-input" accept="image/*">
                 </div>
                 <div class="flex justify-end space-x-2">
                     <button type="button" onclick="closeProdukForm()" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300">Batal</button>
@@ -816,7 +784,7 @@
         </div>
     </div>
 
-    <!-- Form Modal Kegiatan -->
+    <!-- Form TAMBAH Kegiatan -->
     <div id="kegiatanModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50 modal">
         <div class="bg-white rounded-lg p-6 max-w-md w-full">
             <div class="flex justify-between items-center mb-4">
@@ -848,7 +816,7 @@
         </div>
     </div>
 
-    <!-- Form Modal Inovasi -->
+    <!-- Form TAMBAH INOVASI -->
     <div id="inovasiModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50 modal">
         <div class="bg-white rounded-lg p-6 max-w-md w-full">
             <div class="flex justify-between items-center mb-4">
@@ -1081,23 +1049,45 @@
             });
         });
 
-        // CRUD Functions for Struktur
-        function openStrukturForm(editMode = false, row = null) {
+        // CRUD STRUKTUR
+        function openStrukturForm(editMode = false, row = null, id = null) {
             const modal = document.getElementById('strukturModal');
             const modalTitle = document.getElementById('strukturModalTitle');
             const form = document.getElementById('strukturForm');
+            const methodInput = document.getElementById('_method');
 
             if (editMode && row) {
                 modalTitle.textContent = 'Edit Anggota Struktur';
-                document.getElementById('jabatan').value = row.cells[0].textContent;
-                document.getElementById('nama').value = row.cells[1].textContent;
-                form.dataset.editMode = 'true';
-                form.dataset.rowIndex = row.rowIndex;
+
+                // isi field dari tabel
+                document.getElementById('jabatan').value = row.cells[0].textContent.trim();
+                document.getElementById('nama').value = row.cells[1].textContent.trim();
+
+                // isi dropdown sesuai teks di tabel
+                const rentanText = row.cells[2].textContent.trim();
+                const rentanSelect = document.getElementById('id_rentan');
+                for (let option of rentanSelect.options) {
+                    if (option.text === rentanText) {
+                        option.selected = true;
+                        break;
+                    }
+                }
+
+                // set id untuk update
+                document.getElementById('id_struktur').value = id;
+
+                // arahkan ke update route
+                form.action = "/Admin_Kelompok/update-struktur/" + id;
+                methodInput.value = "PUT";
+
             } else {
                 modalTitle.textContent = 'Tambah Anggota Struktur';
                 form.reset();
-                form.dataset.editMode = 'false';
-                delete form.dataset.rowIndex;
+                document.getElementById('id_struktur').value = "";
+
+                // arahkan ke store route
+                form.action = "/Admin_Kelompok/store-struktur";
+                methodInput.value = "POST";
             }
 
             modal.classList.remove('hidden');
@@ -1107,52 +1097,68 @@
             document.getElementById('strukturModal').classList.add('hidden');
         }
 
+
         function saveStruktur(event) {
             event.preventDefault();
             const form = event.target;
-            const jabatan = document.getElementById('jabatan').value;
-            const nama = document.getElementById('nama').value;
-            const tbody = document.getElementById('struktur-tbody');
+            const data = new FormData(form);
 
-            if (form.dataset.editMode === 'true') {
-                const rowIndex = form.dataset.rowIndex;
-                const row = tbody.rows[rowIndex - 1];
-                row.cells[0].textContent = jabatan;
-                row.cells[1].textContent = nama;
-            } else {
-                const newRow = tbody.insertRow();
-                newRow.innerHTML = `
-                    <td class="border border-gray-200 p-3">${jabatan}</td>
-                    <td class="border border-gray-200 p-3">${nama}</td>
-                    <td class="border border-gray-200 p-3 text-center">
-                        <button onclick="editStruktur(this)" class="text-blue-600 hover:text-blue-800 mr-2">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button onclick="deleteStruktur(this)" class="text-red-600 hover:text-red-800">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </td>
-                `;
-            }
-
-            closeStrukturForm();
-            showNotification('Data berhasil disimpan!');
+            fetch("{{ route('Admin_Kelompok.kelompok.store') }}", {
+                    method: "POST",
+                    headers: {
+                        "X-CSRF-TOKEN": document.querySelector('input[name=_token]').value
+                    },
+                    body: data
+                })
+                .then(res => res.json())
+                .then(res => {
+                    if (res.success) {
+                        alert('Data berhasil disimpan!');
+                        location.reload(); // atau update tabel manual
+                    } else {
+                        alert('Gagal menyimpan data!');
+                    }
+                })
+                .catch(err => console.error(err));
         }
+
 
         function editStruktur(button) {
             const row = button.closest('tr');
             openStrukturForm(true, row);
         }
 
+
         function deleteStruktur(button) {
-            if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
-                const row = button.closest('tr');
-                row.remove();
-                showNotification('Data berhasil dihapus!');
-            }
+            if (!confirm("Yakin ingin menghapus data ini?")) return;
+
+            const id = button.getAttribute('data-id');
+
+            // bikin form DELETE dinamis
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/Admin_Kelompok/delete-struktur/' + id;
+
+            const csrf = document.createElement('input');
+            csrf.type = 'hidden';
+            csrf.name = '_token';
+            csrf.value = '{{ csrf_token() }}';
+
+            const method = document.createElement('input');
+            method.type = 'hidden';
+            method.name = '_method';
+            method.value = 'DELETE';
+
+            form.appendChild(csrf);
+            form.appendChild(method);
+            document.body.appendChild(form);
+
+            form.submit();
         }
 
-        // CRUD Functions for Sejarah
+
+
+        // CRUD Sejarah
         function openSejarahForm() {
             const modal = document.getElementById('sejarahModal');
             const content = document.getElementById('sejarah-content').textContent.trim();
@@ -1172,7 +1178,20 @@
             showNotification('Sejarah berhasil diperbarui!');
         }
 
-        // CRUD Functions for SK Desa
+
+
+
+        // CRUD  SK Desa
+        function getKelompokIdFromUrl() {
+            const parts = window.location.pathname.split('/').filter(Boolean);
+            // Contoh URL: /Admin_Kelompok/kelompok/123
+            const idx = parts.indexOf('kelompok');
+            if (idx !== -1 && parts[idx + 1]) {
+                return parts[idx + 1];
+            }
+            return null;
+        }
+
         function openSkDesaForm(editMode = false, element = null) {
             const modal = document.getElementById('skDesaModal');
             const modalTitle = document.getElementById('skDesaModalTitle');
@@ -1182,7 +1201,7 @@
                 modalTitle.textContent = 'Edit SK Desa';
                 const skItem = element.closest('.sk-desa-item');
                 const img = skItem.querySelector('img');
-                const judul = img.alt;
+                const judul = img.alt || '';
 
                 document.getElementById('skJudul').value = judul;
                 form.dataset.editMode = 'true';
@@ -1201,68 +1220,79 @@
             document.getElementById('skDesaModal').classList.add('hidden');
         }
 
-        function saveSkDesa(event) {
-            event.preventDefault();
-            const form = event.target;
-            const judul = document.getElementById('skJudul').value;
+        function saveSkDesaForm(event) {
+            event.preventDefault(); // cegah reload default
+
+            console.log("Fungsi saveSkDesaForm dipanggil ✅");
+
+            const judulInput = document.getElementById('skJudul');
             const fileInput = document.getElementById('skFile');
-            const carousel = document.getElementById('sk-desa-carousel');
 
-            if (fileInput.files.length > 0) {
-                const fileName = fileInput.files[0].name;
-
-                if (form.dataset.editMode === 'true') {
-                    const elementId = form.dataset.elementId;
-                    const skItem = document.getElementById(elementId);
-
-                    if (skItem) {
-                        const img = skItem.querySelector('img');
-                        img.alt = judul;
-                        img.setAttribute('onclick', `openPreview('${img.src}', '${judul}')`);
-                    }
-                } else {
-                    const newId = 'sk-desa-' + Date.now();
-                    const newSk = document.createElement('div');
-                    newSk.className = 'sk-desa-item';
-                    newSk.id = newId;
-                    newSk.innerHTML = `
-                        <img
-                            src="https://via.placeholder.com/800x600"
-                            alt="${judul}"
-                            class="w-full max-w-[30rem] mx-auto h-60 object-contain rounded-lg shadow-md border border-gray-200 cursor-pointer"
-                            onclick="openPreview('https://via.placeholder.com/800x600', '${judul}')">
-                        <div class="text-center mt-2">
-                            <button onclick="editSkDesa(this)" class="text-blue-600 hover:text-blue-800 mr-2">
-                                <i class="fas fa-edit"></i> Edit
-                            </button>
-                            <button onclick="deleteSkDesa(this)" class="text-red-600 hover:text-red-800">
-                                <i class="fas fa-trash"></i> Hapus
-                            </button>
-                        </div>
-                    `;
-                    carousel.appendChild(newSk);
-                }
-
-                closeSkDesaForm();
-                initializeCarousel('sk-desa');
-                showNotification(`File "${fileName}" berhasil disimpan!`);
+            const id = getKelompokIdFromUrl();
+            if (!id) {
+                alert('Gagal menemukan ID kelompok dari URL.');
+                return;
             }
+
+            const formData = new FormData();
+            formData.append('_token', document.querySelector('meta[name="csrf-token"]').content);
+            formData.append('judul', judulInput.value);
+            if (fileInput.files.length > 0) {
+                formData.append('file', fileInput.files[0]);
+            }
+
+            fetch(`/Admin_Kelompok/kelompok/${id}/sk-desa`, {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(res => {
+                    if (res.ok) {
+                        location.reload();
+                    } else {
+                        alert('Gagal menyimpan SK Desa');
+                    }
+                })
+                .catch(err => console.error(err));
         }
+
 
         function editSkDesa(button) {
             openSkDesaForm(true, button);
         }
 
         function deleteSkDesa(button) {
-            if (confirm('Apakah Anda yakin ingin menghapus SK Desa ini?')) {
-                const skItem = button.closest('.sk-desa-item');
-                skItem.remove();
-                initializeCarousel('sk-desa');
-                showNotification('SK Desa berhasil dihapus!');
+            if (!confirm('Apakah Anda yakin ingin menghapus SK Desa ini?')) return;
+
+            const skItem = button.closest('.sk-desa-item');
+            const allItems = Array.from(document.querySelectorAll('#sk-desa-carousel .sk-desa-item'));
+            const index = allItems.indexOf(skItem);
+
+            const id = getKelompokIdFromUrl();
+            if (index < 0 || !id) {
+                alert('Tidak bisa menemukan item untuk dihapus.');
+                return;
             }
+
+            fetch(`/Admin_Kelompok/kelompok/${id}/sk-desa/${index}`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: '_method=DELETE'
+                })
+                .then(res => {
+                    if (!res.ok) throw new Error("Gagal menghapus SK Desa");
+                    location.reload();
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert('Gagal menghapus SK Desa. Periksa console.');
+                });
         }
 
-        // CRUD Functions for Kelompok Rentan
+
+        // CRUD Kelompok Rentan
         function openRentanForm(editMode = false, row = null) {
             const modal = document.getElementById('rentanModal');
             const modalTitle = document.getElementById('rentanModalTitle');
@@ -1337,14 +1367,14 @@
             }
         }
 
-        // CRUD Functions for Total Produk
+        // CRUD Total Produk
         function openTotalProdukForm(editMode = false, row = null) {
             const modal = document.getElementById('totalProdukModal');
             const modalTitle = document.getElementById('totalProdukModalTitle');
             const form = document.getElementById('totalProdukForm');
 
             if (editMode && row) {
-                modalTitle.textContent = 'Edit Produk';
+                modalTitle.textContent = 'Edit Total Produk';
                 const nama = row.cells[0].textContent;
                 const total = row.cells[1].textContent.replace(' pcs', '');
                 document.getElementById('namaProduk').value = nama;
@@ -1352,7 +1382,7 @@
                 form.dataset.editMode = 'true';
                 form.dataset.rowIndex = row.rowIndex;
             } else {
-                modalTitle.textContent = 'Tambah Produk';
+                modalTitle.textContent = 'Tambah Total Produk';
                 form.reset();
                 form.dataset.editMode = 'false';
                 delete form.dataset.rowIndex;
@@ -1410,7 +1440,7 @@
             }
         }
 
-        // CRUD Functions for Produk
+        // CRUD  for Produk
         function openProdukForm(editMode = false, element = null) {
             const modal = document.getElementById('produkModal');
             const modalTitle = document.getElementById('produkModalTitle');

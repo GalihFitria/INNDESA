@@ -6,9 +6,20 @@
 <h2 class="text-center text-4xl font-bold text-gray-800 mb-6">.::Kelola Produk::.</h2>
 <div class="bg-white shadow-md p-4 rounded-lg">
     <div class="flex justify-between mb-4">
-        <a href="{{ route('Admin.produk.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 flex items-center">
-            <i class="fas fa-plus mr-2"></i>Tambah Produk
-        </a>
+        <div class="flex items-center space-x-4">
+            <a href="{{ route('Admin.produk.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 flex items-center">
+                <i class="fas fa-plus mr-2"></i>Tambah Produk
+            </a>
+            <div class="flex items-center">
+                <label for="rowsPerPage" class="mr-2 text-sm text-gray-600">Tampilkan:</label>
+                <select id="rowsPerPage" class="border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
+                    <option value="5">5</option>
+                    <option value="10" selected>10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                </select>
+            </div>
+        </div>
         <input type="text" id="searchInput" placeholder="Cari..." value="{{ request('search') }}" class="w-1/3 border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
     </div>
     <div class="overflow-x-auto">
@@ -35,7 +46,7 @@
                     <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $p->kode_produk }}</td>
                     <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $p->kelompok->nama ?? '-' }}</td>
                     <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $p->nama }}</td>
-                    <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $p->harga }}</td>
+                    <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ number_format($p->harga, 0, ',', '.') }}</td>
                     <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $p->stok }}</td>
                     <td class="border border-gray-300 p-3 text-sm text-gray-900 text-center">
                         @if ($p->foto)
@@ -43,17 +54,20 @@
                             {{ basename($p->foto) }}
                         </a>
                         @else
-                        <span class="text-gray-400">-</span>
+                        <span class="text-gray-400">Tidak ada foto produk</span>
                         @endif
                     </td>
                     <td class="border border-gray-300 p-3 text-sm text-gray-900 break-words max-w-xs">{{ $p->deskripsi }}</td>
                     <td class="border border-gray-300 p-3 text-sm text-gray-900 text-center">
                         @if ($p->sertifikat)
-                        <a href="{{ asset('storage/' . $p->sertifikat) }}" class="text-blue-600 hover:underline">
-                            {{ basename($p->sertifikat) }}
-                        </a>
+                        @php
+                        $sertifikatPaths = json_decode($p->sertifikat, true) ?? [];
+                        @endphp
+                        @foreach ($sertifikatPaths as $path)
+                        <a href="{{ Storage::url($path) }}" class="text-blue-600 hover:underline">Lihat Sertifikat</a><br>
+                        @endforeach
                         @else
-                        <span class="text-gray-400">-</span>
+                        <p class="text-gray-400">Tidak ada sertifikat.</p>
                         @endif
                     </td>
                     <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $p->produk_terjual }}</td>
@@ -117,7 +131,7 @@
         });
     });
 
-    const rowsPerPage = 10;
+    let rowsPerPage = parseInt(document.getElementById('rowsPerPage').value);
     let currentPage = 1;
     let filteredRows = [];
 
@@ -160,6 +174,12 @@
     }
 
     document.getElementById('searchInput').addEventListener('input', function() {
+        currentPage = 1;
+        updateTable();
+    });
+
+    document.getElementById('rowsPerPage').addEventListener('change', function() {
+        rowsPerPage = parseInt(this.value);
         currentPage = 1;
         updateTable();
     });

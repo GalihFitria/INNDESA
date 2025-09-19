@@ -1,3 +1,4 @@
+
 @extends('Admin.sidebar')
 
 @section('title', 'Kelola Katalog - INNDESA')
@@ -6,9 +7,20 @@
 <h2 class="text-center text-4xl font-bold text-gray-800 mb-6">.::Kelola Katalog::.</h2>
 <div class="bg-white shadow-md p-4 rounded-lg">
     <div class="flex justify-between mb-4">
-        <a href="{{ route('Admin.katalog.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 flex items-center">
-            <i class="fas fa-plus mr-2"></i>Tambah
-        </a>
+        <div class="flex items-center space-x-4">
+            <a href="{{ route('Admin.katalog.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 flex items-center">
+                <i class="fas fa-plus mr-2"></i>Tambah
+            </a>
+            <div class="flex items-center">
+                <label for="rowsPerPage" class="mr-2 text-sm text-gray-600">Tampilkan:</label>
+                <select id="rowsPerPage" class="border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
+                    <option value="5">5</option>
+                    <option value="10" selected>10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                </select>
+            </div>
+        </div>
         <form action="{{ route('Admin.katalog.index') }}" method="GET" class="w-1/3">
             <input type="text" name="search" id="searchInput" placeholder="Cari ..." value="{{ request('search') }}" class="w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
         </form>
@@ -50,7 +62,7 @@
                 </tr>
                 @empty
                 <tr id="noDataRow">
-                    <td colspan="9" class="border border-gray-300 p-3 text-center text-sm text-gray-900">Tidak ada data ditemukan</td>
+                    <td colspan="5" class="border border-gray-300 p-3 text-center text-sm text-gray-900">Tidak ada data ditemukan</td>
                 </tr>
                 @endforelse
             </tbody>
@@ -99,7 +111,7 @@
         });
     });
 
-    const rowsPerPage = 10;
+    let rowsPerPage = parseInt(document.getElementById('rowsPerPage').value);
     let currentPage = 1;
     let filteredRows = [];
 
@@ -110,15 +122,14 @@
         const prevButton = document.getElementById('prevPage');
         const nextButton = document.getElementById('nextPage');
         const pageInfo = document.getElementById('pageInfo');
+        const searchInput = document.getElementById('searchInput');
 
-        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
+
         filteredRows = Array.from(rows).filter(row => {
-            const kodeKelompok = row.cells[1].textContent.toLowerCase();
-            const namaKelompokIntegrasi = row.cells[2].textContent.toLowerCase();
-            const namaKelompok = row.cells[3].textContent.toLowerCase();
-            return kodeKelompok.includes(searchTerm) ||
-                namaKelompokIntegrasi.includes(searchTerm) ||
-                namaKelompok.includes(searchTerm);
+            const kodeKatalog = row.cells[1].textContent.toLowerCase(); // Kolom Id Katalog
+            const namaKelompok = row.cells[2].textContent.toLowerCase(); // Kolom Nama Kelompok
+            return kodeKatalog.includes(searchTerm) || namaKelompok.includes(searchTerm);
         });
 
         rows.forEach(row => row.style.display = 'none');
@@ -136,12 +147,18 @@
         pageInfo.textContent = totalRows > 0 ? `Page ${currentPage} of ${totalPages}` : '';
 
         if (noDataRow) {
-            noDataRow.parentElement.style.display = rows.length === 0 ? '' : 'none';
+            noDataRow.style.display = rows.length === 0 ? '' : 'none';
         }
         noSearchResults.classList.toggle('hidden', totalRows > 0 || rows.length === 0);
     }
 
     document.getElementById('searchInput').addEventListener('input', function() {
+        currentPage = 1;
+        updateTable();
+    });
+
+    document.getElementById('rowsPerPage').addEventListener('change', function() {
+        rowsPerPage = parseInt(this.value);
         currentPage = 1;
         updateTable();
     });
@@ -161,6 +178,8 @@
             updateTable();
         }
     });
+
+    // Inisialisasi tabel saat halaman dimuat
     updateTable();
 </script>
 @endsection

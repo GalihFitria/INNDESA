@@ -1,14 +1,18 @@
 @extends('Admin.sidebar')
 
-@section('title', 'Kelola Struktur Organisasi - INNDESA')
+@section('title', 'Kelola Produk Terjual/Tahun - INNDESA')
 
 @section('content')
-<h2 class="text-center text-4xl font-bold text-gray-800 mb-6">.::Kelola Struktur Organisasi::.</h2>
+<h2 class="text-center text-4xl font-bold text-gray-800 mb-6">.::Kelola Penjualan Produk per-Tahun::.</h2>
 <div class="bg-white shadow-md p-4 rounded-lg">
     <div class="flex justify-between mb-4">
         <div class="flex items-center space-x-4">
-            <a href="{{ route('Admin.struktur.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 flex items-center">
+            <a href="{{ route('Admin.produk_pertahun.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 flex items-center">
                 <i class="fas fa-plus mr-2"></i>Tambah
+            </a>
+            <a href="{{ route('Admin.produk_pertahun.pdf') }}"
+                class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 flex items-center">
+                <i class="fas fa-file-pdf mr-2"></i>Export PDF
             </a>
             <div class="flex items-center">
                 <label for="rowsPerPage" class="mr-2 text-sm text-gray-600">Tampilkan:</label>
@@ -20,33 +24,35 @@
                 </select>
             </div>
         </div>
-        <input type="text" id="searchInput" placeholder="Cari..." class="w-1/3 border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
+        <input type="text" id="searchInput" placeholder="Cari..." value="{{ request('search') }}" class="w-1/3 border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
     </div>
     <div class="overflow-x-auto">
         <table class="w-full border-collapse border border-gray-300">
             <thead class="bg-gray-50">
                 <tr>
                     <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">No</th>
-                    <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">Id Struktur</th>
+                    <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">Id Tahun</th>
+                    <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">Tahun</th>
                     <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">Nama Kelompok</th>
-                    <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">Nama</th>
-                    <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">Posisi</th>
-                    <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">Kelompok Rentan</th>
+                    <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">Nama Produk</th>
+                    <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">Harga</th>
+                    <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">Produk Terjual</th>
                     <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">Aksi</th>
                 </tr>
             </thead>
             <tbody id="tableBody">
-                @forelse ($struktur as $index => $s)
+                @forelse ($produks_pertahun as $index => $p)
                 <tr class="data-row">
                     <td class="border border-gray-300 p-3 text-center text-sm text-gray-900">{{ $index + 1 }}</td>
-                    <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $s->kode_struktur }}</td>
-                    <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $s->kelompok->nama ?? '-' }}</td>
-                    <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $s->nama }}</td>
-                    <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $s->jabatan }}</td>
-                    <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $s->rentan->nama_rentan ?? '-' }}</td>
-                    <td class="border border-gray-300 p-3 text-center text-sm">
-                        <a href="{{ route('Admin.struktur.edit', $s->id_struktur) }}" class="text-blue-600 hover:underline mr-2">Edit</a>
-                        <form action="{{ route('Admin.struktur.destroy', $s->id_struktur) }}" method="POST" class="inline-block delete-form">
+                    <td class="border border-gray-300 p-3 text-center text-sm text-gray-900">{{ $p->kode_tahun }}</td>
+                    <td class="border border-gray-300 p-3 text-center text-sm text-gray-900">{{ $p->tahun }}</td>
+                    <td class="border border-gray-300 p-3 text-center text-sm text-gray-900">{{ $p->nama_kelompok }}</td>
+                    <td class="border border-gray-300 p-3 text-center text-sm text-gray-900">{{ $p->nama_produk }}</td>
+                    <td class="border border-gray-300 p-3 text-center text-sm text-gray-900">{{ number_format($p->harga, 0, ',', '.') }}</td>
+                    <td class="border border-gray-300 p-3 text-center text-sm text-gray-900">{{ $p->produk_terjual }}</td>
+                    <td class="border border-gray-300 p-3 text-center text-sm text-gray-900">
+                        <a href="{{ route('Admin.produk_pertahun.edit', $p->id_tahun) }}" class="text-blue-600 hover:underline mr-2">Edit</a>
+                        <form action="{{ route('Admin.produk_pertahun.destroy', $p->id_tahun) }}" method="POST" class="inline-block delete-form">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="text-red-600 hover:underline">Hapus</button>
@@ -55,14 +61,13 @@
                 </tr>
                 @empty
                 <tr id="noDataRow">
-                    <td colspan="7" class="border border-gray-300 p-3 text-center text-sm text-gray-900">Tidak ada data ditemukan</td>
+                    <td colspan="8" class="border border-gray-300 p-3 text-center text-sm text-gray-900">Tidak ada data ditemukan</td>
                 </tr>
                 @endforelse
             </tbody>
         </table>
         <div id="noSearchResults" class="text-center text-sm text-gray-900 mt-4 hidden">Data tidak ditemukan</div>
     </div>
-
     <div class="flex justify-between mt-4">
         <button id="prevPage" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg disabled:opacity-50" disabled>Previous</button>
         <span id="pageInfo" class="text-sm text-gray-900 self-center"></span>
@@ -71,6 +76,7 @@
 </div>
 
 <input type="hidden" id="success-message" value="{{ session('success') ?? '' }}">
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     const successMessage = document.getElementById('success-message').value;
@@ -120,10 +126,10 @@
         const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
 
         filteredRows = Array.from(rows).filter(row => {
-            const nama = row.cells[3].textContent.toLowerCase(); // Kolom Nama
-            const kodeStruktur = row.cells[1].textContent.toLowerCase(); // Kolom Id Struktur
-            const namaKelompok = row.cells[2].textContent.toLowerCase(); // Kolom Nama Kelompok
-            return nama.includes(searchTerm) || kodeStruktur.includes(searchTerm) || namaKelompok.includes(searchTerm);
+            const kodeProduk = row.cells[1].textContent.toLowerCase(); // Kolom Id Tahun
+            const namaKelompok = row.cells[3].textContent.toLowerCase(); // Kolom Nama Kelompok
+            const namaProduk = row.cells[4].textContent.toLowerCase(); // Kolom Nama Produk
+            return kodeProduk.includes(searchTerm) || namaKelompok.includes(searchTerm) || namaProduk.includes(searchTerm);
         });
 
         rows.forEach(row => row.style.display = 'none');
@@ -172,7 +178,6 @@
             updateTable();
         }
     });
-
 
     updateTable();
 </script>

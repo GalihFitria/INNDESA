@@ -33,7 +33,7 @@ class IndexController extends Controller
 
         $kegiatans = Kegiatan::select('id_kegiatan', 'foto', 'judul', 'deskripsi', 'tanggal')
             ->orderBy('tanggal', 'desc')
-            ->paginate(4);
+            ->paginate(8);
 
         return view('Pengunjung.index', compact(
             'totalKelompok',

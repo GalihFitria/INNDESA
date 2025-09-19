@@ -38,7 +38,7 @@ class KegiatanController extends Controller
         $request->validate([
             'id_kelompok'   => 'required|exists:kelompok,id_kelompok',
             'judul'         => 'required|string|max:200',
-            'deskripsi'     => 'required|text',
+            'deskripsi'     => 'required|string',
             'tanggal'       => 'required|date',
             'sumber_berita' => 'nullable|string|max:255',
             'foto'          => 'required|mimes:jpg,jpeg,png,pdf|max:1024',
@@ -83,13 +83,11 @@ class KegiatanController extends Controller
             'deskripsi'     => 'required|string',
             'tanggal'       => 'required|date',
             'sumber_berita' => 'nullable|string|max:255',
-            'foto'          => 'nullable|mimes:jpg,jpeg,png,pdf|max:1024',
+            'foto'          => 'nullable|mimes:jpg,jpeg,png,pdf|max:2048',
         ]);
 
         $kegiatan = Kegiatan::findOrFail($id);
         $data = $request->except('foto');
-
-        
 
         if ($request->hasFile('foto')) {
             if ($kegiatan->foto) {

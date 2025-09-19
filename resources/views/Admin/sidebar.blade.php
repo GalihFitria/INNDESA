@@ -65,12 +65,17 @@
                         </a>
                     </li>
                     <li>
+                        <a href="{{ route('Admin.produk_pertahun.index') }}" class="menu-item w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition-colors flex items-center {{ Route::is('Admin.produk_pertahun.index') ? 'bg-blue-100 text-blue-700' : '' }}">
+                            <i class="fas fa-box mr-3 text-pink-500"></i>
+                            <span>Rekap Produk</span>
+                        </a>
+                    </li>
+                    <li>
                         <a href="{{ route('Admin.produk.index') }}" class="menu-item w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition-colors flex items-center {{ Route::is('Admin.produk.index') ? 'bg-blue-100 text-blue-700' : '' }}">
                             <i class="fas fa-box mr-3 text-yellow-600"></i>
                             <span>Produk</span>
                         </a>
                     </li>
-
                     <li>
                         <a href="{{ route('Admin.kegiatan.index') }}" class="menu-item w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition-colors flex items-center {{ Route::is('Admin.kegiatan.index') ? 'bg-blue-100 text-blue-700' : '' }}">
                             <i class="fas fa-calendar-alt mr-3 text-green-600"></i>
