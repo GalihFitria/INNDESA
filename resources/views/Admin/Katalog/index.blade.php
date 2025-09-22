@@ -48,7 +48,7 @@
                             {{ basename($kt->katalog) }}
                         </a>
                         @else
-                        <span class="text-gray-400">-</span>
+                        <span class="text-gray-400">Tidak ada katalog</span>
                         @endif
                     </td>
                     <td class="border border-gray-300 p-3 text-center text-sm">

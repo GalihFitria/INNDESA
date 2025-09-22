@@ -1,4 +1,3 @@
-
 @extends('Admin.sidebar')
 
 @section('title', 'Kelola Kelompok - INNDESA')
@@ -56,7 +55,7 @@
                             {{ basename($k->sk_desa) }}
                         </a>
                         @else
-                        <span class="text-gray-400">-</span>
+                        <span class="text-gray-400">Tidak ada sk desa</span>
                         @endif
                     </td>
                     <td class="border border-gray-300 p-3 text-sm text-gray-900 text-center">
@@ -65,7 +64,7 @@
                             {{ basename($k->background) }}
                         </a>
                         @else
-                        <span class="text-gray-400">-</span>
+                        <span class="text-gray-400">Tidak ada background</span>
                         @endif
                     </td>
                     <td class="border border-gray-300 p-3 text-sm text-gray-900 text-center">
@@ -74,7 +73,7 @@
                             {{ basename($k->logo) }}
                         </a>
                         @else
-                        <span class="text-gray-400">-</span>
+                        <span class="text-gray-400">Tidak ada logo</span>
                         @endif
                     </td>
                     <td class="border border-gray-300 p-3 text-center text-sm">

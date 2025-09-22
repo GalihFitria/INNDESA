@@ -7,27 +7,41 @@
 <div class="bg-white shadow-md p-4 rounded-lg max-w-2xl mx-auto">
     <form action="{{ route('Admin.struktur.store') }}" method="POST" class="space-y-6">
         @csrf
+
         <div class="mb-4">
             <label for="id_kelompok" class="block text-sm font-medium text-gray-700">Nama Kelompok</label>
-            <select name="id_kelompok" id="id_kelompok" class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
+            <select name="id_kelompok" id="id_kelompok"
+                class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500 @error('id_kelompok') border-red-500 @enderror select2"
+                style="width: 100%;" required>
                 <option value="">-- Pilih Kelompok --</option>
                 @foreach ($kelompok as $k)
                 <option value="{{ $k->id_kelompok }}">{{ $k->nama }}</option>
                 @endforeach
             </select>
+            @error('id_kelompok')
+            <span class="text-red-500 text-sm">{{ $message }}</span>
+            @enderror
         </div>
+
         <div>
             <label for="nama" class="block text-sm font-medium text-gray-700">Nama</label>
             <input type="text" name="nama" id="nama" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Masukkan Nama Kelompok" required>
         </div>
-        <div>
+        <div class="mb-4">
             <label for="jabatan" class="block text-sm font-medium text-gray-700">Posisi</label>
-            <input type="text" name="jabatan" id="jabatan" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Masukkan Posisi Anda(Ketua/Anggota)" required>
+            <select id="jabatan" name="jabatan"
+                class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500 @error('jabatan') border-red-500 @enderror">
+                <option value="">-- Pilih Posisi --</option>
+                <option value="Ketua">Ketua</option>
+                <option value="Wakil Ketua">Wakil Ketua</option>
+                <option value="Sekretaris">Sekretaris</option>
+                <option value="Bendahara">Bendahara</option>
+                <option value="Anggota">Anggota</option>
+            </select>
+            @error('jabatan')
+            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+            @enderror
         </div>
-        <!-- <div>
-            <label for="rentan" class="block text-sm font-medium text-gray-700">Kelompok Rentan</label>
-            <input type="text" name="rentan" id="rentan" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Masukkan Jenis kelompok rentannya(Pengangguran,Lansia,Janda,dll" required>
-        </div> -->
 
         <div class="mb-4">
             <label for="id_rentan" class="block text-sm font-medium text-gray-700">Kelompok Rentan</label>
@@ -48,4 +62,16 @@
         </div>
     </form>
 </div>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#id_kelompok').select2({
+            placeholder: "-- Pilih Kelompok --",
+            allowClear: true
+        });
+    });
+</script>
 @endsection

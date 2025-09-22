@@ -6,6 +6,7 @@ use App\Models\Kegiatan;
 use App\Models\Kelompok;
 use App\Models\Produk;
 use App\Models\StrukturOrganisasi;
+use App\Models\PageView;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -14,6 +15,9 @@ class IndexController extends Controller
    
     public function index()
     {
+        // Increment view count for home page
+        $homePageViews = PageView::incrementView('home');
+        
         $totalKelompok = Kelompok::count();
         $totalAnggota = StrukturOrganisasi::count();
         $totalProduk = Produk::count();
@@ -41,7 +45,8 @@ class IndexController extends Controller
             'totalProduk',
             'totalKelompokRentan',
             'anggotaRentan',
-            'kegiatans'
+            'kegiatans',
+            'homePageViews' // Pass view count to view
         ));
     }
 
@@ -93,6 +98,7 @@ class IndexController extends Controller
         $totalKelompok = Kelompok::count();
         $totalAnggota = StrukturOrganisasi::count();
         $totalProduk = Produk::count();
+        $homePageViews = PageView::getViewCount('home');
 
         $totalKelompokRentan = DB::table('v_struktur_rentan')
             ->whereNotNull('nama_rentan')
@@ -105,6 +111,7 @@ class IndexController extends Controller
             'totalAnggota' => $totalAnggota,
             'totalProduk' => $totalProduk,
             'totalKelompokRentan' => $totalKelompokRentan,
+            'homePageViews' => $homePageViews,
         ]);
     }
 }

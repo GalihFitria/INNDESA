@@ -10,25 +10,41 @@
         @method('PUT')
         <div class="mb-4">
             <label for="id_kelompok" class="block text-sm font-medium text-gray-700">Nama Kelompok</label>
-            <select name="id_kelompok" id="id_kelompok" class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
+            <select name="id_kelompok" id="id_kelompok"
+                class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500 @error('id_kelompok') border-red-500 @enderror select2"
+                style="width: 100%;" required>
                 <option value="">-- Pilih Kelompok --</option>
                 @foreach ($kelompok as $k)
-                <option value="{{ $k->id_kelompok }}" {{ $struktur->id_kelompok == $k->id_kelompok ? 'selected' : '' }}>{{ $k->nama }}</option>
+                <option value="{{ $k->id_kelompok }}"
+                    {{ old('id_kelompok', $struktur->id_kelompok ?? '') == $k->id_kelompok ? 'selected' : '' }}>
+                    {{ $k->nama }}
+                </option>
                 @endforeach
             </select>
+            @error('id_kelompok')
+            <span class="text-red-500 text-sm">{{ $message }}</span>
+            @enderror
         </div>
+
         <div>
             <label for="nama" class="block text-sm font-medium text-gray-700">Nama</label>
             <input type="text" name="nama" id="nama" value="{{ $struktur->nama }}" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Masukkan Nama " required>
         </div>
-        <div>
+        <div class="mb-4">
             <label for="jabatan" class="block text-sm font-medium text-gray-700">Posisi</label>
-            <input type="text" name="jabatan" id="jabatan" value="{{ $struktur->jabatan }}" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Masukkan Posisi (Ketua/Anggota)" required>
+            <select id="jabatan" name="jabatan"
+                class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500 @error('jabatan') border-red-500 @enderror">
+                <option value="">-- Pilih Posisi --</option>
+                <option value="Ketua" {{ old('jabatan', $struktur->jabatan) == 'Ketua' ? 'selected' : '' }}>Ketua</option>
+                <option value="Wakil Ketua" {{ old('jabatan', $struktur->jabatan) == 'Wakil Ketua' ? 'selected' : '' }}>Wakil Ketua</option>
+                <option value="Sekretaris" {{ old('jabatan', $struktur->jabatan) == 'Sekretaris' ? 'selected' : '' }}>Sekretaris</option>
+                <option value="Bendahara" {{ old('jabatan', $struktur->jabatan) == 'Bendahara' ? 'selected' : '' }}>Bendahara</option>
+                <option value="Anggota" {{ old('jabatan', $struktur->jabatan) == 'Anggota' ? 'selected' : '' }}>Anggota</option>
+            </select>
+            @error('jabatan')
+            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+            @enderror
         </div>
-        <!-- <div>
-            <label for="rentan" class="block text-sm font-medium text-gray-700">Kelompok Rentan</label>
-            <input type="text" name="rentan" id="rentan" value="{{ $struktur->rentan }}" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Masukkan Kelompok rentan (Pengangguran,Janda dll)" required>
-        </div> -->
 
         <div class="mb-4">
             <label for="id_rentan" class="block text-sm font-medium text-gray-700">Kelompok Rentan</label>
@@ -46,9 +62,21 @@
                 <i class="fas fa-arrow-left mr-2"></i>Kembali
             </a>
             <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 flex items-center">
-                <i class="fas fa-save mr-2"></i>Edit
+                <i class="fas fa-save mr-2"></i>Simpan Perubahan
             </button>
         </div>
     </form>
 </div>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#id_kelompok').select2({
+            placeholder: "-- Pilih Kelompok --",
+            allowClear: true
+        });
+    });
+</script>
 @endsection

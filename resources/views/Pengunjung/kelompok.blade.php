@@ -11,6 +11,44 @@
     <!-- PERBAIKAN: Tambahkan PDF.js library untuk rendering PDF di mobile -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
     <style>
+        /* PRELOADER */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 255);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .logo-loading {
+            width: 120px;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .fade-out {
+            opacity: 0;
+            transition: opacity 0.5s ease-out;
+        }
+
+        body:not(.loaded)>*:not(#preloader) {
+            display: none;
+        }
+
         .hero-subtitle {
             text-shadow: 1px 1px 0px #ffffff, -1px -1px 0px #ffffff, 1px -1px 0px #ffffff, -1px 1px 0px #ffffff;
             -webkit-text-stroke: 0.5px #ffffff;
@@ -221,7 +259,6 @@
                 text-align: center;
                 white-space: nowrap;
             }
-
 
             .mobile-table {
                 overflow-x: auto;
@@ -646,27 +683,26 @@
 </head>
 
 <body class="min-h-screen bg-white font-poppins">
+    <div id="preloader">
+        <img src="{{ asset('images/logo.png') }}" alt="Logo Website" class="logo-loading">
+    </div>
     @include('navbar')
-
-    <section class="relative text-white overflow-hidden 
-    min-h-[300px] sm:min-h-[350px] md:min-h-[550px] 
+    <section class="relative text-white overflow-hidden
+    min-h-[300px] sm:min-h-[350px] md:min-h-[550px]
     flex flex-col justify-start md:justify-center
     pt-12 sm:pt-16 md:pt-0
-    {{ $kelompok->background 
-        ? 'bg-[url(\'' . asset('storage/' . $kelompok->background) . '\')] 
-           bg-contain bg-top md:bg-cover md:bg-center bg-no-repeat' 
+    {{ $kelompok->background
+        ? 'bg-[url(\'' . asset('storage/' . $kelompok->background) . '\')]
+           bg-contain bg-top md:bg-cover md:bg-center bg-no-repeat'
         : 'bg-gray-800' }}">
-
         <!-- LOGO -->
         <div class="hero-logo flex items-center justify-start pl-4 -mt-6 sm:mt-6 md:mt-0 md:absolute md:top-12 md:left-16">
-
-
             @if ($kelompok->logo && Storage::disk('public')->exists($kelompok->logo))
             <img
                 src="{{ asset('storage/' . $kelompok->logo) }}"
                 alt="Logo {{ $kelompok->getKodeKelompokAttribute() }}"
-                class="h-12 sm:h-14 md:h-20 lg:h-24 w-auto 
-                       max-h-16 sm:max-h-20 md:max-h-28 lg:max-h-32 
+                class="h-12 sm:h-14 md:h-20 lg:h-24 w-auto
+                       max-h-16 sm:max-h-20 md:max-h-28 lg:max-h-32
                        object-contain no-context-menu"
                 draggable="false"
                 oncontextmenu="return false;"
@@ -677,8 +713,8 @@
             <img
                 src="{{ asset('images/fallback-logo.png') }}"
                 alt="Default Logo"
-                class="h-12 sm:h-14 md:h-20 lg:h-24 w-auto 
-                       max-h-16 sm:max-h-20 md:max-h-28 lg:max-h-32 
+                class="h-12 sm:h-14 md:h-20 lg:h-24 w-auto
+                       max-h-16 sm:max-h-20 md:max-h-28 lg:max-h-32
                        object-contain no-context-menu"
                 draggable="false"
                 oncontextmenu="return false;"
@@ -686,7 +722,6 @@
                 onselectstart="return false;">
             @endif
         </div>
-
         <!-- JUDUL -->
         <div class="text-center md:text-center absolute top-10 left-1/2 -translate-x-1/2 md:static md:transform-none md:mt-0 px-4">
             <h2 class="hero-title text-xl sm:text-3xl md:text-5xl lg:text-7xl font-bold text-[#0097D4]">
@@ -694,9 +729,8 @@
             </h2>
         </div>
     </section>
-
     <h2 class="text-2xl md:text-4xl font-bold text-blue-600 text-center mb-6 md:mb-8 mt-6 md:mt-10 px-4">Profil Kelompok</h2>
-    <div class="w-full border-t border-gray-200 pt-4 box-border section-padding-mobile">
+    <div class="w-full border-t-t border-gray-200 pt-4 box-border section-padding-mobile">
         <div class="bg-white p-3 md:p-6 content-container-mobile md:max-w-4xl md:mx-auto">
             <div class="tab-buttons flex rounded-lg overflow-x-auto bg-gray-200 whitespace-nowrap">
                 <button class="profile-tab-button flex-1 py-2 px-2 md:px-4 font-semibold text-center transition-colors bg-[#0097D4] text-white text-xs md:text-base" onclick="openTab('struktur', 'profile')" aria-label="Lihat Struktur">Struktur</button>
@@ -705,7 +739,6 @@
                 <button class="profile-tab-button flex-1 py-2 px-2 md:px-4 font-semibold text-center transition-colors bg-gray-200 text-gray-700 text-xs md:text-base" onclick="openTab('kelompok-rentan', 'profile')" aria-label="Lihat Kelompok Rentan">Kelompok Rentan</button>
                 <button class="profile-tab-button flex-1 py-2 px-2 md:px-4 font-semibold text-center transition-colors bg-gray-200 text-gray-700 text-xs md:text-base" onclick="openTab('total-produk', 'profile')" aria-label="Lihat Total Produk">Stok Produk</button>
             </div>
-
             <!-- STRUKTUR -->
             <div id="struktur" class="profile-tab-content block py-4">
                 <div class="mobile-table overflow-x-auto">
@@ -731,11 +764,9 @@
                                 </td>
                             </tr>
                             @endforeach
-
                             @php
                             $anggota = $struktur->where('jabatan', 'Anggota');
                             @endphp
-
                             @if($anggota->count())
                             <tr>
                                 <td class="border border-gray-200 px-2 py-1 md:px-3 md:py-2 text-xs md:text-base align-top">
@@ -750,7 +781,6 @@
                                 </td>
                             </tr>
                             @endif
-
                             @if($struktur->count() == 0)
                             <tr>
                                 <td colspan="2" class="text-center p-3 md:p-4 text-gray-500 text-xs md:text-base">
@@ -762,8 +792,6 @@
                     </table>
                 </div>
             </div>
-
-
             <!-- SEJARAH -->
             <div id="sejarah" class="profile-tab-content hidden py-4">
                 <div class="prose prose-xs md:prose-lg max-w-none text-gray-700 leading-relaxed text-justify">
@@ -776,8 +804,6 @@
                     @endforeach
                 </div>
             </div>
-
-
             <!-- SK DESA -->
             <div id="sk-desa" class="profile-tab-content hidden py-4">
                 <div class="relative">
@@ -785,14 +811,12 @@
                     @php
                     $skDesaItems = is_array($kelompok->sk_desa) ? $kelompok->sk_desa : [$kelompok->sk_desa];
                     @endphp
-
                     <div id="sk-desa-carousel" class="carousel">
                         @foreach ($skDesaItems as $index => $skDesa)
                         @php
                         $extension = pathinfo($skDesa, PATHINFO_EXTENSION);
                         $isImage = in_array(strtolower($extension), ['jpg', 'jpeg', 'png']);
                         @endphp
-
                         <!-- IMAGE -->
                         @if ($isImage)
                         <div class="preview-container-mobile relative w-full max-w-[20rem] md:max-w-[30rem] mx-auto {{ $index === 0 ? 'block' : 'hidden' }} sk-desa-item" data-index="{{ $index }}">
@@ -807,7 +831,6 @@
                                     onselectstart="return false;"
                                     onclick="openPreview('{{ asset('storage/' . $skDesa) }}', 'SK Desa {{ $kelompok->getKodeKelompokAttribute() }}', 'image', false)"
                                     onerror="this.src='{{ asset('images/placeholder.jpg') }}'">
-
                                 {{-- ✅ Watermark mobile --}}
                                 <div class="absolute inset-0 pointer-events-none overflow-hidden md:hidden">
                                     <div class="grid grid-cols-4 w-full h-full">
@@ -818,7 +841,6 @@
                                             @endfor
                                     </div>
                                 </div>
-
                                 {{-- ✅ Watermark desktop --}}
                                 <div class="absolute inset-0 pointer-events-none overflow-hidden hidden md:block">
                                     <div class="grid grid-cols-12 w-full h-full">
@@ -831,19 +853,16 @@
                                 </div>
                             </div>
                         </div>
-
                         <!-- PDF -->
                         @else
                         <div class="preview-container-mobile relative w-full max-w-[20rem] md:max-w-[30rem] mx-auto {{ $index === 0 ? 'block' : 'hidden' }} sk-desa-item" data-index="{{ $index }}">
                             <div class="pdf-container relative w-full h-full rounded-lg shadow-md border border-gray-200 overflow-hidden">
-
                                 <div id="pdf-sk-desa-js-{{ $index }}" class="pdf-canvas-container w-full h-full">
                                     <div class="pdf-loading">
                                         <div class="pdf-loading-spinner"></div>
                                         <p>Memuat PDF...</p>
                                     </div>
                                 </div>
-
                                 <iframe
                                     id="pdf-sk-desa-{{ $index }}"
                                     src="{{ asset('storage/' . $skDesa) }}#toolbar=0&navpanes=0&statusbar=0&scrollbar=0&view=FitH"
@@ -854,7 +873,6 @@
                                     onselectstart="return false;"
                                     onload="this.contentWindow.focus(); checkPdfLoad(this, 'sk-desa', '{{ $index }}', '{{ asset('storage/' . $skDesa) }}');">
                                 </iframe>
-
                                 <object
                                     id="pdf-sk-desa-object-{{ $index }}"
                                     data="{{ asset('storage/' . $skDesa) }}#toolbar=0&navpanes=0&statusbar=0&scrollbar=0&view=FitH"
@@ -866,7 +884,6 @@
                                         Buka PDF di Tab Baru
                                     </a>
                                 </object>
-
                                 {{-- Fallback link --}}
                                 <div id="pdf-sk-desa-fallback-{{ $index }}" class="pdf-fallback hidden">
                                     <p class="text-sm md:text-base text-gray-700 mb-3">PDF tidak dapat ditampilkan di browser ini.</p>
@@ -874,7 +891,6 @@
                                         Buka PDF di Tab Baru
                                     </a>
                                 </div>
-
                                 {{-- ✅ Watermark mobile (rapat seperti desktop) --}}
                                 <div class="absolute inset-0 pointer-events-none overflow-hidden md:hidden">
                                     <div class="grid grid-cols-12 w-full h-full">
@@ -885,8 +901,6 @@
                                             @endfor
                                     </div>
                                 </div>
-
-
                                 {{-- ✅ Watermark desktop --}}
                                 <div class="absolute inset-0 pointer-events-none overflow-hidden hidden md:block">
                                     <div class="grid grid-cols-12 w-full h-full">
@@ -897,7 +911,6 @@
                                             @endfor
                                     </div>
                                 </div>
-
                                 {{-- Overlay klik PDF --}}
                                 <div class="absolute inset-0 cursor-pointer no-context-menu"
                                     onclick="openPreview('{{ asset('storage/' . $skDesa) }}', 'SK Desa {{ $kelompok->getKodeKelompokAttribute() }}', 'pdf', false)"
@@ -910,7 +923,6 @@
                         @endif
                         @endforeach
                     </div>
-
                     {{-- Pagination --}}
                     @if(count($skDesaItems) > 1)
                     <div class="pagination-mobile flex justify-center mt-4">
@@ -924,8 +936,6 @@
                     @endif
                 </div>
             </div>
-
-
             <!-- KELOMPOK RENTAN -->
             <div id="kelompok-rentan" class="profile-tab-content hidden py-4">
                 @if ($rentanCategories->isNotEmpty())
@@ -946,7 +956,6 @@
                             return isset($rentanGrouped[$category]) ? $rentanGrouped[$category]->count() : 0;
                             }, $rentanCategories->toArray()));
                             @endphp
-
                             @for ($i = 0; $i < $maxRows; $i++)
                                 <tr>
                                 @foreach ($rentanCategories as $category)
@@ -975,7 +984,6 @@
                 </table>
                 @endif
             </div>
-
             <!-- STOK PRODUK -->
             <div id="total-produk" class="profile-tab-content hidden py-4">
                 @if ($produk->isNotEmpty())
@@ -1011,10 +1019,8 @@
                 </p>
                 @endif
             </div>
-
         </div>
     </div>
-
     <!-- INFORMASI -->
     <h2 class="text-2xl md:text-4xl font-bold text-blue-600 text-center mb-6 md:mb-8 px-4">Informasi</h2>
     <div class="w-full border-t border-gray-200 pt-4 box-border section-padding-mobile">
@@ -1024,16 +1030,14 @@
                 <button class="info-tab-button flex-1 py-2 px-2 md:px-4 font-semibold text-center transition-colors bg-gray-200 text-gray-700 text-xs md:text-base" onclick="openTab('kegiatan', 'info')" aria-label="Lihat Kegiatan">Kegiatan</button>
                 <button class="info-tab-button flex-1 py-2 px-2 md:px-4 font-semibold text-center transition-colors bg-gray-200 text-gray-700 text-xs md:text-base" onclick="openTab('inovasi', 'info')" aria-label="Lihat Inovasi & Penghargaan">Inovasi & Penghargaan</button>
             </div>
-
             <div id="produk" class="info-tab-content block py-4">
-                <!-- TOTAL PRODUK TERJUAL, KONTAK, KATALOG -->
+                <!-- TOTAL PRODUK TERJUAL, KONTAK, KONTALOG -->
                 <!-- Mobile layout -->
                 <div class="controls-mobile flex flex-wrap items-center justify-between mb-4 md:hidden">
                     <!-- Produk Terjual -->
                     <div class="text-green-600 font-medium text-sm mr-3">
                         Total Produk Terjual: {{ $totalProdukTerjual }}
                     </div>
-
                     <!-- Kontak -->
                     <a href="https://wa.me/6289647038212?text=Halo%20saya%20tertarik%20dengan%20produk%20Anda"
                         rel="noopener noreferrer"
@@ -1041,7 +1045,6 @@
                         aria-label="Kontak via WhatsApp">
                         <span>Kontak</span>
                     </a>
-
                     <!-- Katalog - PERBAIKAN: Ganti href ke onclick untuk preview -->
                     @if($katalog && $katalog->katalog)
                     <a onclick="openKatalogPreview('{{ asset('storage/' . $katalog->katalog) }}', 'Katalog {{ $kelompok->nama }}')"
@@ -1052,14 +1055,10 @@
                     @else
                     <span class="text-gray-500 text-sm mr-3">Katalog tidak tersedia</span>
                     @endif
-
                     <!-- Input Pencarian -->
-                    <input type="text" id="searchProduk" placeholder="Cari Produk..."
-                        class="border rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-sky-500 
-               text-sm w-full mt-2"
+                    <input type="text" id="searchProduk" placeholder="Cari Produk..." class="border rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-sky-500 text-sm w-full mt-2"
                         aria-label="Cari Produk">
                 </div>
-
                 <!-- Desktop layout -->
                 <div class="controls-desktop hidden md:flex md:flex-nowrap items-center justify-between mb-4">
                     <div class="contact-info-desktop flex items-center gap-x-6">
@@ -1073,7 +1072,6 @@
                             <span>Kontak</span>
                         </a>
                     </div>
-
                     <div class="flex flex-row items-center gap-x-4">
                         <!-- Katalog - PERBAIKAN: Ganti href ke onclick untuk preview -->
                         @if($katalog && $katalog->katalog)
@@ -1085,19 +1083,17 @@
                         @else
                         <span class="text-gray-500 text-base">Katalog tidak tersedia</span>
                         @endif
-
                         <!-- Input pencarian desktop -->
                         <input type="text" id="searchProdukDesktop" placeholder="Cari Produk..."
                             class="border rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-sky-500 text-base w-auto ml-2"
                             aria-label="Cari Produk">
                     </div>
                 </div>
-
                 <!-- PRODUK -->
                 <div class="relative">
                     <div id="produk-carousel" class="product-grid-mobile carousel grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4">
                         @foreach ($produk as $item)
-                        <a href="{{ route('detail_produk.show', $item->id_produk) }}" class="block no-underline produk-item" data-nama="{{ strtolower($item->nama) }}">
+                        <a href="{{ route('detail_produk.show', $item->id_produk) }}?from=kelompok" class="block no-underline produk-item" data-nama="{{ strtolower($item->nama) }}">
                             <div class="product-card-mobile border rounded-lg shadow-md p-2 md:p-3 w-full min-h-[240px] md:min-h-[280px] mx-auto cursor-pointer">
                                 <img src="{{ asset('storage/' . $item->foto) }}"
                                     alt="{{ $item->nama }}"
@@ -1126,21 +1122,19 @@
                     @endif
                 </div>
             </div>
-
             <div id="kegiatan" class="info-tab-content hidden py-4">
                 <div class="flex items-center justify-end mb-4">
                     <input type="text" id="searchKegiatan" placeholder="Cari Kegiatan..."
                         class="border rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-sky-500 text-sm w-full md:w-auto"
                         aria-label="Cari Kegiatan">
                 </div>
-
                 <!-- KEGIATAN -->
                 <div class="relative">
                     <div id="kegiatan-carousel"
                         class="kegiatan-grid-mobile grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 items-stretch">
                         @if ($kegiatan->isNotEmpty())
                         @foreach ($kegiatan as $item)
-                        <a href="{{ route('update_kegiatan.show', $item->id_kegiatan) }}" class="block no-underline kegiatan-item h-full" data-judul="{{ strtolower($item->judul) }}">
+                        <a href="{{ route('update_kegiatan.show', $item->id_kegiatan) }}?from=kelompok" class="block no-underline kegiatan-item" data-judul="{{ strtolower($item->judul) }}">
                             <div class="kegiatan-card-mobile bg-white text-black border rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow min-h-[280px] md:min-h-[320px] h-full cursor-pointer flex flex-col">
                                 <!-- Gambar -->
                                 <div class="kegiatan-image h-36 md:h-40">
@@ -1193,7 +1187,6 @@
                     @endif
                 </div>
             </div>
-
             <!-- INOVASI -->
             <div id="inovasi" class="info-tab-content hidden py-4">
                 <div class="relative">
@@ -1204,7 +1197,6 @@
                         $extension = pathinfo($inovasi->foto, PATHINFO_EXTENSION);
                         $isImage = in_array(strtolower($extension), ['jpg', 'jpeg', 'png']);
                         @endphp
-
                         {{-- ========== IMAGE ========== --}}
                         @if ($isImage)
                         <div class="preview-container-mobile relative w-full max-w-[20rem] md:max-w-[30rem] mx-auto {{ $index === 0 ? 'block' : 'hidden' }} inovasi-item" data-index="{{ $index }}">
@@ -1219,7 +1211,6 @@
                                     onselectstart="return false;"
                                     onclick="openPreview('{{ asset('storage/' . $inovasi->foto) }}', 'Inovasi {{ $inovasi->getKodeInovasiAttribute() }}', 'image', false)"
                                     onerror="this.src='{{ asset('images/placeholder.jpg') }}'">
-
                                 {{-- ✅ Watermark mobile (rapat seperti SK Desa) --}}
                                 <div class="absolute inset-0 pointer-events-none overflow-hidden md:hidden">
                                     <div class="grid grid-cols-12 w-full h-full">
@@ -1230,7 +1221,6 @@
                                             @endfor
                                     </div>
                                 </div>
-
                                 {{-- ✅ Watermark desktop --}}
                                 <div class="absolute inset-0 pointer-events-none overflow-hidden hidden md:block">
                                     <div class="grid grid-cols-12 w-full h-full">
@@ -1243,12 +1233,10 @@
                                 </div>
                             </div>
                         </div>
-
                         {{-- ========== PDF ========== --}}
                         @else
                         <div class="preview-container-mobile relative w-full max-w-[20rem] md:max-w-[30rem] mx-auto {{ $index === 0 ? 'block' : 'hidden' }} inovasi-item" data-index="{{ $index }}">
                             <div class="pdf-container relative w-full h-full rounded-lg shadow-md border border-gray-200 overflow-hidden">
-
                                 {{-- PDF.js container --}}
                                 <div id="pdf-inovasi-js-{{ $index }}" class="pdf-canvas-container w-full h-full">
                                     <div class="pdf-loading">
@@ -1256,7 +1244,6 @@
                                         <p>Memuat PDF...</p>
                                     </div>
                                 </div>
-
                                 {{-- Fallback iframe --}}
                                 <iframe
                                     id="pdf-inovasi-{{ $index }}"
@@ -1268,7 +1255,6 @@
                                     onselectstart="return false;"
                                     onload="this.contentWindow.focus(); checkPdfLoad(this, 'inovasi', '{{ $index }}', '{{ asset('storage/' . $inovasi->foto) }}');">
                                 </iframe>
-
                                 {{-- Fallback object --}}
                                 <object
                                     id="pdf-inovasi-object-{{ $index }}"
@@ -1281,7 +1267,6 @@
                                         Buka PDF di Tab Baru
                                     </a>
                                 </object>
-
                                 {{-- Fallback link --}}
                                 <div id="pdf-inovasi-fallback-{{ $index }}" class="pdf-fallback hidden">
                                     <p class="text-sm md:text-base text-gray-700 mb-3">PDF tidak dapat ditampilkan di browser ini.</p>
@@ -1289,7 +1274,6 @@
                                         Buka PDF di Tab Baru
                                     </a>
                                 </div>
-
                                 {{-- ✅ Watermark mobile (rapat seperti SK Desa) --}}
                                 <div class="absolute inset-0 pointer-events-none overflow-hidden md:hidden">
                                     <div class="grid grid-cols-12 w-full h-full">
@@ -1300,7 +1284,6 @@
                                             @endfor
                                     </div>
                                 </div>
-
                                 {{-- ✅ Watermark desktop --}}
                                 <div class="absolute inset-0 pointer-events-none overflow-hidden hidden md:block">
                                     <div class="grid grid-cols-12 w-full h-full">
@@ -1311,7 +1294,6 @@
                                             @endfor
                                     </div>
                                 </div>
-
                                 {{-- Overlay klik PDF --}}
                                 <div class="absolute inset-0 cursor-pointer no-context-menu"
                                     onclick="openPreview('{{ asset('storage/' . $inovasi->foto) }}', 'Inovasi {{ $inovasi->getKodeInovasiAttribute() }}', 'pdf', false)"
@@ -1324,7 +1306,6 @@
                         @endif
                         @endforeach
                     </div>
-
                     {{-- Pagination --}}
                     @if($inovasiImages->count() > 1)
                     <div class="pagination-mobile flex justify-center mt-4">
@@ -1338,34 +1319,27 @@
                     @endif
                 </div>
             </div>
-
         </div>
     </div>
-
     <!-- MODAL openPreview - PERBAIKAN: Tambahkan class modal-content-mobile ke iframe untuk konsistensi height -->
     <div id="previewModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div class="modal-mobile bg-white p-3 md:p-4 rounded-lg w-11/12 md:w-11/12 h-5/6 relative">
-
             <!-- Tombol Download - PERBAIKAN: Pindah ke bawah, hanya untuk katalog -->
             <a id="downloadLink" href="#" download class="absolute bottom-4 left-4 bg-green-500 text-white px-3 py-2 rounded text-sm font-medium hover:bg-green-600 transition hidden" aria-label="Download file">
                 Download
             </a>
-
             <!-- Tombol Close (✕) -->
             <button onclick="closePreview()"
                 class="absolute top-2 right-2 bg-red-500 text-white px-2 md:px-3 py-1 rounded text-sm md:text-base hover:bg-red-600 transition">
                 ✕
             </button>
-
             <h2 id="previewTitle" class="text-base md:text-lg font-bold mb-3 md:mb-4"></h2>
-
             <img id="previewImage" class="modal-content-mobile max-h-[70%] md:max-h-[80%] mx-auto hidden no-context-menu"
                 alt="Preview"
                 draggable="false"
                 oncontextmenu="return false;"
                 ondragstart="return false;"
                 onselectstart="return false;">
-
             <!-- Container PDF -->
             <div id="pdfModalContainer" class="w-full h-[70%] md:h-[80%] modal-content-mobile hidden">
                 <!-- PDF.js -->
@@ -1395,7 +1369,6 @@
                     </a>
                 </div>
             </div>
-
             <!-- Watermark IMAGE Mobile -->
             <div class="absolute inset-0 pointer-events-none overflow-hidden md:hidden" id="imageWatermarkMobile">
                 <div class="grid grid-cols-4 w-full h-full">
@@ -1416,8 +1389,7 @@
                         @endfor
                 </div>
             </div>
-
-            <!-- Watermark PDF Mobile -->
+            <!-- Watermark PDF mobile -->
             <div class="absolute inset-0 pointer-events-none overflow-hidden md:hidden" id="pdfWatermarkMobile">
                 <div class="grid grid-cols-4 w-full h-full">
                     @for ($i = 0; $i < 40; $i++)
@@ -1437,22 +1409,29 @@
                         @endfor
                 </div>
             </div>
-
         </div>
     </div>
-
-
-    @include('footer')
-
+    <div class="mt-12 sm:mt-20">
+        @include('footer')
+    </div>
     <script>
+        // JS PRELOADER
+        window.addEventListener("load", function() {
+            let preloader = document.getElementById("preloader");
+            // Add fade-out animation
+            preloader.classList.add("fade-out");
+            // After animation completes, hide preloader and show content
+            setTimeout(function() {
+                preloader.style.display = "none";
+                document.body.classList.add("loaded");
+            }, 500); // Match transition duration (0.5s)
+        });
         // PERBAIKAN: Set worker untuk PDF.js
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
-
         // PENCARIAN
         document.addEventListener('DOMContentLoaded', () => {
             // Inisialisasi carousel
             ['sk-desa', 'produk', 'kegiatan', 'inovasi'].forEach(section => initializeCarousel(section));
-
             // Fungsi debounce untuk mencegah pencarian berulang
             function debounce(func, wait) {
                 let timeout;
@@ -1465,18 +1444,34 @@
                     timeout = setTimeout(later, wait);
                 };
             }
-
-            // Fungsi pencarian umum
+            // PERBAIKAN: Fungsi pencarian yang diperbaiki
             function searchItems(section, searchInputId, itemClass, dataAttr, noResultsId) {
                 const searchInput = document.getElementById(searchInputId);
                 const noResults = document.getElementById(noResultsId);
-
                 if (searchInput) {
+                    // Inisialisasi state untuk input pencarian
+                    if (!searchInput.dataset.searchActive) {
+                        searchInput.dataset.searchActive = 'false';
+                        searchInput.dataset.currentPage = '0';
+                    }
                     const searchHandler = debounce(function() {
                         const searchTerm = searchInput.value.toLowerCase().trim();
                         const items = document.querySelectorAll(`.${itemClass}`);
                         let hasResults = false;
-
+                        // Simpan state pagination sebelum pencarian
+                        if (!searchTerm && searchInput.dataset.searchActive === 'true') {
+                            // Kembalikan ke state pagination sebelum pencarian
+                            const currentPage = parseInt(searchInput.dataset.currentPage || '0');
+                            showSlide(section, currentPage);
+                            searchInput.dataset.searchActive = 'false';
+                            // Tampilkan kembali kontrol pagination
+                            const paginationContainer = document.querySelector(`#${section}-pagination`).parentElement;
+                            if (paginationContainer) {
+                                paginationContainer.style.display = 'flex';
+                            }
+                            return;
+                        }
+                        // Tampilkan/sembunyikan item berdasarkan pencarian
                         items.forEach(item => {
                             const itemText = item.getAttribute(dataAttr);
                             if (itemText && itemText.includes(searchTerm)) {
@@ -1486,28 +1481,60 @@
                                 item.style.display = 'none';
                             }
                         });
-
                         // Tampilkan pesan jika tidak ada hasil
                         noResults.classList.toggle('hidden', hasResults || searchTerm === '');
-
-                        // FIX: Reset pagination
-                        if (searchTerm === '') {
-                            initializeCarousel(section); // semua item balik → hitung ulang per page
+                        // Handle pagination
+                        if (searchTerm) {
+                            // Simpan state pagination sebelum pencarian
+                            if (searchInput.dataset.searchActive !== 'true') {
+                                searchInput.dataset.searchActive = 'true';
+                                searchInput.dataset.currentPage = getCurrentSlideIndex(section);
+                            }
+                            // Sembunyikan pagination saat pencarian aktif
+                            const paginationContainer = document.querySelector(`#${section}-pagination`).parentElement;
+                            if (paginationContainer) {
+                                paginationContainer.style.display = 'none';
+                            }
                         } else {
-                            showSlide(section, 0); // pencarian aktif → mulai dari page 1
+                            // Reset ke pagination normal
+                            showSlide(section, 0);
+                            // Tampilkan kembali kontrol pagination
+                            const paginationContainer = document.querySelector(`#${section}-pagination`).parentElement;
+                            if (paginationContainer) {
+                                paginationContainer.style.display = 'flex';
+                            }
                         }
-
                     }, 300);
-
                     searchInput.addEventListener('input', searchHandler);
                 }
             }
-
-
+            // PERBAIKAN: Fungsi untuk mereset pencarian saat berpindah tab
+            function resetSearchWhenTabChange() {
+                // Reset pencarian produk
+                const searchProduk = document.getElementById('searchProduk');
+                const searchProdukDesktop = document.getElementById('searchProdukDesktop');
+                if (searchProduk) {
+                    searchProduk.value = '';
+                    searchProduk.dataset.searchActive = 'false';
+                    searchProduk.dispatchEvent(new Event('input'));
+                }
+                if (searchProdukDesktop) {
+                    searchProdukDesktop.value = '';
+                    searchProdukDesktop.dataset.searchActive = 'false';
+                    searchProdukDesktop.dispatchEvent(new Event('input'));
+                }
+                // Reset pencarian kegiatan
+                const searchKegiatan = document.getElementById('searchKegiatan');
+                if (searchKegiatan) {
+                    searchKegiatan.value = '';
+                    searchKegiatan.dataset.searchActive = 'false';
+                    searchKegiatan.dispatchEvent(new Event('input'));
+                }
+            }
             // Inisialisasi pencarian untuk produk dan kegiatan
             searchItems('produk', 'searchProduk', 'produk-item', 'data-nama', 'produk-no-results');
+            searchItems('produk', 'searchProdukDesktop', 'produk-item', 'data-nama', 'produk-no-results');
             searchItems('kegiatan', 'searchKegiatan', 'kegiatan-item', 'data-judul', 'kegiatan-no-results');
-
             // Disable right-click, drag, and selection for images and PDFs
             const noContextElements = document.querySelectorAll('.no-context-menu');
             noContextElements.forEach(element => {
@@ -1515,36 +1542,31 @@
                 element.addEventListener('dragstart', (e) => e.preventDefault());
                 element.addEventListener('selectstart', (e) => e.preventDefault());
             });
-
             // Global protection for all images and PDFs
             document.addEventListener('contextmenu', (e) => {
                 if (e.target.tagName === 'IMG' || e.target.tagName === 'OBJECT' || e.target.tagName === 'IFRAME') {
                     e.preventDefault();
                 }
             });
-
             document.addEventListener('dragstart', (e) => {
                 if (e.target.tagName === 'IMG' || e.target.tagName === 'OBJECT' || e.target.tagName === 'IFRAME') {
                     e.preventDefault();
                 }
             });
-
             document.addEventListener('selectstart', (e) => {
                 if (e.target.tagName === 'IMG' || e.target.tagName === 'OBJECT' || e.target.tagName === 'IFRAME') {
                     e.preventDefault();
                 }
             });
-
             // PERBAIKAN: Inisialisasi PDF.js untuk inline preview saat halaman dimuat
             initializeInlinePdfs();
         });
-
+        // PERBAIKAN: Modifikasi fungsi openTab
         function openTab(tabId, tabType) {
             const tabClass = tabType === 'profile' ? 'profile-tab-content' : 'info-tab-content';
             const buttonClass = tabType === 'profile' ? 'profile-tab-button' : 'info-tab-button';
             const tabs = document.querySelectorAll(`.${tabClass}`);
             const buttons = document.querySelectorAll(`.${buttonClass}`);
-
             tabs.forEach(tab => {
                 tab.classList.add('hidden');
                 tab.classList.remove('block');
@@ -1560,7 +1582,8 @@
             const activeTab = document.getElementById(tabId);
             activeTab.classList.remove('hidden');
             activeTab.classList.add('block');
-
+            // PERBAIKAN: Reset pencarian saat berpindah tab
+            resetSearchWhenTabChange();
             // PERBAIKAN: Inisialisasi PDF.js untuk tab yang aktif
             if (tabId === 'sk-desa' || tabId === 'inovasi') {
                 setTimeout(() => {
@@ -1568,7 +1591,6 @@
                 }, 100);
             }
         }
-
         // PERBAIKAN: Fungsi untuk inisialisasi PDF.js untuk inline preview
         function initializeInlinePdfs() {
             // Cek untuk SK Desa
@@ -1577,12 +1599,10 @@
                 const jsContainer = document.getElementById(`pdf-sk-desa-js-${index}`);
                 if (jsContainer && !jsContainer.dataset.initialized) {
                     jsContainer.dataset.initialized = 'true';
-
                     // Dapatkan URL PDF dari iframe
                     const iframe = document.getElementById(`pdf-sk-desa-${index}`);
                     if (iframe) {
                         const pdfUrl = iframe.src.split('#')[0]; // Hapus parameter URL
-
                         // Coba render dengan PDF.js untuk mobile
                         if (window.innerWidth <= 768) {
                             renderPdfWithJs(pdfUrl, `pdf-sk-desa-js-${index}`).then(success => {
@@ -1602,19 +1622,16 @@
                     }
                 }
             });
-
             // Cek untuk Inovasi
             const inovasiItems = document.querySelectorAll('.inovasi-item');
             inovasiItems.forEach((item, index) => {
                 const jsContainer = document.getElementById(`pdf-inovasi-js-${index}`);
                 if (jsContainer && !jsContainer.dataset.initialized) {
                     jsContainer.dataset.initialized = 'true';
-
                     // Dapatkan URL PDF dari iframe
                     const iframe = document.getElementById(`pdf-inovasi-${index}`);
                     if (iframe) {
                         const pdfUrl = iframe.src.split('#')[0]; // Hapus parameter URL
-
                         // Coba render dengan PDF.js untuk mobile
                         if (window.innerWidth <= 768) {
                             renderPdfWithJs(pdfUrl, `pdf-inovasi-js-${index}`).then(success => {
@@ -1635,78 +1652,62 @@
                 }
             });
         }
-
         // PERBAIKAN: Fungsi untuk render PDF dengan PDF.js - TAMBAHKAN scrollTop = 0 setelah render selesai
         async function renderPdfWithJs(pdfUrl, containerId) {
             try {
                 const container = document.getElementById(containerId);
                 if (!container) return false;
-
                 const loadingDiv = container.querySelector('.pdf-loading');
-
                 // Show loading
                 if (loadingDiv) {
                     loadingDiv.style.display = 'flex';
                 }
-
                 // Load PDF
                 const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
                 const numPages = pdf.numPages;
-
                 // Clear loading
                 if (loadingDiv) {
                     loadingDiv.style.display = 'none';
                 }
-
                 // Hapus canvas yang ada (kecuali loading)
                 const canvases = container.querySelectorAll('.pdf-page-canvas');
                 canvases.forEach(canvas => canvas.remove());
-
                 // Render each page
                 for (let pageNum = 1; pageNum <= numPages; pageNum++) {
                     const page = await pdf.getPage(pageNum);
-
                     // PERBAIKAN: Hitung skala yang sesuai dengan container
                     const containerWidth = container.clientWidth;
                     const containerHeight = container.clientHeight;
                     const viewport = page.getViewport({
                         scale: 1.0
                     });
-
                     // Hitung skala agar PDF muat dalam container
                     const scaleX = containerWidth / viewport.width;
                     const scaleY = containerHeight / viewport.height;
                     const scale = Math.min(scaleX, scaleY, 1.5); // Batas maksimal skala 1.5
-
                     const scaledViewport = page.getViewport({
                         scale: scale
                     });
-
                     const canvas = document.createElement('canvas');
                     const context = canvas.getContext('2d');
                     canvas.height = scaledViewport.height;
                     canvas.width = scaledViewport.width;
                     canvas.className = 'pdf-page-canvas';
-
                     const renderContext = {
                         canvasContext: context,
                         viewport: scaledViewport
                     };
-
                     await page.render(renderContext).promise;
                     container.appendChild(canvas);
                 }
-
                 // PERBAIKAN: Set scroll position ke atas setelah render selesai
                 container.scrollTop = 0;
-
                 return true;
             } catch (error) {
                 console.error('Error rendering PDF with PDF.js:', error);
                 return false;
             }
         }
-
         // PERBAIKAN: Fungsi untuk mengecek apakah PDF berhasil dimuat
         async function checkPdfLoad(iframe, type, index, pdfUrl) {
             // Tunggu beberapa saat untuk memastikan PDF telah dimuat
@@ -1720,9 +1721,7 @@
                             const jsContainer = document.getElementById(`pdf-${type}-js-${index}`);
                             if (jsContainer) {
                                 jsContainer.classList.remove('hidden');
-
                                 const success = await renderPdfWithJs(pdfUrl, `pdf-${type}-js-${index}`);
-
                                 if (success) {
                                     iframe.style.display = 'none';
                                 } else {
@@ -1731,7 +1730,6 @@
                                     if (objectTag) {
                                         objectTag.classList.remove('hidden');
                                         iframe.style.display = 'none';
-
                                         // Tunggu lagi untuk mengecek object tag
                                         setTimeout(() => {
                                             try {
@@ -1755,7 +1753,6 @@
                                 if (objectTag) {
                                     objectTag.classList.remove('hidden');
                                     iframe.style.display = 'none';
-
                                     // Tunggu lagi untuk mengecek object tag
                                     setTimeout(() => {
                                         try {
@@ -1780,7 +1777,6 @@
                     const jsContainer = document.getElementById(`pdf-${type}-js-${index}`);
                     if (jsContainer) {
                         jsContainer.classList.remove('hidden');
-
                         renderPdfWithJs(pdfUrl, `pdf-${type}-js-${index}`).then(success => {
                             if (!success) {
                                 // Jika PDF.js juga gagal, coba dengan object tag
@@ -1789,7 +1785,6 @@
                                     objectTag.classList.remove('hidden');
                                     iframe.style.display = 'none';
                                     jsContainer.classList.add('hidden');
-
                                     // Tunggu lagi untuk mengecek object tag
                                     setTimeout(() => {
                                         try {
@@ -1817,7 +1812,6 @@
                         if (objectTag) {
                             objectTag.classList.remove('hidden');
                             iframe.style.display = 'none';
-
                             // Tunggu lagi untuk mengecek object tag
                             setTimeout(() => {
                                 try {
@@ -1838,24 +1832,20 @@
                 }
             }, 3000); // Tunggu 3 detik
         }
-
         // PERBAIKAN: Fungsi untuk mengeck PDF di modal - TAMBAHKAN scrollTop = 0 setelah render
         async function checkModalPdfLoad() {
             const iframe = document.getElementById('previewPdf');
             const fallback = document.getElementById('previewPdfFallback');
             const objectTag = document.getElementById('previewPdfObject');
             const jsContainer = document.getElementById('pdfModalJsContainer');
-
             setTimeout(async () => {
                 try {
                     if (iframe.contentDocument && iframe.contentDocument.body) {
                         if (iframe.contentDocument.body.innerHTML.trim() === '') {
                             // Coba dengan PDF.js
                             jsContainer.classList.remove('hidden');
-
                             const pdfUrl = document.getElementById('previewPdfLink').href;
                             const success = await renderPdfWithJs(pdfUrl, 'pdfModalJsContainer');
-
                             if (success) {
                                 iframe.style.display = 'none';
                             } else {
@@ -1863,11 +1853,9 @@
                                 objectTag.classList.remove('hidden');
                                 iframe.style.display = 'none';
                                 jsContainer.classList.add('hidden');
-
                                 // Tunggu lagi untuk mengecek object tag
                                 setTimeout(() => {
                                     try {
-                                        // Jika object juga gagal, tampilkan fallback
                                         fallback.classList.remove('hidden');
                                         objectTag.style.display = 'none';
                                     } catch (e) {
@@ -1881,7 +1869,6 @@
                 } catch (e) {
                     // Jika terjadi error (biasanya karena cross-origin), coba dengan PDF.js
                     jsContainer.classList.remove('hidden');
-
                     const pdfUrl = document.getElementById('previewPdfLink').href;
                     renderPdfWithJs(pdfUrl, 'pdfModalJsContainer').then(success => {
                         if (!success) {
@@ -1889,11 +1876,9 @@
                             objectTag.classList.remove('hidden');
                             iframe.style.display = 'none';
                             jsContainer.classList.add('hidden');
-
                             // Tunggu lagi untuk mengecek object tag
                             setTimeout(() => {
                                 try {
-                                    // Jika object juga gagal, tampilkan fallback
                                     fallback.classList.remove('hidden');
                                     objectTag.style.display = 'none';
                                 } catch (e) {
@@ -1908,7 +1893,6 @@
                 }
             }, 3000);
         }
-
         // PERBAIKAN: Update fungsi openPreview untuk menangani PDF dengan lebih baik - Tambahkan parameter isKatalog
         function openPreview(fileSrc, title, type = 'image', isKatalog = false) {
             const modal = document.getElementById('previewModal');
@@ -1922,9 +1906,7 @@
             const jsContainer = document.getElementById('pdfModalJsContainer');
             const previewTitle = document.getElementById('previewTitle');
             const downloadLink = document.getElementById('downloadLink');
-
             previewTitle.textContent = title;
-
             // PERBAIKAN: Set download link hanya untuk katalog
             if (isKatalog) {
                 downloadLink.href = fileSrc;
@@ -1932,7 +1914,6 @@
             } else {
                 downloadLink.classList.add('hidden');
             }
-
             // PERBAIKAN: Handle watermark berdasarkan isKatalog
             const watermarks = [
                 'imageWatermarkMobile',
@@ -1953,18 +1934,15 @@
                     if (wm) wm.style.display = 'block';
                 });
             }
-
             if (type === 'pdf') {
                 previewImage.classList.add('hidden');
                 pdfModalContainer.classList.remove('hidden');
                 previewPdfFallback.classList.add('hidden');
                 previewPdfObject.classList.add('hidden');
                 jsContainer.classList.add('hidden');
-
                 // Simpan URL PDF untuk fallback
                 previewPdfLink.href = fileSrc;
                 previewPdfLink2.href = fileSrc;
-
                 // Reset container untuk PDF.js
                 const canvasContainer = document.getElementById('pdfModalJsContainer');
                 while (canvasContainer.firstChild) {
@@ -1973,7 +1951,6 @@
                     }
                     canvasContainer.removeChild(canvasContainer.firstChild);
                 }
-
                 // PERBAIKAN: Coba langsung dengan PDF.js untuk mobile
                 if (window.innerWidth <= 768) {
                     jsContainer.classList.remove('hidden');
@@ -1985,7 +1962,6 @@
                             jsContainer.classList.add('hidden');
                             const pdfUrl = fileSrc + '#toolbar=0&navpanes=0&statusbar=0&scrollbar=0&view=FitH';
                             previewPdf.src = pdfUrl;
-
                             // Force reload iframe untuk memastikan rendering di mobile
                             setTimeout(() => {
                                 previewPdf.src = pdfUrl + '&cache=' + new Date().getTime();
@@ -1996,7 +1972,6 @@
                     // Untuk desktop, gunakan iframe
                     const pdfUrl = fileSrc + '#toolbar=0&navpanes=0&statusbar=0&scrollbar=0&view=FitH';
                     previewPdf.src = pdfUrl;
-
                     // Force reload iframe untuk memastikan rendering
                     setTimeout(() => {
                         previewPdf.src = pdfUrl + '&cache=' + new Date().getTime();
@@ -2007,11 +1982,9 @@
                 previewImage.classList.remove('hidden');
                 previewImage.src = fileSrc;
             }
-
             modal.classList.remove('hidden');
             modal.focus();
         }
-
         // PERBAIKAN: Fungsi baru untuk preview katalog (tanpa watermark, dengan download)
         function openKatalogPreview(fileSrc, title) {
             const extension = fileSrc.split('.').pop().toLowerCase();
@@ -2036,7 +2009,6 @@
                 if (wm) wm.style.display = 'block';
             });
         }
-
         // ========== PAGINATION SYSTEM DENGAN NOMOR HALAMAN ==========
         const carousels = {
             'sk-desa': {
@@ -2052,12 +2024,10 @@
                 itemsPerPage: 1
             }
         };
-
         // Update items per page on window resize
         window.addEventListener('resize', () => {
             carousels['produk'].itemsPerPage = window.innerWidth <= 768 ? 4 : 8;
             carousels['kegiatan'].itemsPerPage = window.innerWidth <= 768 ? 4 : 8; // PERBAIKAN: Sesuaikan dengan grid 2 kolom
-
             // Re-initialize carousels with new settings
             ['produk', 'kegiatan'].forEach(section => {
                 const items = document.querySelectorAll(`#${section}-carousel .${section}-item`);
@@ -2065,7 +2035,6 @@
                     showSlide(section, 0);
                 }
             });
-
             // PERBAIKAN: Re-inisialisasi PDF.js saat ukuran layar berubah
             setTimeout(() => {
                 initializeInlinePdfs();
@@ -2075,25 +2044,22 @@
         function initializeCarousel(section) {
             showSlide(section, 0); // Tampilkan slide pertama
         }
-
+        // PERBAIKAN: Modifikasi fungsi renderPagination untuk menangani visibility
         function renderPagination(idPrefix) {
             const carousel = document.getElementById(`${idPrefix}-carousel`);
-            const items = carousel.querySelectorAll(`.${idPrefix}-item`);
+            // Hanya hitung item yang visible (tidak di-hide oleh pencarian)
+            const items = Array.from(carousel.querySelectorAll(`.${idPrefix}-item`)).filter(item => item.style.display !== 'none');
             const pagination = document.getElementById(`${idPrefix}-pagination`);
             const prevBtn = document.getElementById(`${idPrefix}-prev`);
             const nextBtn = document.getElementById(`${idPrefix}-next`);
-
             if (!pagination || items.length === 0) return;
-
             pagination.innerHTML = '';
-
             const total = items.length;
             const itemsPerPage = carousels[idPrefix].itemsPerPage;
             const totalPages = Math.ceil(total / itemsPerPage);
             const current = getCurrentSlideIndex(idPrefix) + 1;
             const page = Math.ceil(current / itemsPerPage);
             const maxButtons = 3;
-
             // Jika total item <= itemsPerPage, sembunyikan pagination dan tombol prev/next
             if (total <= itemsPerPage) {
                 if (prevBtn) prevBtn.style.display = "none";
@@ -2103,9 +2069,7 @@
                 if (prevBtn) prevBtn.style.display = "inline-block";
                 if (nextBtn) nextBtn.style.display = "inline-block";
             }
-
             let startPage, endPage;
-
             // Logika untuk menentukan rentang halaman yang ditampilkan
             if (totalPages <= maxButtons) {
                 startPage = 1;
@@ -2114,7 +2078,6 @@
                 const currentGroup = Math.ceil(page / maxButtons);
                 startPage = (currentGroup - 1) * maxButtons + 1;
                 endPage = Math.min(startPage + maxButtons - 1, totalPages);
-
                 // Tambahkan elipsis di awal jika startPage > 1
                 if (startPage > 1) {
                     const dots = document.createElement('span');
@@ -2123,7 +2086,6 @@
                     pagination.appendChild(dots);
                 }
             }
-
             // Buat tombol untuk setiap halaman dalam rentang
             for (let p = startPage; p <= endPage; p++) {
                 const btn = document.createElement('button');
@@ -2135,7 +2097,6 @@
                 };
                 pagination.appendChild(btn);
             }
-
             // Tambahkan elipsis di akhir jika endPage < totalPages
             if (endPage < totalPages) {
                 const dots = document.createElement('span');
@@ -2143,7 +2104,6 @@
                 dots.className = 'px-2';
                 pagination.appendChild(dots);
             }
-
             // Update status tombol navigasi
             updateNavigationButtons(idPrefix, current, total, itemsPerPage);
         }
@@ -2151,14 +2111,12 @@
         function updateNavigationButtons(idPrefix, current, total, itemsPerPage) {
             const prevBtn = document.getElementById(`${idPrefix}-prev`);
             const nextBtn = document.getElementById(`${idPrefix}-next`);
-
             if (prevBtn) {
                 const isFirstPage = current <= itemsPerPage;
                 prevBtn.disabled = isFirstPage;
                 prevBtn.classList.toggle('opacity-50', isFirstPage);
                 prevBtn.classList.toggle('cursor-not-allowed', isFirstPage);
             }
-
             if (nextBtn) {
                 const isLastPage = current + itemsPerPage - 1 >= total;
                 nextBtn.disabled = isLastPage;
@@ -2168,13 +2126,11 @@
         }
 
         function nextSlide(idPrefix) {
-            const items = document.querySelectorAll(`#${idPrefix}-carousel .${idPrefix}-item`);
+            const items = Array.from(document.querySelectorAll(`#${idPrefix}-carousel .${idPrefix}-item`)).filter(item => item.style.display !== 'none');
             const itemsPerPage = carousels[idPrefix].itemsPerPage;
             let current = getCurrentSlideIndex(idPrefix);
-
             // Calculate the next batch start index
             const nextBatchStart = Math.ceil((current + 1) / itemsPerPage) * itemsPerPage;
-
             if (nextBatchStart < items.length) {
                 showSlide(idPrefix, nextBatchStart);
             } else {
@@ -2185,51 +2141,55 @@
 
         function prevSlide(idPrefix) {
             let current = getCurrentSlideIndex(idPrefix);
-
             if (current > 0) {
                 showSlide(idPrefix, current - 1);
             } else {
                 // Jika di halaman pertama, lompat ke slide terakhir
-                const items = document.querySelectorAll(`#${idPrefix}-carousel .${idPrefix}-item`);
+                const items = Array.from(document.querySelectorAll(`#${idPrefix}-carousel .${idPrefix}-item`)).filter(item => item.style.display !== 'none');
                 const itemsPerPage = carousels[idPrefix].itemsPerPage;
                 const lastIndex = Math.floor((items.length - 1) / itemsPerPage) * itemsPerPage;
                 showSlide(idPrefix, lastIndex);
             }
         }
-
+        // PERBAIKAN: Modifikasi fungsi showSlide untuk menangani pagination dengan benar
         function showSlide(idPrefix, index) {
             const items = document.querySelectorAll(`#${idPrefix}-carousel .${idPrefix}-item`);
-
             if (items.length === 0) return;
             if (index >= items.length) index = items.length - 1;
             if (index < 0) index = 0;
-
             const itemsPerPage = carousels[idPrefix].itemsPerPage;
             const batchStart = Math.floor(index / itemsPerPage) * itemsPerPage;
-
+            // PERBAIKAN: Reset semua item ke state default
             items.forEach((item, i) => {
-                const isInBatch = i >= batchStart && i < batchStart + itemsPerPage;
-                item.classList.toggle('hidden', !isInBatch);
+                // Reset ke state default
+                item.style.display = '';
+                item.classList.remove('hidden');
+                // Terapkan pagination hanya pada item yang visible (tidak di-hide oleh pencarian)
+                if (item.style.display !== 'none') {
+                    const isInBatch = i >= batchStart && i < batchStart + itemsPerPage;
+                    item.classList.toggle('hidden', !isInBatch);
+                }
             });
-
             renderPagination(idPrefix);
-
             // PERBAIKAN: Inisialisasi PDF.js untuk slide yang aktif
             setTimeout(() => {
                 initializeInlinePdfs();
             }, 100);
         }
-
+        // PERBAIKAN: Modifikasi fungsi getCurrentSlideIndex untuk mengabaikan item yang di-hide pencarian
         function getCurrentSlideIndex(idPrefix) {
             const items = document.querySelectorAll(`#${idPrefix}-carousel .${idPrefix}-item`);
+            let visibleIndex = 0;
             for (let i = 0; i < items.length; i++) {
+                // Lewati item yang di-hide oleh pencarian
+                if (items[i].style.display === 'none') continue;
                 if (!items[i].classList.contains('hidden')) {
-                    return i;
+                    return visibleIndex;
                 }
+                visibleIndex++;
             }
             return 0;
         }
-
         // ========== INISIALISASI CAROUSEL ==========
         document.addEventListener('DOMContentLoaded', function() {
             ['sk-desa', 'produk', 'kegiatan', 'inovasi'].forEach(section => {
@@ -2239,7 +2199,6 @@
                 }
             });
         });
-
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') closePreview();
             if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
@@ -2251,7 +2210,6 @@
                 });
             }
         });
-
         document.querySelectorAll('.btn-outline').forEach(btn => {
             btn.setAttribute('tabindex', '0');
             btn.addEventListener('keypress', (e) => {

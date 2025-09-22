@@ -1,4 +1,3 @@
-
 @extends('Admin.sidebar')
 
 @section('title', 'Tambah Produk - INNDESA')
@@ -13,10 +12,11 @@
     <form action="{{ route('Admin.produk.store') }}" method="POST" class="space-y-6" enctype="multipart/form-data" id="produkForm">
         @csrf
 
-        {{-- Pilih Kelompok --}}
         <div class="mb-4">
             <label for="id_kelompok" class="block text-sm font-medium text-gray-700">Nama Kelompok</label>
-            <select name="id_kelompok" id="id_kelompok" class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+            <select name="id_kelompok" id="id_kelompok"
+                class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500 @error('id_kelompok') border-red-500 @enderror select2"
+                style="width: 100%;" required>
                 <option value="">-- Pilih Kelompok --</option>
                 @foreach ($kelompok as $k)
                 <option value="{{ $k->id_kelompok }}">{{ $k->nama }}</option>
@@ -27,7 +27,7 @@
             @enderror
         </div>
 
-        {{-- Nama Produk --}}
+
         <div>
             <label for="nama" class="block text-sm font-medium text-gray-700">Nama Produk</label>
             <input type="text" name="nama" id="nama" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Masukkan Nama Produk" required>
@@ -36,7 +36,6 @@
             @enderror
         </div>
 
-        {{-- Harga --}}
         <div>
             <label for="harga" class="block text-sm font-medium text-gray-700">Harga</label>
             <input type="text" name="harga" id="harga" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Masukkan Harga Produk" required>
@@ -45,7 +44,6 @@
             @enderror
         </div>
 
-        {{-- Stok --}}
         <div>
             <label for="stok" class="block text-sm font-medium text-gray-700">Stok</label>
             <input type="text" name="stok" id="stok" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Masukkan Stok Produk" required>
@@ -54,7 +52,6 @@
             @enderror
         </div>
 
-        {{-- Foto Produk --}}
         <div>
             <label for="foto" class="block text-sm font-medium text-gray-700">Foto Produk</label>
             <input type="file" name="foto" id="foto" accept=".jpg,.jpeg,.png" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
@@ -66,7 +63,6 @@
             @enderror
         </div>
 
-        {{-- Deskripsi --}}
         <div>
             <label for="deskripsi" class="block text-sm font-medium text-gray-700">Deskripsi</label>
             <textarea name="deskripsi" id="deskripsi" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Masukkan Deskripsi Produk" required>{{ old('deskripsi') }}</textarea>
@@ -75,7 +71,6 @@
             @enderror
         </div>
 
-        {{-- Sertifikat --}}
         <div>
             <label for="sertifikat" class="block text-sm font-medium text-gray-700">Sertifikat</label>
             <input type="file" name="sertifikat[]" id="sertifikat" accept=".pdf,.jpg,.jpeg,.png" multiple class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
@@ -87,7 +82,6 @@
             @enderror
         </div>
 
-        {{-- Tombol --}}
         <div class="flex justify-end space-x-4">
             <a href="{{ route('Admin.produk.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 flex items-center">
                 <i class="fas fa-arrow-left mr-2"></i>Kembali
@@ -98,7 +92,6 @@
         </div>
     </form>
 
-    {{-- Modal Preview --}}
     <div id="previewModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
         <div class="bg-white p-4 rounded-lg w-[800px] h-[600px] relative">
             <button onclick="closePreview()" class="absolute top-2 right-2 bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">✕</button>
@@ -129,7 +122,18 @@
     </div>
 </div>
 
+
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
+    $(document).ready(function() {
+        $('#id_kelompok').select2({
+            placeholder: "-- Pilih Kelompok --",
+            allowClear: true
+        });
+    });
+
     let fotoFile = null;
     let sertifikatFiles = [];
     let currentPreview = {
@@ -173,7 +177,6 @@
         updateFotoPreview();
     }
 
-    // Sertifikat Produk
     document.getElementById('sertifikat').addEventListener('change', e => {
         Array.from(e.target.files).forEach(file => {
             if (!sertifikatFiles.some(f => f.name === file.name)) {

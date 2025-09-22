@@ -29,20 +29,193 @@
         nav * {
             font-family: 'Poppins', sans-serif !important;
         }
+
+        /* Perbaikan: CSS yang sangat spesifik untuk button masuk agar konsisten di semua halaman */
+        .nav-login-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #0284c7;
+            /* sky-600 */
+            color: white;
+            font-weight: 600;
+            border-radius: 0.375rem;
+            /* rounded-md */
+            transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 150ms;
+            white-space: nowrap;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Ukuran untuk mobile */
+        @media (max-width: 767px) {
+            .nav-login-btn {
+                font-size: 0.875rem;
+                /* 14px */
+                padding: 0.625rem 1.25rem;
+                /* py-2.5 px-5 */
+                line-height: 1.25rem;
+                /* leading-none */
+            }
+        }
+
+        /* Ukuran untuk desktop */
+        @media (min-width: 768px) {
+            .nav-login-btn {
+                font-size: 1rem;
+                /* 16px */
+                padding: 0.5rem 1.25rem;
+                /* py-2 px-5 */
+                line-height: 1.5rem;
+                /* leading-none */
+            }
+        }
+
+        /* Hover state */
+        .nav-login-btn:hover {
+            background-color: #0369a1;
+            /* sky-700 */
+        }
+
+        /* Perbaikan: Ukuran font yang konsisten untuk mobile */
+        .mobile-menu-item {
+            font-size: 1rem;
+            /* 16px untuk mobile */
+            font-weight: 500;
+            padding: 0.75rem 0;
+            /* py-3 */
+        }
+
+        /* Perbaikan: Menu mobile yang konsisten */
+        @media (max-width: 767px) {
+
+            /* Logo yang lebih kecil di mobile */
+            .nav-logo-mobile {
+                width: 3rem;
+                /* 48px */
+                height: 3rem;
+                /* 48px */
+            }
+
+            /* Brand text yang lebih kecil di mobile */
+            .nav-brand-text-mobile {
+                font-size: 1.25rem;
+                /* 20px */
+            }
+
+            /* Menu items dengan tinggi yang konsisten */
+            .mobile-menu-item {
+                min-height: 3rem;
+                /* 48px */
+                display: flex;
+                align-items: center;
+            }
+        }
+
+        /* Perbaikan: Hover state yang konsisten untuk mobile */
+        .mobile-menu-item:hover {
+            color: #0284c7;
+            /* sky-600 */
+        }
+
+        /* Perbaikan: Active state yang konsisten untuk mobile */
+        .mobile-menu-item.active {
+            color: #0284c7;
+            /* sky-600 */
+        }
+
+        /* Perbaikan: Dropdown konsisten di semua ukuran */
+        .dropdown-container {
+            border-radius: 0.375rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .dropdown-item {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+        }
+
+        .dropdown-sub-container {
+            border-radius: 0.375rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .dropdown-sub-item {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+        }
+
+        /* Perbaikan: Dropdown untuk mobile */
+        @media (max-width: 767px) {
+            .dropdown-container {
+                background-color: #f0f9ff;
+                border: 1px solid #bae6fd;
+            }
+
+            .dropdown-item {
+                padding: 0.75rem 1rem;
+                font-size: 1rem;
+                line-height: 1.5rem;
+            }
+
+            .dropdown-sub-container {
+                background-color: #e0f2fe;
+                border: 1px solid #7dd3fc;
+                margin-left: 1rem;
+                margin-top: 0.25rem;
+            }
+
+            .dropdown-sub-item {
+                padding: 0.75rem 1rem;
+                font-size: 1rem;
+                line-height: 1.5rem;
+            }
+        }
+
+        /* Perbaikan: Dropdown untuk desktop */
+        @media (min-width: 768px) {
+            .dropdown-container {
+                background-color: #ffffff;
+                border: 1px solid #e5e7eb;
+            }
+
+            .dropdown-item {
+                padding: 0.5rem 1rem;
+                font-size: 0.875rem;
+                line-height: 1.25rem;
+            }
+
+            .dropdown-sub-container {
+                background-color: #f0f9ff;
+                border: 1px solid #bae6fd;
+                margin-top: 0.25rem;
+            }
+
+            .dropdown-sub-item {
+                padding: 0.5rem 1rem;
+                font-size: 0.875rem;
+                line-height: 1.25rem;
+            }
+        }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
 
 <body class="bg-white">
     <nav class="bg-white shadow-md sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center h-16 md:h-32 w-full">
-                <a href="index" class="flex items-center ml-0 md:-ml-44 space-x-4">
-                    <div class="w-12 h-12 md:w-28 md:h-28 rounded-full overflow-hidden flex-shrink-0">
+                <a href="{{ route('beranda') }}" class="flex items-center ml-0 md:-ml-44 space-x-4">
+                    <div class="w-12 h-12 md:w-28 md:h-28 rounded-full overflow-hidden flex-shrink-0 nav-logo-mobile">
                         <img src="{{ asset('images/logo.png') }}" alt="Logo INNDESA" class="object-cover w-full h-full" />
                     </div>
                     <div>
-                        <h1 class="font-extrabold text-xl md:text-3xl leading-tight text-gray-900 select-none">INNDESA</h1>
+                        <h1 class="font-extrabold text-xl md:text-3xl leading-tight text-gray-900 select-none nav-brand-text-mobile">INNDESA</h1>
                         <p class="text-sm md:text-base leading-snug text-gray-600 select-none hidden md:block">Inovasi Nusantara Desa Integratif Pangan</p>
                     </div>
                 </a>
@@ -66,8 +239,8 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                                 </svg>
                             </button>
-                            <div id="perusahaanDropdown" class="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-sky-100 ring-1 ring-sky-200 ring-opacity-50 hidden z-50">
-                                <a href="{{ route('pt.index') }}" class="submenu-item block px-4 py-2 text-sky-800 hover:bg-sky-200 transition-colors duration-150" data-parent="pt" data-submenu="pt-ip">PT. IP</a>
+                            <div id="perusahaanDropdown" class="absolute left-0 mt-2 w-48 dropdown-container hidden z-50">
+                                <a href="{{ route('pt.index') }}" class="dropdown-item block text-sky-800 hover:bg-sky-200 transition-colors duration-150" data-parent="pt" data-submenu="pt-ip">PT. IP</a>
                             </div>
                         </div>
 
@@ -81,7 +254,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                                 </svg>
                             </button>
-                            <div id="kelompokDropdown" class="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden z-50"></div>
+                            <div id="kelompokDropdown" class="absolute left-0 mt-2 w-48 dropdown-container hidden z-50"></div>
                         </div>
 
                         <a href="https://wa.me/6289647038212?text=Halo%20saya%20tertarik%20dengan%20produk%20Anda"
@@ -96,7 +269,7 @@
                     </div>
 
                     <div class="flex justify-center space-x-8 text-gray-800 mt-2">
-                        <a href="{{ route('produk.index') }}" class="menu-item flex items-center gap-1 text-gray-800 hover:text-sky-600 transition-colors duration-150" data-menu="produk">
+                        <a href="{{ route('produk.index') }}?from=produk" class="menu-item flex items-center gap-1 text-gray-800 hover:text-sky-600 transition-colors duration-150" data-menu="produk">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.5 6h13L17 13M7 13H5.4M17 13l1.5 6M6 19a1 1 0 100 2 1 1 0 000-2zm12 0a1 1 0 100 2 1 1 0 000-2z" />
                             </svg>
@@ -115,9 +288,7 @@
                 <div class="flex items-center ml-auto gap-3">
                     <!-- Tombol Masuk -->
                     <a href="#"
-                        class="inline-flex items-center justify-center bg-sky-600 text-white font-semibold 
-          px-3 py-1.5 md:px-5 md:py-2 rounded-md hover:bg-sky-700 
-          text-sm md:text-base leading-none whitespace-nowrap">
+                        class="nav-login-btn">
                         Masuk
                     </a>
 
@@ -140,14 +311,14 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
-                <a href="{{ route('beranda') }}" class="menu-item flex items-center gap-2 py-2 text-gray-800 hover:text-sky-600" data-menu="beranda">
+                <a href="{{ route('beranda') }}" class="mobile-menu-item menu-item flex items-center gap-2 text-gray-800 hover:text-sky-600 transition-colors duration-150" data-menu="beranda">
                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M3 9.75L12 3l9 6.75v11.25a.75.75 0 01-.75.75H3.75a.75.75 0 01-.75-.75V9.75z" />
                     </svg>
                     <span>Beranda</span>
                 </a>
                 <div class="relative">
-                    <button onclick="toggleMobileDropdown('mobile-perusahaanDropdown')" class="menu-item flex items-center gap-2 py-2 text-gray-800 hover:text-sky-600 w-full" data-menu="pt">
+                    <button onclick="toggleMobileDropdown('mobile-perusahaanDropdown')" class="mobile-menu-item menu-item flex items-center gap-2 text-gray-800 hover:text-sky-600 transition-colors duration-150 w-full" data-menu="pt">
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M4 22V2h16v20H4zm2-2h2v-2H6v2zm0-4h2v-2H6v2zm0-4h2V8H6v4zm4 8h2v-2h-2v2zm0-4h2v-2h-2v2zm0-4h2V8h-2v4zm4 8h2v-2h-2v2zm0-4h2v-2h-2v2zm0-4h2V8h-2v4z" />
                         </svg>
@@ -156,12 +327,12 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                         </svg>
                     </button>
-                    <div id="mobile-perusahaanDropdown" class="ml-4 hidden">
-                        <a href="{{ route('pt.index') }}" class="submenu-item block py-2 text-sky-800 hover:bg-sky-200" data-parent="pt" data-submenu="pt-ip">PT. IP</a>
+                    <div id="mobile-perusahaanDropdown" class="ml-4 dropdown-container hidden">
+                        <a href="{{ route('pt.index') }}" class="dropdown-item block text-sky-800 hover:bg-sky-200 transition-colors duration-150" data-parent="pt" data-submenu="pt-ip">PT. IP</a>
                     </div>
                 </div>
                 <div class="relative">
-                    <button onclick="toggleMobileDropdown('mobile-kelompokDropdown')" class="menu-item flex items-center gap-2 py-2 text-gray-800 hover:text-sky-600 w-full" data-menu="kelompok">
+                    <button onclick="toggleMobileDropdown('mobile-kelompokDropdown')" class="mobile-menu-item menu-item flex items-center gap-2 text-gray-800 hover:text-sky-600 transition-colors duration-150 w-full" data-menu="kelompok">
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V20h14v-3.5C15 14.17 10.33 13 8 13zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 2.05 1.97 3.45V20h6v-3.5c0-2.33-4.67-3.5-6-3.5z" />
                         </svg>
@@ -170,21 +341,21 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                         </svg>
                     </button>
-                    <div id="mobile-kelompokDropdown" class="ml-4 hidden"></div>
+                    <div id="mobile-kelompokDropdown" class="ml-4 dropdown-container hidden"></div>
                 </div>
-                <a href="https://wa.me/6289647038212?text=Halo%20saya%20tertarik%20dengan%20produk%20Anda" rel="noopener noreferrer" class="menu-item flex items-center gap-2 py-2 text-gray-800 hover:text-sky-600" data-menu="kontak">
+                <a href="https://wa.me/6289647038212?text=Halo%20saya%20tertarik%20dengan%20produk%20Anda" rel="noopener noreferrer" class="mobile-menu-item menu-item flex items-center gap-2 text-gray-800 hover:text-sky-600 transition-colors duration-150" data-menu="kontak">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                     </svg>
                     <span>Kontak</span>
                 </a>
-                <a href="{{ route('produk.index') }}" class="menu-item flex items-center gap-2 py-2 text-gray-800 hover:text-sky-600" data-menu="produk">
+                <a href="{{ route('produk.index') }}?from=produk" class="mobile-menu-item menu-item flex items-center gap-2 text-gray-800 hover:text-sky-600 transition-colors duration-150" data-menu="produk">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.5 6h13L17 13M7 13H5.4M17 13l1.5 6M6 19a1 1 0 100 2 1 1 0 000-2zm12 0a1 1 0 100 2 1 1 0 000-2z" />
                     </svg>
                     <span>Produk</span>
                 </a>
-                <a href="{{ route('publikasi.index') }}" class="menu-item flex items-center gap-2 py-2 text-gray-800 hover:text-sky-600" data-menu="publikasi">
+                <a href="{{ route('publikasi.index') }}" class="mobile-menu-item menu-item flex items-center gap-2 text-gray-800 hover:text-sky-600 transition-colors duration-150" data-menu="publikasi">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
                     </svg>
@@ -211,7 +382,7 @@
                 const categoryId = category.nama.toLowerCase().replace(/\s+/g, '-');
                 button.id = `${categoryId}-button${isMobile ? '-mobile' : ''}`;
                 button.onclick = () => toggleDropdown(`${categoryId}-dropdown${isMobile ? '-mobile' : ''}`, isMobile);
-                button.className = `dropdown-submenu-item w-full text-left py-2 ${isMobile ? 'px-2' : 'px-4'} hover:bg-sky-100 hover:text-sky-600 flex justify-between items-center transition-colors duration-150`;
+                button.className = `dropdown-item w-full text-left hover:bg-sky-100 hover:text-sky-600 flex justify-between items-center transition-colors duration-150`;
                 button.setAttribute('data-menu', categoryId);
                 button.textContent = category.nama;
                 const arrow = document.createElement('svg');
@@ -225,12 +396,12 @@
 
                 const subDropdown = document.createElement('div');
                 subDropdown.id = `${categoryId}-dropdown${isMobile ? '-mobile' : ''}`;
-                subDropdown.className = `ml-4 ${isMobile ? '' : 'mt-1'} w-full ${isMobile ? '' : 'rounded-md shadow-lg bg-sky-100 ring-1 ring-sky-200 ring-opacity-50'} hidden`;
+                subDropdown.className = `dropdown-sub-container hidden`;
 
                 category.kelompok.forEach(kelompok => {
                     const link = document.createElement('a');
-                    link.href = `{{ url('kelompok') }}/${kelompok.id_kelompok}`;
-                    link.className = `submenu-item block py-2 ${isMobile ? 'px-2 text-sky-800 hover:bg-sky-200' : 'px-4 text-sky-800 hover:bg-sky-200'} transition-colors duration-150`;
+                    link.href = `{{ url('kelompok') }}/${kelompok.id_kelompok}?from=kelompok`;
+                    link.className = `dropdown-sub-item block text-sky-800 hover:bg-sky-200 transition-colors duration-150`;
                     link.setAttribute('data-parent', categoryId);
                     link.setAttribute('data-submenu', kelompok.id_kelompok);
                     link.textContent = kelompok.nama;
@@ -243,11 +414,13 @@
             });
 
             // Tambahkan event listener untuk submenu item
-            document.querySelectorAll('.submenu-item').forEach(item => {
+            document.querySelectorAll('.dropdown-sub-item').forEach(item => {
                 item.addEventListener('click', function(e) {
                     const parentMenu = this.getAttribute('data-parent');
                     if (parentMenu) {
-                        setActiveMenu(parentMenu);
+                        // Simpan parent menu ke localStorage
+                        localStorage.setItem('lastActiveMenu', 'kelompok');
+                        setActiveMenu('kelompok');
                     }
                     setActiveSubmenuItem(this);
                     if (isMobile) {
@@ -257,30 +430,54 @@
             });
         }
 
-        let path = window.location.pathname;
-        let currentActiveMenu = 'beranda';
-        if (path.includes('publikasi')) {
-            currentActiveMenu = 'publikasi';
-        } else if (path.includes('produk')) {
-            currentActiveMenu = 'produk';
-        } else if (path.includes('kontak')) {
-            currentActiveMenu = 'kontak';
-        } else if (path.includes('pt')) {
-            currentActiveMenu = 'pt';
-        } else if (path.includes('kelompok')) {
-            currentActiveMenu = 'kelompok';
+        // Fungsi untuk menentukan menu aktif berdasarkan URL
+        function determineActiveMenu() {
+            const path = window.location.pathname;
+            const params = new URLSearchParams(window.location.search);
+            const from = params.get('from');
+
+            // Cek parameter 'from' terlebih dahulu
+            if (from) {
+                return from;
+            }
+
+            // Cek localStorage untuk lastActiveMenu
+            const lastActiveMenu = localStorage.getItem('lastActiveMenu');
+            if (lastActiveMenu) {
+                return lastActiveMenu;
+            }
+
+            // Default pengecekan berdasarkan path
+            if (path.includes('publikasi')) {
+                return 'publikasi';
+            } else if (path.includes('produk')) {
+                return 'produk';
+            } else if (path.includes('kontak')) {
+                return 'kontak';
+            } else if (path.includes('pt')) {
+                return 'pt';
+            } else if (path.includes('kelompok')) {
+                return 'kelompok';
+            }
+
+            return 'beranda';
         }
 
+        let currentActiveMenu = determineActiveMenu();
+
         function setActiveMenu(menuId) {
+            // Simpan menu aktif ke localStorage
+            localStorage.setItem('lastActiveMenu', menuId);
+
             document.querySelectorAll('.menu-item').forEach(item => {
                 item.classList.remove('text-sky-600', 'active');
             });
 
-            document.querySelectorAll('.dropdown-submenu-item').forEach(item => {
+            document.querySelectorAll('.dropdown-item').forEach(item => {
                 item.classList.remove('text-sky-600', 'active');
             });
 
-            document.querySelectorAll('.submenu-item').forEach(item => {
+            document.querySelectorAll('.dropdown-sub-item').forEach(item => {
                 item.classList.remove('bg-sky-600', 'text-white');
                 item.classList.add('text-sky-800');
             });
@@ -297,7 +494,7 @@
         }
 
         function setActiveSubmenuItem(element) {
-            document.querySelectorAll('.submenu-item').forEach(item => {
+            document.querySelectorAll('.dropdown-sub-item').forEach(item => {
                 item.classList.remove('bg-sky-600', 'text-white');
                 item.classList.add('text-sky-800');
             });
@@ -422,24 +619,30 @@
             item.addEventListener('click', function(e) {
                 const menuId = this.getAttribute('data-menu');
                 if (menuId) {
+                    // Simpan menu yang diklik ke localStorage
+                    localStorage.setItem('lastActiveMenu', menuId);
                     setActiveMenu(menuId);
                 }
             });
         });
 
-        document.querySelectorAll('.dropdown-submenu-item').forEach(item => {
+        document.querySelectorAll('.dropdown-item').forEach(item => {
             item.addEventListener('click', function(e) {
                 const menuId = this.getAttribute('data-menu');
                 if (menuId) {
+                    // Simpan menu yang diklik ke localStorage
+                    localStorage.setItem('lastActiveMenu', menuId);
                     setActiveMenu(menuId);
                 }
             });
         });
 
-        document.querySelectorAll('.submenu-item').forEach(item => {
+        document.querySelectorAll('.dropdown-sub-item').forEach(item => {
             item.addEventListener('click', function(e) {
                 const parentMenu = this.getAttribute('data-parent');
                 if (parentMenu) {
+                    // Simpan parent menu ke localStorage
+                    localStorage.setItem('lastActiveMenu', parentMenu);
                     setActiveMenu(parentMenu);
                 }
                 setActiveSubmenuItem(this);
@@ -452,7 +655,22 @@
         document.addEventListener('DOMContentLoaded', function() {
             populateKelompokDropdown(kelompokIntegrasiData);
             populateKelompokDropdown(kelompokIntegrasiData, true);
-            setActiveMenu(currentActiveMenu);
+
+            // Cek parameter 'from' di URL
+            const params = new URLSearchParams(window.location.search);
+            const from = params.get('from');
+
+            if (from) {
+                setActiveMenu(from);
+            } else {
+                // Cek localStorage untuk lastActiveMenu
+                const lastActiveMenu = localStorage.getItem('lastActiveMenu');
+                if (lastActiveMenu) {
+                    setActiveMenu(lastActiveMenu);
+                } else {
+                    setActiveMenu(currentActiveMenu);
+                }
+            }
         });
     </script>
 </body>

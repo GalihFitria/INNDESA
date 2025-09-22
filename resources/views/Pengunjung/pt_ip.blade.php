@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="id">
 
@@ -9,6 +10,46 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        /* PRELOADER */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 255);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .logo-loading {
+            width: 120px;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .fade-out {
+            opacity: 0;
+            transition: opacity 0.5s ease-out;
+        }
+
+        body:not(.loaded)>*:not(#preloader) {
+            display: none;
+        }
+
+
+
         .hero-title {
             text-shadow: 2px 2px 0px #ffffff, -2px -2px 0px #ffffff, 2px -2px 0px #ffffff, -2px 2px 0px #ffffff, 0px 2px 0px #ffffff, 2px 0px 0px #ffffff, 0px -2px 0px #ffffff, -2px 0px 0px #ffffff;
             -webkit-text-stroke: 1px #ffffff;
@@ -240,7 +281,7 @@
             border-radius: 50%;
             background: #0097D4;
             border: 4px solid white;
-            box-shadow: 0 0 0 4px #e5e7eb;
+            box-shadow: 0 0 0 0 4px #e5e7eb;
         }
 
         .timeline-item.active::before {
@@ -387,7 +428,7 @@
 
             .card {
                 padding: 0.5rem;
-                box-hot: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+                box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
             }
 
             .btn {
@@ -510,7 +551,7 @@
 
             h2 {
                 font-size: 1.2rem;
-                /* Mengecilkan heading utama */
+                /* Mengecilkan heading utama di HP */
             }
 
             h3 {
@@ -637,8 +678,11 @@
 </head>
 
 <body class="min-h-screen bg-white font-poppins">
+    <div id="preloader">
+        <img src="{{ asset('images/logo.png') }}" alt="Logo Website" class="logo-loading">
+    </div>
     @include('navbar')
-    
+
     <section
         class="relative text-white overflow-hidden min-h-[300px] sm:min-h-[400px] md:min-h-[550px] flex flex-col items-center pt-20 sm:pt-28 md:pt-32 parallax-bg"
         style="background-image: url('{{ asset('images/background_beranda_INNDESA.jpeg') }}'); background-size: cover; background-position: center;">
@@ -655,7 +699,7 @@
             </h2>
         </div>
     </section>
-    
+
     <section class="py-16 bg-white reveal">
         <div class="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-600 mb-6 text-center section-title">
             <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-600 mb-6 text-center section-title">Profile Perusahaan</h2>
@@ -815,11 +859,10 @@
                         </div>
                     </div>
                 </section>
-
             </div>
-
         </div>
     </section>
+
     <div class="mt-20">
         @include('footer')
     </div>
@@ -854,6 +897,19 @@
         if (parallax) {
             parallax.style.backgroundPositionY = -(scrolled * 0.2) + 'px';
         }
+    });
+
+    // JS PRELOADER
+    window.addEventListener("load", function() {
+        let preloader = document.getElementById("preloader");
+        // Add fade-out animation
+        preloader.classList.add("fade-out");
+
+        // After animation completes, hide preloader and show content
+        setTimeout(function() {
+            preloader.style.display = "none";
+            document.body.classList.add("loaded");
+        }, 500); // Match transition duration (0.5s)
     });
 </script>
 

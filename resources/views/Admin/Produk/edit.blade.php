@@ -13,13 +13,15 @@
         @csrf
         @method('PUT')
 
-        {{-- Pilih Kelompok --}}
         <div class="mb-4">
             <label for="id_kelompok" class="block text-sm font-medium text-gray-700">Nama Kelompok</label>
-            <select name="id_kelompok" id="id_kelompok" class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
+            <select name="id_kelompok" id="id_kelompok"
+                class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500 @error('id_kelompok') border-red-500 @enderror select2"
+                style="width: 100%;" required>
                 <option value="">-- Pilih Kelompok --</option>
                 @foreach ($kelompok as $k)
-                <option value="{{ $k->id_kelompok }}" {{ old('id_kelompok', $produk->id_kelompok) == $k->id_kelompok ? 'selected' : '' }}>
+                <option value="{{ $k->id_kelompok }}"
+                    {{ old('id_kelompok', $produk->id_kelompok ?? '') == $k->id_kelompok ? 'selected' : '' }}>
                     {{ $k->nama }}
                 </option>
                 @endforeach
@@ -29,7 +31,6 @@
             @enderror
         </div>
 
-        {{-- Nama Produk --}}
         <div>
             <label for="nama" class="block text-sm font-medium text-gray-700">Nama Produk</label>
             <input type="text" name="nama" id="nama" value="{{ old('nama', $produk->nama) }}" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500" required>
@@ -38,7 +39,6 @@
             @enderror
         </div>
 
-        {{-- Harga --}}
         <div>
             <label for="harga" class="block text-sm font-medium text-gray-700">Harga</label>
             <input type="text" name="harga" id="harga" value="{{ old('harga', $produk->harga) }}" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500" required>
@@ -47,7 +47,6 @@
             @enderror
         </div>
 
-        {{-- Stok --}}
         <div>
             <label for="stok" class="block text-sm font-medium text-gray-700">Stok</label>
             <input type="text" name="stok" id="stok" value="{{ old('stok', $produk->stok) }}" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500" required>
@@ -56,7 +55,6 @@
             @enderror
         </div>
 
-        {{-- Foto Produk --}}
         <div>
             <label for="foto" class="block text-sm font-medium text-gray-700">Foto Produk</label>
             @if ($produk->foto)
@@ -77,7 +75,6 @@
             @enderror
         </div>
 
-        {{-- Deskripsi --}}
         <div>
             <label for="deskripsi" class="block text-sm font-medium text-gray-700">Deskripsi</label>
             <textarea name="deskripsi" id="deskripsi" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500" required>{{ old('deskripsi', $produk->deskripsi ?? '') }}</textarea>
@@ -86,7 +83,6 @@
             @enderror
         </div>
 
-        {{-- Sertifikat --}}
         <div>
             <label for="sertifikat" class="block text-sm font-medium text-gray-700">Sertifikat</label>
             @php $sertifikatPaths = $produk->sertifikat ? json_decode($produk->sertifikat, true) : []; @endphp
@@ -114,7 +110,6 @@
             @enderror
         </div>
 
-        {{-- Produk Terjual (Read-Only, default 0) --}}
         <div>
             <label for="produk_terjual" class="block text-sm font-medium text-gray-700">Produk Terjual</label>
             <input type="text" name="produk_terjual" id="produk_terjual" value="0" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500" readonly required>
@@ -123,7 +118,6 @@
             @enderror
         </div>
 
-        {{-- Tombol --}}
         <div class="flex justify-end space-x-4">
             <a href="{{ route('Admin.produk.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 flex items-center">
                 <i class="fas fa-arrow-left mr-2"></i>Kembali
@@ -134,7 +128,6 @@
         </div>
     </form>
 
-    {{-- Modal Preview --}}
     <div id="previewModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
         <div class="bg-white p-4 rounded-lg w-[800px] h-[600px] relative">
             <button onclick="closePreview()" class="absolute top-2 right-2 bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">✕</button>
@@ -165,8 +158,19 @@
     </div>
 </div>
 
-{{-- Script --}}
+
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 <script>
+    $(document).ready(function() {
+        $('#id_kelompok').select2({
+            placeholder: "-- Pilih Kelompok --",
+            allowClear: true
+        });
+    });
+
     let fotoFile = null;
     let sertifikatFiles = [];
     let currentPreview = {
@@ -256,7 +260,6 @@
         input.name = 'removed_sertifikat[]';
         input.value = path;
         container.appendChild(input);
-        // Remove from existing_sertifikat_container
         const existingInputs = document.querySelectorAll('#existing_sertifikat_container input[value="' + path + '"]');
         existingInputs.forEach(input => input.remove());
     }

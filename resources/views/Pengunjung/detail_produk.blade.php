@@ -10,6 +10,43 @@
     <!-- Tambahkan PDF.js library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
     <style>
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 255);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .logo-loading {
+            width: 120px;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .fade-out {
+            opacity: 0;
+            transition: opacity 0.5s ease-out;
+        }
+
+        body:not(.loaded)>*:not(#preloader) {
+            display: none;
+        }
+
         html,
         body {
             height: 100%;
@@ -226,6 +263,7 @@
         }
 
         @media (min-width: 1024px) {
+
             #content-deskripsi,
             #content-sertifikat {
                 min-height: 350px;
@@ -552,6 +590,9 @@
 </head>
 
 <body class="bg-white">
+    <div id="preloader">
+        <img src="{{ asset('images/logo.png') }}" alt="Logo Website" class="logo-loading">
+    </div>
     @include('navbar')
     <div class="content w-full mt-6 px-6 lg:px-12">
         <div class="bg-white card p-6 grid grid-cols-1 md:grid-cols-2 gap-6 min-h-[450px]">
@@ -578,7 +619,6 @@
                         Stok: {{ $produk->stok }}
                     </p>
                 </div>
-
                 <div class="w-full mt-6">
                     <div class="flex bg-gray-200 rounded-lg overflow-hidden">
                         <button id="tab-deskripsi"
@@ -598,7 +638,6 @@
                             {{ $produk->deskripsi }}
                         </p>
                     </div>
-
                     <!-- SERTIFIKAT -->
                     <div id="content-sertifikat" class="hidden mt-4">
                         <div class="relative">
@@ -713,7 +752,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div id="previewModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div class="bg-white p-4 rounded-lg w-11/12 h-5/6 relative">
                         <a id="downloadLink" href="#" download class="absolute bottom-4 left-4 bg-green-500 text-white px-3 py-2 rounded text-sm font-medium hover:bg-green-600 transition hidden" aria-label="Download file">
@@ -788,7 +826,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="flex flex-col border-t border-gray-300 mt-4 pt-4">
                     <span class="text-gray-700 mb-2">Untuk pemesanan dapat menghubungi kami:</span>
                     <div class="flex flex-wrap items-center gap-4">
@@ -799,7 +836,6 @@
                             </svg>
                             <span class="text-gray-700 font-bold">{{ $produk->kelompok->nama }}</span>
                         </div>
-
                         <div class="relative">
                             <button onclick="toggleContactDropdown()"
                                 class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
@@ -807,10 +843,10 @@
                             </button>
                             <div id="contactDropdownMenu"
                                 class="hidden absolute top-full left-0 mt-2 w-56 bg-white border rounded-lg shadow-lg z-50">
-                                <a href="https://wa.me/6281327661330"
+                                <a href="https://wa.me/6289647038212?text={{ urlencode('Halo, saya tertarik dengan produk ' . $produk->nama . '. Harga: Rp. ' . number_format($produk->harga, 0, ',', '.') . '. Link produk: ' . route('detail_produk.show', $produk->id_produk)) }}"
                                     class="flex flex-col px-4 py-2 text-gray-700 hover:bg-gray-100">
                                     <span class="font-semibold">WhatsApp</span>
-                                    <span class="text-sm text-gray-500">+62 813-2766-1330</span>
+                                    <span class="text-sm text-gray-500">+62 896-4703-8212</span>
                                 </a>
                                 <a href="https://www.instagram.com/fijarrfqh_/"
                                     class="flex flex-col px-4 py-2 text-gray-700 hover:bg-gray-100">
@@ -868,15 +904,23 @@
             </div>
         </div>
     </div>
-
     <footer class="w-full">
         @include('footer')
     </footer>
-
     <script>
+        // JS PRELOADER
+        window.addEventListener("load", function() {
+            let preloader = document.getElementById("preloader");
+            // Add fade-out animation
+            preloader.classList.add("fade-out");
+            // After animation completes, hide preloader and show content
+            setTimeout(function() {
+                preloader.style.display = "none";
+                document.body.classList.add("loaded");
+            }, 500); // Match transition duration (0.5s)
+        });
         // Set worker untuk PDF.js
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
-
         document.addEventListener('DOMContentLoaded', () => {
             const noContextElements = document.querySelectorAll('.no-context-menu');
             noContextElements.forEach(element => {
@@ -884,25 +928,21 @@
                 element.addEventListener('dragstart', (e) => e.preventDefault());
                 element.addEventListener('selectstart', (e) => e.preventDefault());
             });
-
             document.addEventListener('contextmenu', (e) => {
                 if (e.target.tagName === 'IMG' || e.target.tagName === 'OBJECT' || e.target.tagName === 'IFRAME') {
                     e.preventDefault();
                 }
             });
-
             document.addEventListener('dragstart', (e) => {
                 if (e.target.tagName === 'IMG' || e.target.tagName === 'OBJECT' || e.target.tagName === 'IFRAME') {
                     e.preventDefault();
                 }
             });
-
             document.addEventListener('selectstart', (e) => {
                 if (e.target.tagName === 'IMG' || e.target.tagName === 'OBJECT' || e.target.tagName === 'IFRAME') {
                     e.preventDefault();
                 }
             });
-
             // Inisialisasi carousel
             ['sertifikat', 'produk'].forEach(section => {
                 const items = document.querySelectorAll(`#${section}-carousel .${section}-item`);
@@ -910,7 +950,6 @@
                     showSlide(section, 0);
                 }
             });
-
             // Inisialisasi PDF.js untuk inline preview
             initializeInlinePdfs();
         });
@@ -941,32 +980,30 @@
                 }
             });
         }
-
         async function renderPdfWithJs(pdfUrl, containerId) {
             try {
                 const container = document.getElementById(containerId);
                 if (!container) return false;
-
                 const loadingDiv = container.querySelector('.pdf-loading');
                 if (loadingDiv) loadingDiv.style.display = 'flex';
-
                 const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
                 const numPages = pdf.numPages;
-
                 if (loadingDiv) loadingDiv.style.display = 'none';
-
                 const canvases = container.querySelectorAll('.pdf-page-canvas');
                 canvases.forEach(canvas => canvas.remove());
-
                 for (let pageNum = 1; pageNum <= numPages; pageNum++) {
                     const page = await pdf.getPage(pageNum);
                     const containerWidth = container.clientWidth;
                     const containerHeight = container.clientHeight;
-                    const viewport = page.getViewport({ scale: 1.0 });
+                    const viewport = page.getViewport({
+                        scale: 1.0
+                    });
                     const scaleX = containerWidth / viewport.width;
                     const scaleY = containerHeight / viewport.height;
                     const scale = Math.min(scaleX, scaleY, 1.5);
-                    const scaledViewport = page.getViewport({ scale: scale });
+                    const scaledViewport = page.getViewport({
+                        scale: scale
+                    });
                     const canvas = document.createElement('canvas');
                     const context = canvas.getContext('2d');
                     canvas.height = scaledViewport.height;
@@ -979,7 +1016,6 @@
                     await page.render(renderContext).promise;
                     container.appendChild(canvas);
                 }
-
                 container.scrollTop = 0;
                 return true;
             } catch (error) {
@@ -987,7 +1023,6 @@
                 return false;
             }
         }
-
         async function checkPdfLoad(iframe, type, index, pdfUrl) {
             setTimeout(async () => {
                 try {
@@ -1090,13 +1125,11 @@
                 }
             }, 3000);
         }
-
         async function checkModalPdfLoad() {
             const iframe = document.getElementById('previewPdf');
             const fallback = document.getElementById('previewPdfFallback');
             const objectTag = document.getElementById('previewPdfObject');
             const jsContainer = document.getElementById('pdfModalJsContainer');
-
             setTimeout(async () => {
                 try {
                     if (iframe.contentDocument && iframe.contentDocument.body) {
@@ -1159,16 +1192,13 @@
             const jsContainer = document.getElementById('pdfModalJsContainer');
             const previewTitle = document.getElementById('previewTitle');
             const downloadLink = document.getElementById('downloadLink');
-
             previewTitle.textContent = title;
-
             if (isKatalog) {
                 downloadLink.href = fileSrc;
                 downloadLink.classList.remove('hidden');
             } else {
                 downloadLink.classList.add('hidden');
             }
-
             const watermarks = [
                 'imageWatermarkMobile',
                 'imageWatermarkDesktop',
@@ -1186,17 +1216,14 @@
                     if (wm) wm.style.display = 'block';
                 });
             }
-
             if (type === 'pdf') {
                 previewImage.classList.add('hidden');
                 pdfModalContainer.classList.remove('hidden');
                 previewPdfFallback.classList.add('hidden');
                 previewPdfObject.classList.add('hidden');
                 jsContainer.classList.add('hidden');
-
                 previewPdfLink.href = fileSrc;
                 previewPdfLink2.href = fileSrc;
-
                 const canvasContainer = document.getElementById('pdfModalJsContainer');
                 while (canvasContainer.firstChild) {
                     if (canvasContainer.firstChild.classList && canvasContainer.firstChild.classList.contains('pdf-loading')) {
@@ -1204,7 +1231,6 @@
                     }
                     canvasContainer.removeChild(canvasContainer.firstChild);
                 }
-
                 if (window.innerWidth <= 768) {
                     jsContainer.classList.remove('hidden');
                     renderPdfWithJs(fileSrc, 'pdfModalJsContainer').then(success => {
@@ -1231,7 +1257,6 @@
                 previewImage.classList.remove('hidden');
                 previewImage.src = fileSrc;
             }
-
             modal.classList.remove('hidden');
             modal.focus();
         }
@@ -1273,7 +1298,6 @@
         function toggleContactDropdown() {
             document.getElementById("contactDropdownMenu").classList.toggle("hidden");
         }
-
         document.addEventListener("click", function(event) {
             const dropdown = document.getElementById("contactDropdownMenu");
             const button = event.target.closest("button[onclick='toggleContactDropdown()']");
@@ -1281,7 +1305,6 @@
                 dropdown.classList.add("hidden");
             }
         });
-
         // ========== PAGINATION SYSTEM DENGAN NOMOR HALAMAN ==========
         let sertifikatPage = 1;
         let produkPage = 1;
@@ -1297,15 +1320,11 @@
             const pagination = document.getElementById(`${idPrefix}-pagination`);
             const prevBtn = document.getElementById(`${idPrefix}-prev`);
             const nextBtn = document.getElementById(`${idPrefix}-next`);
-
             if (!pagination || items.length === 0) return;
-
             pagination.innerHTML = '';
-
             const total = items.length;
             const itemsPerPage = getItemsPerPage(idPrefix);
             const totalPages = Math.ceil(total / itemsPerPage);
-
             if (total <= itemsPerPage) {
                 if (prevBtn) prevBtn.style.display = "none";
                 if (nextBtn) nextBtn.style.display = "none";
@@ -1314,27 +1333,22 @@
                 if (prevBtn) prevBtn.style.display = "inline-block";
                 if (nextBtn) nextBtn.style.display = "inline-block";
             }
-
             const current = getCurrentSlideIndex(idPrefix) + 1;
             const page = Math.ceil(current / itemsPerPage);
             if (idPrefix === 'sertifikat') sertifikatPage = page;
             else produkPage = page;
-
             const maxButtons = 3;
             let startPage, endPage;
-
             const groupSize = maxButtons;
             const currentGroup = Math.ceil(page / groupSize);
             startPage = (currentGroup - 1) * groupSize + 1;
             endPage = Math.min(startPage + groupSize - 1, totalPages);
-
             if (startPage > 3 && currentGroup > 2) {
                 const dots = document.createElement('span');
                 dots.textContent = '...';
                 dots.className = "px-2";
                 pagination.appendChild(dots);
             }
-
             for (let p = startPage; p <= endPage; p++) {
                 const btn = document.createElement('button');
                 btn.textContent = p;
@@ -1345,28 +1359,24 @@
                 };
                 pagination.appendChild(btn);
             }
-
             if (endPage < totalPages) {
                 const dots = document.createElement('span');
                 dots.textContent = '...';
                 dots.className = "px-2";
                 pagination.appendChild(dots);
             }
-
             updateNavigationButtons(idPrefix, current, total, itemsPerPage);
         }
 
         function updateNavigationButtons(idPrefix, current, total, itemsPerPage) {
             const prevBtn = document.getElementById(`${idPrefix}-prev`);
             const nextBtn = document.getElementById(`${idPrefix}-next`);
-
             if (prevBtn) {
                 const isFirstPage = current <= itemsPerPage;
                 prevBtn.disabled = isFirstPage;
                 prevBtn.classList.toggle('opacity-50', isFirstPage);
                 prevBtn.classList.toggle('cursor-not-allowed', isFirstPage);
             }
-
             if (nextBtn) {
                 const isLastPage = current + itemsPerPage - 1 >= total;
                 nextBtn.disabled = isLastPage;
@@ -1379,11 +1389,9 @@
             const items = document.querySelectorAll(`#${idPrefix}-carousel .${idPrefix}-item`);
             let current = getCurrentSlideIndex(idPrefix);
             const itemsPerPage = getItemsPerPage(idPrefix);
-
             if (current < items.length - itemsPerPage) {
                 showSlide(idPrefix, current + itemsPerPage);
             }
-
             const prevBtn = document.getElementById(`${idPrefix}-prev`);
             if (prevBtn && current + itemsPerPage > 0) {
                 prevBtn.disabled = false;
@@ -1394,11 +1402,9 @@
         function prevSlide(idPrefix) {
             let current = getCurrentSlideIndex(idPrefix);
             const itemsPerPage = getItemsPerPage(idPrefix);
-
             if (current >= itemsPerPage) {
                 showSlide(idPrefix, current - itemsPerPage);
             }
-
             const items = document.querySelectorAll(`#${idPrefix}-carousel .${idPrefix}-item`);
             const nextBtn = document.getElementById(`${idPrefix}-next`);
             if (nextBtn && current - itemsPerPage < items.length - itemsPerPage) {
@@ -1409,21 +1415,16 @@
 
         function showSlide(idPrefix, index) {
             const items = document.querySelectorAll(`#${idPrefix}-carousel .${idPrefix}-item`);
-
             if (items.length === 0) return;
             if (index >= items.length) index = Math.max(0, items.length - getItemsPerPage(idPrefix));
             if (index < 0) index = 0;
-
             const itemsPerPage = getItemsPerPage(idPrefix);
             const batchStart = Math.floor(index / itemsPerPage) * itemsPerPage;
-
             items.forEach((item, i) => {
                 const isInBatch = i >= batchStart && i < batchStart + itemsPerPage;
                 item.classList.toggle('hidden', !isInBatch);
             });
-
             renderPagination(idPrefix);
-
             if (idPrefix === 'sertifikat') {
                 setTimeout(() => {
                     initializeInlinePdfs();
@@ -1440,7 +1441,6 @@
             }
             return 0;
         }
-
         // Swipe functionality for mobile
         function handleSwipe(startX, endX, idPrefix) {
             const threshold = 50;
@@ -1453,7 +1453,6 @@
                 }
             }
         }
-
         document.addEventListener('DOMContentLoaded', function() {
             const produkCarousel = document.getElementById('produk-carousel');
             let startX = 0;
@@ -1467,7 +1466,6 @@
                     handleSwipe(startX, endX, 'produk');
                 });
             }
-
             window.addEventListener('resize', function() {
                 showSlide('sertifikat', getCurrentSlideIndex('sertifikat'));
                 showSlide('produk', getCurrentSlideIndex('produk'));

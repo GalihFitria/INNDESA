@@ -8,6 +8,44 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 255);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .logo-loading {
+            width: 120px;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .fade-out {
+            opacity: 0;
+            transition: opacity 0.5s ease-out;
+        }
+
+        body:not(.loaded) #content {
+            display: none;
+        }
+
+
         body {
             font-family: 'Poppins', sans-serif;
         }
@@ -186,10 +224,9 @@
                     </div>
                 </div>
                 <div class="mt-4 sm:mt-6">
-                    <a href="{{ url()->previous() }}"
-                        class="inline-block px-4 sm:px-5 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm sm:text-base">
+                    <button onclick="goBack()" class="inline-block px-4 sm:px-5 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm sm:text-base">
                         ← Kembali
-                    </a>
+                    </button>
                 </div>
             </div>
 
@@ -260,11 +297,40 @@
             </div>
         </div>
     </div>
+
+    <div id="preloader">
+        <img src="{{ asset('images/logo.png') }}" alt="Logo Website" class="logo-loading">
+    </div>
+
     <div class="mt-10 sm:mt-20">
         @include('footer')
     </div>
 
     <script>
+        // Fungsi untuk tombol kembali dengan fallback ke Beranda (ganti '/' dengan route Beranda kalau beda)
+        function goBack() {
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                window.location.href = '/'; // Fallback ke halaman Beranda kalau nggak ada history
+            }
+        }
+
+        // JS PRELOADER
+        window.addEventListener("load", function() {
+            let preloader = document.getElementById("preloader");
+            let content = document.getElementById("content");
+
+            // Add fade-out animation
+            preloader.classList.add("fade-out");
+
+            // After animation completes, hide preloader and show content
+            setTimeout(function() {
+                preloader.style.display = "none";
+                document.body.classList.add("loaded");
+            }, 500); // Match transition duration (0.5s)
+        });
+
         document.addEventListener('DOMContentLoaded', function() {
             const kegiatanDataItems = document.querySelectorAll('.kegiatan-data-item');
             const container = document.getElementById('kegiatan-container');

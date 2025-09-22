@@ -45,21 +45,32 @@
         <div class="flex items-center justify-between">
             <div>
                 <p class="text-sm text-gray-600">Total Views</p>
-                <p id="viewCount" class="text-2xl font-bold text-gray-800">0</p>
+                <p id="viewCount" class="text-2xl font-bold text-gray-800">{{ $totalViews }}</p>
             </div>
-            <i class="fas fa-eye text-3xl text-orange-600"></i>
+            <i class="fas fa-eye text-3xl text-blue-600"></i>
         </div>
     </div>
 </div>
 
+<!-- Tambahkan script untuk refresh data secara real-time -->
 <script>
-    // View-display logic (only read from localStorage, do not increment)
-    let views = localStorage.getItem("page_views") || 0;
-    views = parseInt(views);
+    // Fungsi untuk refresh data statistik
+    async function refreshStats() {
+        try {
+            const response = await fetch("/api/statistik");
+            const data = await response.json();
 
-    const viewCountEl = document.getElementById("viewCount");
-    if (viewCountEl) {
-        viewCountEl.textContent = views;
+            // Update view count
+            const viewCountEl = document.getElementById("viewCount");
+            if (viewCountEl) {
+                viewCountEl.textContent = data.homePageViews;
+            }
+        } catch (error) {
+            console.error("Gagal refresh statistik:", error);
+        }
     }
+
+    // Refresh statistik setiap 10 detik
+    setInterval(refreshStats, 10000);
 </script>
 @endsection

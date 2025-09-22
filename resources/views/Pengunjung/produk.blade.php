@@ -8,6 +8,45 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        /* PRELOADER */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 255);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .logo-loading {
+            width: 120px;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .fade-out {
+            opacity: 0;
+            transition: opacity 0.5s ease-out;
+        }
+
+        body:not(.loaded)>*:not(#preloader) {
+            display: none;
+        }
+
+
         .hero-title {
             text-shadow: 2px 2px 0px #ffffff, -2px -2px 0px #ffffff, 2px -2px 0px #ffffff, -2px 2px 0px #ffffff, 0px 2px 0px #ffffff, 2px 0px 0px #ffffff, 0px -2px 0px #ffffff, -2px 0px 0px #ffffff;
             -webkit-text-stroke: 1px #ffffff;
@@ -195,105 +234,176 @@
                 gap: 1rem;
             }
 
-            /* Filter mobile - Full screen overlay */
-            .filter-mobile-overlay {
-                position: fixed;
-                top: 0;
+            /* Filter mobile - Button and dropdown style */
+            .mobile-filter-container {
+                display: flex;
+                gap: 0.5rem;
+                margin-bottom: 0.75rem;
+            }
+
+            .filter-button {
+                flex: 1;
+                background-color: #0097D4;
+                color: white;
+                border: none;
+                border-radius: 0.5rem;
+                padding: 0.75rem;
+                font-size: 0.875rem;
+                font-weight: 500;
+                cursor: pointer;
+                transition: all 0.2s;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.5rem;
+            }
+
+            .filter-button:hover {
+                background-color: #007bb3;
+            }
+
+            .reset-button {
+                background-color: #6b7280;
+                color: white;
+                border: none;
+                border-radius: 0.5rem;
+                padding: 0.75rem;
+                font-size: 0.875rem;
+                font-weight: 500;
+                cursor: pointer;
+                transition: all 0.2s;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.5rem;
+            }
+
+            .reset-button:hover {
+                background-color: #4b5563;
+            }
+
+            .filter-dropdown {
+                position: relative;
+                width: 100%;
+            }
+
+            .filter-dropdown-content {
+                position: absolute;
+                top: 100%;
                 left: 0;
                 right: 0;
-                bottom: 0;
-                background: rgba(0, 0, 0, 0.5);
+                background-color: white;
+                border: 1px solid #d1d5db;
+                border-radius: 0.5rem;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
                 z-index: 50;
-                display: flex;
-                align-items: flex-end;
-                justify-content: center;
-            }
-
-            .filter-mobile-content {
-                background: white;
-                width: 100%;
-                max-height: 80vh;
+                margin-top: 0.25rem;
+                max-height: 300px;
                 overflow-y: auto;
-                border-radius: 1rem 1rem 0 0;
-                padding: 1.5rem 1rem;
-                transform: translateY(100%);
-                transition: transform 0.3s ease-in-out;
+                display: none;
             }
 
-            .filter-mobile-overlay.show .filter-mobile-content {
-                transform: translateY(0);
+            .filter-dropdown-content.show {
+                display: block;
             }
 
-            .filter-mobile-header {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-bottom: 1.5rem;
-                padding-bottom: 0.75rem;
+            .filter-dropdown-header {
+                padding: 0.5rem 1rem;
                 border-bottom: 1px solid #e5e7eb;
-            }
-
-            .filter-mobile-header h2 {
-                font-size: 1.25rem;
                 font-weight: 600;
                 color: #374151;
+                font-size: 0.875rem;
             }
 
-            .close-filter-btn {
-                background: none;
-                border: none;
-                font-size: 1.5rem;
-                color: #6b7280;
-                cursor: pointer;
-                padding: 0.25rem;
-                line-height: 1;
+            .filter-dropdown-body {
+                padding: 0.25rem 0;
             }
 
-            .close-filter-btn:hover {
-                color: #374151;
-            }
-
-            /* Checkbox styling mobile */
-            .checkbox-mobile {
-                padding: 0.75rem;
-                border-radius: 0.5rem;
-                border: 1px solid #e5e7eb;
-                margin-bottom: 0.5rem;
-                transition: all 0.2s;
-            }
-
-            .checkbox-mobile:hover {
-                background-color: #f9fafb;
-                border-color: #0097D4;
-            }
-
-            .checkbox-mobile input[type="checkbox"] {
-                margin-right: 0.75rem;
-                transform: scale(1.2);
-                accent-color: #0097D4;
-            }
-
-            .checkbox-mobile span {
-                font-size: 0.9375rem;
-                color: #374151;
-            }
-
-            /* Buttons mobile */
-            .buttons-mobile {
+            .filter-dropdown-item {
+                padding: 0.25rem 1rem;
                 display: flex;
-                gap: 0.75rem;
-                margin-top: 1.5rem;
-                padding-top: 1rem;
+                align-items: center;
+                cursor: pointer;
+                transition: background-color 0.2s;
+            }
+
+            .filter-dropdown-item:hover {
+                background-color: #f9fafb;
+            }
+
+            .filter-dropdown-item input[type="checkbox"] {
+                margin-right: 0.5rem;
+                accent-color: #0097D4;
+                width: 0.875rem;
+                height: 0.875rem;
+            }
+
+            .filter-dropdown-item span {
+                font-size: 0.875rem;
+            }
+
+            .filter-dropdown-footer {
+                padding: 0.5rem 1rem;
                 border-top: 1px solid #e5e7eb;
             }
 
-            .buttons-mobile button {
-                flex: 1;
-                padding: 0.875rem;
-                border-radius: 0.5rem;
-                font-weight: 600;
-                font-size: 0.9375rem;
+            .filter-dropdown-apply {
+                width: 100%;
+                background-color: #0097D4;
+                color: white;
+                border: none;
+                border-radius: 0.375rem;
+                padding: 0.5rem;
+                font-size: 0.875rem;
+                font-weight: 500;
+                cursor: pointer;
                 transition: all 0.2s;
+            }
+
+            .filter-dropdown-apply:hover {
+                background-color: #007bb3;
+            }
+
+            /* No products message */
+            .no-products {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                padding: 2rem 1rem;
+                color: #6b7280;
+                min-height: 300px;
+            }
+
+            .no-products-title {
+                font-size: 1.125rem;
+                font-weight: 600;
+                margin-bottom: 0.75rem;
+                color: #374151;
+            }
+
+            .no-products-text {
+                font-size: 0.875rem;
+                max-width: 400px;
+                margin: 0 auto 1.5rem;
+                line-height: 1.5;
+            }
+
+            .no-products-button {
+                background-color: #0097D4;
+                color: white;
+                border: none;
+                border-radius: 0.5rem;
+                padding: 0.75rem 1.25rem;
+                font-size: 0.875rem;
+                font-weight: 500;
+                cursor: pointer;
+                transition: all 0.2s;
+            }
+
+            .no-products-button:hover {
+                background-color: #007bb3;
             }
 
             /* Pagination mobile */
@@ -329,6 +439,71 @@
             .product-card img {
                 height: 180px;
             }
+
+            /* No products message for tablet */
+            .no-products {
+                padding: 3rem 1rem;
+                min-height: 350px;
+            }
+
+            .no-products-title {
+                font-size: 1.375rem;
+            }
+
+            .no-products-text {
+                font-size: 1rem;
+                max-width: 500px;
+            }
+
+            .no-products-button {
+                font-size: 1rem;
+                padding: 0.75rem 1.5rem;
+            }
+        }
+
+        /* Desktop responsive */
+        @media (min-width: 1025px) {
+
+            /* No products message for desktop */
+            .no-products {
+                padding: 4rem 1rem;
+                min-height: 400px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+            }
+
+            .no-products-title {
+                font-size: 1.5rem;
+                font-weight: 600;
+                margin-bottom: 1rem;
+                color: #374151;
+            }
+
+            .no-products-text {
+                font-size: 1.125rem;
+                max-width: 600px;
+                margin: 0 auto 2rem;
+                line-height: 1.5;
+            }
+
+            .no-products-button {
+                background-color: #0097D4;
+                color: white;
+                border: none;
+                border-radius: 0.5rem;
+                padding: 0.75rem 1.5rem;
+                font-size: 1rem;
+                font-weight: 500;
+                cursor: pointer;
+                transition: all 0.2s;
+            }
+
+            .no-products-button:hover {
+                background-color: #007bb3;
+            }
         }
 
         /* Very small mobile (iPhone SE, etc) */
@@ -357,6 +532,26 @@
 
             .container-mobile {
                 padding: 0 0.5rem;
+            }
+
+            /* No products message for very small mobile */
+            .no-products {
+                padding: 1.5rem 1rem;
+                min-height: 250px;
+            }
+
+            .no-products-title {
+                font-size: 1rem;
+            }
+
+            .no-products-text {
+                font-size: 0.8125rem;
+                margin-bottom: 1rem;
+            }
+
+            .no-products-button {
+                font-size: 0.8125rem;
+                padding: 0.5rem 1rem;
             }
         }
 
@@ -427,6 +622,9 @@
 </head>
 
 <body class="min-h-screen bg-white">
+    <div id="preloader">
+        <img src="{{ asset('images/logo.png') }}" alt="Logo Website" class="logo-loading">
+    </div>
     @include('navbar')
 
     <section class="relative text-white overflow-hidden min-h-[550px] sm:min-h-[450px] md:min-h-[550px] flex flex-col items-center pt-32 sm:pt-24 md:pt-32 hero-section-mobile hero-section-tablet"
@@ -466,23 +664,44 @@
         <!-- KATEGORI -->
         <div class="col-span-12 md:col-span-3">
             <form id="kategoriForm" action="{{ route('produk.index') }}" method="GET">
-                <!-- Tombol filter muncul hanya di mobile -->
-                <!-- Container untuk button filter dan reset di mobile -->
-                <div class="md:hidden flex gap-2 mb-4">
-                    <button type="button" id="filterToggle"
-                        class="flex-1 bg-[#0097D4] text-white py-3 rounded-lg font-medium hover:bg-[#007bb3] flex items-center justify-center gap-2 transition-all">
+                <!-- Tombol filter dan reset untuk mobile -->
+                <div class="md:hidden mobile-filter-container">
+                    <button type="button" id="filterButton" class="filter-button">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.707A1 1 0 013 7V4z"></path>
                         </svg>
                         Filter
                     </button>
-                    <a href="{{ route('produk.index') }}"
-                        class="flex-shrink-0 bg-gray-500 text-white py-3 px-4 rounded-lg font-medium hover:bg-gray-600 flex items-center justify-center gap-2 transition-all">
+                    <a href="{{ route('produk.index') }}" class="reset-button">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
                         </svg>
                         Reset
                     </a>
+                </div>
+
+                <!-- Dropdown filter untuk mobile -->
+                <div class="md:hidden filter-dropdown">
+                    <div class="filter-dropdown-content" id="filterDropdownContent">
+                        <div class="filter-dropdown-header">
+                            Kelompok
+                        </div>
+                        <div class="filter-dropdown-body">
+                            @foreach (App\Models\Kelompok::all() as $kelompok)
+                            <label class="filter-dropdown-item">
+                                <input type="checkbox" name="kategori_mobile" value="{{ $kelompok->nama }}"
+                                    class="kategori-mobile text-[#0097D4] rounded focus:ring-[#0097D4]"
+                                    {{ request('kategori') === $kelompok->nama ? 'checked' : '' }}>
+                                <span>{{ $kelompok->nama }}</span>
+                            </label>
+                            @endforeach
+                        </div>
+                        <div class="filter-dropdown-footer">
+                            <button type="button" id="applyFilterDropdown" class="filter-dropdown-apply">
+                                Terapkan
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Box filter untuk desktop -->
@@ -524,110 +743,96 @@
                         </button>
                     </div>
                 </div>
-
-                <!-- Mobile Filter Overlay -->
-                <div id="filterMobileOverlay" class="filter-mobile-overlay hidden">
-                    <div class="filter-mobile-content">
-                        <div class="filter-mobile-header">
-                            <h2>Filter Kategori</h2>
-                            <button type="button" id="closeFilterMobile" class="close-filter-btn">&times;</button>
-                        </div>
-
-                        <div class="space-y-2">
-                            @foreach (App\Models\Kelompok::all() as $kelompok)
-                            <label class="checkbox-mobile flex items-center cursor-pointer">
-                                <input type="checkbox" name="kategori_mobile" value="{{ $kelompok->nama }}"
-                                    class="kategori-mobile text-[#0097D4] rounded focus:ring-[#0097D4]"
-                                    {{ request('kategori') === $kelompok->nama ? 'checked' : '' }}>
-                                <span>{{ $kelompok->nama }}</span>
-                            </label>
-                            @endforeach
-                        </div>
-
-                        <div class="buttons-mobile">
-                            <!-- <button type="button" id="resetBtnMobileOverlay"
-                                class="bg-gray-300 text-gray-700 hover:bg-gray-400">
-                                Reset
-                            </button> -->
-                            <button type="button" id="applyFilterMobile"
-                                class="bg-[#0097D4] text-white hover:bg-[#007bb3]">
-                                Terapkan
-                            </button>
-                        </div>
-                    </div>
-                </div>
             </form>
         </div>
 
         <!-- card produk -->
-        <div class="col-span-12 md:col-span-9 grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-6 grid-mobile">
-            @foreach ($produk as $item)
-            <a href="{{ route('detail_produk.show', $item->id_produk) }}" class="block no-underline group">
-                <div class="product-card hover:shadow-lg transition-all duration-300 border">
-                    <img src="{{ asset('storage/' . $item->foto) }}" alt="{{ $item->nama }}" class="w-full object-cover">
-                    <div class="p-3 sm:p-4 product-card-content">
-                        <h3 class="font-semibold text-sm sm:text-base text-gray-800 mb-2">
-                            {{ $item->nama }}
-                        </h3>
-                        <div class="flex items-center justify-between mt-2">
-                            <p class="text-green-600 font-bold text-sm sm:text-base">
-                                Rp. {{ number_format($item->harga, 0, ',', '.') }}
-                            </p>
-                            <p class="text-gray-500 text-xs sm:text-sm">
-                                Stok: {{ $item->stok }}
-                            </p>
+        <div class="col-span-12 md:col-span-9">
+            @if($produk->count() > 0)
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-6 grid-mobile">
+                @foreach ($produk as $item)
+                <a href="{{ route('detail_produk.show', $item->id_produk) }}" class="block no-underline group">
+                    <div class="product-card hover:shadow-lg transition-all duration-300 border">
+                        <img src="{{ asset('storage/' . $item->foto) }}" alt="{{ $item->nama }}" class="w-full object-cover">
+                        <div class="p-3 sm:p-4 product-card-content">
+                            <h3 class="font-semibold text-sm sm:text-base text-gray-800 mb-2">
+                                {{ $item->nama }}
+                            </h3>
+                            <div class="flex items-center justify-between mt-2">
+                                <p class="text-green-600 font-bold text-sm sm:text-base">
+                                    Rp. {{ number_format($item->harga, 0, ',', '.') }}
+                                </p>
+                                <p class="text-gray-500 text-xs sm:text-sm">
+                                    Stok: {{ $item->stok }}
+                                </p>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </a>
-            @endforeach
-        </div>
-
-        @if ($produk->hasPages())
-        <div class="mt-6 col-span-12 flex justify-center pagination-mobile">
-            <div class="flex items-center space-x-1 sm:space-x-2 overflow-x-auto pb-2">
-
-                @if ($produk->onFirstPage())
-                <span class="pagination-btn disabled">←</span>
-                @else
-                <a href="{{ $produk->previousPageUrl() }}" class="pagination-btn btn-outline">←</a>
-                @endif
-
-                <div class="flex space-x-1">
-                    @php
-                    $start = max(1, $produk->currentPage() - 1);
-                    $end = min($produk->lastPage(), $produk->currentPage() + 1);
-
-                    // Ellipsis awal jika start > 2
-                    if ($start > 2) {
-                    echo '<span class="px-2 text-gray-500 text-sm">...</span>';
-                    }
-                    @endphp
-
-                    @for ($page = $start; $page <= $end; $page++)
-                        @if ($page==$produk->currentPage())
-                        <span class="pagination-btn active">{{ $page }}</span>
-                        @else
-                        <a href="{{ $produk->url($page) }}" class="pagination-btn">{{ $page }}</a>
-                        @endif
-                        @endfor
-
-                        @php
-                        // Ellipsis akhir jika end < lastPage - 1
-                            if ($end < $produk->lastPage() - 1) {
-                            echo '<span class="px-2 text-gray-500 text-sm">...</span>';
-                            }
-                            @endphp
-                </div>
-
-                @if ($produk->hasMorePages())
-                <a href="{{ $produk->nextPageUrl() }}" class="pagination-btn btn-outline">→</a>
-                @else
-                <span class="pagination-btn disabled">→</span>
-                @endif
+                </a>
+                @endforeach
             </div>
+            @else
+            <div class="no-products">
+                <h3 class="no-products-title">Produk tidak tersedia</h3>
+                <p class="no-products-text">
+                    @if(request('kategori'))
+                    Produk pada kelompok "{{ request('kategori') }}" tidak tersedia saat ini.
+                    @else
+                    Tidak ada produk yang sesuai dengan pencarian Anda.
+                    @endif
+                </p>
+                <button onclick="window.location.href='{{ route('produk.index') }}'" class="no-products-button">
+                    Lihat Semua Produk
+                </button>
+            </div>
+            @endif
+
+            @if ($produk->hasPages())
+            <div class="mt-6 flex justify-center pagination-mobile">
+                <div class="flex items-center space-x-1 sm:space-x-2 overflow-x-auto pb-2">
+
+                    @if ($produk->onFirstPage())
+                    <span class="pagination-btn disabled">←</span>
+                    @else
+                    <a href="{{ $produk->previousPageUrl() }}" class="pagination-btn btn-outline">←</a>
+                    @endif
+
+                    <div class="flex space-x-1">
+                        @php
+                        $start = max(1, $produk->currentPage() - 1);
+                        $end = min($produk->lastPage(), $produk->currentPage() + 1);
+
+                        // Ellipsis awal jika start > 2
+                        if ($start > 2) {
+                        echo '<span class="px-2 text-gray-500 text-sm">...</span>';
+                        }
+                        @endphp
+
+                        @for ($page = $start; $page <= $end; $page++)
+                            @if ($page==$produk->currentPage())
+                            <span class="pagination-btn active">{{ $page }}</span>
+                            @else
+                            <a href="{{ $produk->url($page) }}" class="pagination-btn">{{ $page }}</a>
+                            @endif
+                            @endfor
+
+                            @php
+                            // Ellipsis akhir jika end < lastPage - 1
+                                if ($end < $produk->lastPage() - 1) {
+                                echo '<span class="px-2 text-gray-500 text-sm">...</span>';
+                                }
+                                @endphp
+                    </div>
+
+                    @if ($produk->hasMorePages())
+                    <a href="{{ $produk->nextPageUrl() }}" class="pagination-btn btn-outline">→</a>
+                    @else
+                    <span class="pagination-btn disabled">→</span>
+                    @endif
+                </div>
+            </div>
+            @endif
         </div>
-        @endif
     </div>
 
     <div class="mt-12 sm:mt-20">
@@ -640,14 +845,29 @@
     </div>
 
     <script>
+        // JS PRELOADER
+        window.addEventListener("load", function() {
+            let preloader = document.getElementById("preloader");
+            // Add fade-out animation
+            preloader.classList.add("fade-out");
+
+            // After animation completes, hide preloader and show content
+            setTimeout(function() {
+                preloader.style.display = "none";
+                document.body.classList.add("loaded");
+            }, 500); // Match transition duration (0.5s)
+        });
+
         const kategoriCheckboxes = document.querySelectorAll(".kategori");
         const kategoriMobileCheckboxes = document.querySelectorAll(".kategori-mobile");
         const kategoriForm = document.getElementById("kategoriForm");
         const loadingOverlay = document.getElementById("loadingOverlay");
-        const filterToggle = document.getElementById("filterToggle");
-        const filterMobileOverlay = document.getElementById("filterMobileOverlay");
-        const closeFilterMobile = document.getElementById("closeFilterMobile");
-        const applyFilterMobile = document.getElementById("applyFilterMobile");
+        const preloader = document.getElementById("preloader");
+
+        // Mobile filter elements
+        const filterButton = document.getElementById("filterButton");
+        const filterDropdownContent = document.getElementById("filterDropdownContent");
+        const applyFilterDropdown = document.getElementById("applyFilterDropdown");
 
         // Handle checkbox exclusivity (only one checkbox can be checked at a time)
         function handleCheckboxExclusivity(checkboxes) {
@@ -682,81 +902,56 @@
         syncCheckboxes(kategoriCheckboxes, kategoriMobileCheckboxes);
         syncCheckboxes(kategoriMobileCheckboxes, kategoriCheckboxes);
 
-        function showLoading() {
-            loadingOverlay.classList.add("active");
+        function showPreloader() {
+            preloader.style.display = "flex";
+            preloader.classList.remove("fade-out");
         }
 
-        function hideLoading() {
+        function hidePreloader() {
             setTimeout(() => {
-                loadingOverlay.classList.remove("active");
+                preloader.classList.add("fade-out");
+                setTimeout(() => {
+                    preloader.style.display = "none";
+                }, 500);
             }, 500);
         }
 
         kategoriForm.addEventListener("submit", (e) => {
-            showLoading();
+            showPreloader();
         });
 
         // Desktop reset button
         document.getElementById("resetBtn")?.addEventListener("click", () => {
             kategoriCheckboxes.forEach(cb => cb.checked = false);
             kategoriMobileCheckboxes.forEach(cb => cb.checked = false);
-            showLoading();
+            showPreloader();
             kategoriForm.submit();
         });
 
-        // Mobile filter toggle
-        filterToggle?.addEventListener('click', function() {
-            // For mobile screens, show overlay
-            if (window.innerWidth < 768) {
-                filterMobileOverlay.classList.remove('hidden');
-                filterMobileOverlay.classList.add('show');
-                document.body.style.overflow = 'hidden';
-            } else {
-                // For larger screens, toggle the filter box
-                let filterBox = document.getElementById('filterBox');
-                filterBox.classList.toggle('hidden');
-            }
+        // Mobile filter button functionality
+        filterButton?.addEventListener('click', function(e) {
+            e.stopPropagation();
+            filterDropdownContent.classList.toggle('show');
         });
 
-        // Close mobile filter
-        closeFilterMobile?.addEventListener('click', function() {
-            filterMobileOverlay.classList.remove('show');
-            setTimeout(() => {
-                filterMobileOverlay.classList.add('hidden');
-                document.body.style.overflow = '';
-            }, 300);
-        });
-
-        // Close mobile filter when clicking overlay
-        filterMobileOverlay?.addEventListener('click', function(e) {
-            if (e.target === filterMobileOverlay) {
-                closeFilterMobile.click();
-            }
-        });
-
-        // Apply mobile filter
-        applyFilterMobile?.addEventListener('click', function() {
-            showLoading();
+        // Apply filter from mobile dropdown
+        applyFilterDropdown?.addEventListener('click', function() {
+            filterDropdownContent.classList.remove('show');
+            showPreloader();
             kategoriForm.submit();
         });
 
-        // Reset mobile filter
-        document.getElementById("resetBtnMobileOverlay")?.addEventListener('click', function() {
-            kategoriCheckboxes.forEach(cb => cb.checked = false);
-            kategoriMobileCheckboxes.forEach(cb => cb.checked = false);
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!filterButton?.contains(e.target) && !filterDropdownContent?.contains(e.target)) {
+                filterDropdownContent?.classList.remove('show');
+            }
         });
 
         // Legacy mobile reset button (fallback)
         document.getElementById("resetBtnMobile")?.addEventListener('click', function() {
             kategoriCheckboxes.forEach(cb => cb.checked = false);
             kategoriMobileCheckboxes.forEach(cb => cb.checked = false);
-        });
-
-        // Handle window resize
-        window.addEventListener('resize', function() {
-            if (window.innerWidth >= 768 && !filterMobileOverlay.classList.contains('hidden')) {
-                closeFilterMobile.click();
-            }
         });
 
         // Prevent zoom on double tap for better mobile UX
@@ -771,7 +966,7 @@
 
         // Hide loading overlay after page load
         window.addEventListener('load', function() {
-            hideLoading();
+            hidePreloader();
         });
     </script>
 </body>

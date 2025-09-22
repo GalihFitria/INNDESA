@@ -48,6 +48,7 @@ Route::resource('detail_produk', DetailProdukController::class);
 Route::resource('kelompok', KelompokController::class);
 
 
+
 //ADMIN
 Route::prefix('Admin')->name('Admin.')->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard.index');

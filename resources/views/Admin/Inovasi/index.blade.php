@@ -46,7 +46,7 @@
                             {{ basename($i->foto) }}
                         </a>
                         @else
-                        <span class="text-gray-400">-</span>
+                        <span class="text-gray-400">Tidak ada inovasi & penghargaan</span>
                         @endif
                     </td>
                     <td class="border border-gray-300 p-3 text-center text-sm">
