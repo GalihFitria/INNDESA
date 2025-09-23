@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Http;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
+
 class ProdukperTahunController extends Controller
 {
    
@@ -128,4 +129,5 @@ class ProdukperTahunController extends Controller
             return back()->with('error', 'Gagal membuat PDF: ' . $e->getMessage());
         }
     }
+
 }

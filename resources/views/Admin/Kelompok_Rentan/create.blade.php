@@ -18,6 +18,8 @@
             <span class="text-red-500 text-sm">{{ $message }}</span>
             @enderror
         </div>
+
+
         <div class="flex justify-end space-x-4">
             <a href="{{ route('Admin.kelompok_rentan.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 flex items-center">
                 <i class="fas fa-arrow-left mr-2"></i>Kembali

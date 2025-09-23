@@ -839,12 +839,6 @@
             </div>
         </div>
 
-        <!-- Notifikasi update otomatis -->
-        <div id="updateNotification" class="update-notification">
-            <span>Konten telah diperbarui</span>
-            <span class="close-btn" onclick="hideUpdateNotification()">&times;</span>
-        </div>
-
         <div class="mt-16 sm:mt-20">
             @include('footer')
         </div>
@@ -1008,18 +1002,18 @@
         if (!firstCard) return;
 
         const currentLatestId = parseInt(firstCard.dataset.idKegiatan || '0');
-
+        
         // Simpan ID terbaru di localStorage untuk perbandingan
         const storedLatestId = parseInt(localStorage.getItem('latestActivityId') || '0');
-
+        
         // Jika ada perubahan (ID terbaru lebih besar dari yang tersimpan)
         if (currentLatestId > storedLatestId) {
             // Update localStorage
             localStorage.setItem('latestActivityId', currentLatestId);
-
+            
             // Tampilkan notifikasi update
             showUpdateNotification();
-
+            
             // Tambahkan animasi pada card terbaru
             firstCard.classList.add('new-activity');
         }
@@ -1073,7 +1067,7 @@
 
                     // Pasang kembali event listener untuk pagination
                     attachPaginationListeners();
-
+                    
                     // Update localStorage dengan ID terbaru
                     const newFirstCard = updateKegiatanSection.querySelector('.update-kegiatan-card');
                     if (newFirstCard) {
@@ -1122,7 +1116,7 @@
                     if (scrollToPosition !== null) {
                         window.scrollTo(0, scrollToPosition);
                     }
-
+                    
                     // Update localStorage dengan ID terbaru
                     const newFirstCard = updateKegiatanSection.querySelector('.update-kegiatan-card');
                     if (newFirstCard) {
@@ -1313,7 +1307,7 @@
             if (firstCard) {
                 localStorage.setItem('latestActivityId', firstCard.dataset.idKegiatan);
             }
-
+            
             // Cek update setiap 2 menit
             setInterval(checkActivityUpdates, 120000); // 2 menit = 120000 ms
 

@@ -34,6 +34,7 @@
                     <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">Id Kelompok</th>
                     <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">Nama Kelompok Integrasi</th>
                     <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">Nama Kelompok</th>
+                    <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">Total Anggota</th>
                     <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">Sejarah</th>
                     <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">SK Desa</th>
                     <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">Background</th>
@@ -48,6 +49,7 @@
                     <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $k->kode_kelompok }}</td>
                     <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $k->kategori->nama ?? '-' }}</td>
                     <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $k->nama }}</td>
+                    <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $k->total_anggota }}</td>
                     <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $k->sejarah }}</td>
                     <td class="border border-gray-300 p-3 text-sm text-gray-900 text-center">
                         @if ($k->sk_desa)

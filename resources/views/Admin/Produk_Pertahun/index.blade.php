@@ -11,9 +11,14 @@
                 <i class="fas fa-plus mr-2"></i>Tambah
             </a>
             <a href="{{ route('Admin.produk_pertahun.pdf') }}"
-                class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 flex items-center">
+                class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 flex items-center">
                 <i class="fas fa-file-pdf mr-2"></i>Export PDF
             </a>
+            <a href="{{ route('Admin.produk_pertahun.excel') }}"
+                class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 flex items-center">
+                <i class="fas fa-file-excel mr-2"></i>Export Excel
+            </a>
+
             <div class="flex items-center">
                 <label for="rowsPerPage" class="mr-2 text-sm text-gray-600">Tampilkan:</label>
                 <select id="rowsPerPage" class="border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">

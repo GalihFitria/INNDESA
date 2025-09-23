@@ -15,7 +15,7 @@ class Kelompok extends Model
     protected $keyType = 'int';
     public $timestamps = false;
 
-    protected $fillable = ['id_kategori', 'nama', 'sejarah', 'sk_desa', 'background', 'logo'];
+    protected $fillable = ['id_kategori', 'nama', 'total_anggota', 'sejarah', 'sk_desa', 'background', 'logo'];
 
     public function kategori()
     {

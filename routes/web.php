@@ -17,6 +17,7 @@ use App\Http\Controllers\DetailProdukController;
 use App\Http\Controllers\FotoController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\KelompokController;
+use App\Http\Controllers\KontakController;
 use App\Http\Controllers\PublikasiController;
 use App\Http\Controllers\PtIpController;
 use App\Http\Controllers\ProdukController;
@@ -46,7 +47,7 @@ Route::resource('produk', ProdukController::class);
 Route::resource('update_kegiatan', Update_KegiatanController::class);
 Route::resource('detail_produk', DetailProdukController::class);
 Route::resource('kelompok', KelompokController::class);
-
+Route::resource('kontak', KontakController::class);
 
 
 //ADMIN
@@ -61,8 +62,12 @@ Route::prefix('Admin')->name('Admin.')->group(function () {
     Route::resource('struktur', StrukturController::class);
     Route::resource('inovasi', InovasiController::class);
     Route::resource('katalog', KatalogController::class);
+
+    // PDF & EXCEL
     Route::get('produk_pertahun/pdf', [ProdukperTahunController::class, 'exportPdf'])
         ->name('produk_pertahun.pdf');
+    Route::get('produk_pertahun/excel', [ProdukperTahunController::class, 'exportExcel'])
+        ->name('produk_pertahun.excel');
     Route::resource('produk_pertahun', ProdukperTahunController::class);
 });
 

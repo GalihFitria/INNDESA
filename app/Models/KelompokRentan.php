@@ -14,7 +14,7 @@ class KelompokRentan extends Model
     protected $keyType = 'int';
     public $timestamps = false;
 
-    protected $fillable = ['nama_rentan'];
+    protected $fillable = ['nama_rentan', 'total'];
 
     public function getKodeRentanAttribute()
     {

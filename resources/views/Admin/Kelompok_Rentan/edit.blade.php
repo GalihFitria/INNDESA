@@ -24,12 +24,26 @@
             @enderror
         </div>
 
+        <div>
+            <label for="total" class="block text-sm font-medium text-gray-700">Total (tidak perlu diisi)</label>
+            <input
+                type="text"
+                name="total"
+                id="total"
+                value="{{ old('total', $rentan->total) }}"
+                class="mt-1 block w-full border border-gray-300 rounded-lg p-2 bg-gray-100 text-gray-600 cursor-not-allowed focus:ring-0 focus:border-gray-300"
+                readonly>
+            @error('total')
+            <span class="text-red-500 text-sm">{{ $message }}</span>
+            @enderror
+        </div>
+
         <div class="flex justify-end space-x-4">
             <a href="{{ route('Admin.kelompok_rentan.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 flex items-center">
                 <i class="fas fa-arrow-left mr-2"></i>Kembali
             </a>
             <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 flex items-center">
-                <i class="fas fa-save mr-2"></i>Simpan
+                <i class="fas fa-save mr-2"></i>Simpan Perubahan
             </button>
         </div>
     </form>

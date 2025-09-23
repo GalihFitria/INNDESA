@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Kegiatan;
 use Illuminate\Http\Request;
 
-class PublikasiController extends Controller
+class KontakController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,11 +12,7 @@ class PublikasiController extends Controller
     public function index()
     {
         //
-        $kegiatans = Kegiatan::select('id_kegiatan', 'foto', 'judul', 'deskripsi', 'tanggal')
-            ->orderBy('tanggal', 'desc')
-            ->paginate(8);
-
-        return view('Pengunjung.publikasi', compact('kegiatans'));
+        return view('Pengunjung.kontak');
     }
 
     /**

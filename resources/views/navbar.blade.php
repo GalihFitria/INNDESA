@@ -257,7 +257,7 @@
                             <div id="kelompokDropdown" class="absolute left-0 mt-2 w-48 dropdown-container hidden z-50"></div>
                         </div>
 
-                        <a href="https://wa.me/6289647038212?text=Halo%20saya%20tertarik%20dengan%20produk%20Anda"
+                        <a href="{{ route('kontak.index') }}"
                             rel="noopener noreferrer"
                             class="menu-item flex items-center gap-1 text-gray-800 hover:text-sky-600 transition-colors duration-150"
                             data-menu="kontak">
@@ -266,6 +266,7 @@
                             </svg>
                             <span>Kontak</span>
                         </a>
+
                     </div>
 
                     <div class="flex justify-center space-x-8 text-gray-800 mt-2">
@@ -343,12 +344,16 @@
                     </button>
                     <div id="mobile-kelompokDropdown" class="ml-4 dropdown-container hidden"></div>
                 </div>
-                <a href="https://wa.me/6289647038212?text=Halo%20saya%20tertarik%20dengan%20produk%20Anda" rel="noopener noreferrer" class="mobile-menu-item menu-item flex items-center gap-2 text-gray-800 hover:text-sky-600 transition-colors duration-150" data-menu="kontak">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                    <span>Kontak</span>
-                </a>
+                <a href="{{ route('kontak.index') }}" 
+   rel="noopener noreferrer" 
+   class="mobile-menu-item menu-item flex items-center gap-2 text-gray-800 hover:text-sky-600 transition-colors duration-150" 
+   data-menu="kontak">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+    </svg>
+    <span>Kontak</span>
+</a>
+
                 <a href="{{ route('produk.index') }}?from=produk" class="mobile-menu-item menu-item flex items-center gap-2 text-gray-800 hover:text-sky-600 transition-colors duration-150" data-menu="produk">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.5 6h13L17 13M7 13H5.4M17 13l1.5 6M6 19a1 1 0 100 2 1 1 0 000-2zm12 0a1 1 0 100 2 1 1 0 000-2z" />

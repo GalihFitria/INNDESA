@@ -1,4 +1,3 @@
-
 @extends('Admin.sidebar')
 
 @section('title', 'Edit Kelompok - INNDESA')
@@ -15,7 +14,7 @@
         @method('PUT')
 
         <div class="mb-4">
-            <label for="id_kategori" class="block text-sm font-medium text-gray-700">Kategori</label>
+            <label for="id_kategori" class="block text-sm font-medium text-gray-700">Kategori Kelompok</label>
             <select name="id_kategori" id="id_kategori" class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
                 <option value="">-- Pilih Kategori --</option>
                 @foreach ($kategori as $k)
@@ -30,10 +29,24 @@
         </div>
 
         <div>
-            <label for="nama" class="block text-sm font-medium text-gray-700">Nama</label>
+            <label for="nama" class="block text-sm font-medium text-gray-700">Nama Kelompok</label>
             <input type="text" name="nama" id="nama" value="{{ old('nama', $kelompok->nama) }}" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Masukkan Nama Kelompok" required data-original-name="{{ $kelompok->nama }}">
             <span id="namaWarning" class="text-red-500 text-sm hidden">Nama kelompok ini sudah digunakan oleh kelompok lain.</span>
             @error('nama')
+            <span class="text-red-500 text-sm">{{ $message }}</span>
+            @enderror
+        </div>
+
+        <div>
+            <label for="total_anggota" class="block text-sm font-medium text-gray-700">Total Anggota (tidak perlu diisi)</label>
+            <input
+                type="text"
+                name="total_anggota"
+                id="total_anggota"
+                value="{{ old('total_anggota', $kelompok->total_anggota) }}"
+                class="mt-1 block w-full border border-gray-300 rounded-lg p-2 bg-gray-100 text-gray-600 cursor-not-allowed focus:ring-0 focus:border-gray-300"
+                readonly>
+            @error('total_anggota')
             <span class="text-red-500 text-sm">{{ $message }}</span>
             @enderror
         </div>

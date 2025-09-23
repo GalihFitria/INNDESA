@@ -1,4 +1,3 @@
-
 @extends('Admin.sidebar')
 
 @section('title', 'Kelola Kelompok Rentan - INNDESA')
@@ -34,6 +33,7 @@
                     <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">No</th>
                     <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">Id Kelompok Rentan</th>
                     <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">Nama Kelompok Rentan</th>
+                    <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">Total</th>
                     <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">Aksi</th>
                 </tr>
             </thead>
@@ -43,6 +43,7 @@
                     <td class="border border-gray-300 p-3 text-center text-sm text-gray-900">{{ $index + 1 }}</td>
                     <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $r->kode_rentan }}</td>
                     <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $r->nama_rentan }}</td>
+                    <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $r->total }}</td>
                     <td class="border border-gray-300 p-3 text-center text-sm">
                         <a href="{{ route('Admin.kelompok_rentan.edit', $r->id_rentan) }}" class="text-blue-600 hover:underline mr-2">Edit</a>
                         <form action="{{ route('Admin.kelompok_rentan.destroy', $r->id_rentan) }}" method="POST" class="inline-block delete-form">

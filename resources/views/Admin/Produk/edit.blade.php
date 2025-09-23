@@ -110,13 +110,19 @@
             @enderror
         </div>
 
-        <div>
-            <label for="produk_terjual" class="block text-sm font-medium text-gray-700">Produk Terjual</label>
-            <input type="text" name="produk_terjual" id="produk_terjual" value="0" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500" readonly required>
-            @error('produk_terjual')
-            <span class="text-red-500 text-sm">{{ $message }}</span>
-            @enderror
-        </div>
+    <div>
+        <label for="produk_terjual" class="block text-sm font-medium text-gray-700">Produk Terjual (tidak perlu diisi)</label>
+    <input 
+        type="text" 
+        name="produk_terjual" 
+        id="produk_terjual" 
+        value="{{ old('produk_terjual', $produk->produk_terjual) }}" 
+        class="mt-1 block w-full border border-gray-300 rounded-lg p-2 bg-gray-100 text-gray-600 cursor-not-allowed focus:ring-0 focus:border-gray-300" 
+        readonly>
+    @error('produk_terjual')
+        <span class="text-red-500 text-sm">{{ $message }}</span>
+    @enderror
+    </div>
 
         <div class="flex justify-end space-x-4">
             <a href="{{ route('Admin.produk.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 flex items-center">
