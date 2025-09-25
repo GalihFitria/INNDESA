@@ -687,19 +687,35 @@
     <section
         class="relative text-white overflow-hidden min-h-[300px] sm:min-h-[400px] md:min-h-[550px] flex flex-col items-center pt-20 sm:pt-28 md:pt-32 parallax-bg"
         style="background-image: url('{{ asset('images/background_beranda_INNDESA.jpeg') }}'); background-size: cover; background-position: center;">
-        <div class="absolute top-6 left-4 sm:top-10 sm:left-14 flex items-center space-x-2">
+
+        <!-- Overlay -->
+        <div class="absolute inset-0 bg-black bg-opacity-50 z-0"></div>
+
+        <!-- LOGO -->
+        <div class="absolute top-6 left-4 sm:top-10 sm:left-14 flex items-center space-x-2 z-10">
             <img src="{{ asset('images/logo_BUMN.png') }}" alt="Logo" class="h-4 sm:h-6 md:h-8 w-auto">
             <img src="{{ asset('images/logo_pln.png') }}" alt="Logo" class="h-4 sm:h-6 md:h-8 w-auto">
         </div>
-        <div class="text-center space-y-4">
-            <h2 class="text-2xl sm:text-4xl md:text-4xl lg:text-6xl font-bold text-[#0097D4] leading-snug md:leading-tight">
+
+        <!-- JUDUL -->
+        <div class="text-center space-y-4 z-10">
+            <!-- Judul 1 -->
+            <h2 class="text-2xl sm:text-4xl md:text-4xl lg:text-6xl font-bold 
+               text-[#0097D4] 
+               drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
                 PT. PLN Indonesia Power
             </h2>
-            <h2 class="text-2xl sm:text-4xl md:text-4xl lg:text-6xl font-bold text-[#0097D4] leading-snug md:leading-tight">
+
+            <!-- Judul 2 -->
+            <h2 class="text-2xl sm:text-4xl md:text-4xl lg:text-6xl font-bold 
+               text-[#FFD700] 
+               drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
                 UBP Jawa Tengah 2 Adipala
             </h2>
         </div>
+
     </section>
+
 
     <section class="py-16 bg-white reveal">
         <div class="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-600 mb-6 text-center section-title">
@@ -743,7 +759,7 @@
             </div>
         </div>
     </section>
-    
+
     <!-- CSR Profile -->
     <section class="py-16 bg-white reveal">
         <div class="max-w-6xl mx-auto px-4">

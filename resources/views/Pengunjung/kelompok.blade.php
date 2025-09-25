@@ -689,7 +689,7 @@
     </div>
     @include('navbar')
 
-    <section class="relative text-white overflow-hidden aspect-[16/9] md:aspect-auto md:min-h-[550px] flex flex-col justify-start md:justify-center pt-8 sm:pt-10 md:pt-0 
+<section class="relative text-white overflow-hidden aspect-[16/9] md:aspect-auto md:min-h-[550px] flex flex-col justify-start md:justify-center pt-8 sm:pt-10 md:pt-0 
     {{ $kelompok->background 
         ? 'bg-[url(\'' . asset('storage/' . $kelompok->background) . '\')] bg-cover bg-center' 
         : 'bg-[url(\'' . asset('images/background_beranda_INNDESA.jpeg') . '\')] bg-cover bg-center' 
@@ -738,7 +738,7 @@
         </div>
 
 
-    </section>
+</section>
 
     <div class="relative z-10 px-4 mt-8 md:mt-0">
         <h2 class="text-2xl md:text-4xl font-bold text-blue-600 text-center mb-6 md:mb-8 mt-2 md:mt-10 px-4">Profil Kelompok</h2>
