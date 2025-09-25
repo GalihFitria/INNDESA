@@ -5,14 +5,20 @@
 @section('content')
 <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 <h2 class="text-center text-4xl font-bold text-gray-800 mb-6">.::Tambah Kegiatan::.</h2>
 <div class="bg-white shadow-md p-4 rounded-lg max-w-2xl mx-auto">
     <form action="{{ route('Admin.kegiatan.store') }}" method="POST" class="space-y-6" enctype="multipart/form-data">
         @csrf
         <div class="mb-4">
             <label for="id_kelompok" class="block text-sm font-medium text-gray-700">Nama Kelompok</label>
-            <select name="id_kelompok" id="id_kelompok" class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
+            <select name="id_kelompok" id="id_kelompok" 
+                class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500 @error('id_kelompok') border-red-500 @enderror select2"
+                style="width: 100%;" required>
                 <option value="">-- Pilih Kelompok --</option>
                 @foreach ($kelompok as $k)
                 <option value="{{ $k->id_kelompok }}" {{ old('id_kelompok') == $k->id_kelompok ? 'selected' : '' }}>{{ $k->nama }}</option>
@@ -22,6 +28,7 @@
             <span class="text-red-500 text-sm">{{ $message }}</span>
             @enderror
         </div>
+
         <div>
             <label for="judul" class="block text-sm font-medium text-gray-700">Judul</label>
             <input type="text" name="judul" id="judul" value="{{ old('judul') }}" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Masukkan Judul Kegiatan" required>
@@ -102,6 +109,13 @@
     </div>
 </div>
 <script>
+    $(document).ready(function() {
+        $('#id_kelompok').select2({
+            placeholder: "-- Pilih Kelompok --",
+            allowClear: true
+        });
+    });
+
     let fotoFile = null;
     let cropper = null;
     let originalImageUrl = null;

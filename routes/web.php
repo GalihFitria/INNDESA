@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\InformasiUserController;
 use App\Http\Controllers\Admin\InovasiController;
 use App\Http\Controllers\Admin\KatalogController;
 use App\Http\Controllers\Admin\KegiatanController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\Admin\ProdukController as AdminProdukController;
 use App\Http\Controllers\Admin\ProdukperTahunController;
 use App\Http\Controllers\Admin\SidebarController;
 use App\Http\Controllers\Admin\StrukturController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin_Kelompok\BerandaController;
 use App\Http\Controllers\Admin_Kelompok\KelompokController as Admin_KelompokKelompokController;
 use App\Http\Controllers\DetailProdukController;
@@ -42,7 +44,7 @@ Route::get('/api/statistik', [App\Http\Controllers\IndexController::class, 'getS
 
 //PENGUNJUNG
 Route::resource('publikasi', PublikasiController::class);
-Route::resource('pt', PtIpController::class);
+Route::resource('perusahaan_pembina', PtIpController::class);
 Route::resource('produk', ProdukController::class);
 Route::resource('update_kegiatan', Update_KegiatanController::class);
 Route::resource('detail_produk', DetailProdukController::class);
@@ -62,13 +64,12 @@ Route::prefix('Admin')->name('Admin.')->group(function () {
     Route::resource('struktur', StrukturController::class);
     Route::resource('inovasi', InovasiController::class);
     Route::resource('katalog', KatalogController::class);
-
-    // PDF & EXCEL
     Route::get('produk_pertahun/pdf', [ProdukperTahunController::class, 'exportPdf'])
         ->name('produk_pertahun.pdf');
-    Route::get('produk_pertahun/excel', [ProdukperTahunController::class, 'exportExcel'])
-        ->name('produk_pertahun.excel');
     Route::resource('produk_pertahun', ProdukperTahunController::class);
+
+    Route::resource('users', UserController::class);
+    Route::resource('informasi_user', InformasiUserController::class);
 });
 
 // ADMIN KELOMPOK

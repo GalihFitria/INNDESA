@@ -1,7 +1,8 @@
-
 @extends('Admin.sidebar')
 
-@section('title', 'Kelola Inovasi dan Penghargaan - INNDESA')
+@section('title', 'INNDESA - Kelola Inovasi dan Penghargaan')
+<link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+
 
 @section('content')
 <h2 class="text-center text-4xl font-bold text-gray-800 mb-6">.::Kelola Inovasi dan Penghargaan::.</h2>

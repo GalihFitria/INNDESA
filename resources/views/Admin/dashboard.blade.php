@@ -1,6 +1,8 @@
 @extends('Admin.sidebar')
 
-@section('title', 'Dashboard - INNDESA')
+@section('title', 'INNDESA - Dashboard')
+<link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+
 
 @section('content')
 <h2 class="text-2xl font-bold text-gray-800 mb-6">Dashboard Overview</h2>

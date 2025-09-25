@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>INNDESA - Publikasi</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+
     <!-- Open Graph Meta Tags for Social Media -->
     <meta property="og:title" content="INNDESA - Publikasi">
     <meta property="og:description" content="Bagikan informasi tentang produk dan inovasi dari INNDESA!">
@@ -259,7 +261,8 @@
             }
 
             .hero-section {
-                min-height: 400px !important;
+                height: 40vw;
+                min-height: 180px;
             }
 
             .card-carousel {

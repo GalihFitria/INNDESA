@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>INNDESA - Kontak</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+
     <!-- Open Graph Meta Tags for Social Media -->
     <meta property="og:title" content="INNDESA - Kontak">
     <meta property="og:description" content="Hubungi Admin INNDESA dan kelompok melalui WhatsApp">

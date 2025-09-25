@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="id">
 
@@ -6,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>INNDESA - Inovasi Nusantara Desa Integratif Pangan</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -742,6 +743,7 @@
             </div>
         </div>
     </section>
+    
     <!-- CSR Profile -->
     <section class="py-16 bg-white reveal">
         <div class="max-w-6xl mx-auto px-4">
@@ -749,22 +751,24 @@
             <!-- Pengertian CSR -->
             <div class="mb-16">
                 <h3 class="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-600 mb-6 text-center section-title">Pengertian CSR</h3>
-                <div class="card p-8 border border-gray-300 rounded-lg max-w-4xl mx-auto card-reveal">
-                    <p class="text-center text-gray-800 text-base sm:text-lg md:text-xl leading-relaxed sm:leading-relaxed leading-snug card-reveal mb-4">
+                <div class="card p-4 sm:p-6 md:p-8 border border-gray-300 rounded-lg max-w-3xl md:max-w-4xl mx-auto card-reveal">
+                    <p class="text-center text-gray-800 text-sm sm:text-base md:text-lg leading-snug sm:leading-relaxed md:leading-relaxed card-reveal mb-4">
                         <i>Corporate Social Responsibility</i> (CSR) atau Tanggung Jawab Sosial dan Lingkungan (TJSL) adalah komitmen PT.PLN Indonesia Power UBP Jawa Tengah 2 Adipala untuk memperhatikan dampak sosial dan lingkungan dari setiap aktivitas bisnis, serta berkontribusi pada pembangunan berkelanjutan.
                         Bagi Indonesia Power, CSR tidak hanya sebatas kepatuhan, tetapi merupakan tanggung jawab perusahaan terhadap masyarakat, pemangku kepentingan, dan lingkungan agar tercipta manfaat berkesinambutan. Implementasinya diwujudkan melalui program INPOWER-CARE <i>(Community Assistance, Relation, and Empowerment)</i> yang berfokus pada peningkatan kualitas hidup, pemberdayaan masyarakat, dan kelestarian lingkungan.
                     </p>
                 </div>
+
             </div>
             <!-- Program CSR -->
             <div class="mb-16">
                 <h3 class="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-600 mb-6 text-center section-title">
                     Program INPOWER - CARE
                 </h3>
-                <p class="text-center text-gray-800 text-base sm:text-lg md:text-xl leading-relaxed sm:leading-relaxed leading-snug card-reveal mb-4">
+                <p class="text-center text-gray-800 text-sm sm:text-base md:text-lg leading-snug sm:leading-relaxed md:leading-relaxed card-reveal mb-4">
                     INPOWER-CARE adalah kegiatan pelibatan dan pengembangan komunitas yang dilakukan Perusahaan sebagai wujud tanggung jawab sosial dan tata kelola Perusahaan yang baik. INPOWERCARE bertujuan untuk memperbesar akses masyarakat agar mencapai kondisi sosial, ekonomi, dan budaya yang lebih baik dari sebelumnya. Sehingga, kehidupan masyarakat di sekitar wilayah operasional Perusahaan diharapkan menjadi lebih berdaya dan mandiri dengan kualitas dan kesejahteraan yang lebih baik.
                     Penyelenggaraan INPOWER-CARE merupakan perwujudan visi dan misi Perusahaan, khususnya bersahabat dengan lingkungan serta perwujudan Tanggung Jawab Sosial dan Lingkungan (TJSL) Perusahaan sebagai bagian dari tata kelola perusahaan yang baik.
                 </p>
+
 
                 <div class="flex justify-center card-reveal">
                     <img
@@ -828,7 +832,7 @@
             <div class="mb-16">
                 <h3 class="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-600 mb-6 text-center section-title">Kebijakan</h3>
                 <div class="max-w-4xl mx-auto">
-                    <p class="text-center text-gray-800 text-base sm:text-lg md:text-xl leading-relaxed sm:leading-relaxed leading-snug card-reveal mb-4">
+                    <p class="text-center text-gray-800 text-sm sm:text-base md:text-lg leading-snug sm:leading-relaxed md:leading-relaxed card-reveal mb-4">
                         Penyelenggaraan program tanggung jawab social terhadap masyarakat di PT.PLN Indonesia Power UBP Jawa Tengah 2 Adipala dilaksanakan berdasarkan pada Keputusan Direksi No. 25.K/010/IP/2014 tentang Pedoman Tanggung Jawab Sosial dan Lingkungan Perusahaan.
                         Sesuai peraturan internal tersebut, Tanggung Jawab Sosial dan Lingkungan Perusahaan (TJSLP), atau di internal disebut dengan program INPOWER-CARE, merupakan komitmen Perusahaan untuk berperan serta dalam pembangunan ekonomi
                         berkelanjutan sebagai bentuk tanggung jawab terhadap dampak pengambilan keputusan dan proses bisnis Perusahaan guna meningkatkan kualitas kehidupan dan lingkungan yang bermanfaat, baik bagi Perusahaan maupun komunitas setempat.

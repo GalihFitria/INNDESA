@@ -1,6 +1,8 @@
 @extends('Admin.sidebar')
 
-@section('title', 'Kelola Kelompok Integrasi - INNDESA')
+@section('title', 'INNDESA - Kelola Kelompok Integrasi')
+<link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+
 
 @section('content')
 <h2 class="text-center text-4xl font-bold text-gray-800 mb-6">.::Kelola Kelompok Integritas::.</h2>

@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>INNDESA - Inovasi Nusantara Desa Integratif Pangan</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* CSS styles tetap sama seperti sebelumnya */
@@ -1002,18 +1004,18 @@
         if (!firstCard) return;
 
         const currentLatestId = parseInt(firstCard.dataset.idKegiatan || '0');
-        
+
         // Simpan ID terbaru di localStorage untuk perbandingan
         const storedLatestId = parseInt(localStorage.getItem('latestActivityId') || '0');
-        
+
         // Jika ada perubahan (ID terbaru lebih besar dari yang tersimpan)
         if (currentLatestId > storedLatestId) {
             // Update localStorage
             localStorage.setItem('latestActivityId', currentLatestId);
-            
+
             // Tampilkan notifikasi update
             showUpdateNotification();
-            
+
             // Tambahkan animasi pada card terbaru
             firstCard.classList.add('new-activity');
         }
@@ -1067,7 +1069,7 @@
 
                     // Pasang kembali event listener untuk pagination
                     attachPaginationListeners();
-                    
+
                     // Update localStorage dengan ID terbaru
                     const newFirstCard = updateKegiatanSection.querySelector('.update-kegiatan-card');
                     if (newFirstCard) {
@@ -1116,7 +1118,7 @@
                     if (scrollToPosition !== null) {
                         window.scrollTo(0, scrollToPosition);
                     }
-                    
+
                     // Update localStorage dengan ID terbaru
                     const newFirstCard = updateKegiatanSection.querySelector('.update-kegiatan-card');
                     if (newFirstCard) {
@@ -1307,7 +1309,7 @@
             if (firstCard) {
                 localStorage.setItem('latestActivityId', firstCard.dataset.idKegiatan);
             }
-            
+
             // Cek update setiap 2 menit
             setInterval(checkActivityUpdates, 120000); // 2 menit = 120000 ms
 

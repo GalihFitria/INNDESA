@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="id">
 
@@ -7,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>INNDESA - {{ $kelompok->nama }}</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- PERBAIKAN: Tambahkan PDF.js library untuk rendering PDF di mobile -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
@@ -687,23 +687,29 @@
         <img src="{{ asset('images/logo.png') }}" alt="Logo Website" class="logo-loading">
     </div>
     @include('navbar')
-    <section class="relative text-white overflow-hidden
-    min-h-[300px] sm:min-h-[350px] md:min-h-[550px]
-    flex flex-col justify-start md:justify-center
-    pt-12 sm:pt-16 md:pt-0
-    {{ $kelompok->background
-        ? 'bg-[url(\'' . asset('storage/' . $kelompok->background) . '\')]
-           bg-contain bg-top md:bg-cover md:bg-center bg-no-repeat'
-        : 'bg-gray-800' }}">
+
+    <section class="relative text-white overflow-hidden aspect-[16/9] md:aspect-auto md:min-h-[550px] flex flex-col justify-start md:justify-center pt-8 sm:pt-10 md:pt-0 
+    {{ $kelompok->background 
+        ? 'bg-[url(\'' . asset('storage/' . $kelompok->background) . '\')] bg-cover bg-center' 
+        : 'bg-[url(\'' . asset('images/background_beranda_INNDESA.jpeg') . '\')] bg-cover bg-center' 
+    }}">
+
+        <!-- Overlay untuk mobile -->
+        <div class="absolute top-0 left-0 right-0 z-0 md:hidden"
+            style="background: rgba(0, 0, 0, 0.5); height: 0; padding-bottom: 56.25%;"></div>
+
+        <!-- Overlay untuk desktop -->
+        <div class="absolute inset-0 bg-black bg-opacity-50 z-0 hidden md:block"></div>
+
         <!-- LOGO -->
-        <div class="hero-logo flex items-center justify-start pl-4 -mt-6 sm:mt-6 md:mt-0 md:absolute md:top-12 md:left-16">
+        <div class="hero-logo flex items-center justify-start pl-4 mt-1 sm:mt-6 md:mt-0 md:absolute md:top-12 md:left-16 z-10">
             @if ($kelompok->logo && Storage::disk('public')->exists($kelompok->logo))
             <img
                 src="{{ asset('storage/' . $kelompok->logo) }}"
                 alt="Logo {{ $kelompok->getKodeKelompokAttribute() }}"
-                class="h-12 sm:h-14 md:h-20 lg:h-24 w-auto
-                       max-h-16 sm:max-h-20 md:max-h-28 lg:max-h-32
-                       object-contain no-context-menu"
+                class="h-10 sm:h-14 md:h-20 lg:h-24 w-auto
+                   max-h-16 sm:max-h-20 md:max-h-28 lg:max-h-32
+                   object-contain no-context-menu"
                 draggable="false"
                 oncontextmenu="return false;"
                 ondragstart="return false;"
@@ -712,315 +718,322 @@
             @else
             <img
                 src="{{ asset('images/fallback-logo.png') }}"
-                alt="Default Logo"
-                class="h-12 sm:h-14 md:h-20 lg:h-24 w-auto
-                       max-h-16 sm:max-h-20 md:max-h-28 lg:max-h-32
-                       object-contain no-context-menu"
+                alt=""
+                class="h-10 sm:h-14 md:h-20 lg:h-24 w-auto
+                   max-h-16 sm:max-h-20 md:max-h-28 lg:max-h-32
+                   object-contain no-context-menu"
                 draggable="false"
                 oncontextmenu="return false;"
                 ondragstart="return false;"
                 onselectstart="return false;">
             @endif
         </div>
+
         <!-- JUDUL -->
-        <div class="text-center md:text-center absolute top-10 left-1/2 -translate-x-1/2 md:static md:transform-none md:mt-0 px-4">
-            <h2 class="hero-title text-xl sm:text-3xl md:text-5xl lg:text-7xl font-bold text-[#0097D4]">
-                Kelompok {{ $kelompok->nama }}
+        <div class="text-center md:text-center relative z-10 px-4 mt-[-20px] md:mt-0">
+            <h2 class="hero-title text-xl sm:text-3xl md:text-5xl lg:text-7xl font-bold text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)]">
+                Kelompok <br><span class="text-yellow-400">{{ $kelompok->nama }}</span>
             </h2>
         </div>
+
+
     </section>
-    <h2 class="text-2xl md:text-4xl font-bold text-blue-600 text-center mb-6 md:mb-8 mt-6 md:mt-10 px-4">Profil Kelompok</h2>
-    <div class="w-full border-t-t border-gray-200 pt-4 box-border section-padding-mobile">
-        <div class="bg-white p-3 md:p-6 content-container-mobile md:max-w-4xl md:mx-auto">
-            <div class="tab-buttons flex rounded-lg overflow-x-auto bg-gray-200 whitespace-nowrap">
-                <button class="profile-tab-button flex-1 py-2 px-2 md:px-4 font-semibold text-center transition-colors bg-[#0097D4] text-white text-xs md:text-base" onclick="openTab('struktur', 'profile')" aria-label="Lihat Struktur">Struktur</button>
-                <button class="profile-tab-button flex-1 py-2 px-2 md:px-4 font-semibold text-center transition-colors bg-gray-200 text-gray-700 text-xs md:text-base" onclick="openTab('sejarah', 'profile')" aria-label="Lihat Sejarah">Sejarah</button>
-                <button class="profile-tab-button flex-1 py-2 px-2 md:px-4 font-semibold text-center transition-colors bg-gray-200 text-gray-700 text-xs md:text-base" onclick="openTab('sk-desa', 'profile')" aria-label="Lihat SK Desa">SK Desa</button>
-                <button class="profile-tab-button flex-1 py-2 px-2 md:px-4 font-semibold text-center transition-colors bg-gray-200 text-gray-700 text-xs md:text-base" onclick="openTab('kelompok-rentan', 'profile')" aria-label="Lihat Kelompok Rentan">Kelompok Rentan</button>
-                <button class="profile-tab-button flex-1 py-2 px-2 md:px-4 font-semibold text-center transition-colors bg-gray-200 text-gray-700 text-xs md:text-base" onclick="openTab('total-produk', 'profile')" aria-label="Lihat Total Produk">Stok Produk</button>
-            </div>
-            <!-- STRUKTUR -->
-            <div id="struktur" class="profile-tab-content block py-4">
-                <div class="mobile-table overflow-x-auto">
-                    <table class="w-full border-collapse mb-6 border border-gray-200 text-xs md:text-sm">
-                        <thead>
-                            <tr class="bg-gray-50">
-                                <th class="border border-gray-200 px-2 py-1 md:px-3 md:py-2 text-left font-semibold text-xs md:text-base">
-                                    Posisi
-                                </th>
-                                <th class="border border-gray-200 px-2 py-1 md:px-3 md:py-2 text-left font-semibold text-xs md:text-base">
-                                    Nama
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($struktur->where('jabatan', '!=', 'Anggota') as $item)
-                            <tr>
-                                <td class="border border-gray-200 px-2 py-1 md:px-3 md:py-2 text-xs md:text-base">
-                                    {{ $item->jabatan }}
-                                </td>
-                                <td class="border border-gray-200 px-2 py-1 md:px-3 md:py-2 text-xs md:text-base">
-                                    {{ $item->nama }}
-                                </td>
-                            </tr>
-                            @endforeach
-                            @php
-                            $anggota = $struktur->where('jabatan', 'Anggota');
-                            @endphp
-                            @if($anggota->count())
-                            <tr>
-                                <td class="border border-gray-200 px-2 py-1 md:px-3 md:py-2 text-xs md:text-base align-top">
-                                    Anggota
-                                </td>
-                                <td class="border border-gray-200 px-2 py-1 md:px-3 md:py-2">
-                                    <ul class="list-disc pl-4">
-                                        @foreach($anggota as $a)
-                                        <li class="text-xs md:text-base">{{ $a->nama }}</li>
-                                        @endforeach
-                                    </ul>
-                                </td>
-                            </tr>
-                            @endif
-                            @if($struktur->count() == 0)
-                            <tr>
-                                <td colspan="2" class="text-center p-3 md:p-4 text-gray-500 text-xs md:text-base">
-                                    Tidak ada data struktur organisasi
-                                </td>
-                            </tr>
-                            @endif
-                        </tbody>
-                    </table>
+
+    <div class="relative z-10 px-4 mt-8 md:mt-0">
+        <h2 class="text-2xl md:text-4xl font-bold text-blue-600 text-center mb-6 md:mb-8 mt-2 md:mt-10 px-4">Profil Kelompok</h2>
+        <div class="w-full border-t border-gray-200 pt-4 box-border section-padding-mobile">
+            <div class="bg-white p-3 md:p-6 content-container-mobile md:max-w-4xl md:mx-auto">
+                <div class="tab-buttons flex rounded-lg overflow-x-auto bg-gray-200 whitespace-nowrap">
+                    <button class="profile-tab-button flex-1 py-2 px-2 md:px-4 font-semibold text-center transition-colors bg-[#0097D4] text-white text-xs md:text-base" onclick="openTab('struktur', 'profile')" aria-label="Lihat Struktur">Struktur</button>
+                    <button class="profile-tab-button flex-1 py-2 px-2 md:px-4 font-semibold text-center transition-colors bg-gray-200 text-gray-700 text-xs md:text-base" onclick="openTab('sejarah', 'profile')" aria-label="Lihat Sejarah">Sejarah</button>
+                    <button class="profile-tab-button flex-1 py-2 px-2 md:px-4 font-semibold text-center transition-colors bg-gray-200 text-gray-700 text-xs md:text-base" onclick="openTab('sk-desa', 'profile')" aria-label="Lihat SK Desa">SK Desa</button>
+                    <button class="profile-tab-button flex-1 py-2 px-2 md:px-4 font-semibold text-center transition-colors bg-gray-200 text-gray-700 text-xs md:text-base" onclick="openTab('kelompok-rentan', 'profile')" aria-label="Lihat Kelompok Rentan">Kelompok Rentan</button>
+                    <button class="profile-tab-button flex-1 py-2 px-2 md:px-4 font-semibold text-center transition-colors bg-gray-200 text-gray-700 text-xs md:text-base" onclick="openTab('total-produk', 'profile')" aria-label="Lihat Total Produk">Stok Produk</button>
                 </div>
-            </div>
-            <!-- SEJARAH -->
-            <div id="sejarah" class="profile-tab-content hidden py-4">
-                <div class="prose prose-xs md:prose-lg max-w-none text-gray-700 leading-relaxed text-justify">
-                    @foreach (explode("\n", $kelompok->sejarah ?? 'Belum ada data sejarah untuk kelompok ini.') as $paragraph)
-                    @if (!empty(trim($paragraph)))
-                    <p class="mb-3 md:mb-4 indent-2 md:indent-8 text-xs md:text-base leading-snug md:leading-relaxed">
-                        {{ $paragraph }}
-                    </p>
-                    @endif
-                    @endforeach
+                <!-- STRUKTUR -->
+                <div id="struktur" class="profile-tab-content block py-4">
+                    <div class="mobile-table overflow-x-auto">
+                        <table class="w-full border-collapse mb-6 border border-gray-200 text-xs md:text-sm">
+                            <thead>
+                                <tr class="bg-gray-50">
+                                    <th class="border border-gray-200 px-2 py-1 md:px-3 md:py-2 text-left font-semibold text-xs md:text-base">
+                                        Posisi
+                                    </th>
+                                    <th class="border border-gray-200 px-2 py-1 md:px-3 md:py-2 text-left font-semibold text-xs md:text-base">
+                                        Nama
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($struktur->where('jabatan', '!=', 'Anggota') as $item)
+                                <tr>
+                                    <td class="border border-gray-200 px-2 py-1 md:px-3 md:py-2 text-xs md:text-base">
+                                        {{ $item->jabatan }}
+                                    </td>
+                                    <td class="border border-gray-200 px-2 py-1 md:px-3 md:py-2 text-xs md:text-base">
+                                        {{ $item->nama }}
+                                    </td>
+                                </tr>
+                                @endforeach
+                                @php
+                                $anggota = $struktur->where('jabatan', 'Anggota');
+                                @endphp
+                                @if($anggota->count())
+                                <tr>
+                                    <td class="border border-gray-200 px-2 py-1 md:px-3 md:py-2 text-xs md:text-base align-top">
+                                        Anggota
+                                    </td>
+                                    <td class="border border-gray-200 px-2 py-1 md:px-3 md:py-2">
+                                        <ul class="list-disc pl-4">
+                                            @foreach($anggota as $a)
+                                            <li class="text-xs md:text-base">{{ $a->nama }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </td>
+                                </tr>
+                                @endif
+                                @if($struktur->count() == 0)
+                                <tr>
+                                    <td colspan="2" class="text-center p-3 md:p-4 text-gray-500 text-xs md:text-base">
+                                        Tidak ada data struktur organisasi
+                                    </td>
+                                </tr>
+                                @endif
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>
-            <!-- SK DESA -->
-            <div id="sk-desa" class="profile-tab-content hidden py-4">
-                <div class="relative">
-                    @if ($kelompok && $kelompok->sk_desa)
-                    @php
-                    $skDesaItems = is_array($kelompok->sk_desa) ? $kelompok->sk_desa : [$kelompok->sk_desa];
-                    @endphp
-                    <div id="sk-desa-carousel" class="carousel">
-                        @foreach ($skDesaItems as $index => $skDesa)
-                        @php
-                        $extension = pathinfo($skDesa, PATHINFO_EXTENSION);
-                        $isImage = in_array(strtolower($extension), ['jpg', 'jpeg', 'png']);
-                        @endphp
-                        <!-- IMAGE -->
-                        @if ($isImage)
-                        <div class="preview-container-mobile relative w-full max-w-[20rem] md:max-w-[30rem] mx-auto {{ $index === 0 ? 'block' : 'hidden' }} sk-desa-item" data-index="{{ $index }}">
-                            <div class="relative w-full h-full rounded-lg shadow-md border border-gray-200 overflow-hidden">
-                                <img
-                                    src="{{ asset('storage/' . $skDesa) }}"
-                                    alt="SK Desa {{ $kelompok->getKodeKelompokAttribute() }}"
-                                    class="w-full h-full object-contain cursor-pointer no-context-menu"
-                                    draggable="false"
-                                    oncontextmenu="return false;"
-                                    ondragstart="return false;"
-                                    onselectstart="return false;"
-                                    onclick="openPreview('{{ asset('storage/' . $skDesa) }}', 'SK Desa {{ $kelompok->getKodeKelompokAttribute() }}', 'image', false)"
-                                    onerror="this.src='{{ asset('images/placeholder.jpg') }}'">
-                                {{-- ✅ Watermark mobile --}}
-                                <div class="absolute inset-0 pointer-events-none overflow-hidden md:hidden">
-                                    <div class="grid grid-cols-4 w-full h-full">
-                                        @for ($i = 0; $i < 40; $i++)
-                                            <span class="flex items-center justify-center text-gray-800 text-[8px] font-bold opacity-10 -rotate-45 whitespace-nowrap">
-                                            INNDESA
-                                            </span>
-                                            @endfor
-                                    </div>
-                                </div>
-                                {{-- ✅ Watermark desktop --}}
-                                <div class="absolute inset-0 pointer-events-none overflow-hidden hidden md:block">
-                                    <div class="grid grid-cols-12 w-full h-full">
-                                        @for ($i = 0; $i < 150; $i++)
-                                            <span class="flex items-center justify-center text-gray-800 text-[10px] font-bold opacity-10 -rotate-45 whitespace-nowrap">
-                                            INNDESA
-                                            </span>
-                                            @endfor
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- PDF -->
-                        @else
-                        <div class="preview-container-mobile relative w-full max-w-[20rem] md:max-w-[30rem] mx-auto {{ $index === 0 ? 'block' : 'hidden' }} sk-desa-item" data-index="{{ $index }}">
-                            <div class="pdf-container relative w-full h-full rounded-lg shadow-md border border-gray-200 overflow-hidden">
-                                <div id="pdf-sk-desa-js-{{ $index }}" class="pdf-canvas-container w-full h-full">
-                                    <div class="pdf-loading">
-                                        <div class="pdf-loading-spinner"></div>
-                                        <p>Memuat PDF...</p>
-                                    </div>
-                                </div>
-                                <iframe
-                                    id="pdf-sk-desa-{{ $index }}"
-                                    src="{{ asset('storage/' . $skDesa) }}#toolbar=0&navpanes=0&statusbar=0&scrollbar=0&view=FitH"
-                                    class="w-full h-full rounded-lg pdf-preview-iframe no-context-menu hidden"
-                                    title="SK Desa {{ $kelompok->getKodeKelompokAttribute() }}"
-                                    oncontextmenu="return false;"
-                                    ondragstart="return false;"
-                                    onselectstart="return false;"
-                                    onload="this.contentWindow.focus(); checkPdfLoad(this, 'sk-desa', '{{ $index }}', '{{ asset('storage/' . $skDesa) }}');">
-                                </iframe>
-                                <object
-                                    id="pdf-sk-desa-object-{{ $index }}"
-                                    data="{{ asset('storage/' . $skDesa) }}#toolbar=0&navpanes=0&statusbar=0&scrollbar=0&view=FitH"
-                                    type="application/pdf"
-                                    class="w-full h-full rounded-lg pdf-preview-iframe no-context-menu hidden"
-                                    title="SK Desa {{ $kelompok->getKodeKelompokAttribute() }}">
-                                    <p class="text-sm md:text-base text-gray-700 mb-3">PDF tidak dapat ditampilkan di browser ini.</p>
-                                    <a href="{{ asset('storage/' . $skDesa) }}" target="_blank" class="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
-                                        Buka PDF di Tab Baru
-                                    </a>
-                                </object>
-                                {{-- Fallback link --}}
-                                <div id="pdf-sk-desa-fallback-{{ $index }}" class="pdf-fallback hidden">
-                                    <p class="text-sm md:text-base text-gray-700 mb-3">PDF tidak dapat ditampilkan di browser ini.</p>
-                                    <a href="{{ asset('storage/' . $skDesa) }}" target="_blank" class="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
-                                        Buka PDF di Tab Baru
-                                    </a>
-                                </div>
-                                {{-- ✅ Watermark mobile (rapat seperti desktop) --}}
-                                <div class="absolute inset-0 pointer-events-none overflow-hidden md:hidden">
-                                    <div class="grid grid-cols-12 w-full h-full">
-                                        @for ($i = 0; $i < 150; $i++)
-                                            <span class="flex items-center justify-center text-gray-800 text-[8px] font-bold opacity-10 -rotate-45 whitespace-nowrap">
-                                            INNDESA
-                                            </span>
-                                            @endfor
-                                    </div>
-                                </div>
-                                {{-- ✅ Watermark desktop --}}
-                                <div class="absolute inset-0 pointer-events-none overflow-hidden hidden md:block">
-                                    <div class="grid grid-cols-12 w-full h-full">
-                                        @for ($i = 0; $i < 150; $i++)
-                                            <span class="flex items-center justify-center text-gray-800 text-[10px] font-bold opacity-10 -rotate-45 whitespace-nowrap">
-                                            INNDESA
-                                            </span>
-                                            @endfor
-                                    </div>
-                                </div>
-                                {{-- Overlay klik PDF --}}
-                                <div class="absolute inset-0 cursor-pointer no-context-menu"
-                                    onclick="openPreview('{{ asset('storage/' . $skDesa) }}', 'SK Desa {{ $kelompok->getKodeKelompokAttribute() }}', 'pdf', false)"
-                                    oncontextmenu="return false;"
-                                    ondragstart="return false;"
-                                    onselectstart="return false;">
-                                </div>
-                            </div>
-                        </div>
+                <!-- SEJARAH -->
+                <div id="sejarah" class="profile-tab-content hidden py-4">
+                    <div class="prose prose-xs md:prose-lg max-w-none text-gray-700 leading-relaxed text-justify">
+                        @foreach (explode("\n", $kelompok->sejarah ?? 'Belum ada data sejarah untuk kelompok ini.') as $paragraph)
+                        @if (!empty(trim($paragraph)))
+                        <p class="mb-3 md:mb-4 indent-2 md:indent-8 text-xs md:text-base leading-snug md:leading-relaxed">
+                            {{ $paragraph }}
+                        </p>
                         @endif
                         @endforeach
                     </div>
-                    {{-- Pagination --}}
-                    @if(count($skDesaItems) > 1)
-                    <div class="pagination-mobile flex justify-center mt-4">
-                        <button id="sk-desa-prev" class="btn btn-outline mr-2" onclick="prevSlide('sk-desa')" aria-label="Previous slide">←</button>
-                        <div id="sk-desa-pagination" class="flex space-x-1"></div>
-                        <button id="sk-desa-next" class="btn btn-outline" onclick="nextSlide('sk-desa')" aria-label="Next slide">→</button>
-                    </div>
-                    @endif
-                    @else
-                    <p class="text-center text-gray-500 text-sm md:text-base">Tidak ada data SK Desa yang tersedia.</p>
-                    @endif
                 </div>
-            </div>
-            <!-- KELOMPOK RENTAN -->
-            <div id="kelompok-rentan" class="profile-tab-content hidden py-4">
-                @if ($rentanCategories->isNotEmpty())
-                <div class="mobile-table overflow-x-auto">
-                    <table class="w-full border-collapse mb-4 border border-gray-200 text-[10px] md:text-sm">
-                        <thead>
-                            <tr class="bg-gray-50">
-                                @foreach ($rentanCategories as $category)
-                                <th class="border border-gray-200 px-1 py-0.5 md:px-3 md:py-2 text-left font-semibold text-[10px] md:text-base">
-                                    {{ $category }}
-                                </th>
-                                @endforeach
-                            </tr>
-                        </thead>
-                        <tbody>
+                <!-- SK DESA -->
+                <div id="sk-desa" class="profile-tab-content hidden py-4">
+                    <div class="relative">
+                        @if ($kelompok && $kelompok->sk_desa)
+                        @php
+                        $skDesaItems = is_array($kelompok->sk_desa) ? $kelompok->sk_desa : [$kelompok->sk_desa];
+                        @endphp
+                        <div id="sk-desa-carousel" class="carousel">
+                            @foreach ($skDesaItems as $index => $skDesa)
                             @php
-                            $maxRows = max(array_map(function($category) use ($rentanGrouped) {
-                            return isset($rentanGrouped[$category]) ? $rentanGrouped[$category]->count() : 0;
-                            }, $rentanCategories->toArray()));
+                            $extension = pathinfo($skDesa, PATHINFO_EXTENSION);
+                            $isImage = in_array(strtolower($extension), ['jpg', 'jpeg', 'png']);
                             @endphp
-                            @for ($i = 0; $i < $maxRows; $i++)
-                                <tr>
-                                @foreach ($rentanCategories as $category)
-                                <td class="border border-gray-200 px-1 py-0.5 md:px-3 md:py-2 text-[10px] md:text-base">
-                                    @if (isset($rentanGrouped[$category]) && isset($rentanGrouped[$category][$i]))
-                                    {{ $rentanGrouped[$category][$i]->nama_anggota }}
-                                    @else
-                                    &nbsp;
-                                    @endif
-                                </td>
-                                @endforeach
-                                </tr>
-                                @endfor
-                        </tbody>
-                    </table>
-                </div>
-                @else
-                <table class="w-full border-collapse mb-4 border border-gray-200">
-                    <tbody>
-                        <tr>
-                            <td class="text-center p-2 md:p-4 text-gray-500 text-[10px] md:text-base" colspan="{{ $rentanCategories->count() ?: 1 }}">
-                                Tidak ada data kelompok rentan yang tersedia.
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                @endif
-            </div>
-            <!-- STOK PRODUK -->
-            <div id="total-produk" class="profile-tab-content hidden py-4">
-                @if ($produk->isNotEmpty())
-                <div class="mobile-table overflow-x-auto">
-                    <table class="w-full border-collapse mt-4 border border-gray-200 text-[10px] md:text-sm">
-                        <thead>
-                            <tr class="bg-gray-50">
-                                <th class="border border-gray-200 px-1 py-0.5 md:px-3 md:py-2 text-left font-semibold text-[10px] md:text-base">
-                                    Nama Produk
-                                </th>
-                                <th class="border border-gray-200 px-1 py-0.5 md:px-3 md:py-2 text-left font-semibold text-[10px] md:text-base">
-                                    Stok Produk
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($produk as $item)
-                            <tr>
-                                <td class="border border-gray-200 px-1 py-0.5 md:px-3 md:py-2 text-[10px] md:text-base">
-                                    {{ $item->nama }}
-                                </td>
-                                <td class="border border-gray-200 px-1 py-0.5 md:px-3 md:py-2 text-[10px] md:text-base">
-                                    {{ $item->stok }} pcs
-                                </td>
-                            </tr>
+                            <!-- IMAGE -->
+                            @if ($isImage)
+                            <div class="preview-container-mobile relative w-full max-w-[20rem] md:max-w-[30rem] mx-auto {{ $index === 0 ? 'block' : 'hidden' }} sk-desa-item" data-index="{{ $index }}">
+                                <div class="relative w-full h-full rounded-lg shadow-md border border-gray-200 overflow-hidden">
+                                    <img
+                                        src="{{ asset('storage/' . $skDesa) }}"
+                                        alt="SK Desa {{ $kelompok->getKodeKelompokAttribute() }}"
+                                        class="w-full h-full object-contain cursor-pointer no-context-menu"
+                                        draggable="false"
+                                        oncontextmenu="return false;"
+                                        ondragstart="return false;"
+                                        onselectstart="return false;"
+                                        onclick="openPreview('{{ asset('storage/' . $skDesa) }}', 'SK Desa {{ $kelompok->getKodeKelompokAttribute() }}', 'image', false)"
+                                        onerror="this.src='{{ asset('images/placeholder.jpg') }}'">
+                                    {{-- ✅ Watermark mobile --}}
+                                    <div class="absolute inset-0 pointer-events-none overflow-hidden md:hidden">
+                                        <div class="grid grid-cols-4 w-full h-full">
+                                            @for ($i = 0; $i < 40; $i++)
+                                                <span class="flex items-center justify-center text-gray-800 text-[8px] font-bold opacity-10 -rotate-45 whitespace-nowrap">
+                                                INNDESA
+                                                </span>
+                                                @endfor
+                                        </div>
+                                    </div>
+                                    {{-- ✅ Watermark desktop --}}
+                                    <div class="absolute inset-0 pointer-events-none overflow-hidden hidden md:block">
+                                        <div class="grid grid-cols-12 w-full h-full">
+                                            @for ($i = 0; $i < 150; $i++)
+                                                <span class="flex items-center justify-center text-gray-800 text-[10px] font-bold opacity-10 -rotate-45 whitespace-nowrap">
+                                                INNDESA
+                                                </span>
+                                                @endfor
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- PDF -->
+                            @else
+                            <div class="preview-container-mobile relative w-full max-w-[20rem] md:max-w-[30rem] mx-auto {{ $index === 0 ? 'block' : 'hidden' }} sk-desa-item" data-index="{{ $index }}">
+                                <div class="pdf-container relative w-full h-full rounded-lg shadow-md border border-gray-200 overflow-hidden">
+                                    <div id="pdf-sk-desa-js-{{ $index }}" class="pdf-canvas-container w-full h-full">
+                                        <div class="pdf-loading">
+                                            <div class="pdf-loading-spinner"></div>
+                                            <p>Memuat PDF...</p>
+                                        </div>
+                                    </div>
+                                    <iframe
+                                        id="pdf-sk-desa-{{ $index }}"
+                                        src="{{ asset('storage/' . $skDesa) }}#toolbar=0&navpanes=0&statusbar=0&scrollbar=0&view=FitH"
+                                        class="w-full h-full rounded-lg pdf-preview-iframe no-context-menu hidden"
+                                        title="SK Desa {{ $kelompok->getKodeKelompokAttribute() }}"
+                                        oncontextmenu="return false;"
+                                        ondragstart="return false;"
+                                        onselectstart="return false;"
+                                        onload="this.contentWindow.focus(); checkPdfLoad(this, 'sk-desa', '{{ $index }}', '{{ asset('storage/' . $skDesa) }}');">
+                                    </iframe>
+                                    <object
+                                        id="pdf-sk-desa-object-{{ $index }}"
+                                        data="{{ asset('storage/' . $skDesa) }}#toolbar=0&navpanes=0&statusbar=0&scrollbar=0&view=FitH"
+                                        type="application/pdf"
+                                        class="w-full h-full rounded-lg pdf-preview-iframe no-context-menu hidden"
+                                        title="SK Desa {{ $kelompok->getKodeKelompokAttribute() }}">
+                                        <p class="text-sm md:text-base text-gray-700 mb-3">PDF tidak dapat ditampilkan di browser ini.</p>
+                                        <a href="{{ asset('storage/' . $skDesa) }}" target="_blank" class="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                                            Buka PDF di Tab Baru
+                                        </a>
+                                    </object>
+                                    {{-- Fallback link --}}
+                                    <div id="pdf-sk-desa-fallback-{{ $index }}" class="pdf-fallback hidden">
+                                        <p class="text-sm md:text-base text-gray-700 mb-3">PDF tidak dapat ditampilkan di browser ini.</p>
+                                        <a href="{{ asset('storage/' . $skDesa) }}" target="_blank" class="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                                            Buka PDF di Tab Baru
+                                        </a>
+                                    </div>
+                                    {{-- ✅ Watermark mobile (rapat seperti desktop) --}}
+                                    <div class="absolute inset-0 pointer-events-none overflow-hidden md:hidden">
+                                        <div class="grid grid-cols-12 w-full h-full">
+                                            @for ($i = 0; $i < 150; $i++)
+                                                <span class="flex items-center justify-center text-gray-800 text-[8px] font-bold opacity-10 -rotate-45 whitespace-nowrap">
+                                                INNDESA
+                                                </span>
+                                                @endfor
+                                        </div>
+                                    </div>
+                                    {{-- ✅ Watermark desktop --}}
+                                    <div class="absolute inset-0 pointer-events-none overflow-hidden hidden md:block">
+                                        <div class="grid grid-cols-12 w-full h-full">
+                                            @for ($i = 0; $i < 150; $i++)
+                                                <span class="flex items-center justify-center text-gray-800 text-[10px] font-bold opacity-10 -rotate-45 whitespace-nowrap">
+                                                INNDESA
+                                                </span>
+                                                @endfor
+                                        </div>
+                                    </div>
+                                    {{-- Overlay klik PDF --}}
+                                    <div class="absolute inset-0 cursor-pointer no-context-menu"
+                                        onclick="openPreview('{{ asset('storage/' . $skDesa) }}', 'SK Desa {{ $kelompok->getKodeKelompokAttribute() }}', 'pdf', false)"
+                                        oncontextmenu="return false;"
+                                        ondragstart="return false;"
+                                        onselectstart="return false;">
+                                    </div>
+                                </div>
+                            </div>
+                            @endif
                             @endforeach
+                        </div>
+                        {{-- Pagination --}}
+                        @if(count($skDesaItems) > 1)
+                        <div class="pagination-mobile flex justify-center mt-4">
+                            <button id="sk-desa-prev" class="btn btn-outline mr-2" onclick="prevSlide('sk-desa')" aria-label="Previous slide">←</button>
+                            <div id="sk-desa-pagination" class="flex space-x-1"></div>
+                            <button id="sk-desa-next" class="btn btn-outline" onclick="nextSlide('sk-desa')" aria-label="Next slide">→</button>
+                        </div>
+                        @endif
+                        @else
+                        <p class="text-center text-gray-500 text-sm md:text-base">Tidak ada data SK Desa yang tersedia.</p>
+                        @endif
+                    </div>
+                </div>
+                <!-- KELOMPOK RENTAN -->
+                <div id="kelompok-rentan" class="profile-tab-content hidden py-4">
+                    @if ($rentanCategories->isNotEmpty())
+                    <div class="mobile-table overflow-x-auto">
+                        <table class="w-full border-collapse mb-4 border border-gray-200 text-[10px] md:text-sm">
+                            <thead>
+                                <tr class="bg-gray-50">
+                                    @foreach ($rentanCategories as $category)
+                                    <th class="border border-gray-200 px-1 py-0.5 md:px-3 md:py-2 text-left font-semibold text-[10px] md:text-base">
+                                        {{ $category }}
+                                    </th>
+                                    @endforeach
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php
+                                $maxRows = max(array_map(function($category) use ($rentanGrouped) {
+                                return isset($rentanGrouped[$category]) ? $rentanGrouped[$category]->count() : 0;
+                                }, $rentanCategories->toArray()));
+                                @endphp
+                                @for ($i = 0; $i < $maxRows; $i++)
+                                    <tr>
+                                    @foreach ($rentanCategories as $category)
+                                    <td class="border border-gray-200 px-1 py-0.5 md:px-3 md:py-2 text-[10px] md:text-base">
+                                        @if (isset($rentanGrouped[$category]) && isset($rentanGrouped[$category][$i]))
+                                        {{ $rentanGrouped[$category][$i]->nama_anggota }}
+                                        @else
+                                        &nbsp;
+                                        @endif
+                                    </td>
+                                    @endforeach
+                                    </tr>
+                                    @endfor
+                            </tbody>
+                        </table>
+                    </div>
+                    @else
+                    <table class="w-full border-collapse mb-4 border border-gray-200">
+                        <tbody>
+                            <tr>
+                                <td class="text-center p-2 md:p-4 text-gray-500 text-[10px] md:text-base" colspan="{{ $rentanCategories->count() ?: 1 }}">
+                                    Tidak ada data kelompok rentan yang tersedia.
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
+                    @endif
                 </div>
-                @else
-                <p class="text-center text-gray-500 text-[10px] md:text-base">
-                    Tidak ada data produk yang tersedia.
-                </p>
-                @endif
+                <!-- STOK PRODUK -->
+                <div id="total-produk" class="profile-tab-content hidden py-4">
+                    @if ($produk->isNotEmpty())
+                    <div class="mobile-table overflow-x-auto">
+                        <table class="w-full border-collapse mt-4 border border-gray-200 text-[10px] md:text-sm">
+                            <thead>
+                                <tr class="bg-gray-50">
+                                    <th class="border border-gray-200 px-1 py-0.5 md:px-3 md:py-2 text-left font-semibold text-[10px] md:text-base">
+                                        Nama Produk
+                                    </th>
+                                    <th class="border border-gray-200 px-1 py-0.5 md:px-3 md:py-2 text-left font-semibold text-[10px] md:text-base">
+                                        Stok Produk
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($produk as $item)
+                                <tr>
+                                    <td class="border border-gray-200 px-1 py-0.5 md:px-3 md:py-2 text-[10px] md:text-base">
+                                        {{ $item->nama }}
+                                    </td>
+                                    <td class="border border-gray-200 px-1 py-0.5 md:px-3 md:py-2 text-[10px] md:text-base">
+                                        {{ $item->stok }} pcs
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    @else
+                    <p class="text-center text-gray-500 text-[10px] md:text-base">
+                        Tidak ada data produk yang tersedia.
+                    </p>
+                    @endif
+                </div>
             </div>
         </div>
     </div>
+
     <!-- INFORMASI -->
     <h2 class="text-2xl md:text-4xl font-bold text-blue-600 text-center mb-6 md:mb-8 px-4">Informasi</h2>
     <div class="w-full border-t border-gray-200 pt-4 box-border section-padding-mobile">
@@ -1029,6 +1042,8 @@
                 <button class="info-tab-button flex-1 py-2 px-2 md:px-4 font-semibold text-center transition-colors bg-[#0097D4] text-white text-xs md:text-base" onclick="openTab('produk', 'info')" aria-label="Lihat Produk">Produk</button>
                 <button class="info-tab-button flex-1 py-2 px-2 md:px-4 font-semibold text-center transition-colors bg-gray-200 text-gray-700 text-xs md:text-base" onclick="openTab('kegiatan', 'info')" aria-label="Lihat Kegiatan">Kegiatan</button>
                 <button class="info-tab-button flex-1 py-2 px-2 md:px-4 font-semibold text-center transition-colors bg-gray-200 text-gray-700 text-xs md:text-base" onclick="openTab('inovasi', 'info')" aria-label="Lihat Inovasi & Penghargaan">Inovasi & Penghargaan</button>
+                <button class="info-tab-button flex-1 py-2 px-2 md:px-4 font-semibold text-center transition-colors bg-gray-200 text-gray-700 text-xs md:text-base" onclick="openTab('rekap', 'info')" aria-label="Lihat Rekap Produk Terjual">Rekap Produk Terjual</button>
+
             </div>
             <div id="produk" class="info-tab-content block py-4">
                 <!-- TOTAL PRODUK TERJUAL, KONTAK, KONTALOG -->
@@ -1426,6 +1441,7 @@
                 document.body.classList.add("loaded");
             }, 500); // Match transition duration (0.5s)
         });
+
         // PERBAIKAN: Set worker untuk PDF.js
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
         // PENCARIAN
