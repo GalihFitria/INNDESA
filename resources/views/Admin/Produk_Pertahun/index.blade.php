@@ -3,7 +3,6 @@
 @section('title', 'INNDESA - Kelola Rekap Penjualan Produk')
 <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
 
-
 @section('content')
 <h2 class="text-center text-4xl font-bold text-gray-800 mb-6">.::Kelola Penjualan Produk per-Tahun::.</h2>
 <div class="bg-white shadow-md p-4 rounded-lg">
@@ -86,7 +85,7 @@
 <input type="hidden" id="success-message" value="{{ session('success') ?? '' }}">
 
 <!-- Tambahkan library SheetJS -->
-<script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {

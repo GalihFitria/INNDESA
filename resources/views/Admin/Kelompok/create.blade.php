@@ -57,7 +57,7 @@
 
         <div>
             <label for="background" class="block text-sm font-medium text-gray-700">Background</label>
-            <input type="file" name="background" id="background" accept=".pdf,.jpg,.jpeg,.png" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500" required>
+            <input type="file" name="background" id="background" accept=".pdf,.jpg,.jpeg,.png" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
             <div id="background_filename" class="mt-2 text-sm text-gray-600">
                 <p>Tidak ada file yang dipilih.</p>
             </div>

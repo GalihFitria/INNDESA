@@ -7,6 +7,7 @@ use App\Models\Kegiatan;
 use App\Models\Kelompok;
 use App\Models\KelompokRentan;
 use App\Models\Produk;
+use App\Models\ProdukPertahun;
 use App\Models\StrukturOrganisasi;
 use App\Models\V_Struktur__Rentan;
 use Illuminate\Http\Request;
@@ -92,6 +93,20 @@ class KelompokController extends Controller
             ->orderBy('tanggal', 'desc')
             ->get();
 
+        $rekap = ProdukPertahun::select(
+            'produk_pertahun.tahun',
+            'produk_pertahun.nama_produk',
+            'produk_pertahun.harga',
+            'produk_pertahun.produk_terjual'
+        )
+            ->join('produk', 'produk.id_produk', '=', 'produk_pertahun.id_produk')
+            ->where('produk.id_kelompok', $id) // filter sesuai kelompok
+            ->orderBy('produk_pertahun.nama_produk')
+            ->orderBy('produk_pertahun.tahun')
+            ->get()
+            ->groupBy('nama_produk');
+
+
         return view('Pengunjung.kelompok', [
             'kelompok' => $kelompok,
             'struktur' => $struktur,
@@ -101,7 +116,8 @@ class KelompokController extends Controller
             'katalog' => $katalog,
             'totalProdukTerjual' => $totalProdukTerjual,
             'inovasiImages' => $inovasiImages,
-            'kegiatan' => $kegiatan
+            'kegiatan' => $kegiatan,
+            'rekap' => $rekap
         ]);
     }
 

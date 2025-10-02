@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\InformasiUser;
 use App\Models\Produk;
 use Illuminate\Http\Request;
 
@@ -25,10 +26,15 @@ class DetailProdukController extends Controller
             ->with('kelompok')
             ->findOrFail($id);
 
-        // Prepare certificate data as an array for the carousel
+        // Ambil data kontak (WhatsApp, Instagram, Facebook)
+        $kontak = InformasiUser::where('id_kelompok', $produk->id_kelompok)
+            ->select('no_telp', 'ig', 'facebook')
+            ->first();
+
+        // Prepare certificate data
         $sertifikatImages = $produk->sertifikat ? collect([['file' => $produk->sertifikat, 'nama_sertifikat' => 'Sertifikat Produk ' . $produk->nama]]) : collect([]);
 
-        return view('Pengunjung.detail_produk', compact('produk', 'sertifikatImages'));
+        return view('Pengunjung.detail_produk', compact('produk', 'sertifikatImages', 'kontak'));
     }
 
     public function create()

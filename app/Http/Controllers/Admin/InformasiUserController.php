@@ -110,8 +110,8 @@ public function edit($id)
         $user->id_user = $request->id_user;
         $user->username = $request->username;
         $user->no_telp = $request->no_telp;
-        $user->ig = $request->ig;
-        $user->facebook = $request->facebook;
+        $user->ig          = $request->ig ?: null;       // ✅ kosong → null
+        $user->facebook    = $request->facebook ?: null;
         $user->email = $request->email;
 
         // Update password hanya jika diisi

@@ -200,7 +200,7 @@
             </div>
 
             <div class="space-y-4 sm:space-y-6">
-                <!-- Admin INNDESA -->
+                <!-- Admin INNDESA (static / bisa dari DB kalau ada tabel khusus admin pusat) -->
                 <div class="contact-card admin-card bg-white rounded-lg shadow-md p-4 sm:p-5 flex items-center justify-between">
                     <div class="flex items-center">
                         <div class="contact-icon w-12 h-12 sm:w-12 sm:h-12 rounded-full bg-blue-100 flex items-center justify-center mr-3 sm:mr-4">
@@ -222,96 +222,36 @@
                     </a>
                 </div>
 
-                <!-- Kelompok 1 -->
+                <!-- Kelompok dari database -->
+                @foreach ($kontak as $item)
                 <div class="contact-card group-card bg-white rounded-lg shadow-md p-4 sm:p-5 flex items-center justify-between">
                     <div class="flex items-center">
                         <div class="contact-icon w-12 h-12 sm:w-12 sm:h-12 rounded-full bg-green-100 flex items-center justify-center mr-3 sm:mr-4">
                             <i class="fas fa-users text-green-600 text-xl sm:text-xl"></i>
                         </div>
                         <div>
-                            <h3 class="contact-name text-base sm:text-lg font-bold text-gray-800">Kelompok 1</h3>
+                            <h3 class="contact-name text-base sm:text-lg font-bold text-gray-800">
+                                {{ $item->kelompok->nama ?? 'Tanpa Nama Kelompok' }}
+                            </h3>
                             <div class="flex items-center mt-1">
                                 <i class="fab fa-whatsapp text-green-500 mr-1 sm:mr-2 text-sm sm:text-base"></i>
-                                <span class="contact-number text-gray-700 text-sm sm:text-base">+62 878-9012-3456</span>
+                                <span class="contact-number text-gray-700 text-sm sm:text-base">
+                                    {{ $item->no_telp }}
+                                </span>
                             </div>
                         </div>
                     </div>
-                    <a href="https://api.whatsapp.com/send?phone=6287890123456&text=Halo%20Kelompok%201"
+                    <a href="https://api.whatsapp.com/send?phone={{ preg_replace('/\D/', '', $item->no_telp) }}&text=Halo%20{{ urlencode($item->kelompok->nama ?? 'Kelompok') }}"
                         target="_blank"
                         class="whatsapp-btn text-white font-medium py-2 px-3 sm:px-4 rounded-lg flex items-center text-xs sm:text-sm">
                         <i class="fab fa-whatsapp mr-1 sm:mr-2"></i>
                         Hubungi
                     </a>
                 </div>
-
-                <!-- Kelompok 2 -->
-                <div class="contact-card group-card bg-white rounded-lg shadow-md p-4 sm:p-5 flex items-center justify-between">
-                    <div class="flex items-center">
-                        <div class="contact-icon w-12 h-12 sm:w-12 sm:h-12 rounded-full bg-green-100 flex items-center justify-center mr-3 sm:mr-4">
-                            <i class="fas fa-users text-green-600 text-xl sm:text-xl"></i>
-                        </div>
-                        <div>
-                            <h3 class="contact-name text-base sm:text-lg font-bold text-gray-800">Kelompok 2</h3>
-                            <div class="flex items-center mt-1">
-                                <i class="fab fa-whatsapp text-green-500 mr-1 sm:mr-2 text-sm sm:text-base"></i>
-                                <span class="contact-number text-gray-700 text-sm sm:text-base">+62 857-1234-5678</span>
-                            </div>
-                        </div>
-                    </div>
-                    <a href="https://api.whatsapp.com/send?phone=6285712345678&text=Halo%20Kelompok%202"
-                        target="_blank"
-                        class="whatsapp-btn text-white font-medium py-2 px-3 sm:px-4 rounded-lg flex items-center text-xs sm:text-sm">
-                        <i class="fab fa-whatsapp mr-1 sm:mr-2"></i>
-                        Hubungi
-                    </a>
-                </div>
-
-                <!-- Kelompok 3 -->
-                <div class="contact-card group-card bg-white rounded-lg shadow-md p-4 sm:p-5 flex items-center justify-between">
-                    <div class="flex items-center">
-                        <div class="contact-icon w-12 h-12 sm:w-12 sm:h-12 rounded-full bg-green-100 flex items-center justify-center mr-3 sm:mr-4">
-                            <i class="fas fa-users text-green-600 text-xl sm:text-xl"></i>
-                        </div>
-                        <div>
-                            <h3 class="contact-name text-base sm:text-lg font-bold text-gray-800">Kelompok 3</h3>
-                            <div class="flex items-center mt-1">
-                                <i class="fab fa-whatsapp text-green-500 mr-1 sm:mr-2 text-sm sm:text-base"></i>
-                                <span class="contact-number text-gray-700 text-sm sm:text-base">+62 896-5432-1098</span>
-                            </div>
-                        </div>
-                    </div>
-                    <a href="https://api.whatsapp.com/send?phone=6289654321098&text=Halo%20Kelompok%203"
-                        target="_blank"
-                        class="whatsapp-btn text-white font-medium py-2 px-3 sm:px-4 rounded-lg flex items-center text-xs sm:text-sm">
-                        <i class="fab fa-whatsapp mr-1 sm:mr-2"></i>
-                        Hubungi
-                    </a>
-                </div>
-
-                <!-- Kelompok 4 -->
-                <div class="contact-card group-card bg-white rounded-lg shadow-md p-4 sm:p-5 flex items-center justify-between">
-                    <div class="flex items-center">
-                        <div class="contact-icon w-12 h-12 sm:w-12 sm:h-12 rounded-full bg-green-100 flex items-center justify-center mr-3 sm:mr-4">
-                            <i class="fas fa-users text-green-600 text-xl sm:text-xl"></i>
-                        </div>
-                        <div>
-                            <h3 class="contact-name text-base sm:text-lg font-bold text-gray-800">Kelompok 4</h3>
-                            <div class="flex items-center mt-1">
-                                <i class="fab fa-whatsapp text-green-500 mr-1 sm:mr-2 text-sm sm:text-base"></i>
-                                <span class="contact-number text-gray-700 text-sm sm:text-base">+62 813-2468-1357</span>
-                            </div>
-                        </div>
-                    </div>
-                    <a href="https://api.whatsapp.com/send?phone=6281324681357&text=Halo%20Kelompok%204"
-                        target="_blank"
-                        class="whatsapp-btn text-white font-medium py-2 px-3 sm:px-4 rounded-lg flex items-center text-xs sm:text-sm">
-                        <i class="fab fa-whatsapp mr-1 sm:mr-2"></i>
-                        Hubungi
-                    </a>
-                </div>
+                @endforeach
             </div>
 
-            <div class="mt-8 sm:mt-12 text-center">
+            <!-- <div class="mt-8 sm:mt-12 text-center">
                 <div class="bg-white rounded-lg shadow-md p-4 sm:p-6">
                     <h3 class="text-base sm:text-lg font-bold text-gray-800 mb-1 sm:mb-2">Butuh Bantuan?</h3>
                     <p class="text-xs sm:text-base text-gray-600 mb-3 sm:mb-4">Hubungi kami sekarang juga melalui WhatsApp</p>
@@ -323,7 +263,7 @@
                         Chat Sekarang
                     </a>
                 </div>
-            </div>
+            </div> -->
         </div>
     </section>
 
@@ -341,16 +281,6 @@
                 document.body.classList.add("loaded");
             }, 500);
         });
-
-        // Prevent zoom on double tap for better mobile UX
-        let lastTouchEnd = 0;
-        document.addEventListener('touchend', function(event) {
-            const now = new Date().getTime();
-            if (now - lastTouchEnd <= 300) {
-                event.preventDefault();
-            }
-            lastTouchEnd = now;
-        }, false);
     </script>
 </body>
 

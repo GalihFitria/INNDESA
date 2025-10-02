@@ -537,16 +537,27 @@
                                 alt="{{ $kegiatan->judul }}"
                                 class="w-full h-full object-cover rounded-t-lg" />
                         </div>
-                        <div class="p-3 md:p-4 flex flex-col justify-between flex-1">
-                            <h3 class="font-bold text-base text-sm md:text-sm mb-2 leading-tight">
+                           <div class="flex flex-col h-full p-3 md:p-4">
+                            <h3 class="font-bold text-sm md:text-sm mb-2 leading-tight">
                                 {{ $kegiatan->judul }}
                             </h3>
-                            <div>
-                                <p class="text-[10px] md:text-xs opacity-75 truncate">
-                                    {{ \Carbon\Carbon::parse($kegiatan->tanggal)->translatedFormat('d F Y') }}
-                                </p>
+
+                            {{-- Bagian isi ditarik biar fleksibel --}}
+                            <div class="flex flex-col justify-between flex-1">
+                                <div>
+                                    <p class="text-xs opacity-75">
+                                        {{ \Carbon\Carbon::parse($kegiatan->tanggal)->translatedFormat('d F Y') }}
+                                    </p>
+
+                                    {{-- Deskripsi singkat --}}
+                                    <p class="text-xs md:text-sm text-black-600 mt-2 line-clamp-3 md:line-clamp-2">
+                                        {{ Str::limit($kegiatan->deskripsi, 120) }}
+                                    </p>
+                                </div>
+
+                                {{-- Baca Selengkapnya rata tengah di bawah --}}
                                 <a href="{{ route('update_kegiatan.show', $kegiatan->id_kegiatan) }}"
-                                    class="btn w-full bg-white/20 hover:bg-white/30 text-white border-white/30 text-center block text-xs sm:text-sm">
+                                    class="text-white-600 hover:underline text-xs md:text-sm mt-3 block text-center">
                                     Baca Selengkapnya
                                 </a>
                             </div>

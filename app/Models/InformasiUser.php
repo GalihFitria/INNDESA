@@ -42,23 +42,22 @@ class InformasiUser extends Authenticatable implements CanResetPassword
 
     public function kelompok()
     {
-        return $this->belongsTo(Kelompok::class, 'id_kelompok', 'id_kelompok');
+        return $this->belongsTo(Kelompok::class, 'id_kelompok');
     }
 
-public function sendPasswordResetNotification($token)
-{
-    $this->notify(new \Illuminate\Auth\Notifications\ResetPassword($token));
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new \Illuminate\Auth\Notifications\ResetPassword($token));
+    }
+
+    // app/Models/InformasiUser.php
+    public function getKodeAdminAttribute()
+    {
+        return 'AK' . $this->id_admin;
+    }
+
+    public function kategori()
+    {
+        return $this->belongsTo(KategoriKelompok::class, 'id_kategori', 'id_kategori');
+    }
 }
-
-// app/Models/InformasiUser.php
-public function getKodeAdminAttribute()
-{
-    return 'AK' . $this->id_admin;
-}
-
-}
-
-
-
-
-

@@ -126,20 +126,42 @@
         form.addEventListener('submit', function(e) {
             e.preventDefault();
             Swal.fire({
-                title: 'Yakin ingin menghapus data?',
+                title: 'Peringatan!',
+                html: `<p class="text-red-600 font-semibold">
+                        Jika anda menghapus Kelompok ini maka data pada:
+                    </p>
+                    <ul class="text-left mt-2 text-gray-700 list-disc list-inside">
+                        <li>Struktur</li>
+                        <li>Produk</li>
+                        <li>Kegiatan</li>
+                        <li>Inovasi & Penghargaan</li>
+                        <li>Katalog</li>
+                        <li>Informasi User</li>
+                    </ul>
+                    <p class="mt-3 text-red-600 font-bold">akan ikut terhapus!</p>`,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#d33',
                 cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Hapus',
+                confirmButtonText: 'Iya, Lanjut',
                 cancelButtonText: 'Batal'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    form.submit();
+                    Swal.fire({
+                        title: 'Menghapus...',
+                        text: 'Data kelompok sedang dihapus.',
+                        icon: 'info',
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            form.submit();
+                        }
+                    });
                 }
             });
         });
     });
+
 
     let rowsPerPage = parseInt(document.getElementById('rowsPerPage').value);
     let currentPage = 1;

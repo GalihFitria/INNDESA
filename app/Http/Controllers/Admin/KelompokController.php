@@ -38,9 +38,9 @@ class KelompokController extends Controller
         $request->validate([
             'id_kategori' => 'required|exists:kategori_kelompok,id_kategori',
             'nama' => 'required|string|max:255|unique:kelompok,nama',
-            'sejarah' => 'required|string',
+            'sejarah' => 'nullable|string',
             'sk_desa' => 'nullable|mimes:jpg,png,jpeg,pdf|max:2048',
-            'background' => 'required|image|mimes:jpg,png,jpeg,pdf|max:2048',
+            'background' => 'nullable|image|mimes:jpg,png,jpeg,pdf|max:2048',
             'logo' => 'nullable|image|mimes:jpg,png,jpeg,pdf|max:2048',
         ]);
 
@@ -114,7 +114,7 @@ class KelompokController extends Controller
         $request->validate([
             'id_kategori' => 'required|exists:kategori_kelompok,id_kategori',
             'nama' => 'required|string|max:255',
-            'sejarah' => 'required|string',
+            'sejarah' => 'nullable|string',
             'sk_desa' => 'nullable|mimes:jpg,png,jpeg,pdf|max:2048',
             'background' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
             'logo' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',

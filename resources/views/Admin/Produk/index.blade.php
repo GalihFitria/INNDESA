@@ -166,25 +166,39 @@
         });
     }
 
-    // === DELETE CONFIRMATION ===
+    // === DELETE CONFIRMATION (PRODUK) ===
     document.querySelectorAll('.delete-form').forEach(function(form) {
         form.addEventListener('submit', function(e) {
             e.preventDefault();
             Swal.fire({
-                title: 'Yakin ingin menghapus data?',
+                title: 'Peringatan!',
+                html: `<p class="text-red-600 font-semibold">
+                        Jika anda menghapus Produk ini maka data rekap penjualan produk juga akan terhapus!
+                    </p>
+                    <p class="mt-3 text-gray-700">Apakah anda yakin ingin melanjutkan?</p>`,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#d33',
                 cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Hapus',
+                confirmButtonText: 'Iya, Lanjut',
                 cancelButtonText: 'Batal'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    form.submit();
+                    Swal.fire({
+                        title: 'Menghapus...',
+                        text: 'Data produk sedang diproses untuk dihapus.',
+                        icon: 'info',
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            form.submit();
+                        }
+                    });
                 }
             });
         });
     });
+
 
     // === SORTING TABLE ===
     document.querySelectorAll("thead th[data-column]").forEach(header => {

@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <!-- Tambahkan PDF.js library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         #preloader {
             position: fixed;
@@ -423,9 +424,15 @@
             }
 
             #contactDropdownMenu {
-                width: 100% !important;
+                width: 90%;
+                /* Mengurangi lebar agar tidak mentok */
                 max-width: none !important;
+                left: 50%;
+                /* Posisi ke tengah */
+                transform: translateX(-50%);
+                /* Koreksi posisi tengah */
                 margin-top: 0.5rem;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
             }
 
             #contactDropdownMenu a {
@@ -522,6 +529,30 @@
                 flex-shrink: 0 !important;
                 white-space: nowrap !important;
             }
+
+            #contactDropdownMenu {
+                width: 85%;
+                /* Lebar lebih kecil lagi untuk layar sangat kecil */
+                left: 50%;
+                transform: translateX(-50%);
+                margin: 0.5rem auto;
+                /* Centering with margin auto */
+            }
+
+            #contactDropdownMenu a,
+            #contactDropdownMenu div {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.8rem;
+            }
+
+            #contactDropdownMenu .text-sm {
+                font-size: 0.7rem;
+            }
+
+            .contact-dropdown-wrapper button {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
+            }
         }
 
         /* Loading Spinner */
@@ -555,16 +586,6 @@
             animation: spin 1s linear infinite;
         }
 
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
         /* Smooth Scrolling */
         html {
             scroll-behavior: smooth;
@@ -586,6 +607,368 @@
                 min-height: 44px;
                 min-width: 44px;
             }
+        }
+
+        /* ================= MODAL PREVIEW ================= */
+        .preview-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .preview-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .preview-content {
+            background: white;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 900px;
+            max-height: 90vh;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .preview-modal.active .preview-content {
+            transform: scale(1);
+        }
+
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+            background: #ffffff;
+            z-index: 10;
+            position: relative;
+        }
+
+        .preview-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin: 0;
+        }
+
+        .preview-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #64748b;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+        }
+
+        .preview-close:hover {
+            background: #f1f5f9;
+            color: #1e293b;
+            transform: rotate(90deg);
+        }
+
+        .preview-body {
+            position: relative;
+            width: 100%;
+            height: calc(90vh - 70px);
+            overflow: hidden;
+            background: #f8fafc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .preview-pdf {
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+            padding: 1rem;
+            background: #ffffff;
+            border-radius: 8px;
+        }
+
+        .preview-pdf canvas {
+            display: block;
+            width: 100% !important;
+            height: auto !important;
+            margin: 0 auto 1rem auto;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+        }
+
+        .preview-watermark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 5;
+            overflow: hidden;
+        }
+
+        .preview-watermark .watermark-grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            width: 100%;
+            height: 100%;
+        }
+
+        .preview-watermark .watermark-text {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: rgba(0, 0, 0, 0.25);
+            transform: rotate(-45deg);
+            white-space: nowrap;
+            user-select: none;
+        }
+
+        /* Tambahkan class untuk navbar tetap terlihat saat modal aktif */
+        body.modal-active {
+            overflow: hidden;
+        }
+
+        body.modal-active .navbar {
+            z-index: 10000;
+        }
+
+        /* Responsive untuk modal */
+        @media (max-width: 768px) {
+            .preview-modal {
+                padding: 0.5rem;
+            }
+
+            .preview-content {
+                max-width: 95%;
+                max-height: 85vh;
+                /* Dikurangi dari 95vh menjadi 85vh */
+            }
+
+            .preview-header {
+                padding: 0.75rem;
+            }
+
+            .preview-title {
+                font-size: 1rem;
+            }
+
+            .preview-close {
+                width: 32px;
+                height: 32px;
+                font-size: 1.2rem;
+            }
+
+            .preview-body {
+                height: calc(85vh - 60px);
+                /* Disesuaikan dengan max-height */
+            }
+
+            .preview-watermark .watermark-text {
+                font-size: 14px;
+                color: rgba(0, 0, 0, 0.25);
+                /* Lebih tebal untuk mobile */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .preview-modal {
+                padding: 0.25rem;
+            }
+
+            .preview-content {
+                max-width: 98%;
+                max-height: 80vh;
+                /* Lebih kecil untuk layar sangat kecil */
+            }
+
+            .preview-header {
+                padding: 0.5rem;
+            }
+
+            .preview-title {
+                font-size: 0.9rem;
+            }
+
+            .preview-close {
+                width: 28px;
+                height: 28px;
+                font-size: 1rem;
+            }
+
+            .preview-body {
+                height: calc(80vh - 50px);
+                /* Disesuaikan dengan max-height */
+            }
+
+            .preview-watermark .watermark-text {
+                font-size: 12px;
+                color: rgba(0, 0, 0, 0.25);
+                /* Lebih tebal lagi untuk layar sangat kecil */
+            }
+
+            /* Untuk PDF di layar sangat kecil */
+            .preview-pdf {
+                padding: 0.5rem;
+            }
+
+            .preview-pdf canvas {
+                margin-bottom: 0.5rem;
+            }
+        }
+
+        /* Styling untuk teks "Lihat file" */
+        .sertifikat-item .absolute.inset-0.flex span {
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .sertifikat-item:hover .absolute.inset-0.flex span {
+            transform: scale(1.05);
+            background-color: #2563eb;
+            /* Warna biru lebih gelap saat hover */
+        }
+
+        /* Responsif untuk teks "Lihat file" */
+        @media (max-width: 767px) {
+            .sertifikat-item .absolute.inset-0.flex {
+                background-color: rgba(0, 0, 0, 0.3);
+                border-radius: 0.5rem;
+            }
+
+            .sertifikat-item .absolute.inset-0.flex span {
+                background-color: #0097D4;
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Teks "Lihat File" - PERBAIKAN */
+        .preview-overlay-text {
+            position: absolute;
+            background-color: rgba(59, 130, 246, 0.9);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-weight: 600;
+            font-size: 0.875rem;
+            z-index: 10;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .preview-overlay-text:hover {
+            background-color: rgba(37, 99, 235, 0.95);
+            transform: scale(1.05);
+        }
+
+        .preview-overlay-text i {
+            font-size: 1rem;
+        }
+
+        /* Posisi untuk mobile */
+        @media (max-width: 768px) {
+            .preview-overlay-text {
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+        }
+
+        /* Posisi untuk desktop */
+        @media (min-width: 769px) {
+            .preview-overlay-text {
+                top: 1rem;
+                right: 1rem;
+                transform: none;
+            }
+        }
+
+        /* Contact Dropdown Wrapper */
+        .contact-dropdown-wrapper {
+            position: relative;
+            display: inline-block;
+            width: auto;
+        }
+
+        /* Dropdown Menu */
+        #contactDropdownMenu {
+            min-width: 200px;
+            max-width: calc(100vw - 2rem);
+            /* Prevent overflow on small screens */
+            right: 0;
+            /* Align to the right of the button for better positioning */
+            left: auto;
+            /* Override left:0 to prevent misalignment */
+            transform: translateX(0);
+            /* Reset any transform */
+            border-radius: 0.5rem;
+            overflow: hidden;
+            /* Ensure rounded corners clip content */
+        }
+
+        /* Dropdown Items */
+        #contactDropdownMenu a,
+        #contactDropdownMenu div {
+            min-height: 48px;
+            /* Ensure touch target size for accessibility */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-decoration: none;
+            transition: background-color 0.2s ease;
+        }
+
+        /* Hover and Focus States */
+        #contactDropdownMenu a:hover,
+        #contactDropdownMenu a:focus {
+            background-color: #f1f5f9;
+            outline: none;
+        }
+
+        /* Button Styling */
+        .contact-dropdown-wrapper button {
+            min-height: 44px;
+            /* Ensure touch target size */
+            min-width: 120px;
+            /* Prevent button from being too narrow */
+            font-size: 0.9rem;
+            font-weight: 500;
         }
     </style>
 </head>
@@ -664,16 +1047,35 @@
                                         oncontextmenu="return false;"
                                         ondragstart="return false;"
                                         onselectstart="return false;"
-                                        onclick="openPreview('{{ asset('storage/' . $filePath) }}', 'Sertifikat {{ $namaSertifikat }}', 'image')"
+                                        onclick="openPreviewModal('{{ asset('storage/' . $filePath) }}', 'Sertifikat {{ $namaSertifikat }}', 'image')"
                                         onerror="this.src='{{ asset('images/placeholder.jpg') }}'; this.onerror=null;">
-                                    <div class="absolute inset-0 pointer-events-none overflow-hidden">
+
+                                    <!-- Watermark mobile -->
+                                    <div class="absolute inset-0 pointer-events-none overflow-hidden md:hidden">
                                         <div class="grid grid-cols-12 w-full h-full">
                                             @for ($i = 0; $i < 150; $i++)
-                                                <span class="flex items-center justify-center text-gray-800 text-[10px] font-bold opacity-10 -rotate-45 whitespace-nowrap watermark">
+                                                <span class="flex items-center justify-center text-gray-800 text-[8px] font-bold opacity-45 -rotate-45 whitespace-nowrap">
                                                 INNDESA
                                                 </span>
                                                 @endfor
                                         </div>
+                                    </div>
+
+                                    <!-- Watermark desktop -->
+                                    <div class="absolute inset-0 pointer-events-none overflow-hidden hidden md:block">
+                                        <div class="grid grid-cols-12 w-full h-full">
+                                            @for ($i = 0; $i < 150; $i++)
+                                                <span class="flex items-center justify-center text-gray-800 text-[10px] font-bold opacity-45 -rotate-45 whitespace-nowrap">
+                                                INNDESA
+                                                </span>
+                                                @endfor
+                                        </div>
+                                    </div>
+
+                                    <!-- Teks "Lihat File" - PERBAIKAN -->
+                                    <div class="preview-overlay-text" onclick="openPreviewModal('{{ asset('storage/' . $filePath) }}', 'Sertifikat {{ $namaSertifikat }}', 'image')">
+                                        <i class="fas fa-eye"></i>
+                                        <span>Lihat File</span>
                                     </div>
                                 </div>
                                 @elseif (Storage::disk('public')->exists($filePath))
@@ -689,34 +1091,19 @@
                                         <iframe
                                             id="pdf-sertifikat-{{ $index }}"
                                             src="{{ asset('storage/' . $filePath) }}#toolbar=0&navpanes=0&statusbar=0&scrollbar=0&view=FitH"
-                                            class="w-full h-full rounded-lg pdf-preview-iframe no-context-menu hidden"
+                                            class="w-full h-full rounded-lg pdf-preview-iframe no-context-menu"
                                             title="Sertifikat {{ $namaSertifikat }}"
                                             oncontextmenu="return false;"
                                             ondragstart="return false;"
                                             onselectstart="return false;"
                                             onload="this.contentWindow.focus(); checkPdfLoad(this, 'sertifikat', '{{ $index }}', '{{ asset('storage/' . $filePath) }}');">
                                         </iframe>
-                                        <object
-                                            id="pdf-sertifikat-object-{{ $index }}"
-                                            data="{{ asset('storage/' . $filePath) }}#toolbar=0&navpanes=0&statusbar=0&scrollbar=0&view=FitH"
-                                            type="application/pdf"
-                                            class="w-full h-full rounded-lg pdf-preview-iframe no-context-menu hidden"
-                                            title="Sertifikat {{ $namaSertifikat }}">
-                                            <p class="text-sm md:text-base text-gray-700 mb-3">PDF tidak dapat ditampilkan di browser ini.</p>
-                                            <a href="{{ asset('storage/' . $filePath) }}" target="_blank" class="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
-                                                Buka PDF di Tab Baru
-                                            </a>
-                                        </object>
-                                        <div id="pdf-sertifikat-fallback-{{ $index }}" class="pdf-fallback hidden">
-                                            <p class="text-sm md:text-base text-gray-700 mb-3">PDF tidak dapat ditampilkan di browser ini.</p>
-                                            <a href="{{ asset('storage/' . $filePath) }}" target="_blank" class="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
-                                                Buka PDF di Tab Baru
-                                            </a>
-                                        </div>
-                                        <div class="absolute inset-0 pointer-events-none overflow-hidden md:hidden pdf-watermark-mobile">
-                                            <div class="grid grid-cols-6 w-full h-full">
-                                                @for ($i = 0; $i < 36; $i++)
-                                                    <span class="flex items-center justify-center text-gray-800 text-[6px] font-bold opacity-10 -rotate-45 whitespace-nowrap watermark">
+
+                                        <!-- Watermark mobile -->
+                                        <div class="absolute inset-0 pointer-events-none overflow-hidden md:hidden">
+                                            <div class="grid grid-cols-12 w-full h-full">
+                                                @for ($i = 0; $i < 150; $i++)
+                                                    <span class="flex items-center justify-center text-gray-800 text-[8px] font-bold opacity-45 -rotate-45 whitespace-nowrap">
                                                     INNDESA
                                                     </span>
                                                     @endfor
@@ -725,17 +1112,23 @@
                                         <div class="absolute inset-0 pointer-events-none overflow-hidden hidden md:block">
                                             <div class="grid grid-cols-12 w-full h-full">
                                                 @for ($i = 0; $i < 150; $i++)
-                                                    <span class="flex items-center justify-center text-gray-800 text-[10px] font-bold opacity-10 -rotate-45 whitespace-nowrap watermark">
+                                                    <span class="flex items-center justify-center text-gray-800 text-[10px] font-bold opacity-45 -rotate-45 whitespace-nowrap">
                                                     INNDESA
                                                     </span>
                                                     @endfor
                                             </div>
                                         </div>
                                         <div class="absolute inset-0 cursor-pointer no-context-menu"
-                                            onclick="openPreview('{{ asset('storage/' . $filePath) }}', 'Sertifikat {{ $namaSertifikat }}', 'pdf')"
+                                            onclick="openPreviewModal('{{ asset('storage/' . $filePath) }}', 'Sertifikat {{ $namaSertifikat }}', 'pdf')"
                                             oncontextmenu="return false;"
                                             ondragstart="return false;"
                                             onselectstart="return false;">
+                                        </div>
+
+                                        <!-- Teks "Lihat File" - PERBAIKAN -->
+                                        <div class="preview-overlay-text" onclick="openPreviewModal('{{ asset('storage/' . $filePath) }}', 'Sertifikat {{ $namaSertifikat }}', 'pdf')">
+                                            <i class="fas fa-eye"></i>
+                                            <span>Lihat File</span>
                                         </div>
                                     </div>
                                 </div>
@@ -753,107 +1146,58 @@
                         </div>
                     </div>
                 </div>
-                <div id="previewModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div class="bg-white p-4 rounded-lg w-11/12 h-5/6 relative">
-                        <a id="downloadLink" href="#" download class="absolute bottom-4 left-4 bg-green-500 text-white px-3 py-2 rounded text-sm font-medium hover:bg-green-600 transition hidden" aria-label="Download file">
-                            Download
-                        </a>
-                        <button onclick="closePreview()" class="absolute top-2 right-2 bg-red-500 text-white px-3 py-1 rounded">✕</button>
-                        <h2 id="previewTitle" class="text-lg font-bold mb-4"></h2>
-                        <img id="previewImage" class="max-h-[70vh] mx-auto hidden no-context-menu" alt="Preview"
-                            draggable="false"
-                            oncontextmenu="return false;"
-                            ondragstart="return false;"
-                            onselectstart="return false;">
-                        <div id="pdfModalContainer" class="w-full h-[70vh] hidden">
-                            <div id="pdfModalJsContainer" class="pdf-canvas-container hidden">
-                                <div class="pdf-loading">
-                                    <div class="pdf-loading-spinner"></div>
-                                    <p>Memuat PDF...</p>
-                                </div>
-                            </div>
-                            <iframe id="previewPdf" class="w-full h-full no-context-menu pdf-preview-iframe" frameborder="0"
-                                oncontextmenu="return false;"
-                                onload="this.contentWindow.focus(); checkModalPdfLoad();">
-                            </iframe>
-                            <object id="previewPdfObject" class="w-full h-full no-context-menu pdf-preview-iframe hidden" type="application/pdf">
-                                <p class="text-sm md:text-base text-gray-700 mb-3">PDF tidak dapat ditampilkan di browser ini.</p>
-                                <a id="previewPdfLink" href="#" target="_blank" class="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
-                                    Buka PDF di Tab Baru
-                                </a>
-                            </object>
-                            <div id="previewPdfFallback" class="pdf-fallback hidden">
-                                <p class="text-sm md:text-base text-gray-700 mb-3">PDF tidak dapat ditampilkan di browser ini.</p>
-                                <a id="previewPdfLink2" href="#" target="_blank" class="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
-                                    Buka PDF di Tab Baru
-                                </a>
-                            </div>
-                        </div>
-                        <div class="absolute inset-0 pointer-events-none overflow-hidden md:hidden" id="imageWatermarkMobile">
-                            <div class="grid grid-cols-6 w-full h-full">
-                                @for ($i = 0; $i < 36; $i++)
-                                    <span class="flex items-center justify-center text-gray-800 text-[14px] font-bold opacity-10 -rotate-45 whitespace-nowrap watermark">
-                                    INNDESA
-                                    </span>
-                                    @endfor
-                            </div>
-                        </div>
-                        <div class="absolute inset-0 pointer-events-none overflow-hidden hidden md:block" id="imageWatermarkDesktop">
-                            <div class="grid grid-cols-12 w-full h-full">
-                                @for ($i = 0; $i < 150; $i++)
-                                    <span class="flex items-center justify-center text-gray-800 text-[40px] font-bold opacity-10 -rotate-45 whitespace-nowrap watermark">
-                                    INNDESA
-                                    </span>
-                                    @endfor
-                            </div>
-                        </div>
-                        <div class="absolute inset-0 pointer-events-none overflow-hidden md:hidden" id="pdfWatermarkMobile">
-                            <div class="grid grid-cols-6 w-full h-full">
-                                @for ($i = 0; $i < 36; $i++)
-                                    <span class="flex items-center justify-center text-gray-800 text-[14px] font-bold opacity-10 -rotate-45 whitespace-nowrap watermark">
-                                    INNDESA
-                                    </span>
-                                    @endfor
-                            </div>
-                        </div>
-                        <div class="absolute inset-0 pointer-events-none overflow-hidden hidden md:block" id="pdfWatermarkDesktop">
-                            <div class="grid grid-cols-12 w-full h-full">
-                                @for ($i = 0; $i < 150; $i++)
-                                    <span class="flex items-center justify-center text-gray-800 text-[40px] font-bold opacity-10 -rotate-45 whitespace-nowrap watermark">
-                                    INNDESA
-                                    </span>
-                                    @endfor
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div class="flex flex-col border-t border-gray-300 mt-4 pt-4">
                     <span class="text-gray-700 mb-2">Untuk pemesanan dapat menghubungi kami:</span>
                     <div class="flex flex-wrap items-center gap-4">
                         <div class="flex items-center space-x-2">
                             <svg class="w-10 h-10 text-gray-400 rounded-full bg-gray-200 p-2"
                                 fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z" />
+                                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
                             </svg>
                             <span class="text-gray-700 font-bold">{{ $produk->kelompok->nama }}</span>
                         </div>
-                        <div class="relative">
+                        <div class="relative contact-dropdown-wrapper">
                             <button onclick="toggleContactDropdown()"
-                                class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
+                                class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
                                 Hubungi Kami
                             </button>
                             <div id="contactDropdownMenu"
-                                class="hidden absolute top-full left-0 mt-2 w-56 bg-white border rounded-lg shadow-lg z-50">
-                                <a href="https://wa.me/6289647038212?text={{ urlencode('Halo, saya tertarik dengan produk ' . $produk->nama . '. Harga: Rp. ' . number_format($produk->harga, 0, ',', '.') . '. Link produk: ' . route('detail_produk.show', $produk->id_produk)) }}"
-                                    class="flex flex-col px-4 py-2 text-gray-700 hover:bg-gray-100">
-                                    <span class="font-semibold">WhatsApp</span>
-                                    <span class="text-sm text-gray-500">+62 896-4703-8212</span>
+                                class="hidden absolute top-full mt-2 w-64 max-w-full bg-white border border-gray-200 rounded-lg shadow-lg z-50 sm:w-56">
+                                @if($kontak)
+                                <!-- WhatsApp -->
+                                @if($kontak->no_telp)
+                                <a href="https://wa.me/{{ $kontak->no_telp }}?text={{ urlencode('Halo, saya tertarik dengan produk ' . $produk->nama . '. Harga: Rp. ' . number_format($produk->harga, 0, ',', '.') . '. Link produk: ' . route('detail_produk.show', $produk->id_produk)) }}"
+                                    class="flex flex-col px-4 py-3 text-gray-700 hover:bg-gray-100 transition-colors no-underline">
+                                    <span class="font-semibold text-sm sm:text-base">WhatsApp</span>
+                                    <span class="text-xs sm:text-sm text-gray-500">{{ $kontak->no_telp }}</span>
                                 </a>
-                                <a href="https://www.instagram.com/fijarrfqh_/"
-                                    class="flex flex-col px-4 py-2 text-gray-700 hover:bg-gray-100">
-                                    <span class="font-semibold">Instagram</span>
-                                    <span class="text-sm text-gray-500">@fijarrfqh_</span>
+                                @endif
+
+                                <!-- Instagram -->
+                                @if($kontak->ig)
+                                <a href="https://www.instagram.com/{{ ltrim($kontak->ig, '@') }}/"
+                                    class="flex flex-col px-4 py-3 text-gray-700 hover:bg-gray-100 transition-colors no-underline">
+                                    <span class="font-semibold text-sm sm:text-base">Instagram</span>
+                                    <span class="text-xs sm:text-sm text-gray-500">{{ '@' . ltrim($kontak->ig, '@') }}</span>
                                 </a>
+                                @endif
+
+                                <!-- Facebook -->
+                                @if($kontak->facebook)
+                                @php
+                                $fbUsername = str_replace(['https://facebook.com/', 'http://facebook.com/', 'www.facebook.com/'], '', $kontak->facebook);
+                                @endphp
+                                <a href="https://facebook.com/{{ $fbUsername }}"
+                                    class="flex flex-col px-4 py-3 text-gray-700 hover:bg-gray-100 transition-colors no-underline">
+                                    <span class="font-semibold text-sm sm:text-base">Facebook</span>
+                                    <span class="text-xs sm:text-sm text-gray-500">{{ $fbUsername }}</span>
+                                </a>
+                                @endif
+                                @else
+                                <div class="px-4 py-3 text-gray-500 text-sm">
+                                    Informasi kontak tidak tersedia
+                                </div>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -908,6 +1252,36 @@
     <footer class="w-full">
         @include('footer')
     </footer>
+
+    <!-- Modal Preview -->
+    <div id="previewModal" class="preview-modal">
+        <div class="preview-content">
+            <div class="preview-header">
+                <h3 id="previewTitle" class="preview-title"></h3>
+                <button onclick="closePreviewModal()" class="preview-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="preview-body">
+                <!-- Image preview -->
+                <img id="previewImage" class="preview-image hidden" alt="Preview">
+
+                <!-- PDF preview -->
+                <div id="previewPdf" class="preview-pdf hidden"></div>
+
+                <!-- Watermark overlay -->
+                <div class="preview-watermark">
+                    <div class="watermark-grid">
+                        @for ($i = 0; $i < 300; $i++)
+                            <span class="watermark-text">INNDESA</span>
+                            @endfor
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         // JS PRELOADER
         window.addEventListener("load", function() {
@@ -920,8 +1294,10 @@
                 document.body.classList.add("loaded");
             }, 500); // Match transition duration (0.5s)
         });
+
         // Set worker untuk PDF.js
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+
         document.addEventListener('DOMContentLoaded', () => {
             const noContextElements = document.querySelectorAll('.no-context-menu');
             noContextElements.forEach(element => {
@@ -929,21 +1305,25 @@
                 element.addEventListener('dragstart', (e) => e.preventDefault());
                 element.addEventListener('selectstart', (e) => e.preventDefault());
             });
+
             document.addEventListener('contextmenu', (e) => {
                 if (e.target.tagName === 'IMG' || e.target.tagName === 'OBJECT' || e.target.tagName === 'IFRAME') {
                     e.preventDefault();
                 }
             });
+
             document.addEventListener('dragstart', (e) => {
                 if (e.target.tagName === 'IMG' || e.target.tagName === 'OBJECT' || e.target.tagName === 'IFRAME') {
                     e.preventDefault();
                 }
             });
+
             document.addEventListener('selectstart', (e) => {
                 if (e.target.tagName === 'IMG' || e.target.tagName === 'OBJECT' || e.target.tagName === 'IFRAME') {
                     e.preventDefault();
                 }
             });
+
             // Inisialisasi carousel
             ['sertifikat', 'produk'].forEach(section => {
                 const items = document.querySelectorAll(`#${section}-carousel .${section}-item`);
@@ -951,6 +1331,7 @@
                     showSlide(section, 0);
                 }
             });
+
             // Inisialisasi PDF.js untuk inline preview
             initializeInlinePdfs();
         });
@@ -959,324 +1340,279 @@
             const sertifikatItems = document.querySelectorAll('.sertifikat-item');
             sertifikatItems.forEach((item, index) => {
                 const jsContainer = document.getElementById(`pdf-sertifikat-js-${index}`);
-                if (jsContainer && !jsContainer.dataset.initialized) {
-                    jsContainer.dataset.initialized = 'true';
-                    const iframe = document.getElementById(`pdf-sertifikat-${index}`);
-                    if (iframe) {
-                        const pdfUrl = iframe.src.split('#')[0];
-                        if (window.innerWidth <= 768) {
-                            renderPdfWithJs(pdfUrl, `pdf-sertifikat-js-${index}`).then(success => {
-                                if (success) {
-                                    iframe.classList.add('hidden');
-                                } else {
-                                    jsContainer.classList.add('hidden');
-                                    iframe.classList.remove('hidden');
-                                }
-                            });
-                        } else {
-                            jsContainer.classList.add('hidden');
-                            iframe.classList.remove('hidden');
-                        }
+                const iframe = document.getElementById(`pdf-sertifikat-${index}`);
+
+                if (jsContainer && iframe) {
+                    const pdfUrl = iframe.src.split('#')[0];
+
+                    // Reset state
+                    jsContainer.style.display = '';
+                    iframe.style.display = '';
+
+                    // Untuk mobile, prioritaskan PDF.js
+                    if (window.innerWidth <= 768) {
+                        // Tampilkan loading
+                        const loadingDiv = jsContainer.querySelector('.pdf-loading');
+                        if (loadingDiv) loadingDiv.style.display = 'flex';
+
+                        // Coba render dengan PDF.js
+                        renderPdfWithJs(pdfUrl, `pdf-sertifikat-js-${index}`).then(success => {
+                            if (success) {
+                                // Sembunyikan iframe jika PDF.js berhasil
+                                iframe.style.display = 'none';
+                            } else {
+                                // Tampilkan iframe jika PDF.js gagal
+                                jsContainer.style.display = 'none';
+                                iframe.style.display = 'block';
+                            }
+                        }).catch(error => {
+                            console.error('Error rendering PDF:', error);
+                            // Fallback ke iframe jika terjadi error
+                            jsContainer.style.display = 'none';
+                            iframe.style.display = 'block';
+                        });
+                    } else {
+                        // Untuk desktop, sembunyikan PDF.js dan tampilkan iframe
+                        jsContainer.style.display = 'none';
+                        iframe.style.display = 'block';
                     }
                 }
             });
         }
+
+        async function checkPdfLoad(iframe, type, index, pdfUrl) {
+            // Tunggu beberapa saat untuk memastikan PDF telah dimuat
+            setTimeout(async () => {
+                try {
+                    // Cek apakah iframe memiliki konten
+                    if (iframe.contentDocument && iframe.contentDocument.body) {
+                        // Jika body kosong, PDF gagal dimuat
+                        if (iframe.contentDocument.body.innerHTML.trim() === '') {
+                            const jsContainer = document.getElementById(`pdf-${type}-js-${index}`);
+                            if (jsContainer) {
+                                // Tampilkan container PDF.js
+                                jsContainer.style.display = 'block';
+
+                                // Coba render dengan PDF.js
+                                const success = await renderPdfWithJs(pdfUrl, `pdf-${type}-js-${index}`);
+
+                                if (success) {
+                                    // Sembunyikan iframe jika PDF.js berhasil
+                                    iframe.style.display = 'none';
+                                } else {
+                                    // Tampilkan iframe jika PDF.js gagal
+                                    jsContainer.style.display = 'none';
+                                    iframe.style.display = 'block';
+                                }
+                            }
+                        }
+                    }
+                } catch (e) {
+                    // Jika terjadi error (biasanya karena cross-origin), coba dengan PDF.js
+                    const jsContainer = document.getElementById(`pdf-${type}-js-${index}`);
+                    if (jsContainer) {
+                        // Tampilkan container PDF.js
+                        jsContainer.style.display = 'block';
+
+                        // Coba render dengan PDF.js
+                        renderPdfWithJs(pdfUrl, `pdf-${type}-js-${index}`).then(success => {
+                            if (!success) {
+                                // Tampilkan iframe jika PDF.js gagal
+                                jsContainer.style.display = 'none';
+                                iframe.style.display = 'block';
+                            } else {
+                                // Sembunyikan iframe jika PDF.js berhasil
+                                iframe.style.display = 'none';
+                            }
+                        });
+                    } else {
+                        // Jika tidak ada container PDF.js, pastikan iframe ditampilkan
+                        iframe.style.display = 'block';
+                    }
+                }
+            }, 2000); // Kurangi waktu tunggu dari 3000ms menjadi 2000ms
+        }
+
+        // Fungsi untuk render PDF dengan PDF.js
         async function renderPdfWithJs(pdfUrl, containerId) {
             try {
                 const container = document.getElementById(containerId);
                 if (!container) return false;
+
+                // Tampilkan loading
                 const loadingDiv = container.querySelector('.pdf-loading');
                 if (loadingDiv) loadingDiv.style.display = 'flex';
+
+                // Load PDF
                 const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
                 const numPages = pdf.numPages;
+
+                // Sembunyikan loading
                 if (loadingDiv) loadingDiv.style.display = 'none';
+
+                // Hapus canvas yang ada
                 const canvases = container.querySelectorAll('.pdf-page-canvas');
                 canvases.forEach(canvas => canvas.remove());
+
+                // Render each page
                 for (let pageNum = 1; pageNum <= numPages; pageNum++) {
                     const page = await pdf.getPage(pageNum);
+
+                    // Hitung skala yang sesuai dengan container
                     const containerWidth = container.clientWidth;
                     const containerHeight = container.clientHeight;
                     const viewport = page.getViewport({
                         scale: 1.0
                     });
+
+                    // Hitung skala agar PDF muat dalam container
                     const scaleX = containerWidth / viewport.width;
                     const scaleY = containerHeight / viewport.height;
-                    const scale = Math.min(scaleX, scaleY, 1.5);
+                    const scale = Math.min(scaleX, scaleY, 1.5); // Batas maksimal skala 1.5
+
                     const scaledViewport = page.getViewport({
                         scale: scale
                     });
+
                     const canvas = document.createElement('canvas');
                     const context = canvas.getContext('2d');
                     canvas.height = scaledViewport.height;
                     canvas.width = scaledViewport.width;
                     canvas.className = 'pdf-page-canvas';
+
                     const renderContext = {
                         canvasContext: context,
                         viewport: scaledViewport
                     };
+
                     await page.render(renderContext).promise;
                     container.appendChild(canvas);
                 }
+
+                // Set scroll position ke atas setelah render selesai
                 container.scrollTop = 0;
+
                 return true;
             } catch (error) {
                 console.error('Error rendering PDF with PDF.js:', error);
+
+                // Tampilkan pesan error di container
+                const container = document.getElementById(containerId);
+                if (container) {
+                    container.innerHTML = `
+                        <div class="flex flex-col items-center justify-center h-full p-4 text-center">
+                            <div class="text-red-500 mb-2">
+                                <i class="fas fa-exclamation-triangle text-2xl"></i>
+                            </div>
+                            <p class="text-sm text-gray-600">PDF tidak dapat ditampilkan.</p>
+                        </div>
+                    `;
+                }
+
                 return false;
             }
         }
-        async function checkPdfLoad(iframe, type, index, pdfUrl) {
-            setTimeout(async () => {
-                try {
-                    if (iframe.contentDocument && iframe.contentDocument.body) {
-                        if (iframe.contentDocument.body.innerHTML.trim() === '') {
-                            const jsContainer = document.getElementById(`pdf-${type}-js-${index}`);
-                            if (jsContainer) {
-                                jsContainer.classList.remove('hidden');
-                                const success = await renderPdfWithJs(pdfUrl, `pdf-${type}-js-${index}`);
-                                if (success) {
-                                    iframe.style.display = 'none';
-                                } else {
-                                    jsContainer.classList.add('hidden');
-                                    iframe.style.display = 'none';
-                                    const objectTag = document.getElementById(`pdf-${type}-object-${index}`);
-                                    if (objectTag) {
-                                        objectTag.classList.remove('hidden');
-                                        setTimeout(() => {
-                                            try {
-                                                document.getElementById(`pdf-${type}-fallback-${index}`).classList.remove('hidden');
-                                                objectTag.style.display = 'none';
-                                            } catch (e) {
-                                                document.getElementById(`pdf-${type}-fallback-${index}`).classList.remove('hidden');
-                                                objectTag.style.display = 'none';
-                                            }
-                                        }, 3000);
-                                    } else {
-                                        document.getElementById(`pdf-${type}-fallback-${index}`).classList.remove('hidden');
-                                        iframe.style.display = 'none';
-                                    }
-                                }
-                            } else {
-                                const objectTag = document.getElementById(`pdf-${type}-object-${index}`);
-                                if (objectTag) {
-                                    objectTag.classList.remove('hidden');
-                                    iframe.style.display = 'none';
-                                    setTimeout(() => {
-                                        try {
-                                            document.getElementById(`pdf-${type}-fallback-${index}`).classList.remove('hidden');
-                                            objectTag.style.display = 'none';
-                                        } catch (e) {
-                                            document.getElementById(`pdf-${type}-fallback-${index}`).classList.remove('hidden');
-                                            objectTag.style.display = 'none';
-                                        }
-                                    }, 3000);
-                                } else {
-                                    document.getElementById(`pdf-${type}-fallback-${index}`).classList.remove('hidden');
-                                    iframe.style.display = 'none';
-                                }
-                            }
-                        }
-                    }
-                } catch (e) {
-                    const jsContainer = document.getElementById(`pdf-${type}-js-${index}`);
-                    if (jsContainer) {
-                        jsContainer.classList.remove('hidden');
-                        renderPdfWithJs(pdfUrl, `pdf-${type}-js-${index}`).then(success => {
-                            if (!success) {
-                                jsContainer.classList.add('hidden');
-                                iframe.style.display = 'none';
-                                const objectTag = document.getElementById(`pdf-${type}-object-${index}`);
-                                if (objectTag) {
-                                    objectTag.classList.remove('hidden');
-                                    setTimeout(() => {
-                                        try {
-                                            document.getElementById(`pdf-${type}-fallback-${index}`).classList.remove('hidden');
-                                            objectTag.style.display = 'none';
-                                        } catch (e) {
-                                            document.getElementById(`pdf-${type}-fallback-${index}`).classList.remove('hidden');
-                                            objectTag.style.display = 'none';
-                                        }
-                                    }, 3000);
-                                } else {
-                                    document.getElementById(`pdf-${type}-fallback-${index}`).classList.remove('hidden');
-                                    iframe.style.display = 'none';
-                                }
-                            } else {
-                                iframe.style.display = 'none';
-                            }
-                        });
-                    } else {
-                        const objectTag = document.getElementById(`pdf-${type}-object-${index}`);
-                        if (objectTag) {
-                            objectTag.classList.remove('hidden');
-                            iframe.style.display = 'none';
-                            setTimeout(() => {
-                                try {
-                                    document.getElementById(`pdf-${type}-fallback-${index}`).classList.remove('hidden');
-                                    objectTag.style.display = 'none';
-                                } catch (e) {
-                                    document.getElementById(`pdf-${type}-fallback-${index}`).classList.remove('hidden');
-                                    objectTag.style.display = 'none';
-                                }
-                            }, 3000);
-                        } else {
-                            document.getElementById(`pdf-${type}-fallback-${index}`).classList.remove('hidden');
-                            iframe.style.display = 'none';
-                        }
-                    }
-                }
-            }, 3000);
-        }
-        async function checkModalPdfLoad() {
-            const iframe = document.getElementById('previewPdf');
-            const fallback = document.getElementById('previewPdfFallback');
-            const objectTag = document.getElementById('previewPdfObject');
-            const jsContainer = document.getElementById('pdfModalJsContainer');
-            setTimeout(async () => {
-                try {
-                    if (iframe.contentDocument && iframe.contentDocument.body) {
-                        if (iframe.contentDocument.body.innerHTML.trim() === '') {
-                            jsContainer.classList.remove('hidden');
-                            const pdfUrl = document.getElementById('previewPdfLink').href;
-                            const success = await renderPdfWithJs(pdfUrl, 'pdfModalJsContainer');
-                            if (success) {
-                                iframe.style.display = 'none';
-                            } else {
-                                objectTag.classList.remove('hidden');
-                                iframe.style.display = 'none';
-                                jsContainer.classList.add('hidden');
-                                setTimeout(() => {
-                                    try {
-                                        fallback.classList.remove('hidden');
-                                        objectTag.style.display = 'none';
-                                    } catch (e) {
-                                        fallback.classList.remove('hidden');
-                                        objectTag.style.display = 'none';
-                                    }
-                                }, 3000);
-                            }
-                        }
-                    }
-                } catch (e) {
-                    jsContainer.classList.remove('hidden');
-                    const pdfUrl = document.getElementById('previewPdfLink').href;
-                    renderPdfWithJs(pdfUrl, 'pdfModalJsContainer').then(success => {
-                        if (!success) {
-                            objectTag.classList.remove('hidden');
-                            iframe.style.display = 'none';
-                            jsContainer.classList.add('hidden');
-                            setTimeout(() => {
-                                try {
-                                    fallback.classList.remove('hidden');
-                                    objectTag.style.display = 'none';
-                                } catch (e) {
-                                    fallback.classList.remove('hidden');
-                                    objectTag.style.display = 'none';
-                                }
-                            }, 3000);
-                        } else {
-                            iframe.style.display = 'none';
-                        }
-                    });
-                }
-            }, 3000);
-        }
 
-        function openPreview(fileSrc, title, type = 'image', isKatalog = false) {
+        // Fungsi untuk membuka modal preview
+        function openPreviewModal(fileSrc, title, type = 'image', isKatalog = false) {
             const modal = document.getElementById('previewModal');
             const previewImage = document.getElementById('previewImage');
             const previewPdf = document.getElementById('previewPdf');
-            const pdfModalContainer = document.getElementById('pdfModalContainer');
-            const previewPdfFallback = document.getElementById('previewPdfFallback');
-            const previewPdfObject = document.getElementById('previewPdfObject');
-            const previewPdfLink = document.getElementById('previewPdfLink');
-            const previewPdfLink2 = document.getElementById('previewPdfLink2');
-            const jsContainer = document.getElementById('pdfModalJsContainer');
             const previewTitle = document.getElementById('previewTitle');
-            const downloadLink = document.getElementById('downloadLink');
+
             previewTitle.textContent = title;
-            if (isKatalog) {
-                downloadLink.href = fileSrc;
-                downloadLink.classList.remove('hidden');
-            } else {
-                downloadLink.classList.add('hidden');
-            }
-            const watermarks = [
-                'imageWatermarkMobile',
-                'imageWatermarkDesktop',
-                'pdfWatermarkMobile',
-                'pdfWatermarkDesktop'
-            ];
-            if (isKatalog) {
-                watermarks.forEach(id => {
-                    const wm = document.getElementById(id);
-                    if (wm) wm.style.display = 'none';
-                });
-            } else {
-                watermarks.forEach(id => {
-                    const wm = document.getElementById(id);
-                    if (wm) wm.style.display = 'block';
-                });
-            }
+
             if (type === 'pdf') {
                 previewImage.classList.add('hidden');
-                pdfModalContainer.classList.remove('hidden');
-                previewPdfFallback.classList.add('hidden');
-                previewPdfObject.classList.add('hidden');
-                jsContainer.classList.add('hidden');
-                previewPdfLink.href = fileSrc;
-                previewPdfLink2.href = fileSrc;
-                const canvasContainer = document.getElementById('pdfModalJsContainer');
-                while (canvasContainer.firstChild) {
-                    if (canvasContainer.firstChild.classList && canvasContainer.firstChild.classList.contains('pdf-loading')) {
-                        break;
-                    }
-                    canvasContainer.removeChild(canvasContainer.firstChild);
-                }
-                if (window.innerWidth <= 768) {
-                    jsContainer.classList.remove('hidden');
-                    renderPdfWithJs(fileSrc, 'pdfModalJsContainer').then(success => {
-                        if (success) {
-                            previewPdf.style.display = 'none';
-                        } else {
-                            jsContainer.classList.add('hidden');
-                            const pdfUrl = fileSrc + '#toolbar=0&navpanes=0&statusbar=0&scrollbar=0&view=FitH';
-                            previewPdf.src = pdfUrl;
-                            setTimeout(() => {
-                                previewPdf.src = pdfUrl + '&cache=' + new Date().getTime();
-                            }, 100);
-                        }
-                    });
-                } else {
-                    const pdfUrl = fileSrc + '#toolbar=0&navpanes=0&statusbar=0&scrollbar=0&view=FitH';
-                    previewPdf.src = pdfUrl;
-                    setTimeout(() => {
-                        previewPdf.src = pdfUrl + '&cache=' + new Date().getTime();
-                    }, 100);
-                }
+                previewPdf.classList.remove('hidden');
+                // Render PDF dengan watermark
+                renderPdfWithWatermark(fileSrc, 'previewPdf');
             } else {
-                pdfModalContainer.classList.add('hidden');
+                previewPdf.classList.add('hidden');
                 previewImage.classList.remove('hidden');
                 previewImage.src = fileSrc;
             }
-            modal.classList.remove('hidden');
+
+            // Tampilkan modal dengan animasi
+            modal.classList.add('active');
+
+            // Tambahkan class untuk body agar navbar tetap terlihat
+            document.body.classList.add('modal-active');
+
+            // Fokus ke modal untuk accessibility
             modal.focus();
         }
 
-        function closePreview() {
+        // Fungsi untuk menutup modal preview
+        function closePreviewModal() {
             const modal = document.getElementById('previewModal');
-            const downloadLink = document.getElementById('downloadLink');
-            modal.classList.add('hidden');
-            downloadLink.classList.add('hidden');
-            const watermarks = [
-                'imageWatermarkMobile',
-                'imageWatermarkDesktop',
-                'pdfWatermarkMobile',
-                'pdfWatermarkDesktop'
-            ];
-            watermarks.forEach(id => {
-                const wm = document.getElementById(id);
-                if (wm) wm.style.display = 'block';
-            });
+
+            // Hapus class active untuk animasi
+            modal.classList.remove('active');
+
+            // Hapus class modal-active dari body
+            document.body.classList.remove('modal-active');
+
+            // Reset konten setelah animasi selesai
+            setTimeout(() => {
+                const previewPdf = document.getElementById('previewPdf');
+                const previewImage = document.getElementById('previewImage');
+
+                previewPdf.innerHTML = '';
+                previewImage.src = '';
+            }, 300);
+        }
+
+        // Fungsi untuk render PDF dengan watermark
+        async function renderPdfWithWatermark(pdfUrl, containerId) {
+            try {
+                const container = document.getElementById(containerId);
+                if (!container) return;
+
+                // Tampilkan loading
+                container.innerHTML = '<div class="pdf-loading"><div class="pdf-loading-spinner"></div><p>Memuat PDF...</p></div>';
+
+                // Load PDF
+                const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
+                const numPages = pdf.numPages;
+
+                // Clear loading
+                container.innerHTML = '';
+
+                // Render each page
+                for (let pageNum = 1; pageNum <= numPages; pageNum++) {
+                    const page = await pdf.getPage(pageNum);
+
+                    // Calculate scale to fit container width
+                    const containerWidth = container.clientWidth;
+                    const viewport = page.getViewport({
+                        scale: 1.0
+                    });
+                    const scale = containerWidth / viewport.width;
+                    const scaledViewport = page.getViewport({
+                        scale: scale
+                    });
+
+                    const canvas = document.createElement('canvas');
+                    const context = canvas.getContext('2d');
+                    canvas.height = scaledViewport.height;
+                    canvas.width = scaledViewport.width;
+
+                    const renderContext = {
+                        canvasContext: context,
+                        viewport: scaledViewport
+                    };
+
+                    await page.render(renderContext).promise;
+                    container.appendChild(canvas);
+                }
+            } catch (error) {
+                console.error('Error rendering PDF:', error);
+                const container = document.getElementById(containerId);
+                if (container) {
+                    container.innerHTML = '<div class="pdf-error text-center p-4"><p class="text-red-500 mb-2">PDF tidak dapat ditampilkan.</p><p class="text-sm text-gray-600">Silakan coba lagi atau hubungi administrator.</p></div>';
+                }
+            }
         }
 
         function openTab(tab) {
@@ -1297,8 +1633,18 @@
         }
 
         function toggleContactDropdown() {
-            document.getElementById("contactDropdownMenu").classList.toggle("hidden");
+            const dropdown = document.getElementById("contactDropdownMenu");
+            dropdown.classList.toggle("hidden");
         }
+
+        // Ensure dropdown closes on resize to prevent misalignment
+        window.addEventListener('resize', function() {
+            const dropdown = document.getElementById("contactDropdownMenu");
+            if (!dropdown.classList.contains('hidden')) {
+                dropdown.classList.add('hidden');
+            }
+        });
+
         document.addEventListener("click", function(event) {
             const dropdown = document.getElementById("contactDropdownMenu");
             const button = event.target.closest("button[onclick='toggleContactDropdown()']");
@@ -1306,13 +1652,14 @@
                 dropdown.classList.add("hidden");
             }
         });
+
         // ========== PAGINATION SYSTEM DENGAN NOMOR HALAMAN ==========
         let sertifikatPage = 1;
         let produkPage = 1;
 
         function getItemsPerPage(idPrefix) {
             if (idPrefix === 'sertifikat') return 1;
-            return window.innerWidth <= 767 ? 2 : 4;
+            return window.innerWidth <= 767 ? 2 : 5;
         }
 
         function renderPagination(idPrefix) {
@@ -1442,6 +1789,7 @@
             }
             return 0;
         }
+
         // Swipe functionality for mobile
         function handleSwipe(startX, endX, idPrefix) {
             const threshold = 50;
@@ -1454,6 +1802,7 @@
                 }
             }
         }
+
         document.addEventListener('DOMContentLoaded', function() {
             const produkCarousel = document.getElementById('produk-carousel');
             let startX = 0;
@@ -1473,7 +1822,25 @@
                 initializeInlinePdfs();
             });
         });
+
+        // Event listener untuk menutup modal dengan klik di luar
+        document.getElementById('previewModal').addEventListener('click', (e) => {
+            if (e.target.id === 'previewModal') {
+                closePreviewModal();
+            }
+        });
+
+        // Event listener untuk tombol close
+        document.querySelectorAll('.preview-close').forEach(btn => {
+            btn.addEventListener('click', closePreviewModal);
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closePreviewModal();
+            }
+        });
     </script>
-</body>
 
 </html>

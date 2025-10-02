@@ -294,7 +294,7 @@
 
                 <div class="flex items-center ml-auto gap-3">
                     <!-- Tombol Masuk -->
-                    <a href="#"
+                    <a href="{{ route('admin_login.index') }}"
                         class="nav-login-btn">
                         Masuk
                     </a>
@@ -663,23 +663,26 @@
         document.getElementById('mobile-menu-button').addEventListener('click', toggleMobileMenu);
         document.getElementById('mobile-menu-close').addEventListener('click', closeMobileMenu);
 
+        // PERBAIKAN
         document.addEventListener('DOMContentLoaded', function() {
             populateKelompokDropdown(kelompokIntegrasiData);
             populateKelompokDropdown(kelompokIntegrasiData, true);
 
-            // Cek parameter 'from' di URL
+            const path = window.location.pathname;
             const params = new URLSearchParams(window.location.search);
             const from = params.get('from');
 
-            if (from) {
+            if (path === '/' && !from) {
+                localStorage.removeItem('lastActiveMenu'); // Hapus data lama jika di root
+                setActiveMenu('beranda');
+            } else if (from) {
                 setActiveMenu(from);
             } else {
-                // Cek localStorage untuk lastActiveMenu
                 const lastActiveMenu = localStorage.getItem('lastActiveMenu');
                 if (lastActiveMenu) {
                     setActiveMenu(lastActiveMenu);
                 } else {
-                    setActiveMenu(currentActiveMenu);
+                    setActiveMenu('beranda');
                 }
             }
         });

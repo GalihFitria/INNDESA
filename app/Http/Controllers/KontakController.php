@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\InformasiUser;
 use Illuminate\Http\Request;
 
 class KontakController extends Controller
@@ -12,7 +13,8 @@ class KontakController extends Controller
     public function index()
     {
         //
-        return view('Pengunjung.kontak');
+        $kontak = InformasiUser::with('kelompok')->get();
+        return view('Pengunjung.kontak', compact('kontak'));
     }
 
     /**

@@ -62,8 +62,16 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\Models\User::class,
+            'model' => App\Models\UserAdmin::class,
         ],
+
+        'admin_kelompok' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\InformasiUser::class,
+        ],
+
+
+
 
         // 'users' => [
         //     'driver' => 'database',
@@ -97,7 +105,19 @@ return [
             'expire' => 60,
             'throttle' => 60,
         ],
+
+        'admin_kelompok' => [
+            'provider' => 'admin_kelompok',
+            'table' => 'password_reset_tokens', // pastikan tabel ini ada
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+
+
+
     ],
+
+
 
     /*
     |--------------------------------------------------------------------------

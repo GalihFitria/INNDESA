@@ -697,7 +697,6 @@
             <img src="{{ asset('images/logo_pln.png') }}" alt="Logo" class="h-4 sm:h-6 md:h-8 w-auto">
         </div>
 
-        <!-- JUDUL -->
         <div class="text-center space-y-4 z-10">
             <!-- Judul 1 -->
             <h2 class="text-2xl sm:text-4xl md:text-4xl lg:text-6xl font-bold 
@@ -705,8 +704,6 @@
                drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
                 PT. PLN Indonesia Power
             </h2>
-
-            <!-- Judul 2 -->
             <h2 class="text-2xl sm:text-4xl md:text-4xl lg:text-6xl font-bold 
                text-[#FFD700] 
                drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">

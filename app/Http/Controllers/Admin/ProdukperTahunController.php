@@ -9,10 +9,19 @@ use Illuminate\Support\Facades\Http;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
-
 class ProdukperTahunController extends Controller
 {
-   
+    // Tambahkan method untuk memperbarui data produk
+    private function updateProdukData(ProdukPertahun $produkPertahun)
+    {
+        $produk = Produk::with('kelompok')->find($produkPertahun->id_produk);
+        if ($produk) {
+            $produkPertahun->nama_produk = $produk->nama;
+            $produkPertahun->nama_kelompok = $produk->kelompok->nama ?? 'Tidak Diketahui';
+            $produkPertahun->save();
+        }
+    }
+
     public function index(Request $request)
     {
         $search = $request->input('search');
@@ -24,7 +33,13 @@ class ProdukperTahunController extends Controller
                 ->orWhere('nama_produk', 'like', "%{$search}%");
         }
 
-        $produks_pertahun = $query->paginate(10)->appends(['search' => $search]);
+        $produks_pertahun = $query->get();
+
+        // Perbarui data untuk setiap produk_pertahun
+        foreach ($produks_pertahun as $produkPertahun) {
+            $this->updateProdukData($produkPertahun);
+        }
+
         return view('Admin.produk_pertahun.index', compact('produks_pertahun', 'search'));
     }
 
@@ -33,7 +48,6 @@ class ProdukperTahunController extends Controller
         $produks = Produk::with('kelompok')->get();
         return view('Admin.produk_pertahun.create', compact('produks'));
     }
-
 
     public function store(Request $request)
     {
@@ -61,14 +75,16 @@ class ProdukperTahunController extends Controller
         }
     }
 
-
     public function edit(string $id)
     {
         $produk_pertahun = ProdukPertahun::findOrFail($id);
+
+        // Perbarui data sebelum ditampilkan
+        $this->updateProdukData($produk_pertahun);
+
         $produks = Produk::with('kelompok')->get();
         return view('Admin.produk_pertahun.edit', compact('produk_pertahun', 'produks'));
     }
-
 
     public function update(Request $request, string $id)
     {
@@ -116,9 +132,14 @@ class ProdukperTahunController extends Controller
                 ->orderBy('nama_produk', 'asc')
                 ->orderBy('tahun', 'asc')
                 ->get();
-                
+
             if ($produks_pertahun->isEmpty()) {
                 return back()->with('error', 'Tidak ada data produk untuk diexport.');
+            }
+
+            // Perbarui data sebelum diexport
+            foreach ($produks_pertahun as $produkPertahun) {
+                $this->updateProdukData($produkPertahun);
             }
 
             $pdf = Pdf::loadView('pdf.cetak', compact('produks_pertahun'))
@@ -129,6 +150,4 @@ class ProdukperTahunController extends Controller
             return back()->with('error', 'Gagal membuat PDF: ' . $e->getMessage());
         }
     }
-
-    
 }
