@@ -41,6 +41,11 @@ class BerandaController extends Controller
             ->orderBy('tanggal', 'desc')
             ->paginate(4);
 
+            // ✅ Ambil id_kelompok admin login
+    $idKelompok = DB::table('admin_kelompok')
+        ->where('id_user', auth()->id())
+        ->value('id_kelompok');
+
         return view('Admin_Kelompok.beranda', compact(
             'totalKelompok',
             'totalAnggota',

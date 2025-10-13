@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>INNDESA - Inovasi Nusantara Desa Integratif Pangan</title>
     <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <!-- Tambahkan PDF.js library -->
@@ -88,6 +90,9 @@
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             overflow: hidden;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
         }
 
         .product-card:hover {
@@ -104,6 +109,10 @@
 
         .product-card-content {
             padding: 1rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .product-card-content h3 {
@@ -283,23 +292,42 @@
                 padding: 0 1rem;
             }
 
+            /* PERBAIKAN: Ubah layout card dari grid menjadi flexbox di mobile */
             .card {
-                grid-template-columns: 1fr !important;
+                display: flex !important;
+                flex-direction: column !important;
                 gap: 1rem;
                 padding: 1rem;
                 min-height: auto;
             }
 
+            .card>div:first-child {
+                flex-shrink: 0 !important;
+                margin-bottom: 1rem;
+            }
+
+            .card>div:last-child {
+                flex-grow: 1 !important;
+            }
+
+            /* PERBAIKAN: Pastikan gambar produk tetap proporsional */
+            .w-full.max-w-\[450px\].aspect-square {
+                width: 100% !important;
+                max-width: 100% !important;
+                aspect-ratio: 1/1 !important;
+                height: auto !important;
+            }
+
             .product-image {
                 max-width: 100%;
-                max-height: 300px;
+                max-height: none;
                 height: auto !important;
             }
 
             .overflow-hidden.rounded-lg {
                 width: 100% !important;
                 height: auto !important;
-                max-height: 300px;
+                max-height: none;
             }
 
             h1.text-4xl {
@@ -310,24 +338,81 @@
                 font-size: 1rem !important;
             }
 
-            /* PERBAIKAN: Button Hubungi Kami tetap bersebelahan di mobile */
-            .flex.flex-wrap.items-center.gap-4 {
-                flex-direction: row !important;
-                justify-content: space-between !important;
-                align-items: center !important;
-                flex-wrap: nowrap !important;
+            /* PERBAIKAN: Layout untuk bagian kontak di mobile */
+            .flex.flex-col.border-t.border-gray-300 {
+                padding-top: 1rem;
+            }
+            
+            .flex.flex-col.border-t.border-gray-300 .flex.flex-wrap.items-center.gap-4 {
+                flex-direction: row;
+                align-items: flex-start;
+                gap: 0.75rem;
+                width: 100%;
+                flex-wrap: nowrap;
             }
 
             .flex.items-center.space-x-2 {
-                flex-shrink: 0 !important;
+                display: flex;
+                align-items: flex-start;
+                gap: 0.75rem;
+                flex: 1;
+                min-width: 0;
             }
 
+            /* PERBAIKAN: Untuk nama kelompok yang panjang di mobile - bisa multiline */
+            .kelompok-nama-mobile {
+                white-space: normal;
+                overflow: visible;
+                text-overflow: unset;
+                display: inline-block;
+                vertical-align: middle;
+                flex: 1;
+                min-width: 0;
+                line-height: 1.4;
+            }
+
+            .contact-dropdown-wrapper {
+                flex-shrink: 0;
+                margin-top: 0;
+            }
+
+            .contact-dropdown-wrapper button {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+                height: auto;
+                min-height: 44px;
+                white-space: nowrap;
+            }
+
+            /* PERBAIKAN: Dropdown menu kontak di mobile */
+            #contactDropdownMenu {
+                width: 85%;
+                left: 50%;
+                transform: translateX(-50%);
+                margin-top: 0.5rem;
+                border-radius: 0.5rem;
+                max-width: none;
+            }
+
+            #contactDropdownMenu a,
+            #contactDropdownMenu div {
+                padding: 0.75rem 1rem;
+            }
+
+            /* PERBAIKAN: Ubah tampilan produk terkait untuk mobile */
             .related-products {
+                display: grid;
+                /* Ubah dari flex menjadi grid */
+                grid-template-columns: repeat(2, 1fr);
+                /* 2 kolom */
                 gap: 1rem;
+                width: 100%;
+                margin: 0 auto;
             }
 
             .produk-item {
-                width: calc(50% - 0.5rem);
+                width: 100%;
+                /* Lebar penuh untuk grid item */
             }
 
             .product-card img {
@@ -341,6 +426,25 @@
 
             .product-card-content p {
                 font-size: 0.75rem;
+            }
+
+            /* PERBAIKAN: Tampilan pagination di mobile */
+            #produk-pagination {
+                flex-wrap: wrap;
+                justify-content: center;
+                max-width: 100%;
+            }
+
+            #produk-pagination button {
+                margin: 0.25rem;
+                padding: 0.4rem 0.6rem;
+                font-size: 0.8rem;
+            }
+
+            #produk-prev,
+            #produk-next {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
             }
 
             .btn {
@@ -423,32 +527,6 @@
                 font-size: 0.9rem !important;
             }
 
-            #contactDropdownMenu {
-                width: 90%;
-                /* Mengurangi lebar agar tidak mentok */
-                max-width: none !important;
-                left: 50%;
-                /* Posisi ke tengah */
-                transform: translateX(-50%);
-                /* Koreksi posisi tengah */
-                margin-top: 0.5rem;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            }
-
-            #contactDropdownMenu a {
-                padding: 0.75rem;
-                font-size: 0.9rem;
-            }
-
-            #contactDropdownMenu .text-sm {
-                font-size: 0.8rem;
-            }
-
-            .btn-outline {
-                padding: 0.3rem 0.8rem !important;
-                font-size: 0.8rem !important;
-            }
-
             #sertifikat-pagination button,
             #produk-pagination button {
                 padding: 0.3rem 0.6rem !important;
@@ -511,23 +589,37 @@
                 height: 65vh !important;
             }
 
-            /* PERBAIKAN: Button Hubungi Kami tetap bersebelahan di very small mobile */
-            .flex.flex-wrap.items-center.gap-4 {
-                flex-direction: row !important;
-                justify-content: space-between !important;
-                align-items: center !important;
-                flex-wrap: nowrap !important;
-                gap: 0.5rem !important;
+            /* PERBAIKAN: Layout untuk nama kelompok di layar sangat kecil */
+            .flex.flex-col.border-t.border-gray-300 .flex.flex-wrap.items-center.gap-4 {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 1rem;
             }
 
             .flex.items-center.space-x-2 {
-                flex-shrink: 0 !important;
-                white-space: nowrap !important;
+                width: 100%;
+                justify-content: flex-start;
+                align-items: center;
             }
 
-            .bg-green-500.text-white.px-4.py-2.rounded-lg {
-                flex-shrink: 0 !important;
-                white-space: nowrap !important;
+            /* PERBAIKAN: Ukuran ikon di layar sangat kecil */
+            .flex.items-center.space-x-2 svg {
+                width: 28px !important;
+                height: 28px !important;
+            }
+
+            .flex.items-center.space-x-2 {
+                gap: 0.5rem !important;
+            }
+
+            .contact-dropdown-wrapper {
+                width: 100%;
+                margin-top: 0.5rem;
+            }
+
+            .contact-dropdown-wrapper button {
+                width: 100%;
+                justify-content: center;
             }
 
             #contactDropdownMenu {
@@ -748,7 +840,7 @@
             justify-content: center;
             font-size: 18px;
             font-weight: bold;
-            color: rgba(0, 0, 0, 0.25);
+            color: rgba(0, 0, 0, 0.05);
             transform: rotate(-45deg);
             white-space: nowrap;
             user-select: none;
@@ -796,7 +888,7 @@
 
             .preview-watermark .watermark-text {
                 font-size: 14px;
-                color: rgba(0, 0, 0, 0.25);
+                color: rgba(0, 0, 0, 0.1);
                 /* Lebih tebal untuk mobile */
             }
         }
@@ -833,7 +925,7 @@
 
             .preview-watermark .watermark-text {
                 font-size: 12px;
-                color: rgba(0, 0, 0, 0.25);
+                color: rgba(0, 0, 0, 0.1);
                 /* Lebih tebal lagi untuk layar sangat kecil */
             }
 
@@ -970,19 +1062,125 @@
             font-size: 0.9rem;
             font-weight: 500;
         }
+
+        /* kembali keatas */
+        #backToTop {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #3b82f6;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            text-decoration: none;
+        }
+
+        #backToTop.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        #backToTop:hover {
+            background-color: #2563eb;
+            transform: translateY(-5px);
+        }
+
+        #backToTop i {
+            font-size: 24px;
+            color: white;
+            display: block !important;
+        }
+
+        /* Fallback for Font Awesome - PERBAIKAN */
+        #backToTop .arrow-fallback {
+            display: none;
+            width: 24px;
+            height: 24px;
+        }
+
+        #backToTop.no-icon .arrow-fallback {
+            display: block;
+        }
+
+        #backToTop.no-icon i {
+            display: none !important;
+        }
+
+        /* Only show on mobile */
+        @media (min-width: 641px) {
+            #backToTop {
+                display: none;
+            }
+        }
+
+        /* PERBAIKAN: Navbar tetap terlihat saat scroll di desktop */
+        @media (min-width: 768px) {
+            #navbar-container {
+                position: sticky;
+                top: 0;
+                z-index: 1000;
+                background-color: white;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                transition: all 0.3s ease;
+            }
+
+            /* Efek shadow saat scroll di desktop */
+            #navbar-container.scrolled {
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+
+            /* Pastikan konten tidak terhalang navbar di desktop */
+            .content {
+                margin-top: 1rem;
+            }
+        }
+
+        /* PERBAIKAN: Navbar tetap terlihat saat scroll di mobile */
+        @media (max-width: 767px) {
+
+            /* Style untuk navbar di mobile */
+            .mobile-navbar {
+                position: fixed !important;
+                top: 0 !important;
+                left: 0 !important;
+                width: 100% !important;
+                z-index: 1000 !important;
+                background-color: white !important;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+            }
+
+            /* Sesuaikan konten agar tidak tertutup navbar */
+            .content {
+                margin-top: 80px !important;
+                /* Sesuaikan dengan tinggi navbar */
+                padding-top: 1rem !important;
+            }
+        }
     </style>
 </head>
 
-<body class="bg-white">
+<body class="min-h-screen bg-white font-poppins">
     <div id="preloader">
         <img src="{{ asset('images/logo.png') }}" alt="Logo Website" class="logo-loading">
     </div>
     @include('navbar')
+
+
     <div class="content w-full mt-6 px-6 lg:px-12">
         <div class="bg-white card p-6 grid grid-cols-1 md:grid-cols-2 gap-6 min-h-[450px]">
             <div class="flex justify-center">
                 <div class="flex justify-center items-center">
-                    <div class="w-full h-48 sm:w-[450px] sm:h-[450px] overflow-hidden rounded-lg">
+                    <div class="w-full max-w-[450px] aspect-square overflow-hidden rounded-lg flex-shrink-0">
                         <img src="{{ asset('storage/' . $produk->foto) }}"
                             alt="{{ $produk->nama }}"
                             class="w-full h-full object-cover no-context-menu"
@@ -992,6 +1190,7 @@
                             onselectstart="return false;">
                     </div>
                 </div>
+
             </div>
             <div class="space-y-4">
                 <h1 class="text-4xl font-bold text-gray-900">{{ $produk->nama }}</h1>
@@ -1017,44 +1216,94 @@
                         </button>
                     </div>
                     <!-- DESKRIPSI -->
-                    <div id="content-deskripsi" class="mt-4">
-                        <p class="text-gray-700 leading-relaxed mb-4">
-                            {{ $produk->deskripsi }}
-                        </p>
+                    <div id="content-deskripsi"
+                        class="content-text prose max-w-none text-gray-700 leading-relaxed text-justify mb-4 sm:mb-6 text-base sm:text-lg lg:text-xl">
+                        @php
+                        // Pisahkan berdasarkan dua atau lebih baris kosong (enter 2 kali)
+                        $paragraphs = preg_split("/\n\s*\n/", $produk->deskripsi);
+                        @endphp
+
+                        @foreach ($paragraphs as $para)
+                        @foreach (explode("\n", $para) as $line)
+                        @if (!empty(trim($line)))
+                        <p class="mb-1">{{ trim($line) }}</p>
+                        @endif
+                        @endforeach
+                        {{-- Tambahkan jarak ekstra antar paragraf --}}
+                        <div class="mb-3"></div>
+                        @endforeach
                     </div>
-                    <!-- SERTIFIKAT -->
+
+                    <!-- SERTIFIKAT - PERBAIKAN PATH -->
                     <div id="content-sertifikat" class="hidden mt-4">
                         <div class="relative">
                             @php
-                            $sertifikatPaths = $produk->sertifikat ? json_decode($produk->sertifikat, true) ?? [] : [];
+                            // Ambil path sertifikat dari database
+                            $sertifikatPaths = $produk->sertifikat ? explode(',', $produk->sertifikat) : [];
+
+                            // Bersihkan path dari spasi tambahan
+                            $sertifikatPaths = array_map('trim', $sertifikatPaths);
+
+                            // Filter path yang kosong
+                            $sertifikatPaths = array_filter($sertifikatPaths, function($path) {
+                            return !empty($path);
+                            });
+
+                            // Reset array keys
+                            $sertifikatPaths = array_values($sertifikatPaths);
                             @endphp
+
                             @if (!empty($sertifikatPaths))
                             <div id="sertifikat-carousel" class="carousel">
                                 @foreach ($sertifikatPaths as $index => $filePath)
                                 @php
-                                $extension = pathinfo($filePath, PATHINFO_EXTENSION);
-                                $isImage = in_array(strtolower($extension), ['jpg', 'jpeg', 'png']);
+                                // Path asli dari database
+                                $originalPath = $filePath;
+
+                                // Path untuk Storage::exists (tanpa 'storage/' jika ada)
+                                $storagePath = $filePath;
+                                if (strpos($filePath, 'storage/') === 0) {
+                                $storagePath = substr($filePath, 8); // Hapus 'storage/'
+                                }
+
+                                // Path untuk asset (dengan 'storage/' jika tidak ada)
+                                $assetPath = $filePath;
+                                if (strpos($filePath, 'storage/') !== 0) {
+                                $assetPath = 'storage/' . ltrim($filePath, '/');
+                                }
+
+                                // Periksa apakah file ada di storage
+                                $fileExists = Storage::disk('public')->exists($storagePath);
+
+                                // Dapatkan ekstensi file
+                                $extension = pathinfo($storagePath, PATHINFO_EXTENSION);
+                                $isImage = in_array(strtolower($extension), ['jpg', 'jpeg', 'png', 'gif', 'webp']);
                                 $namaSertifikat = 'Sertifikat ' . ($index + 1);
+
+                                // Siapkan URL lengkap untuk asset
+                                $assetUrl = asset($assetPath);
                                 @endphp
-                                @if ($isImage && Storage::disk('public')->exists($filePath))
+
+                                @if ($fileExists)
                                 <div class="relative w-full max-w-[20rem] md:max-w-[30rem] mx-auto h-48 md:h-60 block sertifikat-item"
                                     data-index="{{ $index }}">
+                                    @if ($isImage)
                                     <img
-                                        src="{{ asset('storage/' . $filePath) }}"
+                                        src="{{ $assetUrl }}"
                                         alt="Sertifikat {{ $namaSertifikat }}"
                                         class="w-full h-full object-contain rounded-lg shadow-md border border-gray-200 cursor-pointer no-context-menu"
                                         draggable="false"
                                         oncontextmenu="return false;"
                                         ondragstart="return false;"
                                         onselectstart="return false;"
-                                        onclick="openPreviewModal('{{ asset('storage/' . $filePath) }}', 'Sertifikat {{ $namaSertifikat }}', 'image')"
+                                        onclick="openPreviewModal('{{ $assetUrl }}', 'Sertifikat {{ $namaSertifikat }}', 'image')"
                                         onerror="this.src='{{ asset('images/placeholder.jpg') }}'; this.onerror=null;">
 
                                     <!-- Watermark mobile -->
                                     <div class="absolute inset-0 pointer-events-none overflow-hidden md:hidden">
                                         <div class="grid grid-cols-12 w-full h-full">
                                             @for ($i = 0; $i < 150; $i++)
-                                                <span class="flex items-center justify-center text-gray-800 text-[8px] font-bold opacity-45 -rotate-45 whitespace-nowrap">
+                                                <span class="flex items-center justify-center text-gray-800 text-[8px] font-bold opacity-20 -rotate-45 whitespace-nowrap">
                                                 INNDESA
                                                 </span>
                                                 @endfor
@@ -1065,22 +1314,19 @@
                                     <div class="absolute inset-0 pointer-events-none overflow-hidden hidden md:block">
                                         <div class="grid grid-cols-12 w-full h-full">
                                             @for ($i = 0; $i < 150; $i++)
-                                                <span class="flex items-center justify-center text-gray-800 text-[10px] font-bold opacity-45 -rotate-45 whitespace-nowrap">
+                                                <span class="flex items-center justify-center text-gray-800 text-[10px] font-bold opacity-20 -rotate-45 whitespace-nowrap">
                                                 INNDESA
                                                 </span>
                                                 @endfor
                                         </div>
                                     </div>
 
-                                    <!-- Teks "Lihat File" - PERBAIKAN -->
-                                    <div class="preview-overlay-text" onclick="openPreviewModal('{{ asset('storage/' . $filePath) }}', 'Sertifikat {{ $namaSertifikat }}', 'image')">
+                                    <!-- Teks "Lihat File" -->
+                                    <div class="preview-overlay-text" onclick="openPreviewModal('{{ $assetUrl }}', 'Sertifikat {{ $namaSertifikat }}', 'image')">
                                         <i class="fas fa-eye"></i>
                                         <span>Lihat File</span>
                                     </div>
-                                </div>
-                                @elseif (Storage::disk('public')->exists($filePath))
-                                <div class="relative w-full max-w-[20rem] md:max-w-[30rem] mx-auto h-48 md:h-60 block sertifikat-item"
-                                    data-index="{{ $index }}">
+                                    @else
                                     <div class="pdf-container relative w-full h-full rounded-lg shadow-md border border-gray-200 overflow-hidden">
                                         <div id="pdf-sertifikat-js-{{ $index }}" class="pdf-canvas-container w-full h-full">
                                             <div class="pdf-loading">
@@ -1090,20 +1336,20 @@
                                         </div>
                                         <iframe
                                             id="pdf-sertifikat-{{ $index }}"
-                                            src="{{ asset('storage/' . $filePath) }}#toolbar=0&navpanes=0&statusbar=0&scrollbar=0&view=FitH"
+                                            src="{{ $assetUrl }}#toolbar=0&navpanes=0&statusbar=0&scrollbar=0&view=FitH"
                                             class="w-full h-full rounded-lg pdf-preview-iframe no-context-menu"
                                             title="Sertifikat {{ $namaSertifikat }}"
                                             oncontextmenu="return false;"
                                             ondragstart="return false;"
                                             onselectstart="return false;"
-                                            onload="this.contentWindow.focus(); checkPdfLoad(this, 'sertifikat', '{{ $index }}', '{{ asset('storage/' . $filePath) }}');">
+                                            onload="this.contentWindow.focus(); checkPdfLoad(this, 'sertifikat', '{{ $index }}', '{{ $assetUrl }}');">
                                         </iframe>
 
                                         <!-- Watermark mobile -->
                                         <div class="absolute inset-0 pointer-events-none overflow-hidden md:hidden">
                                             <div class="grid grid-cols-12 w-full h-full">
                                                 @for ($i = 0; $i < 150; $i++)
-                                                    <span class="flex items-center justify-center text-gray-800 text-[8px] font-bold opacity-45 -rotate-45 whitespace-nowrap">
+                                                    <span class="flex items-center justify-center text-gray-800 text-[8px] font-bold opacity-20 -rotate-45 whitespace-nowrap">
                                                     INNDESA
                                                     </span>
                                                     @endfor
@@ -1112,25 +1358,26 @@
                                         <div class="absolute inset-0 pointer-events-none overflow-hidden hidden md:block">
                                             <div class="grid grid-cols-12 w-full h-full">
                                                 @for ($i = 0; $i < 150; $i++)
-                                                    <span class="flex items-center justify-center text-gray-800 text-[10px] font-bold opacity-45 -rotate-45 whitespace-nowrap">
+                                                    <span class="flex items-center justify-center text-gray-800 text-[10px] font-bold opacity-20 -rotate-45 whitespace-nowrap">
                                                     INNDESA
                                                     </span>
                                                     @endfor
                                             </div>
                                         </div>
                                         <div class="absolute inset-0 cursor-pointer no-context-menu"
-                                            onclick="openPreviewModal('{{ asset('storage/' . $filePath) }}', 'Sertifikat {{ $namaSertifikat }}', 'pdf')"
+                                            onclick="openPreviewModal('{{ $assetUrl }}', 'Sertifikat {{ $namaSertifikat }}', 'pdf')"
                                             oncontextmenu="return false;"
                                             ondragstart="return false;"
                                             onselectstart="return false;">
                                         </div>
 
-                                        <!-- Teks "Lihat File" - PERBAIKAN -->
-                                        <div class="preview-overlay-text" onclick="openPreviewModal('{{ asset('storage/' . $filePath) }}', 'Sertifikat {{ $namaSertifikat }}', 'pdf')">
+                                        <!-- Teks "Lihat File" -->
+                                        <div class="preview-overlay-text" onclick="openPreviewModal('{{ $assetUrl }}', 'Sertifikat {{ $namaSertifikat }}', 'pdf')">
                                             <i class="fas fa-eye"></i>
                                             <span>Lihat File</span>
                                         </div>
                                     </div>
+                                    @endif
                                 </div>
                                 @endif
                                 @endforeach
@@ -1154,7 +1401,31 @@
                                 fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
                             </svg>
-                            <span class="text-gray-700 font-bold">{{ $produk->kelompok->nama }}</span>
+                            @php
+                            // Cek apakah user login dan apakah user tersebut adalah admin kelompok
+                            $user = auth()->user();
+                            $isAdminKelompok = false;
+                            $loggedInKelompokId = null;
+
+                            if ($user && $user->role === 'admin_kelompok' && $user->status === 'sudah daftar') {
+                            $adminKelompok = \App\Models\InformasiUser::where('id_user', $user->id_user)->first();
+                            if ($adminKelompok) {
+                            $isAdminKelompok = true;
+                            $loggedInKelompokId = $adminKelompok->id_kelompok;
+                            }
+                            }
+
+                            // Tentukan URL berdasarkan status login
+                            if ($isAdminKelompok && $loggedInKelompokId == $produk->kelompok->id_kelompok) {
+                            $kelompokUrl = url('Admin_Kelompok/kelompok/' . $produk->kelompok->id_kelompok);
+                            } else {
+                            $kelompokUrl = route('kelompok.show', $produk->kelompok->id_kelompok) . '?from=kelompok';
+                            }
+                            @endphp
+                            <a href="{{ $kelompokUrl }}"
+                                class="text-gray-600 font-bold hover:underline kelompok-nama-mobile">
+                                {{ $produk->kelompok->nama }}
+                            </a>
                         </div>
                         <div class="relative contact-dropdown-wrapper">
                             <button onclick="toggleContactDropdown()"
@@ -1166,7 +1437,19 @@
                                 @if($kontak)
                                 <!-- WhatsApp -->
                                 @if($kontak->no_telp)
-                                <a href="https://wa.me/{{ $kontak->no_telp }}?text={{ urlencode('Halo, saya tertarik dengan produk ' . $produk->nama . '. Harga: Rp. ' . number_format($produk->harga, 0, ',', '.') . '. Link produk: ' . route('detail_produk.show', $produk->id_produk)) }}"
+                                @php
+                                $pesan = "Halo, saya tertarik dengan produk berikut:\n" .
+                                "Nama Produk : " . $produk->nama . "\n" .
+                                "Harga : Rp. " . number_format($produk->harga, 0, ',', '.') . "\n" .
+                                "Link Produk : " . route('detail_produk.show', $produk->id_produk) . "\n\n" .
+                                "Apakah produk ini masih tersedia?";
+                                $noWa = preg_replace('/\D/', '', $kontak->no_telp);
+                                if (strpos($noWa, '0') === 0) {
+                                $noWa = '62' . substr($noWa, 1);
+                                }
+                                @endphp
+
+                                <a href="https://wa.me/{{ $noWa }}?text={{ urlencode($pesan) }}"
                                     class="flex flex-col px-4 py-3 text-gray-700 hover:bg-gray-100 transition-colors no-underline">
                                     <span class="font-semibold text-sm sm:text-base">WhatsApp</span>
                                     <span class="text-xs sm:text-sm text-gray-500">{{ $kontak->no_telp }}</span>
@@ -1212,7 +1495,6 @@
                     @php
                     $produk_terkait = \App\Models\Produk::where('id_kelompok', $produk->id_kelompok)
                     ->where('id_produk', '!=', $produk->id_produk)
-                    ->take(8)
                     ->get();
                     @endphp
                     @forelse ($produk_terkait as $item)
@@ -1282,6 +1564,15 @@
         </div>
     </div>
 
+    <!-- KEMBALI KEATAS - PERBAIKAN -->
+    <a href="#" id="backToTop" title="Kembali ke Atas">
+        <i class="fas fa-arrow-up"></i>
+        <!-- SVG fallback jika Font Awesome tidak berhasil dimuat -->
+        <svg class="arrow-fallback" fill="white" viewBox="0 0 24 24">
+            <path d="M7 14l5-5 5 5z" />
+        </svg>
+    </a>
+
     <script>
         // JS PRELOADER
         window.addEventListener("load", function() {
@@ -1292,7 +1583,100 @@
             setTimeout(function() {
                 preloader.style.display = "none";
                 document.body.classList.add("loaded");
+
+                // PERBAIKAN: Pastikan navbar menjadi fixed di mobile setelah halaman dimuat
+                if (window.innerWidth <= 767) {
+                    makeNavbarFixed();
+                }
+
+                // PERBAIKAN: Inisialisasi navbar sticky untuk desktop
+                handleNavbarScroll();
             }, 500); // Match transition duration (0.5s)
+        });
+
+        // PERBAIKAN: Fungsi untuk membuat navbar menjadi fixed di mobile
+        function makeNavbarFixed() {
+            const navbarContainer = document.getElementById('navbar-container');
+            if (navbarContainer) {
+                // Simpan tinggi navbar untuk margin konten
+                const navbarHeight = navbarContainer.offsetHeight;
+
+                // Terapkan styling untuk membuat navbar fixed
+                navbarContainer.style.position = 'fixed';
+                navbarContainer.style.top = '0';
+                navbarContainer.style.left = '0';
+                navbarContainer.style.width = '100%';
+                navbarContainer.style.zIndex = '1000';
+                navbarContainer.style.backgroundColor = 'white';
+                navbarContainer.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
+
+                // Tambahkan class untuk styling tambahan
+                navbarContainer.classList.add('mobile-navbar');
+
+                // Sesuaikan margin konten agar tidak tertutup navbar
+                const content = document.querySelector('.content');
+                if (content) {
+                    content.style.marginTop = (navbarHeight + 20) + 'px';
+                }
+            }
+        }
+
+        // PERBAIKAN: Fungsi untuk menangani scroll navbar di desktop
+        function handleNavbarScroll() {
+            const navbarContainer = document.getElementById('navbar-container');
+
+            if (window.innerWidth >= 768) { // Hanya untuk desktop
+                if (window.scrollY > 10) {
+                    navbarContainer.classList.add('scrolled');
+                } else {
+                    navbarContainer.classList.remove('scrolled');
+                }
+            }
+        }
+
+        // PERBAIKAN: Event listener untuk scroll
+        window.addEventListener('scroll', handleNavbarScroll);
+
+        // PERBAIKAN: Event listener untuk resize
+        window.addEventListener('resize', function() {
+            // Reset state saat ukuran berubah
+            const navbarContainer = document.getElementById('navbar-container');
+            navbarContainer.classList.remove('scrolled');
+            handleNavbarScroll();
+
+            // Panggil fungsi mobile navbar yang sudah ada
+            if (window.innerWidth <= 767) {
+                makeNavbarFixed();
+            } else {
+                // Kembalikan navbar ke posisi semula di desktop
+                const navbarContainer = document.getElementById('navbar-container');
+                if (navbarContainer) {
+                    navbarContainer.style.position = '';
+                    navbarContainer.style.top = '';
+                    navbarContainer.style.left = '';
+                    navbarContainer.style.width = '';
+                    navbarContainer.style.zIndex = '';
+                    navbarContainer.style.backgroundColor = '';
+                    navbarContainer.style.boxShadow = '';
+                    navbarContainer.classList.remove('mobile-navbar');
+                }
+
+                // Kembalikan margin konten
+                const content = document.querySelector('.content');
+                if (content) {
+                    content.style.marginTop = '';
+                }
+            }
+        });
+
+        // PERBAIKAN: Deteksi scroll event untuk memastikan navbar tetap terlihat
+        window.addEventListener('scroll', function() {
+            if (window.innerWidth <= 767) {
+                const navbarContainer = document.getElementById('navbar-container');
+                if (navbarContainer && navbarContainer.style.position !== 'fixed') {
+                    makeNavbarFixed();
+                }
+            }
         });
 
         // Set worker untuk PDF.js
@@ -1334,6 +1718,14 @@
 
             // Inisialisasi PDF.js untuk inline preview
             initializeInlinePdfs();
+
+            // PERBAIKAN: Pastikan navbar fixed di mobile saat DOM dimuat
+            if (window.innerWidth <= 767) {
+                makeNavbarFixed();
+            }
+
+            // PERBAIKAN: Inisialisasi navbar sticky untuk desktop
+            handleNavbarScroll();
         });
 
         function initializeInlinePdfs() {
@@ -1640,8 +2032,8 @@
         // Ensure dropdown closes on resize to prevent misalignment
         window.addEventListener('resize', function() {
             const dropdown = document.getElementById("contactDropdownMenu");
-            if (!dropdown.classList.contains('hidden')) {
-                dropdown.classList.add('hidden');
+            if (!dropdown.classList.contains("hidden")) {
+                dropdown.classList.add("hidden");
             }
         });
 
@@ -1659,7 +2051,8 @@
 
         function getItemsPerPage(idPrefix) {
             if (idPrefix === 'sertifikat') return 1;
-            return window.innerWidth <= 767 ? 2 : 5;
+            // PERBAIKAN: Ubah dari 2 menjadi 4 untuk menampilkan 4 produk per halaman di mobile
+            return window.innerWidth <= 767 ? 4 : 5;
         }
 
         function renderPagination(idPrefix) {
@@ -1771,6 +2164,15 @@
             items.forEach((item, i) => {
                 const isInBatch = i >= batchStart && i < batchStart + itemsPerPage;
                 item.classList.toggle('hidden', !isInBatch);
+
+                // PERBAIKAN: Tambahkan ini untuk memastikan grid berfungsi dengan baik di mobile
+                if (window.innerWidth <= 767 && idPrefix === 'produk') {
+                    if (isInBatch) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                }
             });
             renderPagination(idPrefix);
             if (idPrefix === 'sertifikat') {
@@ -1816,9 +2218,16 @@
                     handleSwipe(startX, endX, 'produk');
                 });
             }
+
+            // PERBAIKAN: Tambahkan event listener untuk menangani perubahan orientasi layar
             window.addEventListener('resize', function() {
+                // Periksa apakah kita berada di mobile
+                if (window.innerWidth <= 767) {
+                    // Refresh tampilan produk terkait saat orientasi berubah
+                    const currentIndex = getCurrentSlideIndex('produk');
+                    showSlide('produk', currentIndex);
+                }
                 showSlide('sertifikat', getCurrentSlideIndex('sertifikat'));
-                showSlide('produk', getCurrentSlideIndex('produk'));
                 initializeInlinePdfs();
             });
         });
@@ -1841,6 +2250,44 @@
                 closePreviewModal();
             }
         });
+
+        // KEMBALI KE ATAS
+        function checkFontAwesome() {
+            const icon = document.createElement('i');
+            icon.className = 'fas fa-arrow-up';
+            const isLoaded = window.getComputedStyle(icon, ':before').getPropertyValue('content') !== 'none';
+
+            if (isLoaded) {
+                document.body.classList.add('fa-loaded');
+            }
+        }
+
+        // Run check after DOM is loaded
+        document.addEventListener('DOMContentLoaded', checkFontAwesome);
+
+        // Also run check after window is fully loaded
+        window.addEventListener('load', checkFontAwesome);
+
+        // KEMBALI KE ATAS
+        const backToTopButton = document.getElementById('backToTop');
+
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.add('show');
+            } else {
+                backToTopButton.classList.remove('show');
+            }
+        });
+
+        backToTopButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
     </script>
+
+</body>
 
 </html>

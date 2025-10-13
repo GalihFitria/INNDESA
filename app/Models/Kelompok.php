@@ -26,5 +26,7 @@ class Kelompok extends Model
     {
         return 'KL' . str_pad($this->id_kelompok, 1, STR_PAD_LEFT);
     }
+
+    
 }
 

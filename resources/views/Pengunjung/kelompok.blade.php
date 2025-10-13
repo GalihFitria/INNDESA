@@ -7,6 +7,8 @@
     <title>INNDESA - Inovasi Nusantara Desa Integratif Pangan</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- PDF.js library untuk rendering PDF -->
@@ -493,7 +495,7 @@
             justify-content: center;
             font-size: 18px;
             font-weight: bold;
-            color: rgba(0, 0, 0, 0.25);
+            color: rgba(0, 0, 0, 0.05);
             transform: rotate(-45deg);
             white-space: nowrap;
             user-select: none;
@@ -664,7 +666,7 @@
 
             .preview-watermark .watermark-text {
                 font-size: 12px;
-                color: rgba(0, 0, 0, 0.25);
+                color: rgba(0, 0, 0, 0.1);
                 /* Lebih tebal lagi untuk layar sangat kecil */
             }
 
@@ -1153,6 +1155,66 @@
         body.modal-active .navbar {
             z-index: 10000;
         }
+
+        /* kembali ke atas */
+        #backToTop {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #3b82f6;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            text-decoration: none;
+        }
+
+        #backToTop.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        #backToTop:hover {
+            background-color: #2563eb;
+            transform: translateY(-5px);
+        }
+
+        #backToTop i {
+            font-size: 24px;
+            color: white;
+            display: block !important;
+        }
+
+        /* Fallback for Font Awesome - PERBAIKAN */
+        #backToTop .arrow-fallback {
+            display: none;
+            width: 24px;
+            height: 24px;
+        }
+
+        #backToTop.no-icon .arrow-fallback {
+            display: block;
+        }
+
+        #backToTop.no-icon i {
+            display: none !important;
+        }
+
+        /* Only show on mobile */
+        @media (min-width: 641px) {
+            #backToTop {
+                display: none;
+            }
+        }
     </style>
 </head>
 
@@ -1162,7 +1224,7 @@
     </div>
     @include('navbar')
 
-    <section class="relative text-white overflow-hidden aspect-[16/9] md:aspect-auto md:min-h-[550px] flex flex-col justify-start md:justify-center pt-8 sm:pt-10 md:pt-0 
+    <section class="relative text-white overflow-hidden aspect-[16/9] md:aspect-auto md:min-h-[700px] flex flex-col justify-start md:justify-center pt-8 sm:pt-10 md:pt-0 
     {{ $kelompok->background 
         ? 'bg-[url(\'' . asset('storage/' . $kelompok->background) . '\')] bg-cover bg-center' 
         : 'bg-[url(\'' . asset('images/background_beranda_INNDESA.jpeg') . '\')] bg-cover bg-center' 
@@ -1176,13 +1238,13 @@
         <div class="absolute inset-0 bg-black bg-opacity-50 z-0 hidden md:block"></div>
 
         <!-- LOGO -->
-        <div class="hero-logo flex items-center justify-start pl-4 mt-1 sm:mt-6 md:mt-0 md:absolute md:top-12 md:left-16 z-10">
+        <div class="hero-logo flex items-center justify-start pl-8 mt-[-10px] sm:mt-2 md:mt-0 md:absolute md:top-12 md:left-16 z-10">
             @if ($kelompok->logo && Storage::disk('public')->exists($kelompok->logo))
             <img
                 src="{{ asset('storage/' . $kelompok->logo) }}"
                 alt="Logo {{ $kelompok->getKodeKelompokAttribute() }}"
-                class="h-10 sm:h-14 md:h-20 lg:h-24 w-auto
-                   max-h-16 sm:max-h-20 md:max-h-28 lg:max-h-32
+                class="h-10 sm:h-14 md:h-24 lg:h-28 w-auto
+                   max-h-16 sm:max-h-20 md:max-h-32 lg:max-h-40
                    object-contain no-context-menu"
                 draggable="false"
                 oncontextmenu="return false;"
@@ -1193,8 +1255,8 @@
             <img
                 src="{{ asset('images/fallback-logo.png') }}"
                 alt=""
-                class="h-10 sm:h-14 md:h-20 lg:h-24 w-auto
-                   max-h-16 sm:max-h-20 md:max-h-28 lg:max-h-32
+                class="h-10 sm:h-14 md:h-24 lg:h-28 w-auto
+                   max-h-16 sm:max-h-20 md:max-h-32 lg:max-h-40
                    object-contain no-context-menu"
                 draggable="false"
                 oncontextmenu="return false;"
@@ -1238,33 +1300,49 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($struktur->where('jabatan', '!=', 'Anggota') as $item)
+                                @php
+                                // Pisahkan data non-anggota dan anggota
+                                $nonAnggota = $struktur->where('jabatan', '!=', 'Anggota');
+                                $anggota = $struktur->where('jabatan', 'Anggota');
+
+                                // Kelompokkan non-anggota berdasarkan jabatan
+                                $groupedNonAnggota = $nonAnggota->groupBy('jabatan');
+                                @endphp
+
+                                @foreach($groupedNonAnggota as $jabatan => $items)
                                 <tr>
                                     <td class="border border-gray-200 px-2 py-1 md:px-3 md:py-2 text-xs md:text-base">
-                                        {{ $item->jabatan }}
+                                        {{ $jabatan }}
                                     </td>
                                     <td class="border border-gray-200 px-2 py-1 md:px-3 md:py-2 text-xs md:text-base">
-                                        {{ $item->nama }}
+                                        @if($items->count() > 1)
+                                        <ol class="list-decimal pl-4">
+                                            @foreach($items as $item)
+                                            <li>{{ $item->nama }}</li>
+                                            @endforeach
+                                        </ol>
+                                        @else
+                                        {{ $items->first()->nama }}
+                                        @endif
                                     </td>
                                 </tr>
                                 @endforeach
-                                @php
-                                $anggota = $struktur->where('jabatan', 'Anggota');
-                                @endphp
+
                                 @if($anggota->count())
                                 <tr>
                                     <td class="border border-gray-200 px-2 py-1 md:px-3 md:py-2 text-xs md:text-base align-top">
                                         Anggota
                                     </td>
                                     <td class="border border-gray-200 px-2 py-1 md:px-3 md:py-2">
-                                        <ul class="list-disc pl-4">
+                                        <ol class="list-decimal pl-4">
                                             @foreach($anggota as $a)
                                             <li class="text-xs md:text-base">{{ $a->nama }}</li>
                                             @endforeach
-                                        </ul>
+                                        </ol>
                                     </td>
                                 </tr>
                                 @endif
+
                                 @if($struktur->count() == 0)
                                 <tr>
                                     <td colspan="2" class="text-center p-3 md:p-4 text-gray-500 text-xs md:text-base">
@@ -1320,9 +1398,9 @@
 
                                     <!-- Watermark mobile -->
                                     <div class="absolute inset-0 pointer-events-none overflow-hidden md:hidden">
-                                        <div class="grid grid-cols-4 w-full h-full">
-                                            @for ($i = 0; $i < 40; $i++)
-                                                <span class="flex items-center justify-center text-gray-800 text-[8px] font-bold opacity-45 -rotate-45 whitespace-nowrap">
+                                        <div class="grid grid-cols-12 w-full h-full">
+                                            @for ($i = 0; $i < 150; $i++)
+                                                <span class="flex items-center justify-center text-gray-800 text-[8px] font-bold opacity-20 -rotate-45 whitespace-nowrap">
                                                 INNDESA
                                                 </span>
                                                 @endfor
@@ -1333,7 +1411,7 @@
                                     <div class="absolute inset-0 pointer-events-none overflow-hidden hidden md:block">
                                         <div class="grid grid-cols-12 w-full h-full">
                                             @for ($i = 0; $i < 150; $i++)
-                                                <span class="flex items-center justify-center text-gray-800 text-[10px] font-bold opacity-45 -rotate-45 whitespace-nowrap">
+                                                <span class="flex items-center justify-center text-gray-800 text-[10px] font-bold opacity-20 -rotate-45 whitespace-nowrap">
                                                 INNDESA
                                                 </span>
                                                 @endfor
@@ -1375,7 +1453,7 @@
                                     <div class="absolute inset-0 pointer-events-none overflow-hidden md:hidden">
                                         <div class="grid grid-cols-12 w-full h-full">
                                             @for ($i = 0; $i < 150; $i++)
-                                                <span class="flex items-center justify-center text-gray-800 text-[8px] font-bold opacity-45 -rotate-45 whitespace-nowrap">
+                                                <span class="flex items-center justify-center text-gray-800 text-[8px] font-bold opacity-20 -rotate-45 whitespace-nowrap">
                                                 INNDESA
                                                 </span>
                                                 @endfor
@@ -1386,7 +1464,7 @@
                                     <div class="absolute inset-0 pointer-events-none overflow-hidden hidden md:block">
                                         <div class="grid grid-cols-12 w-full h-full">
                                             @for ($i = 0; $i < 150; $i++)
-                                                <span class="flex items-center justify-center text-gray-800 text-[10px] font-bold opacity-45 -rotate-45 whitespace-nowrap">
+                                                <span class="flex items-center justify-center text-gray-800 text-[10px] font-bold opacity-20 -rotate-45 whitespace-nowrap">
                                                 INNDESA
                                                 </span>
                                                 @endfor
@@ -1541,13 +1619,39 @@
                     <div class="text-green-600 font-medium text-sm mr-3">
                         Total Produk Terjual: {{ $totalProdukTerjual }}
                     </div>
-                    <!-- Kontak -->
-                    <a href="https://wa.me/6289647038212?text=Halo%20saya%20tertarik%20dengan%20produk%20Anda"
+                    @php
+                    $noWa = $informasiUser->no_telp ?? null;
+
+                    if ($noWa) {
+                    // Bersihkan biar cuma angka
+                    $noWa = preg_replace('/[^0-9]/', '', $noWa);
+
+                    // Kalau formatnya 08xxxx → ubah jadi 628xxxx
+                    if (strpos($noWa, '0') === 0) {
+                    $noWa = '62' . substr($noWa, 1);
+                    }
+
+                    $pesan = urlencode(
+                    "Halo, saya tertarik dengan produk dari kelompok {$kelompok->nama}.\n".
+                    "Saya sudah melihat katalog yang tersedia.\n".
+                    "Boleh minta informasi lebih detail terkait harga dan cara pemesanan?\n
+                    ".
+                    "Terima kasih 🙏"
+                    );
+                    }
+                    @endphp
+
+                    @if ($noWa)
+                    <a href="https://wa.me/{{ $noWa }}?text={{ $pesan }}"
                         rel="noopener noreferrer"
                         class="flex items-center gap-1 text-gray-800 hover:text-sky-600 transition-colors font-medium text-sm mr-3"
                         aria-label="Kontak via WhatsApp">
                         <span>Kontak</span>
                     </a>
+                    @else
+                    <span class="text-gray-500 text-sm mr-3">Kontak tidak tersedia</span>
+                    @endif
+
                     <!-- Katalog -->
                     @if($katalog && $katalog->katalog)
                     <a onclick="openKatalogPreview('{{ asset('storage/' . $katalog->katalog) }}', 'Katalog {{ $kelompok->nama }}')"
@@ -1573,12 +1677,38 @@
                         <div class="text-green-600 font-medium text-base">
                             Total Produk Terjual: {{ $totalProdukTerjual }}
                         </div>
-                        <a href="https://wa.me/6289647038212?text=Halo%20saya%20tertarik%20dengan%20produk%20Anda"
+                        <!-- Kontak -->
+                        @php
+                        $noWa = $informasiUser->no_telp ?? null;
+
+                        if ($noWa) {
+                        // Bersihkan biar cuma angka
+                        $noWa = preg_replace('/[^0-9]/', '', $noWa);
+
+                        // Kalau formatnya 08xxxx → ubah jadi 628xxxx
+                        if (strpos($noWa, '0') === 0) {
+                        $noWa = '62' . substr($noWa, 1);
+                        }
+
+                        $pesan = urlencode(
+                        "Halo, saya tertarik dengan produk dari kelompok {$kelompok->nama}.\n".
+                        "Saya sudah melihat katalog yang tersedia.\n".
+                        "Boleh minta informasi lebih detail terkait harga dan cara pemesanan?\n".
+                        "Terima kasih"
+                        );
+                        }
+                        @endphp
+
+                        @if($noWa)
+                        <a href="https://wa.me/{{ $noWa }}?text={{ $pesan }}"
                             rel="noopener noreferrer"
-                            class="flex items-center gap-1 text-gray-800 hover:text-sky-600 transition-colors font-medium text-base"
+                            class="flex items-center gap-1 text-gray-800 hover:text-sky-600 transition-colors font-medium text-sm mr-3"
                             aria-label="Kontak via WhatsApp">
                             <span>Kontak</span>
                         </a>
+                        @else
+                        <span class="text-gray-500 text-sm mr-3">Kontak tidak tersedia</span>
+                        @endif
                     </div>
                     <div class="flex flex-row items-center gap-x-4">
                         <!-- Katalog -->
@@ -1751,9 +1881,9 @@
                                     onerror="this.src='{{ asset('images/placeholder.jpg') }}'">
 
                                 <div class="absolute inset-0 pointer-events-none overflow-hidden md:hidden">
-                                    <div class="grid grid-cols-4 w-full h-full">
-                                        @for ($i = 0; $i < 40; $i++)
-                                            <span class="flex items-center justify-center text-gray-800 text-[8px] font-bold opacity-45 -rotate-45 whitespace-nowrap">
+                                    <div class="grid grid-cols-12 w-full h-full">
+                                        @for ($i = 0; $i < 150; $i++)
+                                            <span class="flex items-center justify-center text-gray-800 text-[8px] font-bold opacity-20 -rotate-45 whitespace-nowrap">
                                             INNDESA
                                             </span>
                                             @endfor
@@ -1763,7 +1893,7 @@
                                 <div class="absolute inset-0 pointer-events-none overflow-hidden hidden md:block">
                                     <div class="grid grid-cols-12 w-full h-full">
                                         @for ($i = 0; $i < 150; $i++)
-                                            <span class="flex items-center justify-center text-gray-800 text-[10px] font-bold opacity-45 -rotate-45 whitespace-nowrap">
+                                            <span class="flex items-center justify-center text-gray-800 text-[10px] font-bold opacity-20 -rotate-45 whitespace-nowrap">
                                             INNDESA
                                             </span>
                                             @endfor
@@ -1801,7 +1931,7 @@
                                 <div class="absolute inset-0 pointer-events-none overflow-hidden md:hidden">
                                     <div class="grid grid-cols-12 w-full h-full">
                                         @for ($i = 0; $i < 150; $i++)
-                                            <span class="flex items-center justify-center text-gray-800 text-[8px] font-bold opacity-45 -rotate-45 whitespace-nowrap">
+                                            <span class="flex items-center justify-center text-gray-800 text-[8px] font-bold opacity-20 -rotate-45 whitespace-nowrap">
                                             INNDESA
                                             </span>
                                             @endfor
@@ -1811,7 +1941,7 @@
                                 <div class="absolute inset-0 pointer-events-none overflow-hidden hidden md:block">
                                     <div class="grid grid-cols-12 w-full h-full">
                                         @for ($i = 0; $i < 150; $i++)
-                                            <span class="flex items-center justify-center text-gray-800 text-[10px] font-bold opacity-45 -rotate-45 whitespace-nowrap">
+                                            <span class="flex items-center justify-center text-gray-800 text-[10px] font-bold opacity-20 -rotate-45 whitespace-nowrap">
                                             INNDESA
                                             </span>
                                             @endfor
@@ -1938,6 +2068,16 @@
         @include('footer')
     </div>
 
+
+    <!-- KEMBALI KEATAS - PERBAIKAN -->
+    <a href="#" id="backToTop" title="Kembali ke Atas">
+        <i class="fas fa-arrow-up"></i>
+        <!-- SVG fallback jika Font Awesome tidak berhasil dimuat -->
+        <svg class="arrow-fallback" fill="white" viewBox="0 0 24 24">
+            <path d="M7 14l5-5 5 5z" />
+        </svg>
+    </a>
+
     <script>
         // Variabel global untuk menyimpan informasi file yang sedang dipreview
         let currentPreviewFile = '';
@@ -1961,7 +2101,7 @@
 
         // Render PDF saat halaman dimuat
         document.addEventListener('DOMContentLoaded', () => {
-            @if(!empty($kelompok->sk_desa) && strtolower(pathinfo($kelompok->sk_desa, PATHINFO_EXTENSION)) === 'pdf')
+            @if(!empty($kelompok -> sk_desa) && strtolower(pathinfo($kelompok -> sk_desa, PATHINFO_EXTENSION)) === 'pdf')
             renderPdfWithWatermark(
                 "{{ asset('storage/' . $kelompok->sk_desa) }}",
                 "pdfSkDesaViewer"
@@ -2600,7 +2740,7 @@
                 pagination.appendChild(dots);
             }
 
-            // Update status tombol navigasi
+
             updateNavigationButtons(idPrefix, current, total, itemsPerPage);
         }
 
@@ -2728,6 +2868,42 @@
             btn.setAttribute('tabindex', '0');
             btn.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') btn.click();
+            });
+        });
+
+        // KEMBALI KE ATAS
+        function checkFontAwesome() {
+            const icon = document.createElement('i');
+            icon.className = 'fas fa-arrow-up';
+            const isLoaded = window.getComputedStyle(icon, ':before').getPropertyValue('content') !== 'none';
+
+            if (isLoaded) {
+                document.body.classList.add('fa-loaded');
+            }
+        }
+
+        // Run check after DOM is loaded
+        document.addEventListener('DOMContentLoaded', checkFontAwesome);
+
+        // Also run check after window is fully loaded
+        window.addEventListener('load', checkFontAwesome);
+
+        // KEMBALI KE ATAS
+        const backToTopButton = document.getElementById('backToTop');
+
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.add('show');
+            } else {
+                backToTopButton.classList.remove('show');
+            }
+        });
+
+        backToTopButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
             });
         });
     </script>

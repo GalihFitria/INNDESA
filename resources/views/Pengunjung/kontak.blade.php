@@ -83,8 +83,8 @@
         }
 
         .contact-card:hover {
-            transform: translateX(5px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         }
 
         .admin-card {
@@ -122,57 +122,125 @@
             opacity: 0;
         }
 
-        .contact-card:nth-child(1) {
+        .admin-card {
             animation-delay: 0.1s;
         }
 
-        .contact-card:nth-child(2) {
+        .group-card:nth-child(1) {
             animation-delay: 0.2s;
         }
 
-        .contact-card:nth-child(3) {
+        .group-card:nth-child(2) {
             animation-delay: 0.3s;
         }
 
-        .contact-card:nth-child(4) {
+        .group-card:nth-child(3) {
             animation-delay: 0.4s;
         }
 
-        .contact-card:nth-child(5) {
+        .group-card:nth-child(4) {
             animation-delay: 0.5s;
+        }
+
+        .group-card:nth-child(5) {
+            animation-delay: 0.6s;
         }
 
         /* Mobile-specific styles */
         @media (max-width: 640px) {
             .contact-card {
-                padding: 16px;
-                border-radius: 8px;
+                padding: 10px;
+                border-radius: 6px;
             }
 
             .contact-icon {
-                width: 40px;
-                height: 40px;
+                width: 28px;
+                height: 28px;
             }
 
             .contact-icon i {
-                font-size: 18px;
+                font-size: 14px;
             }
 
             .contact-name {
-                font-size: 16px;
+                font-size: 13px;
             }
 
             .contact-number {
-                font-size: 14px;
+                font-size: 11px;
             }
 
             .whatsapp-btn {
-                padding: 8px 12px;
-                font-size: 12px;
+                padding: 5px 8px;
+                font-size: 11px;
             }
 
             .whatsapp-btn i {
-                font-size: 14px;
+                font-size: 11px;
+            }
+        }
+
+        /* Back to top button styles */
+        #backToTop {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #3b82f6;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            text-decoration: none;
+        }
+
+        #backToTop.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        #backToTop:hover {
+            background-color: #2563eb;
+            transform: translateY(-5px);
+        }
+
+        #backToTop i {
+            font-size: 24px;
+            color: white;
+        }
+
+        /* Fallback for Font Awesome */
+        #backToTop::before {
+            content: "↑";
+            font-size: 24px;
+            color: white;
+        }
+
+        #backToTop i {
+            display: none;
+        }
+
+        /* Show Font Awesome icon if loaded */
+        .fa-loaded #backToTop i {
+            display: block;
+        }
+
+        .fa-loaded #backToTop::before {
+            display: none;
+        }
+
+        /* Only show on mobile */
+        @media (min-width: 641px) {
+            #backToTop {
+                display: none;
             }
         }
     </style>
@@ -193,83 +261,87 @@
 
     <!-- Contact Section -->
     <section class="py-8 sm:py-12 md:py-16">
-        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-8 sm:mb-12">
                 <h2 class="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 mb-2 sm:mb-4">Hubungi Kami</h2>
                 <p class="text-sm sm:text-base text-gray-600">Silakan hubungi Admin INNDESA atau kelompok kami melalui WhatsApp</p>
             </div>
 
-            <div class="space-y-4 sm:space-y-6">
-                <!-- Admin INNDESA (static / bisa dari DB kalau ada tabel khusus admin pusat) -->
-                <div class="contact-card admin-card bg-white rounded-lg shadow-md p-4 sm:p-5 flex items-center justify-between">
-                    <div class="flex items-center">
-                        <div class="contact-icon w-12 h-12 sm:w-12 sm:h-12 rounded-full bg-blue-100 flex items-center justify-center mr-3 sm:mr-4">
-                            <i class="fas fa-user-tie text-blue-600 text-xl sm:text-xl"></i>
-                        </div>
-                        <div>
-                            <h3 class="contact-name text-base sm:text-lg font-bold text-gray-800">Admin INNDESA</h3>
-                            <div class="flex items-center mt-1">
-                                <i class="fab fa-whatsapp text-green-500 mr-1 sm:mr-2 text-sm sm:text-base"></i>
-                                <span class="contact-number text-gray-700 text-sm sm:text-base">+62 812-3456-7890</span>
-                            </div>
-                        </div>
-                    </div>
-                    <a href="https://api.whatsapp.com/send?phone=6281234567890&text=Halo%20Admin%20INNDESA"
-                        target="_blank"
-                        class="whatsapp-btn text-white font-medium py-2 px-3 sm:px-4 rounded-lg flex items-center text-xs sm:text-sm">
-                        <i class="fab fa-whatsapp mr-1 sm:mr-2"></i>
-                        Hubungi
-                    </a>
-                </div>
+            <!-- Admin INNDESA Card (di tengah atas) -->
+            <div class="flex justify-center mb-10 sm:mb-14">
+                <div class="contact-card admin-card bg-white rounded-lg shadow-md p-5 sm:p-6 w-full max-w-md">
+                    <div class="flex flex-col items-center text-center">
+                        <div class="contact-icon w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center mb-4">
+                            <i class="fas fa-user-tie text-blue-600 text-7xl sm:text-2xl sm:scale-100 scale-150"></i>
 
+                        </div>
+                        <h3 class="contact-name text-xl sm:text-2xl font-bold text-gray-800 mb-2">Admin INNDESA</h3>
+                        <div class="flex items-center justify-center mb-4">
+                            <i class="fab fa-whatsapp text-green-500 mr-2 text-lg"></i>
+                            <span class="contact-number text-gray-700 text-base sm:text-lg">+62 812-3456-7890</span>
+                        </div>
+                        <a href="https://api.whatsapp.com/send?phone=6281234567890&text=Halo%20Admin%20INNDESA"
+                            target="_blank"
+                            class="whatsapp-btn text-white font-medium py-3 px-6 rounded-lg flex items-center text-sm sm:text-base">
+                            <i class="fab fa-whatsapp mr-2"></i>
+                            Hubungi Admin
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grid Layout untuk Kelompok -->
+            <div class="mb-6 sm:mb-8">
+                <h3 class="text-lg sm:text-xl md:text-2xl font-bold text-gray-800 mb-4 sm:mb-6 text-center">Kelompok Terdaftar</h3>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 sm:grid-cols-2 sm:gap-4 md:grid-cols-2 md:gap-6 lg:grid-cols-3 lg:gap-6 xl:grid-cols-4 xl:gap-6">
                 <!-- Kelompok dari database -->
                 @foreach ($kontak as $item)
-                <div class="contact-card group-card bg-white rounded-lg shadow-md p-4 sm:p-5 flex items-center justify-between">
-                    <div class="flex items-center">
-                        <div class="contact-icon w-12 h-12 sm:w-12 sm:h-12 rounded-full bg-green-100 flex items-center justify-center mr-3 sm:mr-4">
-                            <i class="fas fa-users text-green-600 text-xl sm:text-xl"></i>
+                @php
+                $noWa = preg_replace('/\D/', '', $item->no_telp);
+                if (strpos($noWa, '0') === 0) {
+                $noWa = '62' . substr($noWa, 1);
+                }
+
+                $namaKelompok = optional($item->kelompok)->nama ?? 'Tanpa Nama';
+
+                $pesan = urlencode(
+                "Halo, saya tertarik dengan produk dari kelompok {$namaKelompok}.\n".
+                "Apakah bisa diberikan informasi lebih lanjut mengenai produk, harga, dan cara pemesanannya?\n".
+                "Terima kasih"
+                );
+                @endphp
+
+                <div class="contact-card group-card bg-white rounded-lg shadow-md p-2 sm:p-5 flex flex-col h-full">
+                    <div class="flex flex-col items-center text-center mb-2 sm:mb-4">
+                        <div class="contact-icon w-10 h-10 sm:w-16 sm:h-16 rounded-full bg-green-100 flex items-center justify-center mb-2 sm:mb-3">
+                            <i class="fas fa-users text-green-600 text-lg sm:text-2xl"></i>
                         </div>
-                        <div>
-                            <h3 class="contact-name text-base sm:text-lg font-bold text-gray-800">
-                                {{ $item->kelompok->nama ?? 'Tanpa Nama Kelompok' }}
-                            </h3>
-                            <div class="flex items-center mt-1">
-                                <i class="fab fa-whatsapp text-green-500 mr-1 sm:mr-2 text-sm sm:text-base"></i>
-                                <span class="contact-number text-gray-700 text-sm sm:text-base">
-                                    {{ $item->no_telp }}
-                                </span>
-                            </div>
-                        </div>
+                        <h3 class="contact-name font-bold text-gray-800 text-center text-xs sm:text-base break-words leading-tight sm:leading-normal">
+                            {{ $namaKelompok }}
+                        </h3>
                     </div>
-                    <a href="https://api.whatsapp.com/send?phone={{ preg_replace('/\D/', '', $item->no_telp) }}&text=Halo%20{{ urlencode($item->kelompok->nama ?? 'Kelompok') }}"
-                        target="_blank"
-                        class="whatsapp-btn text-white font-medium py-2 px-3 sm:px-4 rounded-lg flex items-center text-xs sm:text-sm">
-                        <i class="fab fa-whatsapp mr-1 sm:mr-2"></i>
-                        Hubungi
-                    </a>
+                    <div class="mt-auto">
+                        <a href="https://wa.me/{{ $noWa }}?text={{ $pesan }}"
+                            class="whatsapp-btn text-white font-medium py-1 px-2 sm:py-2 sm:px-4 rounded-lg flex items-center justify-center text-xs w-full">
+                            <i class="fab fa-whatsapp mr-1 sm:mr-2"></i> Hubungi
+                        </a>
+                    </div>
                 </div>
                 @endforeach
             </div>
-
-            <!-- <div class="mt-8 sm:mt-12 text-center">
-                <div class="bg-white rounded-lg shadow-md p-4 sm:p-6">
-                    <h3 class="text-base sm:text-lg font-bold text-gray-800 mb-1 sm:mb-2">Butuh Bantuan?</h3>
-                    <p class="text-xs sm:text-base text-gray-600 mb-3 sm:mb-4">Hubungi kami sekarang juga melalui WhatsApp</p>
-
-                    <a href="https://api.whatsapp.com/send?phone=6281234567890&text=Halo%20saya%20membutuhkan%20bantuan"
-                        target="_blank"
-                        class="whatsapp-btn text-white font-medium py-2 sm:py-3 px-4 sm:px-6 rounded-lg flex items-center justify-center mx-auto text-xs sm:text-sm">
-                        <i class="fab fa-whatsapp mr-1 sm:mr-2"></i>
-                        Chat Sekarang
-                    </a>
-                </div>
-            </div> -->
         </div>
     </section>
 
     <div class="mt-12 sm:mt-20">
         @include('footer')
     </div>
+
+    <!-- KEMBALI KEATAS -->
+    <a href="#" id="backToTop" title="Kembali ke Atas">
+        <i class="fas fa-arrow-up"></i>
+    </a>
 
     <script>
         // Preloader
@@ -280,6 +352,42 @@
                 preloader.style.display = "none";
                 document.body.classList.add("loaded");
             }, 500);
+        });
+
+        // Check if Font Awesome is loaded
+        function checkFontAwesome() {
+            const icon = document.createElement('i');
+            icon.className = 'fas fa-arrow-up';
+            const isLoaded = window.getComputedStyle(icon, ':before').getPropertyValue('content') !== 'none';
+
+            if (isLoaded) {
+                document.body.classList.add('fa-loaded');
+            }
+        }
+
+        // Run check after DOM is loaded
+        document.addEventListener('DOMContentLoaded', checkFontAwesome);
+
+        // Also run check after window is fully loaded
+        window.addEventListener('load', checkFontAwesome);
+
+        // KEMBALI KE ATAS
+        const backToTopButton = document.getElementById('backToTop');
+
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.add('show');
+            } else {
+                backToTopButton.classList.remove('show');
+            }
+        });
+
+        backToTopButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
         });
     </script>
 </body>

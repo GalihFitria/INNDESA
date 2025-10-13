@@ -1,29 +1,21 @@
 <?php
 namespace App\Http\Controllers\Admin_Kelompok;
-use App\Http\Controllers\Controller;  
 
+use App\Http\Controllers\Controller;  
 use Illuminate\Http\Request;
 use App\Models\Kelompok;
 use Illuminate\Support\Str;
-
-
-
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\DB;
 
 class EditLogoBackgroundController extends Controller
 {
-
-    
-    
-  public function edit($id)
+    public function edit($id)
     {
         $kelompok = Kelompok::findOrFail($id);
         return view('Admin_Kelompok.edit_logo_background', compact('kelompok'));
     }
 
-
-   public function update(Request $request, $id)
+    public function update(Request $request, $id)
     {
         $kelompok = Kelompok::findOrFail($id);
 
@@ -33,67 +25,54 @@ class EditLogoBackgroundController extends Controller
         ]);
 
         /** =========================
-     *   HANDLE HAPUS LOGO & BACKGROUND
-     *  ========================= */
-    if ($request->delete_logo == "1") { // 👈 tambahan
-        if ($kelompok->logo && Storage::disk('public')->exists('logo/' . $kelompok->logo)) {
-            Storage::disk('public')->delete('logo/' . $kelompok->logo);
+         *   HAPUS LOGO / BACKGROUND
+         *  ========================= */
+        if ($request->delete_logo == "1") {
+            if ($kelompok->logo && Storage::disk('public')->exists($kelompok->logo)) {
+                Storage::disk('public')->delete($kelompok->logo);
+            }
+            $kelompok->logo = null;
         }
-        $kelompok->logo = null;
-    }
 
-    if ($request->delete_background == "1") { // 👈 tambahan
-        if ($kelompok->background && Storage::disk('public')->exists('background/' . $kelompok->background)) {
-            Storage::disk('public')->delete('background/' . $kelompok->background);
+        if ($request->delete_background == "1") {
+            if ($kelompok->background && Storage::disk('public')->exists($kelompok->background)) {
+                Storage::disk('public')->delete($kelompok->background);
+            }
+            $kelompok->background = null;
         }
-        $kelompok->background = null;
-    }
 
         /** =========================
          *   HANDLE LOGO
          *  ========================= */
         if ($request->filled('cropped_logo')) {
-            // Hapus file lama
-            if ($kelompok->logo && Storage::disk('public')->exists('logo/' . $kelompok->logo)) {
-                Storage::disk('public')->delete('logo/' . $kelompok->logo);
+            if ($kelompok->logo && Storage::disk('public')->exists($kelompok->logo)) {
+                Storage::disk('public')->delete($kelompok->logo);
             }
 
-            // Ambil nama file asli dari input hidden atau dari request->file jika ada
-            $originalName = $request->input('logo_original_name', 'logo'); // <--- pastikan di JS kirimkan
+            $originalName = $request->input('logo_original_name', 'logo.jpg');
             $baseName = Str::slug(pathinfo($originalName, PATHINFO_FILENAME));
             $extension = pathinfo($originalName, PATHINFO_EXTENSION) ?: 'jpg';
 
-            // Pastikan tidak menimpa file yang sudah ada
-            $fileName = $baseName . '.' . $extension;
-            $counter = 1;
-            while (Storage::disk('public')->exists('logo/' . $fileName)) {
-                $fileName = $baseName . '_' . $counter . '.' . $extension;
-                $counter++;
-            }
+            $fileName = $this->uniqueFileName("logo/$baseName", $extension);
 
-            // Simpan file hasil crop (base64)
             $imageData = $request->input('cropped_logo');
             $image = preg_replace('#^data:image/\w+;base64,#i', '', $imageData);
-            Storage::disk('public')->put('logo/' . $fileName, base64_decode($image));
+            Storage::disk('public')->put($fileName, base64_decode($image));
 
             $kelompok->logo = $fileName;
         } elseif ($request->hasFile('logo')) {
-            if ($kelompok->logo && Storage::disk('public')->exists('logo/' . $kelompok->logo)) {
-                Storage::disk('public')->delete('logo/' . $kelompok->logo);
+            if ($kelompok->logo && Storage::disk('public')->exists($kelompok->logo)) {
+                Storage::disk('public')->delete($kelompok->logo);
             }
 
             $originalName = $request->file('logo')->getClientOriginalName();
             $baseName = Str::slug(pathinfo($originalName, PATHINFO_FILENAME));
             $extension = $request->file('logo')->getClientOriginalExtension();
 
-            $fileName = $baseName . '.' . $extension;
-            $counter = 1;
-            while (Storage::disk('public')->exists('logo/' . $fileName)) {
-                $fileName = $baseName . '_' . $counter . '.' . $extension;
-                $counter++;
-            }
+            $fileName = $this->uniqueFileName("logo/$baseName", $extension);
 
-            $request->file('logo')->storeAs('logo', $fileName, 'public');
+            // Simpan di folder "logo"
+            $request->file('logo')->storeAs('logo', basename($fileName), 'public');
             $kelompok->logo = $fileName;
         }
 
@@ -101,43 +80,33 @@ class EditLogoBackgroundController extends Controller
          *   HANDLE BACKGROUND
          *  ========================= */
         if ($request->filled('cropped_background')) {
-            if ($kelompok->background && Storage::disk('public')->exists('background/' . $kelompok->background)) {
-                Storage::disk('public')->delete('background/' . $kelompok->background);
+            if ($kelompok->background && Storage::disk('public')->exists($kelompok->background)) {
+                Storage::disk('public')->delete($kelompok->background);
             }
 
-            $originalName = $request->input('background_original_name', 'background');
+            $originalName = $request->input('background_original_name', 'background.jpg');
             $baseName = Str::slug(pathinfo($originalName, PATHINFO_FILENAME));
             $extension = pathinfo($originalName, PATHINFO_EXTENSION) ?: 'jpg';
 
-            $fileName = $baseName . '.' . $extension;
-            $counter = 1;
-            while (Storage::disk('public')->exists('background/' . $fileName)) {
-                $fileName = $baseName . '_' . $counter . '.' . $extension;
-                $counter++;
-            }
+            $fileName = $this->uniqueFileName("background/$baseName", $extension);
 
             $imageData = $request->input('cropped_background');
             $image = preg_replace('#^data:image/\w+;base64,#i', '', $imageData);
-            Storage::disk('public')->put('background/' . $fileName, base64_decode($image));
+            Storage::disk('public')->put($fileName, base64_decode($image));
 
             $kelompok->background = $fileName;
         } elseif ($request->hasFile('background')) {
-            if ($kelompok->background && Storage::disk('public')->exists('background/' . $kelompok->background)) {
-                Storage::disk('public')->delete('background/' . $kelompok->background);
+            if ($kelompok->background && Storage::disk('public')->exists($kelompok->background)) {
+                Storage::disk('public')->delete($kelompok->background);
             }
 
             $originalName = $request->file('background')->getClientOriginalName();
             $baseName = Str::slug(pathinfo($originalName, PATHINFO_FILENAME));
             $extension = $request->file('background')->getClientOriginalExtension();
 
-            $fileName = $baseName . '.' . $extension;
-            $counter = 1;
-            while (Storage::disk('public')->exists('background/' . $fileName)) {
-                $fileName = $baseName . '_' . $counter . '.' . $extension;
-                $counter++;
-            }
+            $fileName = $this->uniqueFileName("background/$baseName", $extension);
 
-            $request->file('background')->storeAs('background', $fileName, 'public');
+            $request->file('background')->storeAs('background', basename($fileName), 'public');
             $kelompok->background = $fileName;
         }
 
@@ -147,4 +116,17 @@ class EditLogoBackgroundController extends Controller
             ->with('success', 'Logo & Background berhasil diperbarui!');
     }
 
+    /**
+     * Generate nama file unik (pakai folder).
+     */
+    private function uniqueFileName($baseNameWithFolder, $extension)
+    {
+        $fileName = $baseNameWithFolder . '.' . $extension;
+        $counter = 1;
+        while (Storage::disk('public')->exists($fileName)) {
+            $fileName = $baseNameWithFolder . '_' . $counter . '.' . $extension;
+            $counter++;
+        }
+        return $fileName;
+    }
 }

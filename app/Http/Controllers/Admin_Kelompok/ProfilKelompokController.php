@@ -70,39 +70,46 @@ class ProfilKelompokController extends Controller
         ], 400);
     }
 
-    public function updatePassword(Request $request, $id)
-    {
-        \Log::info('UPDATE PASSWORD DIPANGGIL', ['id_dikirim' => $id]);
 
+    public function updatePassword(Request $request, $id)
+{
+    if ($request->expectsJson()) {
         $request->validate([
             'password_lama' => 'required',
-            'password_baru' => 'required|min:6',
-            'konfirmasi_password' => 'required|same:password_baru',
+            'password_baru' => [
+                'required',
+                'string',
+                'min:8',
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/', // ✅ huruf kecil, besar, angka, & simbol
+                'confirmed'
+            ],
+        ], [
+            'password_lama.required' => 'Password lama wajib diisi',
+            'password_baru.required' => 'Password baru wajib diisi',
+            'password_baru.min' => 'Password baru minimal 8 karakter',
+            'password_baru.regex' => 'Password harus mengandung huruf besar, huruf kecil, angka, dan karakter unik (misal: * $ @ # !)',
+            'password_baru.confirmed' => 'Konfirmasi password tidak cocok',
         ]);
-
-        $user = InformasiUser::findOrFail($id);
-
-        // ✅ Cek password lama pakai Hash::check
-        if (!Hash::check($request->password_lama, $user->password)) {
-            return response()->json([
-                'errors' => [
-                    'password_lama' => ['Password lama salah']
-                ]
-            ], 422);
-        }
-
-        // ✅ Simpan password baru dalam bentuk hash
-        $user->password = Hash::make($request->password_baru);
-        $user->save();
-
-        \Log::info('PASSWORD BERHASIL DIUPDATE', [
-            'id' => $id,
-        ]);
-
-        return response()->json([
-            'message' => 'Password berhasil diubah'
-        ], 200);
     }
+
+    $user = InformasiUser::findOrFail($id);
+
+    if (!Hash::check($request->password_lama, $user->password)) {
+        return response()->json([
+            'errors' => [
+                'password_lama' => ['Password lama anda salah']
+            ]
+        ], 422);
+    }
+
+    $user->password = Hash::make($request->password_baru);
+    $user->save();
+
+    return response()->json([
+        'message' => 'Password berhasil diubah'
+    ], 200);
+}
+
 
     
 }

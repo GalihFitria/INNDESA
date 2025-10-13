@@ -9,6 +9,8 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Pastikan Font Awesome dimuat dengan benar -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         /* PRELOADER */
         #preloader {
@@ -620,6 +622,94 @@
                 min-width: 44px;
             }
         }
+
+        /* Back to top button styles - PERBAIKAN */
+        #backToTop {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #3b82f6;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            text-decoration: none;
+        }
+
+        #backToTop.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        #backToTop:hover {
+            background-color: #2563eb;
+            transform: translateY(-5px);
+        }
+
+        #backToTop i {
+            font-size: 24px;
+            color: white;
+            display: block !important;
+        }
+
+        /* Fallback for Font Awesome - PERBAIKAN */
+        #backToTop .arrow-fallback {
+            display: none;
+            width: 24px;
+            height: 24px;
+        }
+
+        #backToTop.no-icon .arrow-fallback {
+            display: block;
+        }
+
+        #backToTop.no-icon i {
+            display: none !important;
+        }
+
+        /* Only show on mobile */
+        @media (min-width: 641px) {
+            #backToTop {
+                display: none;
+            }
+        }
+
+        /* Tambahkan fitur scroll untuk filter kategori di desktop */
+        @media (min-width: 768px) {
+            #filterBox {
+                max-height: 400px;
+                overflow-y: auto;
+                padding-right: 10px;
+            }
+
+            /* Styling scrollbar */
+            #filterBox::-webkit-scrollbar {
+                width: 8px;
+            }
+
+            #filterBox::-webkit-scrollbar-track {
+                background: #f1f1f1;
+                border-radius: 10px;
+            }
+
+            #filterBox::-webkit-scrollbar-thumb {
+                background: #0097D4;
+                border-radius: 10px;
+            }
+
+            #filterBox::-webkit-scrollbar-thumb:hover {
+                background: #007bb3;
+            }
+        }
     </style>
 </head>
 
@@ -793,44 +883,53 @@
             <div class="mt-6 flex justify-center pagination-mobile">
                 <div class="flex items-center space-x-1 sm:space-x-2 overflow-x-auto pb-2">
 
+                    {{-- Tombol Previous --}}
                     @if ($produk->onFirstPage())
                     <span class="pagination-btn disabled">←</span>
                     @else
                     <a href="{{ $produk->previousPageUrl() }}" class="pagination-btn btn-outline">←</a>
                     @endif
 
-                    <div class="flex space-x-1">
-                        @php
-                        $start = max(1, $produk->currentPage() - 1);
-                        $end = min($produk->lastPage(), $produk->currentPage() + 1);
+                    {{-- Numbered Pagination --}}
+                    @php
+                    $current = $produk->currentPage();
+                    $last = $produk->lastPage();
+                    $start = max(1, $current - 1);
+                    $end = min($last, $current + 1);
+                    @endphp
 
-                        // Ellipsis awal jika start > 2
-                        if ($start > 2) {
-                        echo '<span class="px-2 text-gray-500 text-sm">...</span>';
-                        }
-                        @endphp
-
-                        @for ($page = $start; $page <= $end; $page++)
-                            @if ($page==$produk->currentPage())
-                            <span class="pagination-btn active">{{ $page }}</span>
-                            @else
-                            <a href="{{ $produk->url($page) }}" class="pagination-btn">{{ $page }}</a>
-                            @endif
-                            @endfor
-
-                            @php
-                            // Ellipsis akhir jika end < lastPage - 1
-                                if ($end < $produk->lastPage() - 1) {
-                                echo '<span class="px-2 text-gray-500 text-sm">...</span>';
-                                }
-                                @endphp
-                    </div>
-
-                    @if ($produk->hasMorePages())
-                    <a href="{{ $produk->nextPageUrl() }}" class="pagination-btn btn-outline">→</a>
-                    @else
-                    <span class="pagination-btn disabled">→</span>
+                    {{-- Always show first page --}}
+                    @if ($start > 1)
+                    <a href="{{ $produk->url(1) }}" class="pagination-btn {{ $current == 1 ? 'active' : '' }}">1</a>
+                    @if ($start > 2)
+                    <span class="px-2 text-gray-500 text-sm">...</span>
                     @endif
+                    @endif
+
+                    {{-- Pages around current --}}
+                    @for ($i = $start; $i <= $end; $i++)
+                        @if ($i==$current)
+                        <span class="pagination-btn active">{{ $i }}</span>
+                        @else
+                        <a href="{{ $produk->url($i) }}" class="pagination-btn">{{ $i }}</a>
+                        @endif
+                        @endfor
+
+                        {{-- Always show last page --}}
+                        @if ($end < $last)
+                            @if ($end < $last - 1)
+                            <span class="px-2 text-gray-500 text-sm">...</span>
+                            @endif
+                            <a href="{{ $produk->url($last) }}" class="pagination-btn {{ $current == $last ? 'active' : '' }}">{{ $last }}</a>
+                            @endif
+
+                            {{-- Tombol Next --}}
+                            @if ($produk->hasMorePages())
+                            <a href="{{ $produk->nextPageUrl() }}" class="pagination-btn btn-outline">→</a>
+                            @else
+                            <span class="pagination-btn disabled">→</span>
+                            @endif
+
                 </div>
             </div>
             @endif
@@ -845,6 +944,15 @@
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loading-spinner"></div>
     </div>
+
+    <!-- KEMBALI KEATAS - PERBAIKAN -->
+    <a href="#" id="backToTop" title="Kembali ke Atas">
+        <i class="fas fa-arrow-up"></i>
+        <!-- SVG fallback jika Font Awesome tidak berhasil dimuat -->
+        <svg class="arrow-fallback" fill="white" viewBox="0 0 24 24">
+            <path d="M7 14l5-5 5 5z" />
+        </svg>
+    </a>
 
     <script>
         // JS PRELOADER
@@ -969,6 +1077,50 @@
         // Hide loading overlay after page load
         window.addEventListener('load', function() {
             hidePreloader();
+        });
+
+        // Check if Font Awesome is loaded - PERBAIKAN
+        function checkFontAwesome() {
+            const backToTopButton = document.getElementById('backToTop');
+            const testIcon = document.createElement('i');
+            testIcon.className = 'fas fa-arrow-up';
+            document.body.appendChild(testIcon);
+
+            // Check if the icon is rendered correctly
+            const isLoaded = window.getComputedStyle(testIcon, ':before').getPropertyValue('content') !== 'none';
+
+            // Remove the test element
+            document.body.removeChild(testIcon);
+
+            if (!isLoaded) {
+                // Font Awesome not loaded, use SVG fallback
+                backToTopButton.classList.add('no-icon');
+            }
+        }
+
+        // Run check after DOM is loaded
+        document.addEventListener('DOMContentLoaded', checkFontAwesome);
+
+        // Also run check after window is fully loaded
+        window.addEventListener('load', checkFontAwesome);
+
+        // KEMBALI KE ATAS - PERBAIKAN
+        const backToTopButton = document.getElementById('backToTop');
+
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.add('show');
+            } else {
+                backToTopButton.classList.remove('show');
+            }
+        });
+
+        backToTopButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
         });
     </script>
 </body>

@@ -1,11 +1,14 @@
 @extends('Admin.sidebar')
 
 @section('title', 'Edit Produk - INNDESA')
+<link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+
 
 @section('content')
 <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <h2 class="text-center text-4xl font-bold text-gray-800 mb-6">.::Edit Produk::.</h2>
 <div class="bg-white shadow-md p-4 rounded-lg max-w-2xl mx-auto max-h-[500px] overflow-y-auto">
@@ -17,7 +20,7 @@
             <label for="id_kelompok" class="block text-sm font-medium text-gray-700">Nama Kelompok</label>
             <select name="id_kelompok" id="id_kelompok"
                 class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500 @error('id_kelompok') border-red-500 @enderror select2"
-                style="width: 100%;" required>
+                style="width: 100%;" required data-original-value="{{ $produk->id_kelompok }}">
                 <option value="">-- Pilih Kelompok --</option>
                 @foreach ($kelompok as $k)
                 <option value="{{ $k->id_kelompok }}"
@@ -33,7 +36,8 @@
 
         <div>
             <label for="nama" class="block text-sm font-medium text-gray-700">Nama Produk</label>
-            <input type="text" name="nama" id="nama" value="{{ old('nama', $produk->nama) }}" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500" required>
+            <input type="text" name="nama" id="nama" value="{{ old('nama', $produk->nama) }}" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500" required data-original-value="{{ $produk->nama }}">
+            <span id="namaWarning" class="text-red-500 text-sm hidden">Produk dengan nama ini sudah ada dalam kelompok yang dipilih.</span>
             @error('nama')
             <span class="text-red-500 text-sm">{{ $message }}</span>
             @enderror
@@ -85,7 +89,9 @@
 
         <div>
             <label for="sertifikat" class="block text-sm font-medium text-gray-700">Sertifikat</label>
-            @php $sertifikatPaths = $produk->sertifikat ? json_decode($produk->sertifikat, true) : []; @endphp
+            @php
+            $sertifikatPaths = $produk->sertifikat ? explode(',', $produk->sertifikat) : [];
+            @endphp
             @foreach ($sertifikatPaths as $i => $path)
             <div class="mb-2" data-file-path="{{ $path }}">
                 <a href="#" onclick="event.preventDefault(); previewExistingFile('{{ asset('storage/' . $path) }}', '{{ str_ends_with($path, '.pdf') ? 'application/pdf' : 'image/' }}', 'sertifikat', '{{ $path }}')" class="text-blue-600 hover:underline">
@@ -110,19 +116,17 @@
             @enderror
         </div>
 
-    <div>
-        <label for="produk_terjual" class="block text-sm font-medium text-gray-700">Produk Terjual (tidak perlu diisi)</label>
-    <input 
-        type="text" 
-        name="produk_terjual" 
-        id="produk_terjual" 
-        value="{{ old('produk_terjual', $produk->produk_terjual) }}" 
-        class="mt-1 block w-full border border-gray-300 rounded-lg p-2 bg-gray-100 text-gray-600 cursor-not-allowed focus:ring-0 focus:border-gray-300" 
-        readonly>
-    @error('produk_terjual')
-        <span class="text-red-500 text-sm">{{ $message }}</span>
-    @enderror
-    </div>
+        <div>
+            <label for="produk_terjual" class="block text-sm font-medium text-gray-700">Produk Terjual</label>
+            <div class="mt-1 block w-full border border-gray-300 rounded-lg p-2 bg-gray-100 text-gray-600">
+                {{ $produk->produk_terjual ?? 0 }}
+            </div>
+            <input type="hidden" name="produk_terjual" value="{{ $produk->produk_terjual ?? 0 }}" id="produk_terjual">
+            <p class="mt-1 text-sm text-gray-500">Field ini tidak dapat diubah</p>
+            @error('produk_terjual')
+            <span class="text-red-500 text-sm">{{ $message }}</span>
+            @enderror
+        </div>
 
         <div class="flex justify-end space-x-4">
             <a href="{{ route('Admin.produk.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 flex items-center">
@@ -175,6 +179,85 @@
             placeholder: "-- Pilih Kelompok --",
             allowClear: true
         });
+
+        // Validasi untuk nama produk
+        const namaInput = document.getElementById('nama');
+        const kelompokSelect = document.getElementById('id_kelompok');
+        const warningElement = document.getElementById('namaWarning');
+        const originalNama = namaInput.getAttribute('data-original-value');
+        const originalKelompok = kelompokSelect.getAttribute('data-original-value');
+
+        // Fungsi untuk validasi kombinasi nama dan kelompok
+        function validateCombination() {
+            const currentName = namaInput.value.trim();
+            const currentKelompok = kelompokSelect.value;
+
+            // Hanya validasi jika nama atau kelompok diubah
+            if ((currentName !== originalNama || currentKelompok !== originalKelompok) && currentName && currentKelompok) {
+                // Simulasi pengecekan (ganti dengan API call jika perlu)
+                const sampleData = [{
+                        nama: 'Produk A',
+                        kelompok: '1'
+                    },
+                    {
+                        nama: 'Produk B',
+                        kelompok: '2'
+                    },
+                    {
+                        nama: 'Produk C',
+                        kelompok: '1'
+                    }
+                ];
+
+                const isDuplicate = sampleData.some(item =>
+                    item.nama === currentName && item.kelompok === currentKelompok
+                );
+
+                if (isDuplicate) {
+                    warningElement.classList.remove('hidden');
+                    namaInput.setCustomValidity('Produk dengan nama ini sudah ada dalam kelompok yang dipilih.');
+                    return false;
+                } else {
+                    warningElement.classList.add('hidden');
+                    namaInput.setCustomValidity('');
+                    return true;
+                }
+            } else {
+                warningElement.classList.add('hidden');
+                namaInput.setCustomValidity('');
+                return true;
+            }
+        }
+
+        // Event listener untuk perubahan nama
+        namaInput.addEventListener('input', validateCombination);
+
+        // Event listener untuk perubahan kelompok
+        kelompokSelect.addEventListener('change', validateCombination);
+
+        // Validasi saat submit form
+        document.getElementById('produkForm').addEventListener('submit', function(e) {
+            if (!validateCombination()) {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Validasi Gagal',
+                    text: 'Produk dengan nama ini sudah ada dalam kelompok yang dipilih.',
+                    confirmButtonText: 'OK'
+                });
+            }
+        });
+
+        // Tampilkan error dari backend jika ada
+        const errorMessage = "{{ $errors->first('nama') }}";
+        if (errorMessage) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Validasi Gagal',
+                text: errorMessage,
+                confirmButtonText: 'OK'
+            });
+        }
     });
 
     let fotoFile = null;

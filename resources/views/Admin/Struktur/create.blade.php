@@ -1,11 +1,15 @@
 @extends('Admin.sidebar')
 
 @section('title', 'Tambah Struktur Organisasi - INNDESA')
+<link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+
 
 @section('content')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <h2 class="text-center text-4xl font-bold text-gray-800 mb-6">.::Tambah Struktur Organisasi::.</h2>
 <div class="bg-white shadow-md p-4 rounded-lg max-w-2xl mx-auto">
-    <form action="{{ route('Admin.struktur.store') }}" method="POST" class="space-y-6">
+    <form action="{{ route('Admin.struktur.store') }}" method="POST" class="space-y-6" id="form-struktur">
         @csrf
 
         <div class="mb-4">
@@ -25,8 +29,9 @@
 
         <div>
             <label for="nama" class="block text-sm font-medium text-gray-700">Nama</label>
-            <input type="text" name="nama" id="nama" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Masukkan Nama Kelompok" required>
+            <input type="text" name="nama" id="nama" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Masukkan Nama" required>
         </div>
+
         <div class="mb-4">
             <label for="jabatan" class="block text-sm font-medium text-gray-700">Posisi</label>
             <select id="jabatan" name="jabatan"
@@ -41,6 +46,7 @@
             @error('jabatan')
             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
             @enderror
+            <p id="jabatan-warning" class="text-yellow-600 text-sm mt-1 hidden">Peringatan: Jabatan ini hanya bisa diisi oleh satu orang per kelompok</p>
         </div>
 
         <div class="mb-4">
@@ -52,6 +58,7 @@
                 @endforeach
             </select>
         </div>
+
         <div class="flex justify-end space-x-4">
             <a href="{{ route('Admin.struktur.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 flex items-center">
                 <i class="fas fa-arrow-left mr-2"></i>Kembali
@@ -62,6 +69,10 @@
         </div>
     </form>
 </div>
+
+<!-- Data struktur organisasi untuk validasi jabatan -->
+<input type="hidden" id="struktur-data" value='@json($strukturList)'>
+
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
@@ -72,6 +83,86 @@
             placeholder: "-- Pilih Kelompok --",
             allowClear: true
         });
+
+        // Tampilkan peringatan jika jabatan Ketua atau Wakil Ketua dipilih
+        $('#jabatan').change(function() {
+            const jabatan = $(this).val();
+            const warning = $('#jabatan-warning');
+
+            if (jabatan === 'Ketua' || jabatan === 'Wakil Ketua') {
+                warning.removeClass('hidden');
+            } else {
+                warning.addClass('hidden');
+            }
+        });
+
+        // Validasi form sebelum submit
+        $('#form-struktur').submit(function(e) {
+            const jabatan = $('#jabatan').val();
+            const idKelompok = $('#id_kelompok').val();
+            const strukturData = JSON.parse($('#struktur-data').val());
+
+            // Jika jabatan Ketua atau Wakil Ketua dipilih tapi kelompok belum dipilih
+            if ((jabatan === 'Ketua' || jabatan === 'Wakil Ketua') && !idKelompok) {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Validasi Gagal',
+                    text: 'Silakan pilih kelompok terlebih dahulu sebelum memilih jabatan ' + jabatan,
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    $('#id_kelompok').focus();
+                });
+                return;
+            }
+
+            // Validasi untuk jabatan Ketua atau Wakil Ketua
+            if (jabatan === 'Ketua' || jabatan === 'Wakil Ketua') {
+                // Cek apakah jabatan sudah ada di kelompok yang sama
+                let jabatanExists = false;
+                for (let i = 0; i < strukturData.length; i++) {
+                    const struktur = strukturData[i];
+                    if (struktur.id_kelompok == idKelompok && struktur.jabatan === jabatan) {
+                        jabatanExists = true;
+                        break;
+                    }
+                }
+
+                if (jabatanExists) {
+                    e.preventDefault();
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Validasi Gagal',
+                        text: 'Jabatan ' + jabatan + ' sudah ada di kelompok ini!',
+                        confirmButtonText: 'OK'
+                    });
+                    return;
+                }
+            }
+        });
+
+        // Tampilkan error dari backend jika ada
+        @if($errors - > any())
+        @foreach($errors - > all() as $error)
+        Swal.fire({
+            icon: 'error',
+            title: 'Validasi Gagal',
+            text: '{{ $error }}',
+            confirmButtonText: 'OK'
+        });
+        @endforeach
+        @endif
+
+        // Tampilkan pesan sukses jika ada
+        @if(session('success'))
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil',
+            text: '{{ session('
+            success ') }}',
+            confirmButtonText: 'OK'
+        });
+        @endif
     });
 </script>
 @endsection

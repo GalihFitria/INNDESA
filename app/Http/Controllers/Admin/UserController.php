@@ -27,8 +27,15 @@ class UserController extends Controller
     {
         $request->validate([
             'username' => 'required',
-            'password' => 'required',
+            'password' => [
+                'required',
+                'string',
+                'min:8',
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/', // ✅ huruf kecil, besar, angka, & karakter unik
+            ],
             'role'     => 'required',
+        ], [
+            'password.regex' => 'Password harus mengandung huruf besar, huruf kecil, angka, dan karakter unik (misal: * $ @ # !).',
         ]);
 
         UserAdmin::create([
@@ -53,9 +60,16 @@ class UserController extends Controller
     {
         $request->validate([
             'username' => 'required|string|max:255',
-            'password' => 'nullable|string', // boleh kosong saat edit
+            'password' => [
+                'nullable',
+                'string',
+                'min:8',
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/', // ✅ aturan sama tapi opsional
+            ],
             'role'     => 'required|string',
             // 'status'   => 'required|string',
+        ], [
+            'password.regex' => 'Password harus mengandung huruf besar, huruf kecil, angka, dan karakter unik (misal: * $ @ # !).',
         ]);
 
         $user = UserAdmin::findOrFail($id);

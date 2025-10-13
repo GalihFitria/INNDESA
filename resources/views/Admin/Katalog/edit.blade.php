@@ -1,6 +1,8 @@
 @extends('Admin.sidebar')
 
 @section('title', 'Edit Katalog - INNDESA')
+<link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+
 
 @section('content')
 <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
@@ -9,10 +11,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <h2 class="text-center text-4xl font-bold text-gray-800 mb-6">.::Edit Katalog::.</h2>
 <div class="bg-white shadow-md p-4 rounded-lg max-w-2xl mx-auto">
-    <form action="{{ route('Admin.katalog.update', $katalog->id_katalog) }}" method="POST" class="space-y-6" enctype="multipart/form-data">
+    <form action="{{ route('Admin.katalog.update', $katalog->id_katalog) }}" method="POST" class="space-y-6" id="katalogForm" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
@@ -20,16 +23,13 @@
         <div class="mb-4">
             <label for="id_kelompok" class="block text-sm font-medium text-gray-700">Nama Kelompok</label>
             <select name="id_kelompok" id="id_kelompok"
-                class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500 @error('id_kelompok') border-red-500 @enderror select2"
+                class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500 select2"
                 style="width: 100%;" required>
                 <option value="">-- Pilih Kelompok --</option>
                 @foreach ($kelompok as $k)
                 <option value="{{ $k->id_kelompok }}" {{ $katalog->id_kelompok == $k->id_kelompok ? 'selected' : '' }}>{{ $k->nama }}</option>
                 @endforeach
             </select>
-            @error('id_kelompok')
-            <span class="text-red-500 text-sm">{{ $message }}</span>
-            @enderror
         </div>
 
         <!-- File Katalog -->
@@ -44,9 +44,6 @@
             <div id="katalog_filename" class="mt-2 text-sm text-gray-600">
                 <p>Tidak ada file yang dipilih.</p>
             </div>
-            @error('katalog')
-            <span class="text-red-500 text-sm">{{ $message }}</span>
-            @enderror
         </div>
 
         <!-- Tombol -->
@@ -81,10 +78,10 @@
             </div>
             <div id="cropperControls" class="mt-4 flex space-x-2 justify-center hidden">
                 <button onclick="cancelCrop()" class="bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-600">
-                    <i class="fas fa-times"></i> Cancel
+                    <i class="fas fa-times"></i> Batal
                 </button>
                 <button onclick="cropImage()" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">
-                    <i class="fas fa-crop-alt"></i> Crop
+                    <i class="fas fa-crop-alt"></i> Potong
                 </button>
             </div>
         </div>
@@ -97,6 +94,43 @@
             placeholder: "-- Pilih Kelompok --",
             allowClear: true
         });
+
+        // Validasi form saat submit
+        $('#katalogForm').on('submit', function(e) {
+            const kelompokValue = $('#id_kelompok').val();
+
+            if (!kelompokValue || kelompokValue === "") {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Validasi Gagal',
+                    text: 'Nama kelompok harus dipilih',
+                    confirmButtonText: 'OK'
+                });
+                return false;
+            }
+        });
+
+        // Tampilkan error dari backend jika ada
+        const errorMessage = "{{ $errors->first('id_kelompok') }}";
+        if (errorMessage) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Validasi Gagal',
+                text: errorMessage,
+                confirmButtonText: 'OK'
+            });
+        }
+
+        const katalogError = "{{ $errors->first('katalog') }}";
+        if (katalogError) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Validasi Gagal',
+                text: katalogError,
+                confirmButtonText: 'OK'
+            });
+        }
     });
 
     let katalogFile = null;
@@ -144,6 +178,8 @@
         } else {
             previewDiv.innerHTML = '<p>Tidak ada file yang dipilih.</p>';
         }
+
+        // Simpan file katalog yang sudah dipilih
         const dt = new DataTransfer();
         if (katalogFile) dt.items.add(katalogFile);
         document.getElementById('katalog').files = dt.files;
@@ -183,7 +219,12 @@
             previewFrame.classList.remove('hidden');
             previewControls.classList.add('hidden');
         } else {
-            alert('Pratinjau hanya tersedia untuk gambar dan PDF.');
+            Swal.fire({
+                icon: 'warning',
+                title: 'Peringatan',
+                text: 'Pratinjau hanya tersedia untuk gambar dan PDF.',
+                confirmButtonText: 'OK'
+            });
             return;
         }
 
@@ -214,7 +255,12 @@
             previewFrame.classList.remove('hidden');
             previewControls.classList.add('hidden');
         } else {
-            alert('Pratinjau hanya tersedia untuk gambar dan PDF.');
+            Swal.fire({
+                icon: 'warning',
+                title: 'Peringatan',
+                text: 'Pratinjau hanya tersedia untuk gambar dan PDF.',
+                confirmButtonText: 'OK'
+            });
             return;
         }
 
@@ -279,11 +325,21 @@
                     updateKatalogPreview();
                     closePreview();
                 } else {
-                    alert('Gagal memotong gambar. Silakan coba lagi.');
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal',
+                        text: 'Gagal memotong gambar. Silakan coba lagi.',
+                        confirmButtonText: 'OK'
+                    });
                 }
             }, 'image/jpeg');
         } else {
-            alert('Cropper belum diinisialisasi.');
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal',
+                text: 'Cropper belum diinisialisasi.',
+                confirmButtonText: 'OK'
+            });
         }
     }
 
@@ -315,8 +371,12 @@
             cropper = null;
         }
         isCropping = false;
-        if (originalImageUrl) URL.revokeObjectURL(originalImageUrl);
-        if (rotatedImageUrl) URL.revokeObjectURL(rotatedImageUrl);
+        if (originalImageUrl && originalImageUrl.startsWith('blob:')) {
+            URL.revokeObjectURL(originalImageUrl);
+        }
+        if (rotatedImageUrl && rotatedImageUrl.startsWith('blob:')) {
+            URL.revokeObjectURL(rotatedImageUrl);
+        }
     }
 
     document.getElementById('previewModal').addEventListener('click', function(e) {

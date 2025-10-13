@@ -14,7 +14,17 @@ class ResetPasswordController extends Controller
         $request->validate([
             'token'    => 'required',
             'email'    => 'required|email',
-            'password' => 'required|string|min:6|confirmed',
+            'password' => [
+                'required',
+                'string',
+                'min:8', // ✅ minimal 8 karakter
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/', // ✅ kombinasi huruf besar, kecil, angka, simbol
+                'confirmed'
+            ],
+        ], [
+            'password.min' => 'Password minimal harus 8 karakter.',
+            'password.regex' => 'Password harus mengandung huruf besar, huruf kecil, angka, dan karakter unik (misal: @, #, $, !).',
+            'password.confirmed' => 'Konfirmasi password tidak cocok.',
         ]);
 
         Log::info("🔍 Mencoba reset password untuk: {$request->email}");

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>INNDESA - Inovasi Nusantara Desa Integratif Pangan</title>
     <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -48,8 +48,6 @@
         body:not(.loaded)>*:not(#preloader) {
             display: none;
         }
-
-
 
         .hero-title {
             text-shadow: 2px 2px 0px #ffffff, -2px -2px 0px #ffffff, 2px -2px 0px #ffffff, -2px 2px 0px #ffffff, 0px 2px 0px #ffffff, 2px 0px 0px #ffffff, 0px -2px 0px #ffffff, -2px 0px 0px #ffffff;
@@ -380,8 +378,7 @@
             transform: translateX(0);
         }
 
-        .parallax-bg {
-            background-attachment: fixed;
+        .hero-bg {
             background-position: center;
             background-repeat: no-repeat;
             background-size: cover;
@@ -389,6 +386,37 @@
 
         /* Mobile-specific styles */
         @media (max-width: 640px) {
+
+            /* Reset overflow dan ukuran container */
+            * {
+                max-width: 100%;
+                box-sizing: border-box;
+            }
+
+            html,
+            body {
+                overflow-x: hidden;
+                width: 100%;
+                min-width: 0;
+            }
+
+            .container,
+            .max-w-6xl,
+            .max-w-5xl,
+            .max-w-4xl,
+            .max-w-3xl {
+                width: 100%;
+                padding-left: 0.75rem;
+                padding-right: 0.75rem;
+                overflow-x: hidden;
+            }
+
+            section {
+                padding-top: 1rem;
+                padding-bottom: 1rem;
+                overflow-x: hidden;
+            }
+
             .hero-title {
                 -webkit-text-stroke: 0.3px #ffffff;
             }
@@ -397,86 +425,94 @@
                 -webkit-text-stroke: 0.2px #ffffff;
             }
 
-            section {
-                padding-top: 1rem;
-                padding-bottom: 1rem;
-            }
-
+            /* Ukuran font yang lebih proporsional */
             .text-7xl {
                 font-size: 1.5rem;
-                line-height: 1;
+                line-height: 1.1;
             }
 
             .text-4xl {
-                font-size: 1rem;
+                font-size: 1.2rem;
             }
 
             .text-3xl {
-                font-size: 0.9rem;
+                font-size: 1rem;
             }
 
             .text-2xl {
-                font-size: 0.8rem;
+                font-size: 0.9rem;
             }
 
             .text-xl {
-                font-size: 0.7rem;
+                font-size: 0.85rem;
             }
 
             .text-lg {
-                font-size: 0.65rem;
-            }
-
-            .card {
-                padding: 0.5rem;
-                box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
-            }
-
-            .btn {
-                padding: 0.3rem 0.6rem;
-                font-size: 0.7rem;
-            }
-
-            .csr-grid {
-                grid-template-columns: 1fr;
-                gap: 0.5rem;
-            }
-
-            .csr-card .image-container {
-                height: 80px;
-            }
-
-            .csr-card .icon {
-                width: 20px;
-                height: 20px;
                 font-size: 0.8rem;
             }
 
+            .text-base {
+                font-size: 0.75rem;
+            }
+
+            .text-sm {
+                font-size: 0.7rem;
+            }
+
+            /* Card dan button */
+            .card {
+                padding: 0.75rem;
+                box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+                margin-bottom: 0.75rem;
+            }
+
+            .btn {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.75rem;
+            }
+
+            /* CSR Grid */
+            .csr-grid {
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
+            }
+
+            .csr-card .image-container {
+                height: 100px;
+            }
+
+            .csr-card .icon {
+                width: 30px;
+                height: 30px;
+                font-size: 1rem;
+            }
+
             .csr-card .content {
-                padding: 0.4rem;
+                padding: 0.75rem;
             }
 
             .csr-card h4 {
-                font-size: 0.9rem;
-                margin-bottom: 0.2rem;
+                font-size: 1rem;
+                margin-bottom: 0.5rem;
             }
 
             .csr-card ul li {
-                font-size: 0.65rem;
-                padding: 0.2rem 0;
+                font-size: 0.75rem;
+                padding: 0.25rem 0;
             }
 
             .csr-card ul li i {
-                font-size: 0.7rem;
-                margin-right: 0.2rem;
+                font-size: 0.75rem;
+                margin-right: 0.5rem;
             }
 
+            /* Map container */
             .map-container {
                 padding-bottom: 60%;
             }
 
             .location-card .overlay {
-                padding: 0.5rem 0.3rem;
+                padding: 0.75rem 0.5rem;
             }
 
             .location-card img {
@@ -484,195 +520,215 @@
                 height: auto;
             }
 
+            /* Timeline */
             .timeline {
-                padding-left: 0.5rem;
+                padding-left: 1rem;
             }
 
             .timeline-item::before {
                 left: -0.625rem;
-                width: 8px;
-                height: 8px;
-                border: 1px solid white;
+                width: 10px;
+                height: 10px;
+                border: 2px solid white;
             }
 
+            /* Policy item */
             .policy-item {
-                padding: 0.4rem;
-                margin-bottom: 0.5rem;
+                padding: 0.75rem;
+                margin-bottom: 0.75rem;
             }
 
             .policy-item h4 {
-                font-size: 0.8rem;
-                margin-bottom: 0.2rem;
+                font-size: 0.9rem;
+                margin-bottom: 0.25rem;
             }
 
             .policy-item h4 i {
-                font-size: 0.8rem;
-                margin-right: 0.2rem;
+                font-size: 0.9rem;
+                margin-right: 0.5rem;
             }
 
             .policy-item p {
-                font-size: 0.65rem;
+                font-size: 0.75rem;
             }
 
+            /* Section spacing */
             .section-title {
-                margin-bottom: 0.3rem;
-            }
-
-            .max-w-6xl,
-            .max-w-5xl,
-            .max-w-4xl,
-            .max-w-3xl {
-                padding-left: 0.4rem;
-                padding-right: 0.4rem;
+                margin-bottom: 0.75rem;
             }
 
             section[min-h~="550px"] {
                 min-height: 250px;
-                padding-top: 2rem;
+                padding-top: 1.5rem;
             }
 
             section[min-h~="550px"] .absolute {
-                top: 0.2rem;
-                left: 0.2rem;
+                top: 0.5rem;
+                left: 0.5rem;
             }
 
             section[min-h~="550px"] img {
-                height: 0.8rem;
+                height: 1rem;
             }
 
-            .parallax-bg {
+            .hero-bg {
                 background-attachment: scroll;
             }
 
-            /* Tambahan untuk responsivitas lebih baik di HP: mengecilkan elemen tambahan */
+            /* Body text */
             body {
-                font-size: 0.75rem;
-                /* Mengecilkan font keseluruhan di HP */
+                font-size: 0.8rem;
+                line-height: 1.4;
             }
 
             h2 {
                 font-size: 1.2rem;
-                /* Mengecilkan heading utama di HP */
+                margin-bottom: 0.75rem;
             }
 
             h3 {
                 font-size: 1rem;
-                /* Mengecilkan sub-heading */
+                margin-bottom: 0.5rem;
             }
 
             h4 {
-                font-size: 0.85rem;
-                /* Mengecilkan heading kecil */
+                font-size: 0.9rem;
+                margin-bottom: 0.5rem;
             }
 
             p {
-                font-size: 0.7rem;
-                /* Mengecilkan paragraf */
+                font-size: 0.75rem;
+                line-height: 1.4;
+                margin-bottom: 0.5rem;
             }
 
             img {
                 max-width: 100%;
-                /* Pastikan gambar tidak melebihi lebar layar */
                 height: auto;
             }
 
-            .card {
-                margin-bottom: 0.4rem;
-                /* lebih rapat */
-                padding: 0.2rem;
-                /* kotakan lebih kecil */
-                font-size: 0.85rem;
-                /* tulisan agak kecil juga */
-            }
-
-            .btn {
-                width: 100%;
-                /* Membuat tombol full-width di HP */
-                padding: 0.3rem 0.5rem;
-                /* Kurangi padding tombol */
-                font-size: 0.65rem;
-                /* Kurangi ukuran font tombol */
-            }
-
-            .csr-grid {
-                gap: 0.5rem;
-                /* Kurangi gap di grid CSR */
-                grid-template-columns: 1fr;
-                /* Pastikan stack di HP */
-            }
-
-            .policy-item {
-                margin-bottom: 0.5rem;
-                /* Kurangi margin bottom policy item */
-                padding: 0.3rem;
-                /* Kurangi padding policy item */
-            }
-
+            /* Margin dan padding yang lebih kecil */
             .mb-16 {
-                margin-bottom: 1.5rem;
-                /* Kurangi margin bottom section besar */
+                margin-bottom: 1rem;
             }
 
             .mb-12 {
-                margin-bottom: 1rem;
-                /* Kurangi margin bottom */
+                margin-bottom: 0.75rem;
             }
 
             .mb-6 {
                 margin-bottom: 0.5rem;
-                /* Kurangi margin bottom */
             }
 
             .mb-4 {
-                margin-bottom: 0.3rem;
-                /* Kurangi margin bottom */
+                margin-bottom: 0.4rem;
             }
 
             .py-16 {
-                padding-top: 1.5rem;
-                /* Kurangi padding vertical section */
-                padding-bottom: 1.5rem;
+                padding-top: 1rem;
+                padding-bottom: 1rem;
             }
 
             .pt-32 {
-                padding-top: 3rem;
-                /* Kurangi padding top hero */
+                padding-top: 1.5rem;
             }
 
-            .space-y-4 {
-                margin-top: 0.8rem;
-                /* Kurangi space antar elemen */
+            .space-y-4>*+* {
+                margin-top: 0.5rem;
             }
 
-            .grid-cols-1 md:grid-cols-2 {
+            /* Grid */
+            .grid-cols-1 {
                 grid-template-columns: 1fr;
-                /* Pastikan stack di HP */
+                gap: 0.75rem;
             }
 
-            /* Mengecilkan ukuran div */
-            .max-w-6xl {
-                max-width: 100%;
-                /* Pastikan div tidak terlalu lebar */
-                padding-left: 0.3rem;
-                padding-right: 0.3rem;
+            .grid-cols-2 {
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
             }
 
-            .max-w-5xl {
-                max-width: 95%;
-                padding-left: 0.3rem;
-                padding-right: 0.3rem;
+            /* Padding khusus untuk konten */
+            .px-4 {
+                padding-left: 0.75rem;
+                padding-right: 0.75rem;
             }
 
-            .max-w-4xl {
-                max-width: 90%;
-                padding-left: 0.3rem;
-                padding-right: 0.3rem;
+            .px-6 {
+                padding-left: 0.75rem;
+                padding-right: 0.75rem;
             }
 
-            .max-w-3xl {
-                max-width: 85%;
-                padding-left: 0.3rem;
-                padding-right: 0.3rem;
+            .px-8 {
+                padding-left: 0.75rem;
+                padding-right: 0.75rem;
+            }
+
+            /* Hero section adjustments */
+            .text-center.space-y-0 {
+                margin-top: 0.5rem;
+            }
+
+            .text-center.space-y-0 h2 {
+                margin-bottom: 0.25rem;
+            }
+        }
+
+        /* Back to top button styles */
+        #backToTop {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #3b82f6;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            text-decoration: none;
+        }
+
+        #backToTop.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        #backToTop:hover {
+            background-color: #2563eb;
+            transform: translateY(-5px);
+        }
+
+        #backToTop i {
+            font-size: 24px;
+            color: white;
+            display: block !important;
+        }
+
+        #backToTop .arrow-fallback {
+            display: none;
+            width: 24px;
+            height: 24px;
+        }
+
+        #backToTop.no-icon .arrow-fallback {
+            display: block;
+        }
+
+        #backToTop.no-icon i {
+            display: none !important;
+        }
+
+        @media (min-width: 641px) {
+            #backToTop {
+                display: none;
             }
         }
     </style>
@@ -685,34 +741,35 @@
     @include('navbar')
 
     <section
-        class="relative text-white overflow-hidden min-h-[300px] sm:min-h-[400px] md:min-h-[550px] flex flex-col items-center pt-20 sm:pt-28 md:pt-32 parallax-bg"
-        style="background-image: url('{{ asset('images/background_beranda_INNDESA.jpeg') }}'); background-size: cover; background-position: center;">
-
-        <!-- Overlay -->
+        class="relative text-white overflow-hidden aspect-[16/9] md:aspect-auto md:min-h-[700px] flex flex-col items-center pt-16 sm:pt-20 md:pt-0 md:justify-center"
+        style="background-image: url('{{ asset('images/pltu.jpg') }}'); background-size: cover; background-position: center;">
         <div class="absolute inset-0 bg-black bg-opacity-50 z-0"></div>
 
-        <!-- LOGO -->
-        <div class="absolute top-6 left-4 sm:top-10 sm:left-14 flex items-center space-x-2 z-10">
-            <img src="{{ asset('images/logo_BUMN.png') }}" alt="Logo" class="h-4 sm:h-6 md:h-8 w-auto">
-            <img src="{{ asset('images/logo_pln.png') }}" alt="Logo" class="h-4 sm:h-6 md:h-8 w-auto">
+        <!-- Logo untuk desktop -->
+        <div class="absolute top-12 left-16 hidden md:flex items-center space-x-4 z-10">
+            <img src="{{ asset('images/logo_BUMN.png') }}" alt="Logo" class="h-8 md:h-10 lg:h-12 w-auto">
+            <img src="{{ asset('images/logo_PLN.png') }}" alt="Logo" class="h-8 md:h-10 lg:h-12 w-auto">
         </div>
 
-        <div class="text-center space-y-4 z-10">
-            <!-- Judul 1 -->
-            <h2 class="text-2xl sm:text-4xl md:text-4xl lg:text-6xl font-bold 
+        <!-- Logo untuk mobile -->
+        <div class="absolute top-4 left-3 sm:top-6 sm:left-8 flex items-center space-x-1 md:hidden z-10">
+            <img src="{{ asset('images/logo_BUMN.png') }}" alt="Logo" class="h-3 sm:h-4 w-auto">
+            <img src="{{ asset('images/logo_PLN.png') }}" alt="Logo" class="h-3 sm:h-4 w-auto">
+        </div>
+
+        <div class="text-center space-y-0 z-10 px-4 mt-[-5px] md:mt-0 md:space-y-4">
+            <h2 class="text-lg sm:text-2xl md:text-5xl lg:text-7xl font-bold 
                text-[#0097D4] 
-               drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+               drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)]">
                 PT. PLN Indonesia Power
             </h2>
-            <h2 class="text-2xl sm:text-4xl md:text-4xl lg:text-6xl font-bold 
+            <h2 class="text-lg sm:text-2xl md:text-5xl lg:text-7xl font-bold 
                text-[#FFD700] 
-               drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+               drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)] leading-tight">
                 UBP Jawa Tengah 2 Adipala
             </h2>
         </div>
-
     </section>
-
 
     <section class="py-16 bg-white reveal">
         <div class="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-600 mb-6 text-center section-title">
@@ -744,6 +801,7 @@
             </div>
         </div>
     </section>
+
     <section class="py-2 sm:py-12 md:py-16 bg-white reveal">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12 section-title">
@@ -757,22 +815,18 @@
         </div>
     </section>
 
-    <!-- CSR Profile -->
     <section class="py-16 bg-white reveal">
         <div class="max-w-6xl mx-auto px-4">
             <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-600 mb-6 text-center section-title"><i>Corporate Social Responsibility</i> (CSR)</h2>
-            <!-- Pengertian CSR -->
             <div class="mb-16">
                 <h3 class="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-600 mb-6 text-center section-title">Pengertian CSR</h3>
                 <div class="card p-4 sm:p-6 md:p-8 border border-gray-300 rounded-lg max-w-3xl md:max-w-4xl mx-auto card-reveal">
                     <p class="text-center text-gray-800 text-sm sm:text-base md:text-lg leading-snug sm:leading-relaxed md:leading-relaxed card-reveal mb-4">
                         <i>Corporate Social Responsibility</i> (CSR) atau Tanggung Jawab Sosial dan Lingkungan (TJSL) adalah komitmen PT.PLN Indonesia Power UBP Jawa Tengah 2 Adipala untuk memperhatikan dampak sosial dan lingkungan dari setiap aktivitas bisnis, serta berkontribusi pada pembangunan berkelanjutan.
-                        Bagi Indonesia Power, CSR tidak hanya sebatas kepatuhan, tetapi merupakan tanggung jawab perusahaan terhadap masyarakat, pemangku kepentingan, dan lingkungan agar tercipta manfaat berkesinambutan. Implementasinya diwujudkan melalui program INPOWER-CARE <i>(Community Assistance, Relation, and Empowerment)</i> yang berfokus pada peningkatan kualitas hidup, pemberdayaan masyarakat, dan kelestarian lingkungan.
+                        Bagi Indonesia Power, CSR tidak hanya sebatas kepatuhan, tetapi merupakan tanggung jawab perusahaan terhadap masyarakat, pemangku kepentingan, dan lingkungan agar tercipta manfaat berkesinambungan. Implementasinya diwujudkan melalui program INPOWER-CARE <i>(Community Assistance, Relation, and Empowerment)</i> yang berfokus pada peningkatan kualitas hidup, pemberdayaan masyarakat, dan kelestarian lingkungan.
                     </p>
                 </div>
-
             </div>
-            <!-- Program CSR -->
             <div class="mb-16">
                 <h3 class="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-600 mb-6 text-center section-title">
                     Program INPOWER - CARE
@@ -781,8 +835,6 @@
                     INPOWER-CARE adalah kegiatan pelibatan dan pengembangan komunitas yang dilakukan Perusahaan sebagai wujud tanggung jawab sosial dan tata kelola Perusahaan yang baik. INPOWERCARE bertujuan untuk memperbesar akses masyarakat agar mencapai kondisi sosial, ekonomi, dan budaya yang lebih baik dari sebelumnya. Sehingga, kehidupan masyarakat di sekitar wilayah operasional Perusahaan diharapkan menjadi lebih berdaya dan mandiri dengan kualitas dan kesejahteraan yang lebih baik.
                     Penyelenggaraan INPOWER-CARE merupakan perwujudan visi dan misi Perusahaan, khususnya bersahabat dengan lingkungan serta perwujudan Tanggung Jawab Sosial dan Lingkungan (TJSL) Perusahaan sebagai bagian dari tata kelola perusahaan yang baik.
                 </p>
-
-
                 <div class="flex justify-center card-reveal">
                     <img
                         src="{{ asset('images/Program_INPOWERCARE.png') }}"
@@ -790,12 +842,6 @@
                 </div><br>
                 <div class="csr-grid">
                     <div class="csr-card border border-gray-300 rounded-lg csr-card-reveal">
-                        <!-- <div class="image-container">
-                            <img src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Bantuan Fasilitas KWT">
-                            <div class="icon">
-                                <i class="fas fa-seedling"></i>
-                            </div>
-                        </div> -->
                         <div class="content">
                             <h4>Bantuan Pelayanan Masyarakat</h4>
                             <ul>
@@ -806,13 +852,7 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="csr-card  border border-gray-300 rounded-lg csr-card-reveal">
-                        <!-- <div class="image-container">
-                            <img src="https://images.unsplash.com/photo-1606787366850-de6330128bfc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Penyaluran Paket Sembako">
-                            <div class="icon">
-                                <i class="fas fa-box-open"></i>
-                            </div>
-                        </div> -->
+                    <div class="csr-card border border-gray-300 rounded-lg csr-card-reveal">
                         <div class="content">
                             <h4>Bakti Pembinaan Hubungan</h4>
                             <ul>
@@ -823,12 +863,6 @@
                         </div>
                     </div>
                     <div class="csr-card border border-gray-300 rounded-lg csr-card-reveal">
-                        <!-- <div class="image-container">
-                            <img src="https://images.unsplash.com/photo-1588702592395-a8f7a407a58d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Pelatihan Pengolahan Limbah Perikanan">
-                            <div class="icon">
-                                <i class="fas fa-fish"></i>
-                            </div>
-                        </div> -->
                         <div class="content">
                             <h4>Bakti Pemberdayaan Masyarakat</h4>
                             <ul>
@@ -841,12 +875,11 @@
                     </div>
                 </div>
             </div>
-            <!-- Kebijakan CSR -->
             <div class="mb-16">
                 <h3 class="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-600 mb-6 text-center section-title">Kebijakan</h3>
                 <div class="max-w-4xl mx-auto">
                     <p class="text-center text-gray-800 text-sm sm:text-base md:text-lg leading-snug sm:leading-relaxed md:leading-relaxed card-reveal mb-4">
-                        Penyelenggaraan program tanggung jawab social terhadap masyarakat di PT.PLN Indonesia Power UBP Jawa Tengah 2 Adipala dilaksanakan berdasarkan pada Keputusan Direksi No. 25.K/010/IP/2014 tentang Pedoman Tanggung Jawab Sosial dan Lingkungan Perusahaan.
+                        Penyelenggaraan program tanggung jawab sosial terhadap masyarakat di PT.PLN Indonesia Power UBP Jawa Tengah 2 Adipala dilaksanakan berdasarkan pada Keputusan Direksi No. 25.K/010/IP/2014 tentang Pedoman Tanggung Jawab Sosial dan Lingkungan Perusahaan.
                         Sesuai peraturan internal tersebut, Tanggung Jawab Sosial dan Lingkungan Perusahaan (TJSLP), atau di internal disebut dengan program INPOWER-CARE, merupakan komitmen Perusahaan untuk berperan serta dalam pembangunan ekonomi
                         berkelanjutan sebagai bentuk tanggung jawab terhadap dampak pengambilan keputusan dan proses bisnis Perusahaan guna meningkatkan kualitas kehidupan dan lingkungan yang bermanfaat, baik bagi Perusahaan maupun komunitas setempat.
                     </p><br>
@@ -863,7 +896,6 @@
                         <p>Tujuannya meningkatkan kualitas kehidupan masyarakat dan lingkungan yang bermanfaat, baik bagi perusahaan maupun komunitas setempat.</p>
                     </div>
                 </div>
-
                 <section class="py-16 bg-white reveal">
                     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div class="text-center mb-12 section-title">
@@ -883,17 +915,23 @@
     <div class="mt-20">
         @include('footer')
     </div>
+
+    <a href="#" id="backToTop" title="Kembali ke Atas">
+        <i class="fas fa-arrow-up"></i>
+        <svg class="arrow-fallback" fill="white" viewBox="0 0 24 24">
+            <path d="M7 14l5-5 5 5z" />
+        </svg>
+    </a>
 </body>
+
 <script>
     // Scroll reveal animation
     function reveal() {
         const reveals = document.querySelectorAll('.reveal, .card-reveal, .section-title, .csr-card-reveal, .policy-reveal');
-
         for (let i = 0; i < reveals.length; i++) {
             const windowHeight = window.innerHeight;
             const elementTop = reveals[i].getBoundingClientRect().top;
             const elementVisible = 100;
-
             if (elementTop < windowHeight - elementVisible) {
                 reveals[i].classList.add('active');
             } else {
@@ -903,30 +941,46 @@
     }
 
     window.addEventListener('scroll', reveal);
-
-    // Jalankan reveal saat halaman dimuat
     reveal();
-
-    // Parallax effect untuk hero background
-    window.addEventListener('scroll', () => {
-        const scrolled = window.pageYOffset;
-        const parallax = document.querySelector('.parallax-bg');
-        if (parallax) {
-            parallax.style.backgroundPositionY = -(scrolled * 0.2) + 'px';
-        }
-    });
 
     // JS PRELOADER
     window.addEventListener("load", function() {
         let preloader = document.getElementById("preloader");
-        // Add fade-out animation
         preloader.classList.add("fade-out");
-
-        // After animation completes, hide preloader and show content
         setTimeout(function() {
             preloader.style.display = "none";
             document.body.classList.add("loaded");
-        }, 500); // Match transition duration (0.5s)
+        }, 500);
+    });
+
+    // KEMBALI KE ATAS
+    function checkFontAwesome() {
+        const icon = document.createElement('i');
+        icon.className = 'fas fa-arrow-up';
+        const isLoaded = window.getComputedStyle(icon, ':before').getPropertyValue('content') !== 'none';
+        if (isLoaded) {
+            document.body.classList.add('fa-loaded');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', checkFontAwesome);
+    window.addEventListener('load', checkFontAwesome);
+
+    const backToTopButton = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 300) {
+            backToTopButton.classList.add('show');
+        } else {
+            backToTopButton.classList.remove('show');
+        }
+    });
+
+    backToTopButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
     });
 </script>
 

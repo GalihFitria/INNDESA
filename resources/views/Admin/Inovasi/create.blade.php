@@ -1,6 +1,8 @@
 @extends('Admin.sidebar')
 
 @section('title', 'Tambah Inovasi & Penghargaan - INNDESA')
+<link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+
 
 @section('content')
 <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">

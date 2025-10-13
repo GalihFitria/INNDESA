@@ -168,7 +168,15 @@ Route::prefix('Admin_Kelompok')->name('Admin_Kelompok.')->group(function () {
     Route::patch('/profil/update-password/{id}', [ProfilKelompokController::class, 'updatePassword'])
     ->name('profil.updatePassword');
     Route::get('/kelompok/{id}', [Admin_KelompokKelompokController::class, 'show'])->name('kelompok.show');
+
+    //LOGO BACKGROUND
+    // EDIT LOGO & BACKGROUND
+    Route::put('/kelompok/{id}/update-logo-background', [Admin_KelompokKelompokController::class, 'updateLogoBackground'])
+        ->name('kelompok.updateLogoBackground');
+    // Hapus logo atau background kelompok
+    Route::delete('/kelompok/{id}/delete-file', [Admin_KelompokKelompokController::class, 'deleteFile'])
+        ->name('kelompok.deleteFile');
 });
 
-Route::resource('edit_logo_background', EditLogoBackgroundController::class);
-Route::get('/kelompok/{id}', [KelompokController::class, 'show'])->name('kelompok.show');
+
+

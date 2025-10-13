@@ -1,6 +1,8 @@
 @extends('Admin.sidebar')
 
 @section('title', 'Tambah Kegiatan - INNDESA')
+<link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+
 
 @section('content')
 <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
@@ -16,7 +18,7 @@
         @csrf
         <div class="mb-4">
             <label for="id_kelompok" class="block text-sm font-medium text-gray-700">Nama Kelompok</label>
-            <select name="id_kelompok" id="id_kelompok" 
+            <select name="id_kelompok" id="id_kelompok"
                 class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500 @error('id_kelompok') border-red-500 @enderror select2"
                 style="width: 100%;" required>
                 <option value="">-- Pilih Kelompok --</option>

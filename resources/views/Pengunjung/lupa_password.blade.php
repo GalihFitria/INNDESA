@@ -96,30 +96,89 @@
                 margin: 0 auto;
             }
         }
+        
+/* ✅ PRELOADER */
+        #preloader {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 255);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+        #preloader.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .logo-loading {
+            width: 120px;
+            animation: spin 2s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    padding: 10px 12px;
+    border-radius: 6px;
+    font-size: 0.9em;
+    margin-bottom: 15px;
+}
+.alert-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    padding: 10px 12px;
+    border-radius: 6px;
+    font-size: 0.9em;
+    margin-bottom: 15px;
+}
+
+
+
     </style>
 </head>
 
 <body>
+    <!-- ✅ PRELOADER -->
+    <div id="preloader">
+        <img src="{{ asset('images/logo.png') }}" alt="Logo Website" class="logo-loading">
+    </div>
+    <script>
+        window.addEventListener("load", function() {
+            let preloader = document.getElementById("preloader");
+            preloader.classList.add("fade-out");
+            setTimeout(() => preloader.style.display = "none", 500);
+        });
+    </script>
     <div class="reset-box">
         {{-- ✅ Logo --}}
         <img src="{{ asset('images/logo.png') }}" alt="Logo">
 
         <h2>Lupa Kata Sandi</h2>
-        <p>Masukkan Email Anda Untuk Kata Sandi</p>
+        <p>Masukkan Email Anda Untuk Ubah Kata Sandi</p>
 
         {{-- ✅ Notifikasi sukses --}}
-        @if (session('status'))
-        <div class="alert alert-success" id="alert-box">
-            {{ session('status') }}
-        </div>
-        @endif
+@if (session('status'))
+    <div class="alert-success" id="alert-box">
+        {{ session('status') }}
+    </div>
+@endif
+
 
         {{-- ❌ Notifikasi error --}}
-        @if ($errors->any())
-        <div class="alert alert-error" id="alert-box">
-            {{ $errors->first() }}
-        </div>
-        @endif
+@if ($errors->any())
+    <div class="alert-error" id="alert-box">
+        {{ $errors->first() }}
+    </div>
+@endif
+
 
         <form method="POST" action="{{ route('lupa_password_email') }}">
             @csrf

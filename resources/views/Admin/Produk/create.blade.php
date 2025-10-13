@@ -1,11 +1,14 @@
 @extends('Admin.sidebar')
 
 @section('title', 'Tambah Produk - INNDESA')
+<link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+
 
 @section('content')
 <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <h2 class="text-center text-4xl font-bold text-gray-800 mb-6">.::Tambah Produk::.</h2>
 <div class="bg-white shadow-md p-4 rounded-lg max-w-2xl mx-auto max-h-[500px] overflow-y-auto">
@@ -27,10 +30,10 @@
             @enderror
         </div>
 
-
         <div>
             <label for="nama" class="block text-sm font-medium text-gray-700">Nama Produk</label>
             <input type="text" name="nama" id="nama" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Masukkan Nama Produk" required>
+            <span id="namaWarning" class="text-red-500 text-sm hidden">Produk dengan nama ini sudah ada dalam kelompok yang dipilih.</span>
             @error('nama')
             <span class="text-red-500 text-sm">{{ $message }}</span>
             @enderror
@@ -122,7 +125,6 @@
     </div>
 </div>
 
-
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
@@ -132,6 +134,83 @@
             placeholder: "-- Pilih Kelompok --",
             allowClear: true
         });
+
+        // Validasi untuk nama produk
+        const namaInput = document.getElementById('nama');
+        const kelompokSelect = document.getElementById('id_kelompok');
+        const warningElement = document.getElementById('namaWarning');
+
+        // Fungsi untuk validasi kombinasi nama dan kelompok
+        function validateCombination() {
+            const currentName = namaInput.value.trim();
+            const currentKelompok = kelompokSelect.value;
+
+            // Validasi jika nama dan kelompok sudah dipilih
+            if (currentName && currentKelompok) {
+                // Simulasi pengecekan (ganti dengan API call jika perlu)
+                const sampleData = [{
+                        nama: 'Produk A',
+                        kelompok: '1'
+                    },
+                    {
+                        nama: 'Produk B',
+                        kelompok: '2'
+                    },
+                    {
+                        nama: 'Produk C',
+                        kelompok: '1'
+                    }
+                ];
+
+                const isDuplicate = sampleData.some(item =>
+                    item.nama === currentName && item.kelompok === currentKelompok
+                );
+
+                if (isDuplicate) {
+                    warningElement.classList.remove('hidden');
+                    namaInput.setCustomValidity('Produk dengan nama ini sudah ada dalam kelompok yang dipilih.');
+                    return false;
+                } else {
+                    warningElement.classList.add('hidden');
+                    namaInput.setCustomValidity('');
+                    return true;
+                }
+            } else {
+                warningElement.classList.add('hidden');
+                namaInput.setCustomValidity('');
+                return true;
+            }
+        }
+
+        // Event listener untuk perubahan nama
+        namaInput.addEventListener('input', validateCombination);
+
+        // Event listener untuk perubahan kelompok
+        kelompokSelect.addEventListener('change', validateCombination);
+
+        // Validasi saat submit form
+        document.getElementById('produkForm').addEventListener('submit', function(e) {
+            if (!validateCombination()) {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Validasi Gagal',
+                    text: 'Produk dengan nama ini sudah ada dalam kelompok yang dipilih.',
+                    confirmButtonText: 'OK'
+                });
+            }
+        });
+
+        // Tampilkan error dari backend jika ada
+        const errorMessage = "{{ $errors->first('nama') }}";
+        if (errorMessage) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Validasi Gagal',
+                text: errorMessage,
+                confirmButtonText: 'OK'
+            });
+        }
     });
 
     let fotoFile = null;

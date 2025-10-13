@@ -18,31 +18,15 @@
         }
 
         .reset-box {
-            background: white;
-            padding: 40px 40px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            width: 300px;
-            text-align: center;
-        }
+        background: white;
+        padding: 40px 40px; /* <-- padding dikurangi */
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        width: 300px; /* <-- lebar dikecilkan dari 350px */
+        text-align: center;
+    }
 
-        /* ✅ Logo */
-        .reset-box img {
-            width: 80px;
-            margin-bottom: 15px;
-        }
-
-        .reset-box h2 {
-            color: #1ca1e0;
-            margin-bottom: 10px;
-        }
-
-        .reset-box p {
-            font-size: 14px;
-            color: #555;
-            margin-bottom: 20px;
-        }
-
+        /* Form dan ukuran field & button */
         .reset-box form {
             display: flex;
             flex-direction: column;
@@ -50,19 +34,32 @@
         }
 
         .reset-box input[type="email"],
-        .reset-box input[type="password"],
-        .reset-box button {
-            width: 80%;
+.reset-box input[type="password"],
+.reset-box input[type="text"],
+.reset-box button {
+    width: 100%; /* semua sama persis */
+}
+
+
+
+        .reset-box h2 {
+            color: #1ca1e0;
+            margin-bottom: 20px;
         }
 
         input[type="email"],
-        input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-        }
+input[type="password"],
+input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-family: inherit; /* biar font tetap sama */
+    height: 40px; /* samain tinggi */
+    box-sizing: border-box;
+}
+
 
         /* Hilangkan icon mata bawaan browser */
         input[type="password"]::-ms-reveal,
@@ -74,27 +71,47 @@
             display: none !important;
         }
 
-        .password-wrapper {
-            position: relative;
-            width: 80%;
-            margin-bottom: 15px;
-        }
+        /* Hilangkan tombol show password bawaan browser */
+input::-ms-reveal,
+input::-ms-clear {
+    display: none !important;
+}
+input::-webkit-credentials-auto-fill-button,
+input::-webkit-password-toggle-button {
+    display: none !important;
+}
 
-        .password-wrapper input {
-            width: 100%;
-            padding-right: 40px;
-            margin-bottom: 0;
-        }
+        /* Tambahan untuk icon toggle */
+        .password-wrapper {
+    position: relative;
+    width: 100%; /* samain dengan tombol */
+    margin-bottom: 15px;
+}
+
+.password-wrapper input {
+    width: 100%;
+    padding-right: 40px; /* ruang buat icon */
+    margin-bottom: 0;
+    box-sizing: border-box; /* penting biar lebar tetap sama */
+}
+.password-wrapper input[type="text"],
+.password-wrapper input[type="password"] {
+    font-family: inherit; /* biar font sama */
+    height: 40px; /* samain tinggi */
+    line-height: normal;
+}
 
         .toggle-password {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 16px;
-            color: #666;
-            cursor: pointer;
-        }
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: #666;
+    cursor: pointer;
+    pointer-events: all;
+}
+
 
         button {
             display: block;
@@ -128,13 +145,28 @@
             font-size: 0.9em;
             text-align: center;
         }
+
+
+        /* ✅ Responsive untuk layar kecil */
+@media (max-width: 480px) {
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .reset-box {
+        transform: scale(0.8); /* bisa atur 0.7 - 0.9 sesuai selera */
+        transform-origin: center center;
+        margin: 0 auto;
+    }
+}
+
     </style>
 </head>
 <body>
     <div class="reset-box">
-        {{-- ✅ Logo --}}
-        <img src="{{ asset('images/logo.png') }}" alt="Logo">
-
+           <img src="{{ asset('images/logo.png') }}" alt="Logo" style="width:80px; margin-bottom:15px;">
         <h2>Reset Password</h2>
         <p>Masukkan kata sandi baru Anda</p>
 
@@ -161,18 +193,19 @@
             <input type="hidden" name="token" value="{{ $token }}">
 
             <div class="password-wrapper">
-                <input type="email" name="email" placeholder="Masukkan email" value="{{ old('email') }}" required>
-            </div>
+    <input type="email" name="email" placeholder="Masukkan email" value="{{ old('email') }}" required>
+</div>
 
-            <div class="password-wrapper">
-                <input type="password" name="password" id="password" placeholder="Kata sandi baru" required>
-                <i class="fa-solid fa-eye toggle-password" onclick="togglePassword('password', this)"></i>
-            </div>
+<div class="password-wrapper">
+    <input type="password" name="password" id="password" placeholder="Kata sandi baru" required>
+    <i class="fa-solid fa-eye toggle-password" onclick="togglePassword('password', this)"></i>
+</div>
 
-            <div class="password-wrapper">
-                <input type="password" name="password_confirmation" id="password_confirmation" placeholder="Konfirmasi kata sandi" required>
-                <i class="fa-solid fa-eye toggle-password" onclick="togglePassword('password_confirmation', this)"></i>
-            </div>
+<div class="password-wrapper">
+    <input type="password" name="password_confirmation" id="password_confirmation" placeholder="Konfirmasi kata sandi" required>
+    <i class="fa-solid fa-eye toggle-password" onclick="togglePassword('password_confirmation', this)"></i>
+</div>
+
 
             <button type="submit">Reset Password</button>
         </form>

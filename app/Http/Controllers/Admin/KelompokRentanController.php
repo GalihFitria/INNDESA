@@ -53,11 +53,12 @@ class KelompokRentanController extends Controller
         return view('Admin.kelompok_rentan.edit', compact('rentan'));
     }
 
- 
+
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'nama_rentan' => 'required|string|unique:rentan,nama_rentan',
+            // Tambahkan pengecualian untuk ID yang sedang diedit
+            'nama_rentan' => 'required|string|unique:rentan,nama_rentan,' . $id . ',id_rentan',
         ], [
             'nama_rentan.required' => 'Nama Kelompok Rentan wajib diisi.',
             'nama_rentan.unique'   => 'Kelompok Rentan sudah ada.',

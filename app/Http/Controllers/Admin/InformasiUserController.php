@@ -34,54 +34,61 @@ class InformasiUserController extends Controller
     return view('Admin.Informasi_User.create', compact('kelompoks', 'users'));;
 }
 
- public function store(Request $request)
+ // Simpan user baru
+public function store(Request $request)
 {
     $request->validate([
-        'id_kelompok' => 'required|exists:kelompok,id_kelompok',
-        'id_user'     => [
+        'username' => 'required',
+        'password' => [
             'required',
-            Rule::unique('admin_kelompok')->where(function ($query) use ($request) {
-                return $query->where('id_user', $request->id_user)
-                             ->where('id_kelompok', $request->id_kelompok);
-            }),
+            'string',
+            'min:8',
+            'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/',
         ],
-        'username'    => 'required',
-        'password'    => 'required',
-        'no_telp'     => 'required',
-        'email'       => 'required|email|unique:admin_kelompok,email',
+        'role' => 'required',
     ], [
-        'id_user.unique' => 'User ini sudah terdaftar di kelompok tersebut!',
+        'password.min'   => 'Kata sandi wajib minimal 8 karakter.',
+        'password.regex' => 'Kata sandi harus mengandung huruf besar, huruf kecil, angka, dan karakter unik (misal: * $ @ # !).',
     ]);
 
-    $user = UserAdmin::where('id_user', $request->id_user)->first();
-
-    if (!$user) {
-        return back()->withErrors(['id_user' => 'User tidak ditemukan!'])->withInput();
-    }
-
-    // ✅ Validasi password dengan Hash::check kalau user.password sudah di-hash
-    if (!Hash::check($request->password, $user->password)) {
-        return back()->with('warning', 'Password tidak sesuai dengan data Users!')
-                     ->withInput($request->except(['password']));
-    }
-
-    // ✅ Simpan password hash & simpan password asli di kolom baru (misalnya password_plain)
-    InformasiUser::create([
-        'id_kelompok' => $request->id_kelompok,
-        'id_user'     => $request->id_user,
-        'username'    => $request->username,
-        'password'    => Hash::make($request->password), // HASH
-        'no_telp'     => $request->no_telp,
-        'ig'          => $request->ig,
-        'facebook'    => $request->facebook,
-        'email'       => $request->email,
+    UserAdmin::create([
+        'username' => $request->username,
+        'password' => Hash::make($request->password),
+        'role'     => $request->role,
     ]);
 
-    UserAdmin::where('id_user', $request->id_user)
-        ->update(['status' => 'sudah daftar']);
+    return redirect()->route('Admin.users.index')
+        ->with('success', 'User berhasil ditambahkan!');
+}
 
-    return redirect()->route('Admin.informasi_user.index')
-                     ->with('success', 'Informasi User berhasil ditambahkan dan status user diperbarui!');
+
+// Update user
+public function update(Request $request, $id)
+{
+    $request->validate([
+        'username' => 'required|string|max:255',
+        'password' => [
+            'nullable',
+            'string',
+            'min:8',
+            'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/',
+        ],
+        'role' => 'required|string',
+    ], [
+        'password.min'   => 'Kata sandi wajib minimal 8 karakter.',
+        'password.regex' => 'Kata sandi harus mengandung huruf besar, huruf kecil, angka, dan karakter unik (misal: * $ @ # !).',
+    ]);
+
+    $user = UserAdmin::findOrFail($id);
+    $user->username = $request->username;
+    if ($request->filled('password')) {
+        $user->password = Hash::make($request->password);
+    }
+    $user->role = $request->role;
+    $user->save();
+
+    return redirect()->route('Admin.users.index')
+        ->with('success', 'User berhasil diperbarui.');
 }
 
 
@@ -92,40 +99,7 @@ public function edit($id)
         return view('Admin.Informasi_User.edit', compact('user', 'kelompoks'));
 }
 
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'id_kelompok' => 'required|exists:kelompok,id_kelompok',
-            'id_user'     => 'required',
-            'username'    => 'required',
-            'password'    => 'nullable', // Tidak wajib diisi
-            'no_telp'     => 'required',
-            'email'       => 'required|email',
-        ]);
-
-        $user = InformasiUser::findOrFail($id);
-
-        // Update data
-        $user->id_kelompok = $request->id_kelompok;
-        $user->id_user = $request->id_user;
-        $user->username = $request->username;
-        $user->no_telp = $request->no_telp;
-        $user->ig          = $request->ig ?: null;       // ✅ kosong → null
-        $user->facebook    = $request->facebook ?: null;
-        $user->email = $request->email;
-
-        // Update password hanya jika diisi
-        if ($request->filled('password')) {
-            $user->password = Hash::make($request->password);
-        }
-
-        $user->save();
-
-        return redirect()->route('Admin.informasi_user.index')
-            ->with('success', 'Informasi User berhasil diperbarui');
-    }
-
-
+ 
 
 public function destroy($id)
 {

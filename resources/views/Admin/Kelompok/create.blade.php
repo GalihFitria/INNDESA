@@ -1,12 +1,14 @@
-
 @extends('Admin.sidebar')
 
 @section('title', 'Tambah Kelompok - INNDESA')
+<link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+
 
 @section('content')
 <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <h2 class="text-center text-4xl font-bold text-gray-800 mb-6">.::Tambah Kelompok::.</h2>
 <div class="bg-white shadow-md p-4 rounded-lg max-w-2xl mx-auto max-h-[500px] overflow-y-auto">
@@ -31,6 +33,7 @@
         <div>
             <label for="nama" class="block text-sm font-medium text-gray-700">Nama</label>
             <input type="text" name="nama" id="nama" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500" value="{{ old('nama') }}" placeholder="Masukkan Nama Kelompok" required>
+            <span id="namaWarning" class="text-red-500 text-sm hidden">Kombinasi nama kelompok dan kategori sudah ada.</span>
             @error('nama')
             <span class="text-red-500 text-sm">{{ $message }}</span>
             @enderror
@@ -129,6 +132,86 @@
     let rotatedImageUrl = null;
     let isCropping = false;
     let originalFile = null;
+    let currentImageType = null; // Tambahkan variabel untuk menyimpan tipe gambar
+
+    // Validasi frontend untuk nama kelompok
+    const namaInput = document.getElementById('nama');
+    const kategoriSelect = document.getElementById('id_kategori');
+    const warningElement = document.getElementById('namaWarning');
+
+    // Fungsi untuk validasi kombinasi nama dan kategori
+    function validateCombination() {
+        const currentName = namaInput.value.trim();
+        const currentKategori = kategoriSelect.value;
+
+        // Validasi jika nama dan kategori sudah dipilih
+        if (currentName && currentKategori) {
+            // Simulasi pengecekan (ganti dengan API call jika perlu)
+            const sampleData = [{
+                    nama: 'Kelompok A',
+                    kategori: '1'
+                },
+                {
+                    nama: 'Kelompok B',
+                    kategori: '2'
+                },
+                {
+                    nama: 'Kelompok C',
+                    kategori: '1'
+                }
+            ];
+
+            const isDuplicate = sampleData.some(item =>
+                item.nama === currentName && item.kategori === currentKategori
+            );
+
+            if (isDuplicate) {
+                warningElement.classList.remove('hidden');
+                namaInput.setCustomValidity('Kombinasi nama kelompok dan kategori sudah ada.');
+                return false;
+            } else {
+                warningElement.classList.add('hidden');
+                namaInput.setCustomValidity('');
+                return true;
+            }
+        } else {
+            warningElement.classList.add('hidden');
+            namaInput.setCustomValidity('');
+            return true;
+        }
+    }
+
+    // Event listener untuk perubahan nama
+    namaInput.addEventListener('input', validateCombination);
+
+    // Event listener untuk perubahan kategori
+    kategoriSelect.addEventListener('change', validateCombination);
+
+    // Validasi saat submit form
+    document.getElementById('kelompokForm').addEventListener('submit', function(e) {
+        if (!validateCombination()) {
+            e.preventDefault();
+            Swal.fire({
+                icon: 'error',
+                title: 'Validasi Gagal',
+                text: 'Kombinasi nama kelompok dan kategori sudah ada.',
+                confirmButtonText: 'OK'
+            });
+        }
+    });
+
+    // Tampilkan error dari backend jika ada
+    document.addEventListener('DOMContentLoaded', function() {
+        const errorMessage = "{{ $errors->first('nama') }}";
+        if (errorMessage) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Validasi Gagal',
+                text: errorMessage,
+                confirmButtonText: 'OK'
+            });
+        }
+    });
 
     // SK Desa
     document.getElementById('sk_desa').addEventListener('change', e => {
@@ -226,6 +309,7 @@
             file
         };
         originalFile = file;
+        currentImageType = file.type; // Simpan tipe gambar
         rotatedImageUrl = URL.createObjectURL(file);
         showPreview(rotatedImageUrl, file.type);
     }
@@ -237,6 +321,14 @@
         img.classList.add('hidden');
         frame.classList.add('hidden');
         document.getElementById('cropperControls').classList.add('hidden');
+
+        // Reset cropper state
+        if (cropper) {
+            cropper.destroy();
+            cropper = null;
+        }
+        isCropping = false;
+
         if (type.startsWith('image/')) {
             img.src = url;
             img.classList.remove('hidden');
@@ -259,23 +351,30 @@
             cropper = new Cropper(previewImage, {
                 aspectRatio: NaN,
                 viewMode: 1,
-                autoCropArea: 0.8
+                autoCropArea: 0.8,
+                background: false // Menonaktifkan background grid yang mungkin mengganggu transparansi
             });
         }
     }
 
     function rotateImage(degree) {
         const previewImage = document.getElementById('previewImage');
+
+        // Jika cropper aktif, gunakan cropper untuk rotasi
         if (cropper) {
             cropper.rotate(degree);
             return;
         }
+
+        // Jika bukan PDF, lakukan rotasi dengan canvas
         if (currentPreview.type !== 'application/pdf') {
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
             const img = new Image();
+            img.crossOrigin = "Anonymous"; // Tambahkan untuk handle CORS jika perlu
             img.src = rotatedImageUrl;
             img.onload = () => {
+                // Menentukan ukuran canvas berdasarkan rotasi
                 if (degree === 90 || degree === -270) {
                     canvas.width = img.height;
                     canvas.height = img.width;
@@ -289,34 +388,62 @@
                     canvas.width = img.width;
                     canvas.height = img.height;
                 }
+
+                // Membersihkan canvas dengan transparansi
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // Menempatkan titik tengah canvas
                 ctx.translate(canvas.width / 2, canvas.height / 2);
+
+                // Melakukan rotasi
                 ctx.rotate((degree * Math.PI) / 180);
+
+                // Menggambar gambar dengan mempertahankan transparansi
                 ctx.drawImage(img, -img.width / 2, -img.height / 2);
-                rotatedImageUrl = canvas.toDataURL('image/jpeg');
-                previewImage.src = rotatedImageUrl;
+
+                // Menentukan format file berdasarkan file asli
+                let outputType = 'image/jpeg';
+                if (currentImageType === 'image/png') {
+                    outputType = 'image/png';
+                }
+
                 canvas.toBlob((blob) => {
                     if (blob) {
                         const newFile = new File([blob], currentPreview.file.name, {
-                            type: 'image/jpeg'
+                            type: outputType
                         });
                         updateCurrentFile(newFile);
+                        rotatedImageUrl = URL.createObjectURL(blob);
+                        previewImage.src = rotatedImageUrl;
                     }
-                }, 'image/jpeg');
+                }, outputType);
             };
         }
     }
 
     function cropImage() {
         if (cropper) {
-            cropper.getCroppedCanvas().toBlob((blob) => {
+            // Menentukan format output berdasarkan file asli
+            let outputType = 'image/jpeg';
+            if (currentImageType === 'image/png') {
+                outputType = 'image/png';
+            }
+
+            cropper.getCroppedCanvas({
+                // Menonaktifkan background untuk mempertahankan transparansi
+                backgroundColor: null,
+                // Jika file asli PNG, pastikan output juga PNG
+                imageSmoothingEnabled: true,
+                imageSmoothingQuality: 'high'
+            }).toBlob((blob) => {
                 if (blob) {
                     const newFile = new File([blob], currentPreview.file.name, {
-                        type: 'image/jpeg'
+                        type: outputType
                     });
                     updateCurrentFile(newFile);
                     closePreview();
                 }
-            }, 'image/jpeg');
+            }, outputType);
         }
     }
 
@@ -354,6 +481,7 @@
             isCropping = false;
         }
         originalFile = null;
+        currentImageType = null;
         if (rotatedImageUrl) {
             URL.revokeObjectURL(rotatedImageUrl);
             rotatedImageUrl = null;

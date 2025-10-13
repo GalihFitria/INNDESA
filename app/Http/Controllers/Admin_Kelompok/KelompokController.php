@@ -20,6 +20,7 @@ use Illuminate\Support\Str;
 
 
 
+
 class KelompokController extends Controller
 {
     
@@ -83,9 +84,18 @@ public function show(string $id)
     $kelompok = Kelompok::findOrFail($id);
 
     // Ambil produk sesuai id_kelompok
-    $produk = Produk::with('kelompok')
-        ->where('id_kelompok', $id)
-        ->get();
+     $produk = DB::table('produk')
+    ->where('id_kelompok', $id)
+    ->leftJoin('produk_pertahun', 'produk.id_produk', '=', 'produk_pertahun.id_produk')
+    ->select(
+        'produk.id_produk as id',   // ✅ bikin alias id
+        'produk.*',
+        DB::raw('COUNT(produk_pertahun.id_tahun) as produk_pertahun_count')
+    )
+    ->groupBy('produk.id_produk')
+    ->get();
+
+
 
     $totalProdukTerjual = Produk::where('id_kelompok', $id)
         ->sum('produk_terjual');
@@ -125,17 +135,19 @@ public function show(string $id)
 
     $kegiatan = Kegiatan::where('id_kelompok', $id)->get();
 
-    $produkPertahun = DB::table('produk_pertahun')
-        ->join('produk', 'produk.id_produk', '=', 'produk_pertahun.id_produk')
-        ->select(
-            'produk_pertahun.id_tahun',
-            'produk_pertahun.id_produk',
-            'produk_pertahun.harga',
-            'produk_pertahun.produk_terjual',
-            'produk_pertahun.tahun',
-            'produk.nama as nama_produk'
-        )
-        ->get();
+     $produkPertahun = DB::table('produk_pertahun')
+    ->join('produk', 'produk.id_produk', '=', 'produk_pertahun.id_produk')
+    ->where('produk.id_kelompok', $id) // ✅ filter produk sesuai kelompok
+    ->select(
+        'produk_pertahun.id_tahun',
+        'produk_pertahun.id_produk',
+        'produk_pertahun.harga',
+        'produk_pertahun.produk_terjual',
+        'produk_pertahun.tahun',
+        'produk.nama as nama_produk'
+    )
+    ->get();
+
 
     $katalog = Katalog::where('id_kelompok', $id)->first();
 
@@ -459,6 +471,8 @@ public function deleteSkDesa($id)
 
 
 // STORE PRODUK
+
+
 public function storeProduk(Request $request, $id_kelompok)
 {
     $request->validate([
@@ -470,23 +484,36 @@ public function storeProduk(Request $request, $id_kelompok)
         'sertifikat.*' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048'
     ]);
 
+    // ✅ CEK DUPLIKAT NAMA PRODUK DALAM SATU KELOMPOK
+    $exists = Produk::where('id_kelompok', $id_kelompok)
+        ->whereRaw('LOWER(nama) = ?', [strtolower($request->nama)])
+        ->exists();
+
+   // 🟡 CEK DUPLIKAT di storeProduk
+if ($exists) {
+    return redirect()->back()
+        ->with('duplicate_produk', true) // kirim flag ke Blade
+        ->withInput();
+}
+
+
     // Simpan Foto Produk
     $fotoName = null;
     if ($request->hasFile('foto')) {
-    $fotoName = $this->uniqueFileName($request->file('foto'), 'foto_produk');
-    $request->file('foto')->storeAs('foto_produk', $fotoName, 'public');
-    $fotoName = 'foto_produk/'.$fotoName; // ✅ simpan path lengkap
-}
+        $fotoName = $this->uniqueFileName($request->file('foto'), 'foto_produk');
+        $request->file('foto')->storeAs('foto_produk', $fotoName, 'public');
+        $fotoName = 'foto_produk/'.$fotoName;
+    }
 
     // Simpan Banyak Sertifikat
     $sertifikatPaths = [];
     if ($request->hasFile('sertifikat')) {
-    foreach ($request->file('sertifikat') as $file) {
-        $fileName = $this->uniqueFileName($file, 'sertifikat_produk');
-        $file->storeAs('sertifikat_produk', $fileName, 'public');
-        $sertifikatPaths[] = 'sertifikat_produk/'.$fileName; // ✅ simpan path lengkap
+        foreach ($request->file('sertifikat') as $file) {
+            $fileName = $this->uniqueFileName($file, 'sertifikat_produk');
+            $file->storeAs('public/sertifikat_produk', $fileName);
+            $sertifikatPaths[] = 'sertifikat_produk/' . $fileName;
+        }
     }
-}
 
     Produk::create([
         'id_kelompok'    => $id_kelompok,
@@ -496,12 +523,13 @@ public function storeProduk(Request $request, $id_kelompok)
         'deskripsi'      => $request->deskripsi,
         'produk_terjual' => 0,
         'foto'           => $fotoName,
-        // simpan jadi string dipisah koma
-    'sertifikat'     => !empty($sertifikatPaths) ? implode(',', $sertifikatPaths) : null,
+        'sertifikat'     => !empty($sertifikatPaths) ? implode(',', $sertifikatPaths) : null,
     ]);
 
     return redirect()->back()->with('success', 'Produk berhasil ditambahkan');
+
 }
+
 
 public function updateProduk(Request $request, $id)
 {
@@ -515,6 +543,20 @@ public function updateProduk(Request $request, $id)
         'foto'         => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         'sertifikat.*' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048'
     ]);
+
+    // ✅ CEK DUPLIKAT NAMA PRODUK SAAT UPDATE
+    $exists = Produk::where('id_kelompok', $produk->id_kelompok)
+        ->whereRaw('LOWER(nama) = ?', [strtolower($request->nama)])
+        ->where('id_produk', '!=', $produk->id_produk)
+        ->exists();
+
+   // 🟡 CEK DUPLIKAT di updateProduk
+if ($exists) {
+    return redirect()->back()
+        ->with('duplicate_produk', true)
+        ->withInput();
+}
+
 
     $data = [
         'nama'           => $request->nama,
@@ -534,115 +576,131 @@ public function updateProduk(Request $request, $id)
 
     // === UPDATE FOTO BARU JIKA DIUPLOAD ===
     if ($request->hasFile('foto')) {
-    if ($produk->foto && Storage::disk('public')->exists($produk->foto)) {
-        Storage::disk('public')->delete($produk->foto);
+        if ($produk->foto && Storage::disk('public')->exists($produk->foto)) {
+            Storage::disk('public')->delete($produk->foto);
+        }
+        $fileName = $this->uniqueFileName($request->file('foto'), 'foto_produk');
+        $request->file('foto')->storeAs('foto_produk', $fileName, 'public');
+        $data['foto'] = 'foto_produk/'.$fileName;
     }
-    $fileName = $this->uniqueFileName($request->file('foto'), 'foto_produk');
-    $request->file('foto')->storeAs('foto_produk', $fileName, 'public');
-    $data['foto'] = 'foto_produk/'.$fileName; // ✅ simpan path lengkap
-}
 
- // === LOGIKA UPDATE SERTIFIKAT ===
-$existing = $produk->sertifikat ? explode(',', $produk->sertifikat) : [];
+    // === UPDATE SERTIFIKAT ===
+    $existing = $produk->sertifikat ? explode(',', $produk->sertifikat) : [];
 
-// ✅ Parsing removed_sertifikat konsisten (selalu JSON)
-$removedSertifikat = [];
-if ($request->filled('removed_sertifikat')) {
-    $removedSertifikat = json_decode($request->removed_sertifikat, true);
-    $removedSertifikat = is_array($removedSertifikat) ? $removedSertifikat : [];
-}
+    $removedSertifikat = [];
+    if ($request->filled('removed_sertifikat')) {
+        $removedSertifikat = json_decode($request->removed_sertifikat, true) ?? [];
+    }
 
-if (!empty($removedSertifikat)) {
-    foreach ($removedSertifikat as $remove) {
-        if (in_array($remove, $existing)) {
-            if (Storage::disk('public')->exists('sertifikat_produk/'.$remove)) {
-                Storage::disk('public')->delete('sertifikat_produk/'.$remove);
+    if (!empty($removedSertifikat)) {
+        foreach ($removedSertifikat as $remove) {
+            $path = 'public/' . $remove;
+            if (Storage::exists($path)) {
+                Storage::delete($path);
             }
-            // hapus dari array existing
             $existing = array_values(array_diff($existing, [$remove]));
         }
     }
-}
 
-// === TAMBAH FILE BARU JIKA ADA ===
-if ($request->hasFile('sertifikat')) {
-    foreach ($request->file('sertifikat') as $file) {
-        $fileName = $this->uniqueFileName($file, 'sertifikat_produk');
-        $file->storeAs('sertifikat_produk', $fileName, 'public');
-        $existing[] = 'sertifikat_produk/'.$fileName; // ✅ simpan path lengkap
+    // === TAMBAH FILE BARU ===
+    if ($request->hasFile('sertifikat')) {
+        foreach ($request->file('sertifikat') as $file) {
+            $fileName = $this->uniqueFileName($file, 'sertifikat_produk');
+            $file->storeAs('public/sertifikat_produk', $fileName);
+            $existing[] = 'sertifikat_produk/' . $fileName;
+        }
     }
-}
 
-// ✅ simpan sebagai string dipisahkan koma
-$data['sertifikat'] = !empty($existing) ? implode(',', $existing) : null;
-
+    $data['sertifikat'] = !empty($existing) ? implode(',', $existing) : null;
 
     $produk->update($data);
 
-    return back()->with('success', 'Produk berhasil diperbarui');
+        return redirect()->back()->with('success', 'Produk berhasil ditambahkan');
 }
-
-
-
 
 
 
 // FUNGSI BANTU BUAT NAMA FILE UNIK
-private function uniqueFileName($file, $folder)
+private function uniqueFileName($fileOrBase, $folderOrExt)
 {
-    $originalName = $file->getClientOriginalName();
-    $baseName = pathinfo($originalName, PATHINFO_FILENAME);
-    $extension = $file->getClientOriginalExtension();
-    $fileName = $originalName;
-    $counter = 1;
+    // Jika parameter pertama adalah UploadedFile (objek file dari form)
+    if (is_object($fileOrBase) && method_exists($fileOrBase, 'getClientOriginalName')) {
+        $file = $fileOrBase;
+        $folder = $folderOrExt;
 
-    while (Storage::disk('public')->exists($folder.'/'.$fileName)) {
-        $fileName = $baseName.'_'.$counter.'.'.$extension;
-        $counter++;
+        $originalName = $file->getClientOriginalName();
+        $baseName = pathinfo($originalName, PATHINFO_FILENAME);
+        $extension = $file->getClientOriginalExtension();
+        $fileName = $originalName;
+        $counter = 1;
+
+        while (Storage::disk('public')->exists($folder . '/' . $fileName)) {
+            $fileName = $baseName . '_' . $counter . '.' . $extension;
+            $counter++;
+        }
+
+        return $fileName;
     }
 
+    // Jika parameter pertama berupa string baseName dan kedua extension
+    $baseNameWithFolder = $fileOrBase;
+    $extension = $folderOrExt;
+
+    $fileName = $baseNameWithFolder . '.' . $extension;
+    $counter = 1;
+    while (Storage::disk('public')->exists($fileName)) {
+        $fileName = $baseNameWithFolder . '_' . $counter . '.' . $extension;
+        $counter++;
+    }
     return $fileName;
 }
 
+
+ 
 public function deleteProduk($id)
 {
     try {
         $produk = Produk::findOrFail($id);
 
-        // simpan id_kelompok kalau kamu perlu validasi tambahan
-        $idKelompok = $produk->id_kelompok;
+        // ✅ Hapus semua produk_pertahun yang terkait
+        DB::table('produk_pertahun')->where('id_produk', $produk->id_produk)->delete();
 
-        // Hapus file foto jika ada
+        // ✅ Hapus file foto jika ada
         if ($produk->foto && Storage::disk('public')->exists($produk->foto)) {
             Storage::disk('public')->delete($produk->foto);
         }
 
-        // Hapus file sertifikat jika ada
-        if ($produk->sertifikat && Storage::disk('public')->exists($produk->sertifikat)) {
-            Storage::disk('public')->delete($produk->sertifikat);
+        // ✅ Hapus file sertifikat jika ada
+        if ($produk->sertifikat) {
+    $sertifikatFiles = explode(',', $produk->sertifikat);
+    foreach ($sertifikatFiles as $file) {
+        if (Storage::disk('public')->exists($file)) {
+            Storage::disk('public')->delete($file);
         }
+    }
+}
 
+
+        // ✅ Terakhir hapus produk
         $produk->delete();
 
-        // balik ke halaman sebelumnya (misal: /Admin_Kelompok/kelompok/2)
-        return redirect()->back()->with('success', 'Produk berhasil dihapus');
+        return redirect()->back()->with('success', 'Produk dan rekap terkait berhasil dihapus');
     } catch (\Exception $e) {
         return redirect()->back()->with('error', $e->getMessage());
     }
 }
 
 
+
 // STORE Inovasi
  public function storeInovasi(Request $request, $idKelompok)
 {
     $request->validate([
-        'judul_inovasi' => 'required|string|max:255',
         'foto' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
     ]);
 
     $inovasi = new InovasiPenghargaan();
     $inovasi->id_kelompok = $idKelompok;
-    $inovasi->judul_inovasi = $request->judul_inovasi;
 
     $originalName = $request->file('foto')->getClientOriginalName();
     $baseName = pathinfo($originalName, PATHINFO_FILENAME);
@@ -681,11 +739,9 @@ public function updateInovasi(Request $request, $id)
     }
 
     $request->validate([
-        'judul_inovasi' => 'required|string|max:255',
         'foto' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
     ]);
 
-    $inovasi->judul_inovasi = $request->judul_inovasi;
 
     if ($request->hasFile('foto')) {
         if ($inovasi->foto && Storage::disk('public')->exists($inovasi->foto)) {
@@ -829,6 +885,7 @@ public function storeProdukPertahun(Request $request)
         'id_produk' => 'required|exists:produk,id_produk',
         'harga' => 'required|numeric|min:0',
         'produk_terjual' => 'required|numeric|min:0',
+        
     ]);
 
     try {
@@ -1089,6 +1146,98 @@ public function deleteKatalog($id)
         ->route('Admin_Kelompok.kelompok.show', $id_kelompok)
         ->with('success', 'Katalog berhasil dihapus!');
 }
+
+//LOGO BACKGROUDN
+    /** =========================================================
+     *  EDIT LOGO & BACKGROUND KELOMPOK
+     *  ========================================================= */
+    public function editLogoBackground($id)
+{
+    $kelompok = Kelompok::findOrFail($id);
+    return view('Admin_Kelompok.edit_logo_background', compact('kelompok'));
+}
+
+// Di controller method updateLogoBackground
+public function updateLogoBackground(Request $request, $id)
+{
+    $kelompok = Kelompok::findOrFail($id);
+
+    // 🧹 Hapus logo kalau diset delete
+    if ($request->delete_logo == 1) {
+        if ($kelompok->logo && Storage::disk('public')->exists($kelompok->logo)) {
+            Storage::disk('public')->delete($kelompok->logo);
+        }
+        $kelompok->logo = null;
+    }
+
+    // 🧹 Hapus background kalau diset delete
+    if ($request->delete_background == 1) {
+        if ($kelompok->background && Storage::disk('public')->exists($kelompok->background)) {
+            Storage::disk('public')->delete($kelompok->background);
+        }
+        $kelompok->background = null;
+    }
+
+    // 🖼️ Upload logo baru (pakai nama asli + auto rename kalau sudah ada)
+    if ($request->hasFile('logo')) {
+        $file = $request->file('logo');
+        $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        $extension = $file->getClientOriginalExtension();
+        $fileName = $originalName . '.' . $extension;
+        $counter = 1;
+
+        // 🔁 Cek nama unik seperti di storeProduk()
+        while (Storage::disk('public')->exists('logo/' . $fileName)) {
+            $fileName = $originalName . '_' . $counter . '.' . $extension;
+            $counter++;
+        }
+
+        $path = $file->storeAs('logo', $fileName, 'public');
+        $kelompok->logo = $path;
+    }
+
+    // 🖼️ Upload background baru (pakai nama asli + auto rename kalau sudah ada)
+    if ($request->hasFile('background')) {
+        $file = $request->file('background');
+        $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        $extension = $file->getClientOriginalExtension();
+        $fileName = $originalName . '.' . $extension;
+        $counter = 1;
+
+        // 🔁 Cek nama unik seperti di storeProduk()
+        while (Storage::disk('public')->exists('background/' . $fileName)) {
+            $fileName = $originalName . '_' . $counter . '.' . $extension;
+            $counter++;
+        }
+
+        $path = $file->storeAs('background', $fileName, 'public');
+        $kelompok->background = $path;
+    }
+
+    $kelompok->save();
+
+    return redirect()->back()->with('success', 'Logo dan background berhasil diperbarui');
+}
+
+public function deleteFile($id, Request $request)
+{
+    $kelompok = Kelompok::findOrFail($id);
+
+    if ($request->has('type')) {
+        if ($request->type === 'logo' && $kelompok->logo) {
+            Storage::disk('public')->delete($kelompok->logo);
+            $kelompok->logo = null;
+        } elseif ($request->type === 'background' && $kelompok->background) {
+            Storage::disk('public')->delete($kelompok->background);
+            $kelompok->background = null;
+        }
+        $kelompok->save();
+    }
+
+    return response()->json(['success' => true]);
+}
+
+
 
 
 

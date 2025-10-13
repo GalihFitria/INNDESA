@@ -1,6 +1,8 @@
 @extends('Admin.sidebar')
 
 @section('title', 'Tambah Informasi User - INNDESA')
+<link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+
 
 @section('content')
 <h2 class="text-center text-4xl font-bold text-gray-800 mb-6">.::Tambah Informasi User::.</h2>
@@ -60,13 +62,14 @@
         <div>
             <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
             <input type="password" name="password" id="password"
-                value=""
-                class="w-full p-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
-                placeholder="Masukkan Password (harus sama dengan tabel users)" required>
+                class="mt-1 block w-full border @error('password') border-red-500 @else border-gray-300 @enderror rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="Masukkan Password" required>
+
             @error('password')
-            <small class="text-red-500">{{ $message }}</small>
+            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
             @enderror
         </div>
+
 
         {{-- No Telp --}}
         <div>

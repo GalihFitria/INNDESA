@@ -3,6 +3,7 @@
 <head>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <meta charset="UTF-8">
+      <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Admin</title>
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
@@ -37,12 +38,14 @@
     } */
 
     .login-box img {
-        width: 90px;
-        margin-bottom: 15px;
-        border-radius: 50%;
-        background: #f1faff;
-        padding: 10px;
-    }
+    width: 90px;
+    margin-bottom: 15px;
+    object-fit: contain;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 
     .login-box h2 {
         color: #1ca1e0;
@@ -180,11 +183,47 @@
         margin: 0 auto;
     }
 }
+/* ✅ PRELOADER */
+        #preloader {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 255);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+        #preloader.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .logo-loading {
+            width: 120px;
+            animation: spin 2s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
 
 
     </style>
 </head>
 <body>
+<!-- ✅ PRELOADER -->
+    <div id="preloader">
+        <img src="{{ asset('images/logo.png') }}" alt="Logo Website" class="logo-loading">
+    </div>
+    <script>
+        window.addEventListener("load", function() {
+            let preloader = document.getElementById("preloader");
+            preloader.classList.add("fade-out");
+            setTimeout(() => preloader.style.display = "none", 500);
+        });
+    </script>
+
     <div class="login-box">
         <img src="{{ asset('images/logo.png') }}" alt="Logo">
         <h2>LOGIN</h2>

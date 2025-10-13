@@ -1,6 +1,8 @@
 @extends('Admin.sidebar')
 
 @section('title', 'Edit User - INNDESA')
+<link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+
 
 @section('content')
 <h2 class="text-center text-4xl font-bold text-gray-800 mb-6">.::Edit User::.</h2>
@@ -22,8 +24,11 @@
 
     <div class="mb-4">
         <label class="block text-gray-700">Password</label>
-        <input type="text" name="password" value="{{ $user->password }}"
-            class="w-full p-2 border rounded-lg" required>
+        <input type="password" name="password" placeholder="Kosongkan jika tidak diubah"
+            class="w-full p-2 border @error('password') border-red-500 @else border-gray-300 @enderror rounded-lg">
+        @error('password')
+        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+        @enderror
     </div>
 
     <div class="mb-4">

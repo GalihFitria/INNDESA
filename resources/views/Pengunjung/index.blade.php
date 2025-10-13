@@ -7,6 +7,7 @@
     <title>INNDESA - Inovasi Nusantara Desa Integratif Pangan</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -452,6 +453,66 @@
             animation: slideIn 0.5s ease-out;
             border: 2px solid #10b981;
         }
+
+        /* Back to top button styles - PERBAIKAN */
+        #backToTop {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #3b82f6;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            text-decoration: none;
+        }
+
+        #backToTop.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        #backToTop:hover {
+            background-color: #2563eb;
+            transform: translateY(-5px);
+        }
+
+        #backToTop i {
+            font-size: 24px;
+            color: white;
+            display: block !important;
+        }
+
+        /* Fallback for Font Awesome - PERBAIKAN */
+        #backToTop .arrow-fallback {
+            display: none;
+            width: 24px;
+            height: 24px;
+        }
+
+        #backToTop.no-icon .arrow-fallback {
+            display: block;
+        }
+
+        #backToTop.no-icon i {
+            display: none !important;
+        }
+
+        /* Only show on mobile */
+        @media (min-width: 641px) {
+            #backToTop {
+                display: none;
+            }
+        }
     </style>
 </head>
 
@@ -717,42 +778,54 @@
                 @if ($kegiatans->hasPages())
                 <div class="mt-4 sm:mt-6 flex justify-center">
                     <div class="flex items-center space-x-1 sm:space-x-2">
+
+                        {{-- Tombol Previous --}}
                         @if ($kegiatans->onFirstPage())
                         <span class="pagination-btn disabled">←</span>
                         @else
                         <a href="{{ $kegiatans->previousPageUrl() }}" class="pagination-btn" data-page-link>←</a>
                         @endif
 
-                        <div class="flex space-x-1">
-                            @php
-                            $start = max(1, $kegiatans->currentPage() - 1);
-                            $end = min($kegiatans->lastPage(), $kegiatans->currentPage() + 1);
+                        {{-- Nomor halaman --}}
+                        @php
+                        $current = $kegiatans->currentPage();
+                        $last = $kegiatans->lastPage();
+                        $start = max(1, $current - 1);
+                        $end = min($last, $current + 1);
+                        @endphp
 
-                            if ($start > 2) {
-                            echo '<span class="px-1 sm:px-2 text-gray-500 text-sm">...</span>';
-                            }
-                            @endphp
-
-                            @for ($page = $start; $page <= $end; $page++)
-                                @if ($page==$kegiatans->currentPage())
-                                <span class="pagination-btn active">{{ $page }}</span>
-                                @else
-                                <a href="{{ $kegiatans->url($page) }}" class="pagination-btn" data-page-link>{{ $page }}</a>
-                                @endif
-                                @endfor
-
-                                @php
-                                if ($end < $kegiatans->lastPage() - 1) {
-                                    echo '<span class="px-1 sm:px-2 text-gray-500 text-sm">...</span>';
-                                    }
-                                    @endphp
-                        </div>
-
-                        @if ($kegiatans->hasMorePages())
-                        <a href="{{ $kegiatans->nextPageUrl() }}" class="pagination-btn" data-page-link>→</a>
-                        @else
-                        <span class="pagination-btn disabled">→</span>
+                        {{-- Tampilkan halaman pertama --}}
+                        @if ($start > 1)
+                        <a href="{{ $kegiatans->url(1) }}" class="pagination-btn {{ $current == 1 ? 'active' : '' }}">1</a>
+                        @if ($start > 2)
+                        <span class="px-1 sm:px-2 text-gray-500 text-sm">...</span>
                         @endif
+                        @endif
+
+                        {{-- Halaman sekitar current --}}
+                        @for ($page = $start; $page <= $end; $page++)
+                            @if ($page==$current)
+                            <span class="pagination-btn active">{{ $page }}</span>
+                            @else
+                            <a href="{{ $kegiatans->url($page) }}" class="pagination-btn" data-page-link>{{ $page }}</a>
+                            @endif
+                            @endfor
+
+                            {{-- Tampilkan halaman terakhir --}}
+                            @if ($end < $last)
+                                @if ($end < $last - 1)
+                                <span class="px-1 sm:px-2 text-gray-500 text-sm">...</span>
+                                @endif
+                                <a href="{{ $kegiatans->url($last) }}" class="pagination-btn {{ $current == $last ? 'active' : '' }}">{{ $last }}</a>
+                                @endif
+
+                                {{-- Tombol Next --}}
+                                @if ($kegiatans->hasMorePages())
+                                <a href="{{ $kegiatans->nextPageUrl() }}" class="pagination-btn" data-page-link>→</a>
+                                @else
+                                <span class="pagination-btn disabled">→</span>
+                                @endif
+
                     </div>
                 </div>
                 @endif
@@ -857,9 +930,56 @@
         <div class="mt-16 sm:mt-20">
             @include('footer')
         </div>
+
+        <!-- KEMBALI KEATAS -->
+        <!-- KEMBALI KEATAS - PERBAIKAN -->
+        <a href="#" id="backToTop" title="Kembali ke Atas">
+            <i class="fas fa-arrow-up"></i>
+            <!-- SVG fallback jika Font Awesome tidak berhasil dimuat -->
+            <svg class="arrow-fallback" fill="white" viewBox="0 0 24 24">
+                <path d="M7 14l5-5 5 5z" />
+            </svg>
+        </a>
     </div>
 </body>
+
 <script>
+    // KEMBALI KE ATAS
+    function checkFontAwesome() {
+        const icon = document.createElement('i');
+        icon.className = 'fas fa-arrow-up';
+        const isLoaded = window.getComputedStyle(icon, ':before').getPropertyValue('content') !== 'none';
+
+        if (isLoaded) {
+            document.body.classList.add('fa-loaded');
+        }
+    }
+
+    // Run check after DOM is loaded
+    document.addEventListener('DOMContentLoaded', checkFontAwesome);
+
+    // Also run check after window is fully loaded
+    window.addEventListener('load', checkFontAwesome);
+
+    // KEMBALI KE ATAS
+    const backToTopButton = document.getElementById('backToTop');
+
+    window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 300) {
+            backToTopButton.classList.add('show');
+        } else {
+            backToTopButton.classList.remove('show');
+        }
+    });
+
+    backToTopButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+
     // JS PRELOADER
     window.addEventListener("load", function() {
         let preloader = document.getElementById("preloader");

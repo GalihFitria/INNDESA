@@ -107,15 +107,22 @@
                     <td class="border border-gray-300 p-3 text-sm text-gray-900 text-center">
                         @if ($p->sertifikat)
                         @php
-                        $sertifikatPaths = json_decode($p->sertifikat, true) ?? [];
+                        // Pecah string sertifikat berdasarkan koma
+                        $sertifikatPaths = explode(',', $p->sertifikat);
                         @endphp
                         @foreach ($sertifikatPaths as $path)
-                        <a href="{{ Storage::url($path) }}" class="text-blue-600 hover:underline">Lihat Sertifikat</a><br>
+                        <a href="{{ asset('storage/' . trim($path)) }}"
+                            target="_blank"
+                            class="text-blue-600 hover:underline block mb-1">
+                            Lihat Sertifikat
+                        </a>
                         @endforeach
                         @else
                         <p class="text-gray-400">Tidak ada sertifikat.</p>
                         @endif
                     </td>
+
+
                     <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $p->produk_terjual }}</td>
                     <td class="border border-gray-300 p-3 text-center text-sm">
                         <a href="{{ route('Admin.produk.edit', $p->id_produk) }}" class="text-blue-600 hover:underline mr-2">Edit</a>

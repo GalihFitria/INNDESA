@@ -1,6 +1,8 @@
 @extends('Admin.sidebar')
 
 @section('title', 'Edit Kelompok Rentan - INNDESA')
+<link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+
 
 @section('content')
 <h2 class="text-center text-4xl font-bold text-gray-800 mb-6">.::Edit Kelompok Rentan::.</h2>

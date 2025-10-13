@@ -51,7 +51,7 @@ class KelompokIntegritasController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'nama' => 'required|string|unique:kategori_kelompok,nama',
+            'nama' => 'required|string|unique:kategori_kelompok,nama,' . $id . ',id_kategori',
         ], [
             'nama.required' => 'Nama Kelompok Integritas wajib diisi.',
             'nama.unique'   => 'Kelompok Integritas sudah ada.',

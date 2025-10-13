@@ -1,6 +1,8 @@
 @extends('Admin.sidebar')
 
 @section('title', 'Edit Informasi User - INNDESA')
+<link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+
 
 @section('content')
 <h2 class="text-center text-4xl font-bold text-gray-800 mb-6">.::Edit Informasi User::.</h2>
@@ -56,10 +58,14 @@
         <div>
             <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
             <input type="password" name="password" id="password"
-                value="{{ $user->password }}"
-                class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="Password saat ini (terenkripsi)">
-            <small class="text-gray-500">Password terenkripsi saat ini. Kosongkan jika tidak ingin mengubah password.</small>
+                class="mt-1 block w-full border @error('password') border-red-500 @else border-gray-300 @enderror rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="Biarkan kosong jika tidak ingin mengubah password">
+
+            <small class="text-gray-500">Kosongkan jika tidak ingin mengubah password.</small>
+
+            @error('password')
+            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+            @enderror
         </div>
 
         {{-- No Telp --}}

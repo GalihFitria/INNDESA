@@ -6,17 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>INNDESA - Inovasi Nusantara Desa Integratif Pangan</title>
     <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
+        /* PRELOADER */
         #preloader {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(255, 255, 255, 255);
+            background: rgba(255, 255, 255, 1);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -43,10 +45,10 @@
             transition: opacity 0.5s ease-out;
         }
 
-        body:not(.loaded) #content {
+        /* Hide all content except preloader until page is loaded */
+        body:not(.loaded)>*:not(#preloader) {
             display: none;
         }
-
 
         body {
             font-family: 'Poppins', sans-serif;
@@ -122,11 +124,97 @@
                 font-size: 1rem !important;
             }
         }
+
+        /* kembali keatas */
+        #backToTop {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #3b82f6;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            text-decoration: none;
+        }
+
+        #backToTop.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        #backToTop:hover {
+            background-color: #2563eb;
+            transform: translateY(-5px);
+        }
+
+        #backToTop i {
+            font-size: 24px;
+            color: white;
+            display: block !important;
+        }
+
+        /* Fallback for Font Awesome - PERBAIKAN */
+        #backToTop .arrow-fallback {
+            display: none;
+            width: 24px;
+            height: 24px;
+        }
+
+        #backToTop.no-icon .arrow-fallback {
+            display: block;
+        }
+
+        #backToTop.no-icon i {
+            display: none !important;
+        }
+
+        /* Only show on mobile */
+        @media (min-width: 641px) {
+            #backToTop {
+                display: none;
+            }
+        }
+
+        /* Sticky Navbar - PERBAIKAN */
+        .navbar-sticky {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            width: 100%;
+        }
+
+        /* Pastikan navbar tetap di atas saat preload */
+        body:not(.loaded) .navbar-sticky {
+            position: relative;
+        }
+
+        body.loaded .navbar-sticky {
+            position: sticky;
+        }
     </style>
 </head>
 
 <body class="bg-white">
-    @include('navbar')
+    <!-- PRELOADER -->
+    <div id="preloader">
+        <img src="{{ asset('images/logo.png') }}" alt="Logo Website" class="logo-loading">
+    </div>
+
+    <!-- Navbar dengan class sticky -->
+    <div class="navbar-sticky">
+        @include('navbar')
+    </div>
+
     <div class="container mx-auto pt-4 sm:pt-8 container-padding">
         <div class="flex flex-wrap -mx-2 lg:-mx-4">
             <div class="w-full lg:w-2/3 px-2 lg:px-4">
@@ -172,13 +260,38 @@
                                     class="w-4 h-4 sm:w-5 sm:h-5 text-gray-700 flex-shrink-0">
                                     <path stroke-linecap="round" stroke-linejoin="round"
                                         d="M15 19.128a9.38 9.38 0 0 0 4.5-1.128M4.5 
-                 18A9.38 9.38 0 0 0 9 19.128M9 
-                 13.5a3 3 0 1 0 6 0 3 3 0 0 0-6 
-                 0zm12 0a9 9 0 1 1-18 0 9 9 0 
-                 0 1 18 0z" />
+            18A9.38 9.38 0 0 0 9 19.128M9 
+            13.5a3 3 0 1 0 6 0 3 3 0 0 0-6 
+            0zm12 0a9 9 0 1 1-18 0 9 9 0 
+            1 1 18 0z" />
                                 </svg>
-                                Kelompok {{ $kegiatan->kelompok->nama }}
+                                @php
+                                // Cek apakah user login dan apakah user tersebut adalah admin kelompok
+                                $user = auth()->user();
+                                $isAdminKelompok = false;
+                                $loggedInKelompokId = null;
+
+                                if ($user && $user->role === 'admin_kelompok' && $user->status === 'sudah daftar') {
+                                $adminKelompok = \App\Models\InformasiUser::where('id_user', $user->id_user)->first();
+                                if ($adminKelompok) {
+                                $isAdminKelompok = true;
+                                $loggedInKelompokId = $adminKelompok->id_kelompok;
+                                }
+                                }
+
+                                // Tentukan URL berdasarkan status login
+                                if ($isAdminKelompok && $loggedInKelompokId == $kegiatan->kelompok->id_kelompok) {
+                                $kelompokUrl = url('Admin_Kelompok/kelompok/' . $kegiatan->kelompok->id_kelompok);
+                                } else {
+                                $kelompokUrl = route('kelompok.show', $kegiatan->kelompok->id_kelompok) . '?from=kelompok';
+                                }
+                                @endphp
+                                <a href="{{ $kelompokUrl }}"
+                                    class="text-black-600 hover:underline"> Kelompok
+                                    {{ $kegiatan->kelompok->nama }}
+                                </a>
                             </p>
+
 
                             <div class="mb-4 sm:mb-6">
                                 <h2 class="text-lg sm:text-xl font-semibold text-gray-800 mb-2">Sumber Berita</h2>
@@ -211,15 +324,24 @@
                                 </ul>
                             </div>
                             <div class="content-text prose max-w-none text-gray-700 leading-relaxed text-justify mb-4 sm:mb-6 text-base sm:text-lg lg:text-xl">
-                                @foreach (explode("\n", $kegiatan->deskripsi) as $paragraph)
-                                @if (!empty(trim($paragraph)))
-                                <p class="mb-4">
-                                    @if ($loop->first)
+                                @php
+                                // Pisahkan teks berdasarkan dua atau lebih enter kosong (paragraf baru)
+                                $paragraphs = preg_split("/\n\s*\n/", $kegiatan->deskripsi);
+                                @endphp
+
+                                @foreach ($paragraphs as $pIndex => $para)
+                                @foreach (explode("\n", $para) as $line)
+                                @if (!empty(trim($line)))
+                                <p class="mb-1">
+                                    @if ($loop->first && $pIndex === 0)
                                     <b>INNDESA-</b>
                                     @endif
-                                    {{ $paragraph }}
+                                    {{ trim($line) }}
                                 </p>
                                 @endif
+                                @endforeach
+                                {{-- jarak ekstra antar paragraf --}}
+                                <div class="mb-3"></div>
                                 @endforeach
                             </div>
                         </div>
@@ -300,13 +422,18 @@
         </div>
     </div>
 
-    <div id="preloader">
-        <img src="{{ asset('images/logo.png') }}" alt="Logo Website" class="logo-loading">
-    </div>
-
     <div class="mt-10 sm:mt-20">
         @include('footer')
     </div>
+
+    <!-- KEMBALI KEATAS - PERBAIKAN -->
+    <a href="#" id="backToTop" title="Kembali ke Atas">
+        <i class="fas fa-arrow-up"></i>
+        <!-- SVG fallback jika Font Awesome tidak berhasil dimuat -->
+        <svg class="arrow-fallback" fill="white" viewBox="0 0 24 24">
+            <path d="M7 14l5-5 5 5z" />
+        </svg>
+    </a>
 
     <script>
         // Fungsi untuk tombol kembali dengan fallback ke Beranda (ganti '/' dengan route Beranda kalau beda)
@@ -318,19 +445,14 @@
             }
         }
 
-        // JS PRELOADER
+        // JS PRELOADER - PERBAIKAN (sama seperti di halaman kontak)
         window.addEventListener("load", function() {
-            let preloader = document.getElementById("preloader");
-            let content = document.getElementById("content");
-
-            // Add fade-out animation
+            const preloader = document.getElementById("preloader");
             preloader.classList.add("fade-out");
-
-            // After animation completes, hide preloader and show content
-            setTimeout(function() {
+            setTimeout(() => {
                 preloader.style.display = "none";
                 document.body.classList.add("loaded");
-            }, 500); // Match transition duration (0.5s)
+            }, 500);
         });
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -379,7 +501,7 @@
                     container.appendChild(kegiatanElement);
                 });
 
-                pageInfo.textContent = `Halaman ${page} dari ${totalPages}`;
+                pageInfo.textContent = ` ${page} dari ${totalPages}`;
                 prevBtn.disabled = page === 1;
                 nextBtn.disabled = page === totalPages;
             }
@@ -400,6 +522,42 @@
 
             // Initial display
             displayKegiatan(currentPage);
+        });
+
+        // KEMBALI KE ATAS
+        function checkFontAwesome() {
+            const icon = document.createElement('i');
+            icon.className = 'fas fa-arrow-up';
+            const isLoaded = window.getComputedStyle(icon, ':before').getPropertyValue('content') !== 'none';
+
+            if (isLoaded) {
+                document.body.classList.add('fa-loaded');
+            }
+        }
+
+        // Run check after DOM is loaded
+        document.addEventListener('DOMContentLoaded', checkFontAwesome);
+
+        // Also run check after window is fully loaded
+        window.addEventListener('load', checkFontAwesome);
+
+        // KEMBALI KE ATAS
+        const backToTopButton = document.getElementById('backToTop');
+
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.add('show');
+            } else {
+                backToTopButton.classList.remove('show');
+            }
+        });
+
+        backToTopButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
         });
     </script>
 </body>

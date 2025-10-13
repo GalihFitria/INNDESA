@@ -106,6 +106,7 @@ class KelompokController extends Controller
             ->get()
             ->groupBy('nama_produk');
 
+        $informasiUser = \App\Models\InformasiUser::where('id_kelompok', $id)->first();
 
         return view('Pengunjung.kelompok', [
             'kelompok' => $kelompok,
@@ -117,7 +118,8 @@ class KelompokController extends Controller
             'totalProdukTerjual' => $totalProdukTerjual,
             'inovasiImages' => $inovasiImages,
             'kegiatan' => $kegiatan,
-            'rekap' => $rekap
+            'rekap' => $rekap,
+            'informasiUser' => $informasiUser
         ]);
     }
 

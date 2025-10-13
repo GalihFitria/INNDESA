@@ -1,6 +1,8 @@
 @extends('Admin.sidebar')
 
 @section('title', 'Edit Kelompok Integrasi - INNDESA')
+<link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+
 
 @section('content')
 <h2 class="text-center text-4xl font-bold text-gray-800 mb-6">.::Edit Kelompok Integrasi::.</h2>
@@ -20,7 +22,7 @@
                 value="{{ old('nama', $kategori->nama) }}"
                 required>
             @error('nama')
-                <span class="text-red-500 text-sm">{{ $message }}</span>
+            <span class="text-red-500 text-sm">{{ $message }}</span>
             @enderror
         </div>
 

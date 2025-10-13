@@ -1,6 +1,8 @@
 @extends('Admin.sidebar')
 
 @section('title', 'Edit Inovasi & Penghargaan - INNDESA')
+<link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+
 
 @section('content')
 <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
@@ -9,10 +11,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <h2 class="text-center text-4xl font-bold text-gray-800 mb-6">.::Edit Inovasi & Penghargaan::.</h2>
 <div class="bg-white shadow-md p-4 rounded-lg max-w-2xl mx-auto">
-    <form action="{{ route('Admin.inovasi.update', $inovasi->id_inovasi) }}" method="POST" class="space-y-6" enctype="multipart/form-data">
+    <form action="{{ route('Admin.inovasi.update', $inovasi->id_inovasi) }}" method="POST" class="space-y-6" id="inovasiForm" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
@@ -69,8 +72,7 @@
                 <img id="previewImage" class="max-w-full max-h-full object-contain hidden" alt="File Preview">
                 <iframe id="previewFrame" class="w-full h-full hidden" frameborder="0"></iframe>
             </div>
-            <!-- Controls untuk gambar -->
-            <div id="previewControls" class="mt-4 flex space-x-2 justify-center hidden">
+            <div id="previewControls" class="mt-4 flex space-x-2 justify-center">
                 <button onclick="rotateImage(-90)" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
                     <i class="fas fa-rotate-left"></i>
                 </button>
@@ -83,7 +85,7 @@
             </div>
             <div id="cropperControls" class="mt-4 flex space-x-2 justify-center hidden">
                 <button onclick="cancelCrop()" class="bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-600">
-                    <i class="fas fa-times"></i> Cancel
+                    <i class="fas fa-times"></i> Batal
                 </button>
                 <button onclick="cropImage()" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">
                     <i class="fas fa-crop-alt"></i> Crop
@@ -99,6 +101,43 @@
             placeholder: "-- Pilih Kelompok --",
             allowClear: true
         });
+
+        // Validasi form saat submit
+        $('#inovasiForm').on('submit', function(e) {
+            const kelompokValue = $('#id_kelompok').val();
+
+            if (!kelompokValue || kelompokValue === "") {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Validasi Gagal',
+                    text: 'Nama kelompok harus dipilih',
+                    confirmButtonText: 'OK'
+                });
+                return false;
+            }
+        });
+
+        // Tampilkan error dari backend jika ada
+        const errorMessage = "{{ $errors->first('id_kelompok') }}";
+        if (errorMessage) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Validasi Gagal',
+                text: errorMessage,
+                confirmButtonText: 'OK'
+            });
+        }
+
+        const fotoError = "{{ $errors->first('foto') }}";
+        if (fotoError) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Validasi Gagal',
+                text: fotoError,
+                confirmButtonText: 'OK'
+            });
+        }
     });
 
     let FotoFile = null;
@@ -173,19 +212,24 @@
         previewImage.classList.add('hidden');
         previewFrame.classList.add('hidden');
         cropperControls.classList.add('hidden');
-        previewControls.classList.add('hidden');
+        previewControls.classList.remove('hidden');
         previewImage.src = '';
         previewFrame.src = '';
 
         if (file.type.startsWith('image/')) {
             previewImage.src = rotatedImageUrl;
             previewImage.classList.remove('hidden');
-            previewControls.classList.remove('hidden'); // tampilkan tombol
         } else if (file.type === 'application/pdf') {
-            previewFrame.src = originalImageUrl;
+            previewFrame.src = rotatedImageUrl;
             previewFrame.classList.remove('hidden');
+            previewControls.classList.add('hidden');
         } else {
-            alert('Pratinjau hanya tersedia untuk gambar dan PDF.');
+            Swal.fire({
+                icon: 'warning',
+                title: 'Peringatan',
+                text: 'Pratinjau hanya tersedia untuk gambar dan PDF.',
+                confirmButtonText: 'OK'
+            });
             return;
         }
 
@@ -198,23 +242,30 @@
         const previewFrame = document.getElementById('previewFrame');
         const previewControls = document.getElementById('previewControls');
         const cropperControls = document.getElementById('cropperControls');
+        originalImageUrl = url;
+        rotatedImageUrl = originalImageUrl;
 
         previewImage.classList.add('hidden');
         previewFrame.classList.add('hidden');
         cropperControls.classList.add('hidden');
-        previewControls.classList.add('hidden');
+        previewControls.classList.remove('hidden');
         previewImage.src = '';
         previewFrame.src = '';
 
         if (type.startsWith('image/')) {
-            previewImage.src = url;
+            previewImage.src = rotatedImageUrl;
             previewImage.classList.remove('hidden');
-            previewControls.classList.remove('hidden');
         } else if (type === 'application/pdf') {
-            previewFrame.src = url;
+            previewFrame.src = rotatedImageUrl;
             previewFrame.classList.remove('hidden');
+            previewControls.classList.add('hidden');
         } else {
-            alert('Pratinjau hanya tersedia untuk gambar dan PDF.');
+            Swal.fire({
+                icon: 'warning',
+                title: 'Peringatan',
+                text: 'Pratinjau hanya tersedia untuk gambar dan PDF.',
+                confirmButtonText: 'OK'
+            });
             return;
         }
 
@@ -235,7 +286,7 @@
                 aspectRatio: NaN,
                 viewMode: 1,
                 autoCropArea: 0.8,
-                responsive: true
+                responsive: true,
             });
         }
     }
@@ -279,9 +330,21 @@
                     updateFotoPreview();
                     closePreview();
                 } else {
-                    alert('Gagal memotong gambar. Silakan coba lagi.');
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal',
+                        text: 'Gagal memotong gambar. Silakan coba lagi.',
+                        confirmButtonText: 'OK'
+                    });
                 }
             }, 'image/jpeg');
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal',
+                text: 'Cropper belum diinisialisasi.',
+                confirmButtonText: 'OK'
+            });
         }
     }
 
@@ -313,8 +376,12 @@
             cropper = null;
         }
         isCropping = false;
-        if (originalImageUrl) URL.revokeObjectURL(originalImageUrl);
-        if (rotatedImageUrl) URL.revokeObjectURL(rotatedImageUrl);
+        if (originalImageUrl && originalImageUrl.startsWith('blob:')) {
+            URL.revokeObjectURL(originalImageUrl);
+        }
+        if (rotatedImageUrl && rotatedImageUrl.startsWith('blob:')) {
+            URL.revokeObjectURL(rotatedImageUrl);
+        }
     }
 
     document.getElementById('previewModal').addEventListener('click', function(e) {

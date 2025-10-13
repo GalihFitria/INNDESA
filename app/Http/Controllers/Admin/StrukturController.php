@@ -16,7 +16,6 @@ class StrukturController extends Controller
      */
     public function index()
     {
-        // Eager load 'kelompok' dan 'rentan'
         $struktur = StrukturOrganisasi::with(['kelompok', 'rentan'])->get();
         return view('Admin.struktur.index', compact('struktur'));
     }
@@ -27,8 +26,12 @@ class StrukturController extends Controller
     public function create()
     {
         $kelompok = Kelompok::all();
-        $rentan = KelompokRentan::all(); // ambil semua kelompok rentan
-        return view('Admin.struktur.create', compact('kelompok', 'rentan'));
+        $rentan = KelompokRentan::all();
+
+        // Ambil semua struktur organisasi untuk validasi jabatan
+        $strukturList = StrukturOrganisasi::all();
+
+        return view('Admin.struktur.create', compact('kelompok', 'rentan', 'strukturList'));
     }
 
     /**
@@ -42,6 +45,19 @@ class StrukturController extends Controller
             'jabatan' => 'required|string|max:50',
             'id_rentan' => 'required|exists:rentan,id_rentan',
         ]);
+
+        // Validasi khusus untuk Ketua dan Wakil Ketua
+        if (in_array($request->jabatan, ['Ketua', 'Wakil Ketua'])) {
+            $existing = StrukturOrganisasi::where('id_kelompok', $request->id_kelompok)
+                ->where('jabatan', $request->jabatan)
+                ->exists();
+
+            if ($existing) {
+                return redirect()->back()
+                    ->withErrors(['jabatan' => 'Jabatan ' . $request->jabatan . ' sudah ada di kelompok ini'])
+                    ->withInput();
+            }
+        }
 
         StrukturOrganisasi::create([
             'id_kelompok' => $request->id_kelompok,
@@ -60,8 +76,12 @@ class StrukturController extends Controller
     {
         $struktur = StrukturOrganisasi::findOrFail($id);
         $kelompok = Kelompok::all();
-        $rentan = KelompokRentan::all(); // ambil semua kelompok rentan
-        return view('Admin.struktur.edit', compact('struktur', 'kelompok', 'rentan'));
+        $rentan = KelompokRentan::all();
+
+        // Ambil semua struktur organisasi untuk validasi jabatan
+        $strukturList = StrukturOrganisasi::all();
+
+        return view('Admin.struktur.edit', compact('struktur', 'kelompok', 'rentan', 'strukturList'));
     }
 
     /**
@@ -77,6 +97,20 @@ class StrukturController extends Controller
         ]);
 
         $struktur = StrukturOrganisasi::findOrFail($id);
+
+        // Validasi khusus untuk Ketua dan Wakil Ketua
+        if (in_array($request->jabatan, ['Ketua', 'Wakil Ketua'])) {
+            $existing = StrukturOrganisasi::where('id_kelompok', $request->id_kelompok)
+                ->where('jabatan', $request->jabatan)
+                ->where('id_struktur', '!=', $id) // Perbaikan di sini - gunakan id_struktur bukan id
+                ->exists();
+
+            if ($existing) {
+                return redirect()->back()
+                    ->withErrors(['jabatan' => 'Jabatan ' . $request->jabatan . ' sudah ada di kelompok ini'])
+                    ->withInput();
+            }
+        }
 
         $struktur->update([
             'id_kelompok' => $request->id_kelompok,

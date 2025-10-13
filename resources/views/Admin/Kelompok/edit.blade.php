@@ -1,11 +1,14 @@
 @extends('Admin.sidebar')
 
 @section('title', 'Edit Kelompok - INNDESA')
+<link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+
 
 @section('content')
 <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <h2 class="text-center text-4xl font-bold text-gray-800 mb-6">.::Edit Kelompok::.</h2>
 <div class="bg-white shadow-md p-4 rounded-lg max-w-2xl mx-auto max-h-[500px] overflow-y-auto">
@@ -30,8 +33,8 @@
 
         <div>
             <label for="nama" class="block text-sm font-medium text-gray-700">Nama Kelompok</label>
-            <input type="text" name="nama" id="nama" value="{{ old('nama', $kelompok->nama) }}" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Masukkan Nama Kelompok" required data-original-name="{{ $kelompok->nama }}">
-            <span id="namaWarning" class="text-red-500 text-sm hidden">Nama kelompok ini sudah digunakan oleh kelompok lain.</span>
+            <input type="text" name="nama" id="nama" value="{{ old('nama', $kelompok->nama) }}" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Masukkan Nama Kelompok" required data-original-name="{{ $kelompok->nama }}" data-original-kategori="{{ $kelompok->id_kategori }}">
+            <span id="namaWarning" class="text-red-500 text-sm hidden">Kombinasi nama kelompok dan kategori sudah ada.</span>
             @error('nama')
             <span class="text-red-500 text-sm">{{ $message }}</span>
             @enderror
@@ -173,25 +176,94 @@
     let rotatedImageUrl = null;
     let isCropping = false;
     let originalFile = null;
+    let currentImageType = null; // Tambahkan variabel untuk menyimpan tipe gambar
 
-    // Nama Kelompok Validation
-    const originalName = document.getElementById('nama').getAttribute('data-original-name');
-    document.getElementById('nama').addEventListener('input', function() {
-        const currentName = this.value.trim();
-        if (currentName && currentName !== originalName) {
-            // Simulasi cek duplikat (ganti dengan API call ke backend jika diperlukan)
-            // Untuk demo, kita anggap ada duplikat jika nama sama dengan contoh
-            const sampleNames = ['Kelompok A', 'Kelompok B', 'Kelompok C']; // Ganti dengan data dari backend
-            if (sampleNames.includes(currentName)) {
-                document.getElementById('namaWarning').classList.remove('hidden');
-                this.setCustomValidity('Nama kelompok ini sudah digunakan oleh kelompok lain.');
+    // Validasi frontend untuk nama kelompok
+    const namaInput = document.getElementById('nama');
+    const kategoriSelect = document.getElementById('id_kategori');
+    const warningElement = document.getElementById('namaWarning');
+    const originalName = namaInput.getAttribute('data-original-name');
+    const originalKategori = kategoriSelect.getAttribute('data-original-kategori');
+
+    // Fungsi untuk validasi kombinasi nama dan kategori
+    function validateCombination() {
+        const currentName = namaInput.value.trim();
+        const currentKategori = kategoriSelect.value;
+
+        // Hanya validasi jika nama diubah
+        if (currentName !== originalName) {
+            // Simulasi pengecekan (ganti dengan API call jika perlu)
+            const sampleData = [{
+                    nama: 'Kelompok A',
+                    kategori: '1'
+                },
+                {
+                    nama: 'Kelompok B',
+                    kategori: '2'
+                },
+                {
+                    nama: 'Kelompok C',
+                    kategori: '1'
+                }
+            ];
+
+            const isDuplicate = sampleData.some(item =>
+                item.nama === currentName && item.kategori === currentKategori
+            );
+
+            if (isDuplicate) {
+                warningElement.classList.remove('hidden');
+                namaInput.setCustomValidity('Kombinasi nama kelompok dan kategori sudah ada.');
+                return false;
             } else {
-                document.getElementById('namaWarning').classList.add('hidden');
-                this.setCustomValidity('');
+                warningElement.classList.add('hidden');
+                namaInput.setCustomValidity('');
+                return true;
             }
         } else {
-            document.getElementById('namaWarning').classList.add('hidden');
-            this.setCustomValidity('');
+            warningElement.classList.add('hidden');
+            namaInput.setCustomValidity('');
+            return true;
+        }
+    }
+
+    // Event listener untuk perubahan nama
+    namaInput.addEventListener('input', validateCombination);
+
+    // Event listener untuk perubahan kategori (jika nama sudah diubah)
+    kategoriSelect.addEventListener('change', function() {
+        if (namaInput.value.trim() !== originalName) {
+            validateCombination();
+        }
+    });
+
+    // Validasi saat submit form
+    document.getElementById('kelompokForm').addEventListener('submit', function(e) {
+        if (!validateCombination()) {
+            e.preventDefault();
+            Swal.fire({
+                icon: 'error',
+                title: 'Validasi Gagal',
+                text: 'Kombinasi nama kelompok dan kategori sudah ada.',
+                confirmButtonText: 'OK'
+            });
+        }
+
+        // Pastikan file yang diedit dimasukkan ke form sebelum submit
+        if (skDesaFile) {
+            const dt = new DataTransfer();
+            dt.items.add(skDesaFile);
+            document.getElementById('sk_desa').files = dt.files;
+        }
+        if (backgroundFile) {
+            const dt = new DataTransfer();
+            dt.items.add(backgroundFile);
+            document.getElementById('background').files = dt.files;
+        }
+        if (logoFile) {
+            const dt = new DataTransfer();
+            dt.items.add(logoFile);
+            document.getElementById('logo').files = dt.files;
         }
     });
 
@@ -210,9 +282,6 @@
                 <button type="button" onclick="removeSkDesaFile()" class="text-red-500 hover:text-red-700 ml-2">×</button>
             </div>` :
             '<p>Tidak ada file baru yang dipilih.</p>';
-        const dt = new DataTransfer();
-        if (skDesaFile) dt.items.add(skDesaFile);
-        document.getElementById('sk_desa').files = dt.files;
     }
 
     function removeSkDesaFile() {
@@ -246,9 +315,6 @@
                 <button type="button" onclick="removeBackgroundFile()" class="text-red-500 hover:text-red-700 ml-2">×</button>
             </div>` :
             '<p>Tidak ada file baru yang dipilih.</p>';
-        const dt = new DataTransfer();
-        if (backgroundFile) dt.items.add(backgroundFile);
-        document.getElementById('background').files = dt.files;
     }
 
     function removeBackgroundFile() {
@@ -282,9 +348,6 @@
                 <button type="button" onclick="removeLogoFile()" class="text-red-500 hover:text-red-700 ml-2">×</button>
             </div>` :
             '<p>Tidak ada file baru yang dipilih.</p>';
-        const dt = new DataTransfer();
-        if (logoFile) dt.items.add(logoFile);
-        document.getElementById('logo').files = dt.files;
     }
 
     function removeLogoFile() {
@@ -310,6 +373,7 @@
             file
         };
         originalFile = file;
+        currentImageType = file.type; // Simpan tipe gambar
         rotatedImageUrl = URL.createObjectURL(file);
         showPreview(rotatedImageUrl, file.type);
     }
@@ -323,6 +387,7 @@
                     type: blob.type
                 });
                 originalFile = file;
+                currentImageType = blob.type; // Simpan tipe gambar
                 rotatedImageUrl = URL.createObjectURL(file);
                 currentPreview = {
                     type: previewType,
@@ -342,6 +407,14 @@
         img.classList.add('hidden');
         frame.classList.add('hidden');
         document.getElementById('cropperControls').classList.add('hidden');
+
+        // Reset cropper state
+        if (cropper) {
+            cropper.destroy();
+            cropper = null;
+        }
+        isCropping = false;
+
         if (type.startsWith('image/')) {
             img.src = url;
             img.classList.remove('hidden');
@@ -364,23 +437,30 @@
             cropper = new Cropper(previewImage, {
                 aspectRatio: NaN,
                 viewMode: 1,
-                autoCropArea: 0.8
+                autoCropArea: 0.8,
+                background: false // Menonaktifkan background grid yang mungkin mengganggu transparansi
             });
         }
     }
 
     function rotateImage(degree) {
         const previewImage = document.getElementById('previewImage');
+
+        // Jika cropper aktif, gunakan cropper untuk rotasi
         if (cropper) {
             cropper.rotate(degree);
             return;
         }
+
+        // Jika bukan PDF, lakukan rotasi dengan canvas
         if (currentPreview.type !== 'application/pdf') {
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
             const img = new Image();
+            img.crossOrigin = "Anonymous"; // Tambahkan untuk handle CORS jika perlu
             img.src = rotatedImageUrl;
             img.onload = () => {
+                // Menentukan ukuran canvas berdasarkan rotasi
                 if (degree === 90 || degree === -270) {
                     canvas.width = img.height;
                     canvas.height = img.width;
@@ -394,58 +474,99 @@
                     canvas.width = img.width;
                     canvas.height = img.height;
                 }
+
+                // Membersihkan canvas dengan transparansi
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // Menempatkan titik tengah canvas
                 ctx.translate(canvas.width / 2, canvas.height / 2);
+
+                // Melakukan rotasi
                 ctx.rotate((degree * Math.PI) / 180);
+
+                // Menggambar gambar dengan mempertahankan transparansi
                 ctx.drawImage(img, -img.width / 2, -img.height / 2);
-                rotatedImageUrl = canvas.toDataURL('image/jpeg');
-                previewImage.src = rotatedImageUrl;
+
+                // Menentukan format file berdasarkan file asli
+                let outputType = 'image/jpeg';
+                if (currentImageType === 'image/png') {
+                    outputType = 'image/png';
+                }
+
                 canvas.toBlob((blob) => {
                     if (blob) {
                         const newFile = new File([blob], currentPreview.file.name, {
-                            type: 'image/jpeg'
+                            type: outputType
                         });
                         updateCurrentFile(newFile);
+                        rotatedImageUrl = URL.createObjectURL(blob);
+                        previewImage.src = rotatedImageUrl;
                     }
-                }, 'image/jpeg');
+                }, outputType);
             };
         }
     }
 
     function cropImage() {
         if (cropper) {
-            cropper.getCroppedCanvas().toBlob((blob) => {
+            // Menentukan format output berdasarkan file asli
+            let outputType = 'image/jpeg';
+            if (currentImageType === 'image/png') {
+                outputType = 'image/png';
+            }
+
+            cropper.getCroppedCanvas({
+                // Menonaktifkan background untuk mempertahankan transparansi
+                backgroundColor: null,
+                // Jika file asli PNG, pastikan output juga PNG
+                imageSmoothingEnabled: true,
+                imageSmoothingQuality: 'high'
+            }).toBlob((blob) => {
                 if (blob) {
                     const newFile = new File([blob], currentPreview.file.name, {
-                        type: 'image/jpeg'
+                        type: outputType
                     });
                     updateCurrentFile(newFile);
                     closePreview();
                 }
-            }, 'image/jpeg');
+            }, outputType);
         }
     }
 
     function updateCurrentFile(newFile) {
         if (currentPreview.type === 'sk_desa') {
             skDesaFile = newFile;
+            // Reset remove flag karena kita mengganti file, bukan menghapusnya
+            document.getElementById('remove_sk_desa').value = '0';
+            // Hapus tampilan file lama jika ada
             if (currentPreview.isExisting) {
-                document.getElementById('remove_sk_desa').value = '1';
                 document.querySelector(`[data-file-path="${currentPreview.path}"]`)?.remove();
             }
+            // Perbarui input file
+            const dt = new DataTransfer();
+            dt.items.add(skDesaFile);
+            document.getElementById('sk_desa').files = dt.files;
+            // Perbarui tampilan preview
             updateSkDesaPreview();
         } else if (currentPreview.type === 'background') {
             backgroundFile = newFile;
+            document.getElementById('remove_background').value = '0';
             if (currentPreview.isExisting) {
-                document.getElementById('remove_background').value = '1';
                 document.querySelector(`[data-file-path="${currentPreview.path}"]`)?.remove();
             }
+            const dt = new DataTransfer();
+            dt.items.add(backgroundFile);
+            document.getElementById('background').files = dt.files;
             updateBackgroundPreview();
         } else if (currentPreview.type === 'logo') {
             logoFile = newFile;
+            document.getElementById('remove_logo').value = '0';
             if (currentPreview.isExisting) {
-                document.getElementById('remove_logo').value = '1';
                 document.querySelector(`[data-file-path="${currentPreview.path}"]`)?.remove();
             }
+            const dt = new DataTransfer();
+            dt.items.add(logoFile);
+            document.getElementById('logo').files = dt.files;
             updateLogoPreview();
         }
     }
@@ -471,10 +592,24 @@
             isCropping = false;
         }
         originalFile = null;
+        currentImageType = null;
         if (rotatedImageUrl) {
             URL.revokeObjectURL(rotatedImageUrl);
             rotatedImageUrl = null;
         }
     }
+
+    // Tampilkan error dari backend jika ada
+    document.addEventListener('DOMContentLoaded', function() {
+        const errorMessage = "{{ $errors->first('nama') }}";
+        if (errorMessage) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Validasi Gagal',
+                text: errorMessage,
+                confirmButtonText: 'OK'
+            });
+        }
+    });
 </script>
 @endsection

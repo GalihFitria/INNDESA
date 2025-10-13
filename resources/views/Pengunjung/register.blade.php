@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,19 +7,21 @@
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <!-- ✅ Tambah FontAwesome biar icon mata muncul -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
   
     <style>
     body {
     display: flex;
-    justify-content: center;
-    align-items: center;   /* ✅ ini yang bikin pas di tengah */
-    height: 100vh;         /* ✅ penuh 1 layar */
+    justify-content: center;   /* center horizontal */
+    align-items: center;       /* center vertikal */
+    min-height: 100vh;         /* biar penuh */
     margin: 0;
     font-family: Arial, sans-serif;
     background-color: #f9f9f9;
-    overflow: hidden;      /* ✅ biar nggak ada scroll */
-    padding: 0;            /* ✅ buang padding biar nggak ngedorong ke bawah */
+    overflow-y: auto;          /* ✅ biar kalau SweetAlert muncul, scroll jalan */
 }
+
+
 
     /* Hilangkan icon mata bawaan browser */
         input[type="password"]::-ms-reveal,
@@ -32,22 +34,21 @@
         }
 
     .register-box {
-        background: white;
-        padding: 50px 80px;
-        border-radius: 20px;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-        width: 350px;
-        max-height: 60vh;
-        display: flex;
-        flex-direction: column;
-        overflow-y: auto;
-        overflow-x: hidden;
-    }
+    background: white;
+    padding: 50px 60px;
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    width: 350px;
+    height: 500px;              /* ✅ tingginya menyesuaikan isi */
+    max-height: 80vh;          /* ✅ biar nggak lebih tinggi dari layar */
+    overflow-y: auto;          /* ✅ scroll muncul kalau isi kepanjangan */
+}
 
     .register-box img {
-        width: 100px;
-        margin: 0 auto 20px;
-    }
+    width: 100px;
+    display: block;       /* ✅ biar bisa auto margin */
+    margin: 0 auto 20px;  /* ✅ auto = center horizontal */
+}
 
     .register-box h2 {
         color: #1ca1e0;
@@ -213,21 +214,58 @@
 
 }
 
+/* ✅ PRELOADER */
+        #preloader {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 255);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+        #preloader.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .logo-loading {
+            width: 120px;
+            animation: spin 2s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+
     </style>
 </head>
 <body>
+    <!-- ✅ PRELOADER -->
+    <div id="preloader">
+        <img src="{{ asset('images/logo.png') }}" alt="Logo Website" class="logo-loading">
+    </div>
+    <script>
+        window.addEventListener("load", function() {
+            let preloader = document.getElementById("preloader");
+            preloader.classList.add("fade-out");
+            setTimeout(() => preloader.style.display = "none", 500);
+        });
+    </script>
 
     <div class="register-box">
         <img src="{{ asset('images/logo.png') }}" alt="Logo">
         <h2>REGISTER</h2>
         <p>Silakan isi data dengan benar!</p>
 
-        {{-- Popup error --}}
+        <!-- {{-- Popup error --}}
         @if(session('error'))
         <script>
             alert("{{ session('error') }}");
         </script>
-        @endif
+        @endif -->
 
         <form method="POST" action="{{ route('register.store') }}">
             @csrf
@@ -242,17 +280,23 @@
                 </select>
             </div>
 
-            <div class="form-group">
-                <label>Nama Pengguna</label>
-                <input type="text" name="username" value="">
-            </div>
+           <div class="form-group">
+    <label>Nama Pengguna</label>
+    <input type="text" name="username" value="" required>
+    @error('username')
+        <small style="color:red;">{{ $message }}</small>
+    @enderror
+</div>
 
-            <div class="form-group password-wrapper">
+           <div class="form-group password-wrapper">
     <label>Kata Sandi</label>
     <div class="input-with-icon">
-        <input type="password" id="password" name="password">
+        <input type="password" id="password" name="password" required>
         <i class="fa-solid fa-eye toggle-password" onclick="togglePassword()" id="eyeIcon"></i>
     </div>
+    @error('password')
+        <small style="color:red;">{{ $message }}</small>
+    @enderror
 </div>
 
 
@@ -262,18 +306,18 @@
             </div>
 
             <div class="form-group">
-                <label>Instagram</label>
+                <label>Instagram (Opsional)</label>
                 <input type="text" name="ig" value="{{ old('ig') }}">
             </div>
 
             <div class="form-group">
-                <label>Facebook</label>
+                <label>Facebook  (Opsional)</label>
                 <input type="text" name="facebook" value="{{ old('facebook') }}">
             </div>
 
             <div class="form-group">
                 <label>Email</label>
-                <input type="email" name="email" value="{{ old('email') }}">
+                <input type="email" name="email" value="{{ old('email') }}" required>
             </div>
 
             <button type="submit" class="submit-btn">Sign Up</button>
@@ -301,6 +345,29 @@
         }
     }
     </script>
+
+<input type="hidden" id="email-warning-message" value="{{ session('email_warning') ?? '' }}">
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const emailWarning = document.getElementById('email-warning-message').value;
+
+    if (emailWarning) {
+        Swal.fire({
+            title: "⚠ Peringatan",
+            text: emailWarning,
+            icon: "warning",
+            showCancelButton: false,
+            confirmButtonColor: "#3085d6",
+            confirmButtonText: "OK"
+        });
+    }
+});
+</script>
+
+
+
 
 </body>
 </html>
