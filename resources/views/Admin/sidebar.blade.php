@@ -173,11 +173,14 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('beranda') }}"
-                            class="menu-item w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition-colors flex items-center">
-                            <i class="fas fa-sign-out-alt mr-3 text-red-600"></i>
-                            <span>Logout</span>
-                        </a>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit"
+                                class="menu-item w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition-colors flex items-center">
+                                <i class="fas fa-sign-out-alt mr-3 text-red-600"></i>
+                                <span>Logout</span>
+                            </button>
+                        </form>
                     </li>
                 </ul>
             </div>

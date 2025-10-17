@@ -302,7 +302,14 @@
 
             <div class="form-group">
                 <label>Nomor Telepon</label>
-                <input type="text" name="no_telp" value="{{ old('no_telp') }}" required>
+                <input type="text" 
+       name="no_telp" 
+       value="{{ old('no_telp') }}" 
+       required 
+       pattern="[0-9]+" 
+       title="Hanya boleh angka"
+       oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+
             </div>
 
             <div class="form-group">

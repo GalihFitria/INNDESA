@@ -31,6 +31,7 @@ use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\Update_KegiatanController;
 use App\Http\Controllers\TambahPerusahaanController;
 use App\Http\Controllers\Admin_Kelompok\EditLogoBackgroundController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -70,6 +71,7 @@ Route::resource('update_kegiatan', Update_KegiatanController::class);
 Route::resource('detail_produk', DetailProdukController::class);
 Route::resource('kelompok', KelompokController::class);
 Route::resource('kontak', KontakController::class);
+Route::resource('profile', ProfileController::class);
 
 
 //SUPER ADMIN

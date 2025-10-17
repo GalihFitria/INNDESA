@@ -88,40 +88,75 @@
 <input type="hidden" id="success-message" value="{{ session('success') ?? '' }}">
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<style>
+/* 🔹 Responsive SweetAlert2 khusus untuk mobile */
+@media (max-width: 640px) {
+  .swal2-popup {
+    width: 0% !important;      /* biar popup nggak penuh banget */
+    font-size: 0.85rem !important; /* teks sedikit lebih kecil */
+    padding: 1rem !important;   /* ruang dalam popup lebih sempit */
+  }
+
+  .swal2-title {
+    font-size: 1.1rem !important; /* judul lebih kecil */
+  }
+
+  .swal2-html-container {
+    font-size: 0.9rem !important; /* isi teks juga disesuaikan */
+  }
+
+  .swal2-confirm, .swal2-cancel {
+    font-size: 0.8rem !important; /* tombol lebih kecil */
+    padding: 0.4rem 0.8rem !important;
+  }
+}
+</style>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Success message handling
-        const successMessage = document.getElementById('success-message').value;
-        if (successMessage) {
-            Swal.fire({
-                icon: 'success',
-                title: 'Sukses!',
-                text: successMessage,
-                timer: 2000,
-                showConfirmButton: true,
-                confirmButtonText: 'OK'
-            });
-        }
+    // ✅ Success message handling
+    const successMessage = document.getElementById('success-message').value;
+    if (successMessage) {
+        Swal.fire({
+            icon: 'success',
+            title: 'Sukses!',
+            text: successMessage,
+            timer: 2000,
+            showConfirmButton: true,
+            confirmButtonText: 'OK'
+        });
+    }
 
-        // Delete confirmation
-        document.querySelectorAll('.delete-form').forEach(function(form) {
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                Swal.fire({
-                    title: 'Yakin ingin menghapus user?',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#d33',
-                    cancelButtonColor: '#3085d6',
-                    confirmButtonText: 'Hapus',
-                    cancelButtonText: 'Batal'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        form.submit();
-                    }
-                });
+    // 🚫 Tambahan baru → tampilkan pesan error dari controller
+    const errorMessage = "{{ session('error') ?? '' }}";
+    if (errorMessage) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal!',
+            text: errorMessage,
+            confirmButtonText: 'OK'
+        });
+    }
+
+    // 🔹 Delete confirmation
+    document.querySelectorAll('.delete-form').forEach(function(form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            Swal.fire({
+                title: 'Yakin ingin menghapus user?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Hapus',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
             });
         });
+    });
 
         // Pagination + Search
         let rowsPerPage = parseInt(document.getElementById('rowsPerPage').value);

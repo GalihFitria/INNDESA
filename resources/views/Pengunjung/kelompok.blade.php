@@ -1733,7 +1733,7 @@
                     @if($produk->isNotEmpty())
                     <div id="produk-carousel" class="product-grid-mobile carousel grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4">
                         @foreach ($produk as $item)
-                        <a href="{{ route('detail_produk.show', $item->id_produk) }}?from=kelompok"
+                        <a href="{{ url('detail_produk/' . \App\Http\Controllers\DetailProdukController::createHashUrl($item->id_produk, $item->nama)) }}?from=kelompok"
                             class="block no-underline produk-item"
                             data-nama="{{ strtolower($item->nama) }}">
                             <div class="product-card-mobile border rounded-lg shadow-md p-2 md:p-3 w-full min-h-[240px] md:min-h-[280px] mx-auto cursor-pointer">
@@ -1788,7 +1788,7 @@
                     <div id="kegiatan-carousel"
                         class="kegiatan-grid-mobile grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 items-stretch">
                         @foreach ($kegiatan as $item)
-                        <a href="{{ route('update_kegiatan.show', $item->id_kegiatan) }}?from=kelompok"
+                        <a href="{{ url('update_kegiatan/' . \App\Http\Controllers\Update_KegiatanController::createHashUrl($item->id_kegiatan, $item->judul)) }}?from=kelompok"
                             class="block no-underline kegiatan-item"
                             data-judul="{{ strtolower($item->judul) }}">
                             <div class="kegiatan-card-mobile bg-white text-black border rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow min-h-[280px] md:min-h-[320px] h-full cursor-pointer flex flex-col">
@@ -1819,7 +1819,7 @@
                                     </h3>
                                     <div>
                                         <p class="text-xs opacity-75 truncate">
-                                            {{ \Carbon\Carbon::parse($item->tanggal)->format('d F Y') }}
+                                            {{ \Carbon\Carbon::parse($item->tanggal)->locale('id')->translatedFormat('d F Y') }}
                                         </p>
                                         {{-- Tambahin deskripsi --}}
                                         <p class="text-xs md:text-sm text-gray-600 mt-2 line-clamp-3 md:line-clamp-2">
@@ -2125,6 +2125,7 @@
             }
 
             // Fungsi pencarian
+            // Ganti fungsi searchItems dengan versi yang diperbaiki
             function searchItems(section, searchInputId, itemClass, dataAttr, noResultsId) {
                 const searchInput = document.getElementById(searchInputId);
                 const noResults = document.getElementById(noResultsId);
@@ -2140,12 +2141,19 @@
                         const items = document.querySelectorAll(`.${itemClass}`);
                         let hasResults = false;
 
-                        // Simpan state pagination sebelum pencarian
-                        if (!searchTerm && searchInput.dataset.searchActive === 'true') {
+                        // Jika input kosong, sembunyikan pesan "tidak ada hasil" dan tampilkan semua item
+                        if (!searchTerm) {
+                            noResults.classList.add('hidden');
+                            items.forEach(item => {
+                                item.style.display = '';
+                                item.classList.remove('hidden');
+                            });
+
                             // Kembalikan ke state pagination sebelum pencarian
                             const currentPage = parseInt(searchInput.dataset.currentPage || '0');
                             showSlide(section, currentPage);
                             searchInput.dataset.searchActive = 'false';
+
                             // Tampilkan kembali kontrol pagination
                             const paginationContainer = document.querySelector(`#${section}-pagination`).parentElement;
                             if (paginationContainer) {
@@ -2166,7 +2174,7 @@
                         });
 
                         // Tampilkan pesan jika tidak ada hasil
-                        noResults.classList.toggle('hidden', hasResults || searchTerm === '');
+                        noResults.classList.toggle('hidden', hasResults);
 
                         // Handle pagination
                         if (searchTerm) {
@@ -2180,14 +2188,6 @@
                             if (paginationContainer) {
                                 paginationContainer.style.display = 'none';
                             }
-                        } else {
-                            // Reset ke pagination normal
-                            showSlide(section, 0);
-                            // Tampilkan kembali kontrol pagination
-                            const paginationContainer = document.querySelector(`#${section}-pagination`).parentElement;
-                            if (paginationContainer) {
-                                paginationContainer.style.display = 'flex';
-                            }
                         }
                     }, 300);
 
@@ -2200,22 +2200,36 @@
                 // Reset pencarian produk
                 const searchProduk = document.getElementById('searchProduk');
                 const searchProdukDesktop = document.getElementById('searchProdukDesktop');
+                const produkNoResults = document.getElementById('produk-no-results');
+
                 if (searchProduk) {
                     searchProduk.value = '';
                     searchProduk.dataset.searchActive = 'false';
-                    searchProduk.dispatchEvent(new Event('input'));
+                    // Sembunyikan pesan "tidak ada hasil" untuk produk
+                    if (produkNoResults) {
+                        produkNoResults.classList.add('hidden');
+                    }
                 }
                 if (searchProdukDesktop) {
                     searchProdukDesktop.value = '';
                     searchProdukDesktop.dataset.searchActive = 'false';
-                    searchProdukDesktop.dispatchEvent(new Event('input'));
+                    // Sembunyikan pesan "tidak ada hasil" untuk produk
+                    if (produkNoResults) {
+                        produkNoResults.classList.add('hidden');
+                    }
                 }
+
                 // Reset pencarian kegiatan
                 const searchKegiatan = document.getElementById('searchKegiatan');
+                const kegiatanNoResults = document.getElementById('kegiatan-no-results');
+
                 if (searchKegiatan) {
                     searchKegiatan.value = '';
                     searchKegiatan.dataset.searchActive = 'false';
-                    searchKegiatan.dispatchEvent(new Event('input'));
+                    // Sembunyikan pesan "tidak ada hasil" untuk kegiatan
+                    if (kegiatanNoResults) {
+                        kegiatanNoResults.classList.add('hidden');
+                    }
                 }
             }
 

@@ -36,61 +36,110 @@ class InformasiUserController extends Controller
 
  // Simpan user baru
 public function store(Request $request)
-{
-    $request->validate([
-        'username' => 'required',
-        'password' => [
-            'required',
-            'string',
-            'min:8',
-            'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/',
-        ],
-        'role' => 'required',
-    ], [
-        'password.min'   => 'Kata sandi wajib minimal 8 karakter.',
-        'password.regex' => 'Kata sandi harus mengandung huruf besar, huruf kecil, angka, dan karakter unik (misal: * $ @ # !).',
-    ]);
+    {
+        $validator = Validator::make($request->all(), [
+            'id_kelompok' => 'required|exists:kelompok,id_kelompok',
+            'id_user'     => 'required|exists:user_admin,id_user',
+            'username'    => 'required|string|max:255',
+            'password'    => [
+                'required',
+                'string',
+                'min:8',
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/',
+            ],
+            'no_telp'  => ['required', 'regex:/^[0-9]+$/', 'max:20'],
 
-    UserAdmin::create([
-        'username' => $request->username,
-        'password' => Hash::make($request->password),
-        'role'     => $request->role,
-    ]);
+            'ig'       => 'nullable|string|max:255',
+            'facebook' => 'nullable|string|max:255',
+            'email'    => 'required|email|max:255|unique:informasi_user,email',
+        ], [
+            'email.unique' => 'Email sudah terdaftar, silakan gunakan akun email yang lain.',
+        ]);
 
-    return redirect()->route('Admin.users.index')
-        ->with('success', 'User berhasil ditambahkan!');
-}
+        // Kalau validasi gagal
+        if ($validator->fails()) {
+            // Kalau error karena email sudah terdaftar → kosongkan field email
+            if ($validator->errors()->has('email')) {
+                $oldInput = $request->except('email');
+                $oldInput['email'] = ''; // kosongkan email
+                return back()
+                    ->withErrors($validator)
+                    ->withInput($oldInput);
+            }
+
+            return back()->withErrors($validator)->withInput();
+        }
+
+        UserAdmin::create([
+            'username' => $request->username,
+            'password' => Hash::make($request->password),
+            'role'     => $request->role,
+        ]);
+
+        return redirect()->route('Admin.users.index')
+            ->with('success', 'User berhasil ditambahkan!');
+    }
 
 
 // Update user
-public function update(Request $request, $id)
-{
-    $request->validate([
-        'username' => 'required|string|max:255',
-        'password' => [
-            'nullable',
-            'string',
-            'min:8',
-            'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/',
-        ],
-        'role' => 'required|string',
-    ], [
-        'password.min'   => 'Kata sandi wajib minimal 8 karakter.',
-        'password.regex' => 'Kata sandi harus mengandung huruf besar, huruf kecil, angka, dan karakter unik (misal: * $ @ # !).',
-    ]);
+ public function update(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'id_kelompok' => 'required|exists:kelompok,id_kelompok',
+            'username'    => 'required|string|max:255',
+            'password'    => [
+                'nullable',
+                'string',
+                'min:8',
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/',
+            ],
+           'no_telp'  => ['required', 'regex:/^[0-9]+$/', 'max:20'],
 
-    $user = UserAdmin::findOrFail($id);
-    $user->username = $request->username;
-    if ($request->filled('password')) {
-        $user->password = Hash::make($request->password);
+            'ig'       => 'nullable|string|max:255',
+            'facebook' => 'nullable|string|max:255',
+            'email'    => [
+                'required',
+                'email',
+                'max:255',
+                Rule::unique('admin_kelompok', 'email')->ignore($id, 'id_admin'),
+            ],
+        ], [
+            'email.unique' => 'Email sudah terdaftar, silakan gunakan akun email yang lain.',
+        ]);
+
+        if ($validator->fails()) {
+            // Kalau error karena email sudah terdaftar → kosongkan field email
+            if ($validator->errors()->has('email')) {
+                $oldInput = $request->except('email');
+                $oldInput['email'] = ''; // kosongkan email
+                return back()
+                    ->withErrors($validator)
+                    ->withInput($oldInput);
+            }
+
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $user = InformasiUser::findOrFail($id);
+
+        // Update semua data
+        $user->id_kelompok = $request->id_kelompok;
+        $user->username = $request->username;
+        $user->no_telp = $request->no_telp;
+        $user->ig = $request->ig;
+        $user->facebook = $request->facebook;
+        $user->email = $request->email;
+
+        // Hanya update password jika diisi
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
+        }
+
+        $user->save();
+
+        return redirect()->route('Admin.informasi_user.index')
+                         ->with('success', 'Informasi user berhasil diperbarui!');
     }
-    $user->role = $request->role;
-    $user->save();
-
-    return redirect()->route('Admin.users.index')
-        ->with('success', 'User berhasil diperbarui.');
-}
-
 
 public function edit($id)
 {

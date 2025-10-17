@@ -3,7 +3,6 @@
 @section('title', 'INNDESA - Kelola Kelompok')
 <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
 
-
 @section('content')
 <h2 class="text-center text-4xl font-bold text-gray-800 mb-6">.::Kelola Kelompok::.</h2>
 
@@ -23,7 +22,8 @@
                 </select>
             </div>
         </div>
-        <form action="{{ route('Admin.kelompok.index') }}" method="GET" class="w-1/3">
+        <!-- Ubah form untuk mencegah submit default -->
+        <form id="searchForm" action="{{ route('Admin.kelompok.index') }}" method="GET" class="w-1/3">
             <input type="text" name="search" id="searchInput" placeholder="Cari ..." value="{{ request('search') }}" class="w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
         </form>
     </div>
@@ -162,7 +162,6 @@
         });
     });
 
-
     let rowsPerPage = parseInt(document.getElementById('rowsPerPage').value);
     let currentPage = 1;
     let filteredRows = [];
@@ -205,6 +204,23 @@
         noSearchResults.classList.toggle('hidden', totalRows > 0 || rows.length === 0);
     }
 
+    // Perbaikan utama untuk masalah pencarian
+    // 1. Mencegah form submit saat tombol Enter ditekan
+    document.getElementById('searchForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        return false;
+    });
+
+    // 2. Menangani event keydown khusus untuk tombol Enter
+    document.getElementById('searchInput').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault(); // Mencegah submit form
+            e.stopPropagation(); // Menghentikan propagasi event
+            return false; // Memastikan event tidak berlanjut
+        }
+    });
+
+    // 3. Event listener untuk pencarian real-time saat mengetik
     document.getElementById('searchInput').addEventListener('input', function() {
         currentPage = 1;
         updateTable();

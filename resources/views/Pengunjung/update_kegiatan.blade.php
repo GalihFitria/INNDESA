@@ -201,6 +201,80 @@
         body.loaded .navbar-sticky {
             position: sticky;
         }
+
+        /* Share buttons styling - PERUBAHAN SESUAI CONTOH */
+        .share-section {
+            margin: 15px 0;
+            padding: 10px 0;
+        }
+
+        .share-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 1rem;
+            color: #333;
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .share-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 4px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .share-button:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+
+        .share-facebook {
+            background-color: #1877f2;
+        }
+
+        .share-instagram {
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+        }
+
+        .share-whatsapp {
+            background-color: #25d366;
+        }
+
+        .share-telegram {
+            background-color: #0088cc;
+        }
+
+        .share-link {
+            background-color: #6c757d;
+        }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            z-index: 1001;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .toast.show {
+            opacity: 1;
+        }
     </style>
 </head>
 
@@ -238,6 +312,28 @@
                         </svg>
                         {{ \Carbon\Carbon::parse($kegiatan->tanggal)->locale('id')->translatedFormat('l, d F Y') }}
                     </p>
+
+                    <!-- Bagian Share Buttons-->
+                    <div class="share-section">
+                        <div class="share-title">Bagikan:</div>
+                        <div class="share-buttons">
+                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url()->current()) }}" class="share-button share-facebook" title="Bagikan ke Facebook">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="https://www.instagram.com/" class="share-button share-instagram" title="Bagikan ke Instagram">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            <a href="https://api.whatsapp.com/send?text={{ urlencode(url()->current()) }}" class="share-button share-whatsapp" title="Bagikan ke WhatsApp">
+                                <i class="fab fa-whatsapp"></i>
+                            </a>
+                            <a href="https://t.me/share/url?url={{ urlencode(url()->current()) }}" class="share-button share-telegram" title="Bagikan ke Telegram">
+                                <i class="fab fa-telegram-plane"></i>
+                            </a>
+                            <button id="copyLinkBtn" class="share-button share-link" title="Salin Tautan">
+                                <i class="fas fa-link"></i>
+                            </button>
+                        </div>
+                    </div>
 
                     <div class="flex flex-wrap -mx-2 lg:-mx-4">
                         <div class="w-full px-0">
@@ -381,10 +477,9 @@
                             <div class="kegiatan-content-mobile flex-1">
                                 <h3 class="kegiatan-title text-sm sm:text-base lg:text-lg font-bold text-blue-600 mb-2 leading-tight">{{ $item->judul }}</h3>
                                 <p class="text-xs sm:text-sm text-gray-500 mb-2">
-                                    {{ \Carbon\Carbon::parse($item->tanggal)->format('d F Y') }}
+                                    {{ \Carbon\Carbon::parse($item->tanggal)->locale('id')->translatedFormat('d F Y') }}
                                 </p>
-                                <a href="{{ route('update_kegiatan.show', $item->id_kegiatan) }}"
-                                    class="text-blue-600 hover:underline text-xs sm:text-sm font-medium">Baca Selengkapnya</a>
+                                <a href="{{ url('update_kegiatan/' . \App\Http\Controllers\Update_KegiatanController::createHashUrl($item->id_kegiatan, $item->judul)) }}" class="text-blue-600 hover:underline text-xs sm:text-sm font-medium">Baca Selengkapnya</a>
                             </div>
                         </div>
                         @endforeach
@@ -412,8 +507,8 @@
                             data-id="{{ $item->id_kegiatan }}"
                             data-judul="{{ $item->judul }}"
                             data-foto="{{ $item->foto ? asset('storage/' . $item->foto) : asset('images/placeholder.jpg') }}"
-                            data-tanggal="{{ \Carbon\Carbon::parse($item->tanggal)->format('d F Y') }}"
-                            data-url="{{ route('update_kegiatan.show', $item->id_kegiatan) }}">
+                            data-tanggal="{{ \Carbon\Carbon::parse($item->tanggal)->locale('id')->translatedFormat('d F Y') }}"
+                            data-url="{{ url('update_kegiatan/' . \App\Http\Controllers\Update_KegiatanController::createHashUrl($item->id_kegiatan, $item->judul)) }}">
                         </div>
                         @endforeach
                     </div>
@@ -434,6 +529,9 @@
             <path d="M7 14l5-5 5 5z" />
         </svg>
     </a>
+
+    <!-- Toast notification -->
+    <div id="toast" class="toast">Tautan berhasil disalin!</div>
 
     <script>
         // Fungsi untuk tombol kembali dengan fallback ke Beranda (ganti '/' dengan route Beranda kalau beda)
@@ -522,6 +620,30 @@
 
             // Initial display
             displayKegiatan(currentPage);
+
+            // Copy link functionality
+            const copyLinkBtn = document.getElementById('copyLinkBtn');
+            const toast = document.getElementById('toast');
+
+            copyLinkBtn.addEventListener('click', function() {
+                const url = window.location.href;
+
+                // Create a temporary input element to copy the URL
+                const tempInput = document.createElement('input');
+                tempInput.value = url;
+                document.body.appendChild(tempInput);
+                tempInput.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempInput);
+
+                // Show toast notification
+                toast.classList.add('show');
+
+                // Hide toast after 3 seconds
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3000);
+            });
         });
 
         // KEMBALI KE ATAS

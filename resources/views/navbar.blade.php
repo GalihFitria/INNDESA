@@ -14,6 +14,8 @@
         /* Custom styles for mobile menu */
         .mobile-menu {
             transition: transform 0.3s ease-in-out;
+            z-index: 60;
+            /* Tingkatkan z-index dari sidebar */
         }
 
         .mobile-menu-hidden {
@@ -182,6 +184,12 @@
                 padding: 0.75rem 1rem;
                 font-size: 1rem;
                 line-height: 1.5rem;
+                /* PERBAIKAN: Menambahkan multi-line support untuk mobile */
+                white-space: normal;
+                word-wrap: break-word;
+                hyphens: auto;
+                display: block;
+                max-width: 100%;
             }
         }
 
@@ -224,18 +232,13 @@
                 padding: 0.5rem 1rem;
                 font-size: 0.875rem;
                 line-height: 1.25rem;
+                /* PERBAIKAN: Menambahkan multi-line support untuk desktop */
                 white-space: normal;
-                /* Izinkan wrapping untuk teks dengan spasi */
                 word-wrap: break-word;
-                /* Pecah kata jika perlu */
-            }
-
-            /* Khusus untuk teks tanpa spasi (panjang) */
-            .dropdown-sub-item:has(> span:not(:empty)) {
-                white-space: nowrap;
-                /* Teks tanpa spasi tetap satu baris */
-                overflow: visible;
-                /* Tampilkan overflow */
+                hyphens: auto;
+                display: block;
+                max-width: 100%;
+                min-height: auto;
             }
         }
 
@@ -443,8 +446,46 @@
 
             /* PERBAIKAN: Mengurangi jarak antara nama kelompok, avatar, dan menu navbar */
             .kelompok-avatar-container {
-                margin-left: 0.75rem;
+                margin-left: 0.25rem;
                 /* Mengurangi jarak lebih kecil lagi */
+            }
+
+            /* PERBAIKAN UTAMA: CSS untuk desktop - meningkatkan ruang untuk teks kelompok */
+            .kelompok-info-wrapper {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-end;
+                justify-content: center;
+                min-width: 0;
+                flex: 1;
+                max-width: 500px;
+                /* Meningkatkan lebar maksimal */
+            }
+
+            .kelompok-name {
+                white-space: normal;
+                word-wrap: break-word;
+                font-size: 0.875rem;
+                /* Ukuran font yang lebih kecil */
+                line-height: 1.3;
+                /* Jarak antar baris yang lebih baik */
+                text-align: right;
+                max-width: 100%;
+                font-weight: 600;
+                /* Menebalkan font agar lebih mudah dibaca */
+            }
+
+            .kelompok-kategori {
+                white-space: normal;
+                word-wrap: break-word;
+                font-size: 0.75rem;
+                /* Ukuran font yang lebih kecil */
+                line-height: 1.3;
+                /* Jarak antar baris yang lebih baik */
+                text-align: right;
+                max-width: 100%;
+                margin-top: 2px;
+                /* Jarak kecil antara nama dan kategori */
             }
         }
 
@@ -553,16 +594,26 @@
             .nav-right-container {
                 display: flex;
                 align-items: center;
-                gap: 0.25rem; /* Mengurangi jarak antar elemen */
-                margin-right: 0.25rem; /* Mengurangi jarak dari tepi kanan */
+                gap: 0.25rem;
+                /* Mengurangi jarak antar elemen */
+                margin-right: 0.25rem;
+                /* Mengurangi jarak dari tepi kanan */
             }
 
             .hamburger-button {
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                width: 36px; /* Mengurangi ukuran tombol hamburger */
-                height: 36px; /* Mengurangi ukuran tombol hamburger */
+                width: 36px;
+                /* Mengurangi ukuran tombol hamburger */
+                height: 36px;
+                /* Mengurangi ukuran tombol hamburger */
+                z-index: 50 !important;
+                /* PERBAIKAN: Kurangi z-index hamburger button */
+                position: relative !important;
+                pointer-events: auto !important;
+                /* Pastikan bisa diklik */
+                cursor: pointer !important;
             }
 
             /* Mengurangi ukuran avatar di mobile */
@@ -574,6 +625,53 @@
             /* Menghilangkan margin pada tombol avatar di mobile */
             #userMenuButton {
                 margin-right: 0 !important;
+            }
+
+            /* PERBAIKAN: Tambahkan overlay untuk mobile menu */
+            .mobile-menu-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5);
+                z-index: 55;
+                /* Di bawah sidebar (z-index: 60) tapi di atas navbar (z-index: 50) */
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.3s ease, visibility 0.3s ease;
+            }
+
+            .mobile-menu-overlay.active {
+                opacity: 1;
+                visibility: visible;
+            }
+        }
+
+        /* PERBAIKAN: Multi-line support untuk dropdown items */
+        .dropdown-sub-item {
+            display: block !important;
+            white-space: normal !important;
+            word-wrap: break-word !important;
+            hyphens: auto !important;
+            overflow: visible !important;
+            text-overflow: unset !important;
+            line-height: 1.4 !important;
+            min-height: auto !important;
+            padding-top: 0.5rem !important;
+            padding-bottom: 0.5rem !important;
+        }
+
+        /* PERBAIKAN: Lebar maksimum dropdown container */
+        @media (min-width: 768px) {
+            .dropdown-container {
+                max-width: 320px !important;
+                width: auto !important;
+            }
+
+            .dropdown-sub-container {
+                max-width: 300px !important;
+                width: auto !important;
             }
         }
     </style>
@@ -633,9 +731,9 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                                 </svg>
                             </button>
-                            <div id="kelompokDropdown" class="absolute left-0 mt-2 w-48 dropdown-container hidden z-50"></div>
+                            <!-- PERBAIKAN: Mengubah lebar dropdown container -->
+                            <div id="kelompokDropdown" class="absolute left-0 mt-2 w-64 dropdown-container hidden z-50"></div>
                         </div>
-
                         <a href="{{ route('kontak.index') }}"
                             rel="noopener noreferrer"
                             class="menu-item flex items-center gap-1 text-gray-800 hover:text-sky-600 transition-colors duration-150"
@@ -645,7 +743,6 @@
                             </svg>
                             <span>Kontak</span>
                         </a>
-
                     </div>
 
                     <div class="flex justify-center space-x-8 text-gray-800 mt-2">
@@ -658,9 +755,18 @@
 
                         <a href="{{ route('publikasi.index') }}" class="menu-item flex items-center gap-1 text-gray-800 hover:text-sky-600 transition-colors duration-150" data-menu="publikasi">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4-H7V8z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
                             </svg>
                             <span>Publikasi</span>
+                        </a>
+
+                        <a href="{{ route('profile.index') }}?from=profil"
+                            class="menu-item flex items-center gap-1 text-gray-800 hover:text-sky-600 transition-colors duration-150"
+                            data-menu="profil">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                            </svg>
+                            <span>Profile</span>
                         </a>
                     </div>
                 </div>
@@ -698,17 +804,17 @@
                     <!-- Avatar & Dropdown dengan profil kelompok -->
                     <div class="flex items-center">
                         @if($kelompok)
-                        <div class="mr-5 md:mr-5 text-right flex flex-col justify-center items-end leading-snug hidden md:flex kelompok-info-container">
-                            <div class="text-sm md:text-base font-semibold text-gray-800 kelompok-name" title="{{ $kelompok->nama }}">
+                        <div class="kelompok-info-wrapper mr-3 hidden md:flex">
+                            <div class="kelompok-name" title="{{ $kelompok->nama }}">
                                 {{ $kelompok->nama }}
                             </div>
-                            <div class="text-[11px] md:text-sm text-gray-500 kelompok-kategori" title="{{ $kategori?->nama ?? 'Kategori Tidak Ditemukan' }}">
+                            <div class="kelompok-kategori" title="{{ $kategori?->nama ?? 'Kategori Tidak Ditemukan' }}">
                                 {{ $kategori?->nama ?? 'Kategori Tidak Ditemukan' }}
                             </div>
                         </div>
                         @endif
 
-                        <div class="relative">
+                        <div class="relative kelompok-avatar-container">
                             <button id="userMenuButton" onclick="toggleUserMenu()"
                                 class="flex items-center focus:outline-none">
                                 <svg class="w-10 h-10 text-gray-400 rounded-full bg-gray-200 p-2"
@@ -753,8 +859,11 @@
             </div>
         </div>
 
+        <!-- PERBAIKAN: Tambahkan overlay untuk mobile menu -->
+        <div id="mobile-menu-overlay" class="mobile-menu-overlay"></div>
+
         <!-- Mobile Menu -->
-        <div id="mobile-menu" class="md:hidden fixed top-0 right-0 h-full w-64 bg-white shadow-lg mobile-menu mobile-menu-hidden z-50">
+        <div id="mobile-menu" class="md:hidden fixed top-0 right-0 h-full w-64 bg-white shadow-lg mobile-menu mobile-menu-hidden z-60">
             <div class="flex flex-col p-4">
                 <button id="mobile-menu-close" class="self-end mb-4 focus:outline-none">
                     <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -815,11 +924,24 @@
                     </svg>
                     <span>Publikasi</span>
                 </a>
+                <!-- Menu Profil yang ditambahkan -->
+                <a href="{{ route('profile.index') }}?from=profil"
+                    class="mobile-menu-item menu-item flex items-center gap-2 text-gray-800 hover:text-sky-600 transition-colors duration-150"
+                    data-menu="profil">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                    </svg>
+                    <span>Profile</span>
+                </a>
             </div>
         </div>
     </nav>
 
     <script>
+        // PERBAIKAN UTAMA: TAMBAHKAN VARIABEL UNTUK MENYIMPAN STATUS MENU
+        let currentActiveMenu = 'beranda';
+        let previousActiveMenu = 'beranda'; // Menyimpan menu aktif sebelum dropdown dibuka
+
         function toggleUserMenu() {
             document.getElementById('userMenu').classList.toggle('hidden');
         }
@@ -938,11 +1060,25 @@
                     link.className = `dropdown-sub-item block text-sky-800 hover:bg-sky-200 transition-colors duration-150`;
                     link.setAttribute('data-parent', categoryId);
                     link.setAttribute('data-submenu', kelompok.id_kelompok);
-                    link.textContent = kelompok.nama;
+
+                    // PERBAIKAN: Membuat nama kelompok multi-line
+                    const kelompokNameSpan = document.createElement('span');
+                    kelompokNameSpan.textContent = kelompok.nama;
+                    kelompokNameSpan.style.display = 'block';
+                    kelompokNameSpan.style.whiteSpace = 'normal';
+                    kelompokNameSpan.style.wordWrap = 'break-word';
+                    kelompokNameSpan.style.hyphens = 'auto';
+                    kelompokNameSpan.style.lineHeight = '1.4';
+                    link.appendChild(kelompokNameSpan);
 
                     // Tambahkan indikator visual untuk kelompok sendiri (opsional)
                     if (loggedInKelompokId && String(kelompok.id_kelompok) === String(loggedInKelompokId)) {
-                        link.innerHTML += ' <span class="text-xs text-sky-600 ml-1">(Kelompok Anda)</span>';
+                        const indicatorSpan = document.createElement('span');
+                        indicatorSpan.textContent = ' (Kelompok Anda)';
+                        indicatorSpan.className = 'text-xs text-sky-600';
+                        indicatorSpan.style.display = 'block';
+                        indicatorSpan.style.marginTop = '2px';
+                        link.appendChild(indicatorSpan);
                     }
 
                     subDropdown.appendChild(link);
@@ -999,16 +1135,23 @@
             } else if (path.includes('kelompok') || path.includes('Admin_Kelompok')) {
                 // Tambahkan pengecekan untuk Admin_Kelompok
                 return 'kelompok';
+            } else if (path.includes('profil')) {
+                // Tambahkan pengecekan untuk profil
+                return 'profil';
             }
 
             return 'beranda';
         }
 
-        let currentActiveMenu = determineActiveMenu();
-
+        // PERBAIKAN UTAMA: Perbarui fungsi setActiveMenu
         function setActiveMenu(menuId) {
             // Simpan menu aktif ke localStorage
             localStorage.setItem('lastActiveMenu', menuId);
+
+            // PERBAIKAN: Hanya update previousActiveMenu jika bukan menu dropdown
+            if (!['kelompok', 'pt', 'kwt', 'pertanian'].includes(menuId)) {
+                previousActiveMenu = menuId;
+            }
 
             document.querySelectorAll('.menu-item').forEach(item => {
                 item.classList.remove('text-sky-600', 'active');
@@ -1029,7 +1172,7 @@
                 currentActiveMenu = menuId;
             }
 
-            if (!['kelompok', 'pt', 'kwt', 'pertanian'].includes(menuId)) {
+            if (!['kelompok', 'pt', 'kwt', 'pertanian', 'profil'].includes(menuId)) {
                 closeAllDropdowns();
             }
         }
@@ -1066,6 +1209,7 @@
             });
         }
 
+        // PERBAIKAN UTAMA: Perbarui fungsi toggleDropdown
         function toggleDropdown(id, isMobile = false) {
             const el = document.getElementById(id);
             const isCurrentlyHidden = el.classList.contains('hidden');
@@ -1087,10 +1231,20 @@
                 });
 
                 if (id === (isMobile ? 'mobile-kelompokDropdown' : 'kelompokDropdown')) {
-                    setActiveMenu('kelompok');
+                    if (isCurrentlyHidden) { // Jika membuka dropdown
+                        previousActiveMenu = currentActiveMenu; // Simpan menu aktif sebelumnya
+                        setActiveMenu('kelompok');
+                    } else { // Jika menutup dropdown
+                        setActiveMenu(previousActiveMenu); // Kembalikan ke menu sebelumnya
+                    }
                     rotateArrow(isMobile ? 'mobile-kelompokArrow' : 'kelompokArrow', isCurrentlyHidden);
                 } else if (id === (isMobile ? 'mobile-perusahaanDropdown' : 'perusahaanDropdown')) {
-                    setActiveMenu('pt');
+                    if (isCurrentlyHidden) { // Jika membuka dropdown
+                        previousActiveMenu = currentActiveMenu; // Simpan menu aktif sebelumnya
+                        setActiveMenu('pt');
+                    } else { // Jika menutup dropdown
+                        setActiveMenu(previousActiveMenu); // Kembalikan ke menu sebelumnya
+                    }
                     rotateArrow(isMobile ? 'mobile-perusahaanArrow' : 'perusahaanArrow', isCurrentlyHidden);
                 }
             }
@@ -1109,10 +1263,20 @@
                 });
 
                 if (id === 'kwtDropdown') {
-                    setActiveMenu('kwt');
+                    if (isCurrentlyHidden) {
+                        previousActiveMenu = currentActiveMenu;
+                        setActiveMenu('kwt');
+                    } else {
+                        setActiveMenu(previousActiveMenu);
+                    }
                     rotateArrow('kwtArrow', isCurrentlyHidden);
                 } else if (id === 'pertanianDropdown') {
-                    setActiveMenu('pertanian');
+                    if (isCurrentlyHidden) {
+                        previousActiveMenu = currentActiveMenu;
+                        setActiveMenu('pertanian');
+                    } else {
+                        setActiveMenu(previousActiveMenu);
+                    }
                     rotateArrow('pertanianArrow', isCurrentlyHidden);
                 }
             }
@@ -1121,14 +1285,24 @@
 
         function toggleMobileMenu() {
             const mobileMenu = document.getElementById('mobile-menu');
+            const overlay = document.getElementById('mobile-menu-overlay');
+
             mobileMenu.classList.toggle('mobile-menu-hidden');
             mobileMenu.classList.toggle('mobile-menu-open');
+            overlay.classList.toggle('active');
+
+            console.log('Mobile menu toggled:', !mobileMenu.classList.contains('mobile-menu-hidden'));
         }
 
         function closeMobileMenu() {
             const mobileMenu = document.getElementById('mobile-menu');
+            const overlay = document.getElementById('mobile-menu-overlay');
+
             mobileMenu.classList.add('mobile-menu-hidden');
             mobileMenu.classList.remove('mobile-menu-open');
+            overlay.classList.remove('active');
+
+            console.log('Mobile menu closed');
             closeAllDropdowns(true);
         }
 
@@ -1136,12 +1310,18 @@
             toggleDropdown(id, true);
         }
 
+        // PERBAIKAN UTAMA: Perbarui event listener untuk klik di luar dropdown
         window.addEventListener('click', function(e) {
             const dropdowns = ['kelompokDropdown', 'perusahaanDropdown', 'kwtDropdown', 'pertanianDropdown'];
+            let anyDropdownClosed = false;
+
             dropdowns.forEach(id => {
                 const el = document.getElementById(id);
                 const toggleButton = document.querySelector(`[onclick="toggleDropdown('${id}')"]`);
                 if (el && !el.contains(e.target) && toggleButton && !toggleButton.contains(e.target)) {
+                    if (!el.classList.contains('hidden')) {
+                        anyDropdownClosed = true; // Tandai bahwa sebuah dropdown ditutup
+                    }
                     el.classList.add('hidden');
                     if (id === 'kelompokDropdown') {
                         rotateArrow('kelompokArrow', false);
@@ -1154,6 +1334,11 @@
                     }
                 }
             });
+
+            // PERBAIKAN: Jika ada dropdown yang ditutup, kembalikan status menu
+            if (anyDropdownClosed) {
+                setActiveMenu(previousActiveMenu);
+            }
         });
 
         document.querySelectorAll('.menu-item').forEach(item => {
@@ -1190,12 +1375,55 @@
             });
         });
 
-        document.getElementById('mobile-menu-button').addEventListener('click', toggleMobileMenu);
-        document.getElementById('mobile-menu-close').addEventListener('click', closeMobileMenu);
-
-        // PERBAIKAN
-        // Ganti bagian DOMContentLoaded dengan ini:
+        // PERBAIKAN UTAMA: Pastikan event listener untuk hamburger menu bekerja dengan benar
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, setting up hamburger button');
+
+            // Hapus semua event listener yang mungkin sudah ada
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenuClose = document.getElementById('mobile-menu-close');
+            const overlay = document.getElementById('mobile-menu-overlay');
+
+            // Clone dan replace untuk menghapus event listener yang ada
+            if (mobileMenuButton) {
+                const newButton = mobileMenuButton.cloneNode(true);
+                mobileMenuButton.parentNode.replaceChild(newButton, mobileMenuButton);
+
+                // Tambahkan event listener baru
+                newButton.addEventListener('click', function(e) {
+                    console.log('Hamburger button clicked');
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggleMobileMenu();
+                });
+            }
+
+            if (mobileMenuClose) {
+                const newClose = mobileMenuClose.cloneNode(true);
+                mobileMenuClose.parentNode.replaceChild(newClose, mobileMenuClose);
+
+                // Tambahkan event listener baru
+                newClose.addEventListener('click', function(e) {
+                    console.log('Close button clicked');
+                    e.preventDefault();
+                    e.stopPropagation();
+                    closeMobileMenu();
+                });
+            }
+
+            // PERBAIKAN: Tambahkan event listener untuk overlay
+            if (overlay) {
+                const newOverlay = overlay.cloneNode(true);
+                overlay.parentNode.replaceChild(newOverlay, overlay);
+
+                newOverlay.addEventListener('click', function(e) {
+                    console.log('Overlay clicked');
+                    e.preventDefault();
+                    e.stopPropagation();
+                    closeMobileMenu();
+                });
+            }
+
             populateKelompokDropdown(kelompokIntegrasiData);
             populateKelompokDropdown(kelompokIntegrasiData, true);
 
@@ -1213,6 +1441,10 @@
                 if (path.includes('/Admin_Kelompok/kelompok')) {
                     localStorage.setItem('lastActiveMenu', 'kelompok');
                     setActiveMenu('kelompok');
+                } else if (path.includes('profil')) {
+                    // Tambahkan pengecekan untuk halaman profil
+                    localStorage.setItem('lastActiveMenu', 'profil');
+                    setActiveMenu('profil');
                 } else {
                     const lastActiveMenu = localStorage.getItem('lastActiveMenu');
                     if (lastActiveMenu) {
@@ -1223,6 +1455,30 @@
                 }
             }
         });
+
+        // PERBAIKAN TAMBAHAN: Event listener dengan capture phase
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('#mobile-menu-button')) {
+                console.log('Hamburger button clicked via event delegation');
+                e.preventDefault();
+                e.stopPropagation();
+                toggleMobileMenu();
+            }
+
+            if (e.target.closest('#mobile-menu-close')) {
+                console.log('Close button clicked via event delegation');
+                e.preventDefault();
+                e.stopPropagation();
+                closeMobileMenu();
+            }
+
+            if (e.target.closest('#mobile-menu-overlay')) {
+                console.log('Overlay clicked via event delegation');
+                e.preventDefault();
+                e.stopPropagation();
+                closeMobileMenu();
+            }
+        }, true); // Use capture phase
     </script>
 </body>
 

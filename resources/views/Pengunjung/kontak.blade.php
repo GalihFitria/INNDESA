@@ -276,12 +276,11 @@
 
                         </div>
                         <h3 class="contact-name text-xl sm:text-2xl font-bold text-gray-800 mb-2">Admin INNDESA</h3>
-                        <div class="flex items-center justify-center mb-4">
+                        <!-- <div class="flex items-center justify-center mb-4">
                             <i class="fab fa-whatsapp text-green-500 mr-2 text-lg"></i>
-                            <span class="contact-number text-gray-700 text-base sm:text-lg">+62 812-3456-7890</span>
-                        </div>
-                        <a href="https://api.whatsapp.com/send?phone=6281234567890&text=Halo%20Admin%20INNDESA"
-                            target="_blank"
+                            <span class="contact-number text-gray-700 text-base sm:text-lg">+62 823-2490-0948</span>
+                        </div> -->
+                        <a href="https://wa.me/6282324900948"
                             class="whatsapp-btn text-white font-medium py-3 px-6 rounded-lg flex items-center text-sm sm:text-base">
                             <i class="fab fa-whatsapp mr-2"></i>
                             Hubungi Admin

@@ -843,7 +843,7 @@
             @if($produk->count() > 0)
             <div class="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-6 grid-mobile">
                 @foreach ($produk as $item)
-                <a href="{{ route('detail_produk.show', $item->id_produk) }}" class="block no-underline group">
+                <a href="{{ url('detail_produk/' . \App\Http\Controllers\DetailProdukController::createHashUrl($item->id_produk, $item->nama)) }}" class="block no-underline group">
                     <div class="product-card hover:shadow-lg transition-all duration-300 border">
                         <img src="{{ asset('storage/' . $item->foto) }}" alt="{{ $item->nama }}" class="w-full object-cover">
                         <div class="p-3 sm:p-4 product-card-content">

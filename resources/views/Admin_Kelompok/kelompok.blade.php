@@ -17,7 +17,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
-        /* kembali keatas */
+        /* tanda panah untuk kembali keatas di mobile*/
         #backToTop {
             position: fixed;
             bottom: 20px;
@@ -76,7 +76,7 @@
                 display: none;
             }
         }
-        /* PRELOADER */
+        /* PRELOADER YG PAKE LOGO*/
         #preloader {
             position: fixed;
             top: 0;
@@ -252,7 +252,7 @@
     margin-left: auto;
     margin-right: auto;
     padding: 0.75rem;
-    font-size: 0.7rem; /* 🔥 Kecilkan ukuran font */
+    font-size: 0.7rem; /*kcilin  ukuran font */
     line-height: 1.5rem;
   }
 
@@ -271,8 +271,8 @@
     margin-right: auto;
   }
 }
-/* ✅ SK Desa tombol kecil (khusus mobile) */
-/* ✅ SK Desa khusus mobile */
+/*  SK Desa tombol kecil (khusus mobile) */
+/*  SK Desa khusus mobile */
 @media (max-width: 768px) {
   #sk-desa .sk-desa-item .relative {
     max-width: 90% !important;   /* Lebarnya jadi lebih kecil */
@@ -297,10 +297,10 @@
 }
 
 /*INFOMASI DAN TAB MENUNYA  */
-/* ✅ MOBILE */
+/*  MOBILE */
 /*INFOMASI DAN TAB MENUNYA*/
 
-/* ✅ MOBILE */
+/*   MOBILE */
 @media (max-width: 767px) {
   .info-tab-wrapper {
     display: flex;
@@ -332,7 +332,7 @@
   }
 }
 
-/* ✅ DESKTOP */
+/*   DESKTOP */
 @media (min-width: 768px) {
   .info-tab-wrapper {
     display: flex;
@@ -392,7 +392,7 @@
 /* Edit & Hapus Inovasi lebih mepet */
 @media (max-width: 768px) {
   #inovasi .inovasi-item .flex {
-    gap: 0.15rem !important;   /* 🔥 super kecil jaraknya */
+    gap: 0.15rem !important;   /*   super kecil jaraknya */
     justify-content: center;
   }
 
@@ -516,11 +516,11 @@ html, body {
     margin-top: 120px !important;
     padding-top: 0 !important;
 }
-/* ✅ Hero Section khusus mobile */
+/*   Hero Section khusus mobile */
 @media (max-width: 768px) {
   .hero-section {
     margin-top: 100px !important;
-    min-height: 200px !important; /* 🔥 lebih pendek */
+    min-height: 200px !important; /*   lebih pendek */
     background-size: cover !important; 
     background-position: top center !important;
   }
@@ -536,8 +536,7 @@ html, body {
     margin-top: 64px !important; /* hilangkan gap putih */
   }
 }
-/* ✅ Responsif ukuran logo */
-/* ✅ Responsif logo hero */
+/*    Responsif ukuran logo */ 
 .logo-preview {
   height: 100px;
   width: auto;
@@ -547,7 +546,7 @@ html, body {
   box-shadow: none;
 }
 
-/* 🔥 Mobile: kecilin logo */
+/*   Mobile: kecilin logo */
 @media (max-width: 768px) {
   .logo-preview {
     height: 60px !important; /* dari 100px → 60px */
@@ -555,7 +554,7 @@ html, body {
   }
 }
 
-/* 🔥 Tablet: sedang */
+/*   Tablet: sedang */
 @media (min-width: 769px) and (max-width: 1024px) {
   .logo-preview {
     height: 80px !important;
@@ -563,7 +562,7 @@ html, body {
   }
 }
 
-/* 🔥 Desktop: besar */
+/*   Desktop: besar */
 @media (min-width: 1025px) {
   .logo-preview {
     height: 100px !important;
@@ -571,7 +570,7 @@ html, body {
   }
 }
 
-/* ✅ Biar nama file dan X sejajar di semua ukuran layar */
+/*   Biar nama file dan X sejajar di semua ukuran layar */
 .file-preview {
   display: flex;
   align-items: center;
@@ -669,305 +668,304 @@ html, body {
         });
     </script>
        <!-- Hero Section -->
-<section class=" hero-section relative text-white overflow-hidden
-   min-h-[300px] sm:min-h-[350px] md:min-h-[550px]
-   flex flex-col justify-start md:justify-center
-   pt-0 sm:pt-0 md:pt-40 {{-- ✅ Mobile & tablet nempel ke navbar, desktop ada jarak --}}
-   {{ $kelompok->background
-   ? 'bg-[url(\'' . asset('storage/' . $kelompok->background) . '\')] bg-contain bg-top md:bg-cover md:bg-center bg-no-repeat'
-   : 'bg-[url(\'' . asset('images/background_beranda_INNDESA.jpeg') . '\')] bg-cover bg-center' }}">
+    <section class=" hero-section relative text-white overflow-hidden
+        min-h-[300px] sm:min-h-[350px] md:min-h-[550px]
+        flex flex-col justify-start md:justify-center
+        pt-0 sm:pt-0 md:pt-40 {{--   Mobile & tablet nempel ke navbar, desktop ada jarak --}}
+        {{ $kelompok->background
+        ? 'bg-[url(\'' . asset('storage/' . $kelompok->background) . '\')] bg-contain bg-top md:bg-cover md:bg-center bg-no-repeat'
+        : 'bg-[url(\'' . asset('images/background_beranda_INNDESA.jpeg') . '\')] bg-cover bg-center' }}">
 
-      <!-- Overlay untuk mobile -->
-      <div class="absolute inset-0 bg-black bg-opacity-50 z-0 md:hidden"></div>
+            <!-- Overlay untuk mobile -->
+            <div class="absolute inset-0 bg-black bg-opacity-50 z-0 md:hidden"></div>
 
-      <!-- Overlay untuk desktop -->
-      <div class="absolute inset-0 bg-black bg-opacity-50 z-0 hidden md:block"></div>
+            <!-- Overlay untuk desktop -->
+            <div class="absolute inset-0 bg-black bg-opacity-50 z-0 hidden md:block"></div>
 
-      <!-- Tombol Edit -->
-      <div x-data="{ open: false }">
-          <button
-   @click="open = true"
-   class="absolute bottom-3 right-3 
-          px-2 py-1 text-[10px]   <!-- 🔥 font super kecil di mobile -->
-          sm:px-4 sm:py-2 sm:text-sm 
-          bg-white text-gray-800 rounded-md shadow hover:bg-gray-100 
-          font-medium flex items-center z-20">
-   <i class="fa fa-pen mr-1 sm:mr-2 text-[11px] sm:text-sm"></i> 
-   <span class="hidden sm:inline">Edit Logo & Background</span>
-   <span class="sm:hidden">Edit Logo & Background</span>
-</button>
-
-
-
-         <!-- Modal Form -->
-         <div 
-  x-show="open" 
-  x-cloak 
-  x-transition 
-  style="display:none"
-  x-effect="document.body.classList.toggle('modal-open', open)"
-  class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center pointer-events-auto z-[999999]"
->
+            <!-- Tombol Edit -->
+            <div x-data="{ open: false }">
+                <button
+        @click="open = true"
+        class="absolute bottom-3 right-3 
+                px-2 py-1 text-[10px]   <!--   font super kecil di mobile -->
+                sm:px-4 sm:py-2 sm:text-sm 
+                bg-white text-gray-800 rounded-md shadow hover:bg-gray-100 
+                font-medium flex items-center z-20">
+        <i class="fa fa-pen mr-1 sm:mr-2 text-[11px] sm:text-sm"></i> 
+        <span class="hidden sm:inline">Edit Logo & Background</span>
+        <span class="sm:hidden">Edit Logo & Background</span>
+        </button>
 
 
-            <!-- ✅ Responsive modal -->
-            <div class="bg-white shadow-lg rounded-lg
-                        p-3 w-11/12 max-w-[260px] text-xs
-                        sm:p-8 sm:w-full sm:max-w-md sm:text-base
-                        relative z-[9999] max-h-[80vh] overflow-y-auto">
 
-               <!-- Tombol Close -->
-               <button @click.stop="open = false"
-        class="absolute top-2 right-2 text-gray-500 hover:text-gray-800 text-lg sm:text-xl z-[99999999] pointer-events-auto">✕</button>
+            <!-- Modal Form -->
+            <div 
+                x-show="open" 
+                x-cloak 
+                x-transition 
+                style="display:none"
+                x-effect="document.body.classList.toggle('modal-open', open)"
+                class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center pointer-events-auto z-[999999]">
+
+    
+                <!--   Responsive modal -->
+                <div class="bg-white shadow-lg rounded-lg
+                            p-3 w-11/12 max-w-[260px] text-xs
+                            sm:p-8 sm:w-full sm:max-w-md sm:text-base
+                            relative z-[9999] max-h-[80vh] overflow-y-auto">
+
+                <!-- Tombol Close -->
+                <button @click.stop="open = false"
+                    class="absolute top-2 right-2 text-gray-500 hover:text-gray-800 text-lg sm:text-xl z-[99999999] pointer-events-auto">✕</button>
 
 
-               <!-- Logo -->
-               <div class="flex justify-center mb-3 sm:mb-4">
-                  <img src="{{ asset('images/logo.png') }}" alt="" class="h-10 sm:h-16">
-               </div>
+                <!-- Logo -->
+                <div class="flex justify-center mb-3 sm:mb-4">
+                    <img src="{{ asset('images/logo.png') }}" alt="" class="h-10 sm:h-16">
+                </div>
 
-               <!-- Judul -->
-               <h2 class="text-center text-sm sm:text-2xl font-bold text-blue-600 mb-2">
-                  Edit Logo & Background
-               </h2>
-               <p class="text-center text-gray-600 mb-4 sm:mb-6 text-xs sm:text-base">
-                  Unggah logo dan background kelompok Anda
-               </p>
+                <!-- Judul -->
+                <h2 class="text-center text-sm sm:text-2xl font-bold text-blue-600 mb-2">
+                    Edit Logo & Background
+                </h2>
+                <p class="text-center text-gray-600 mb-4 sm:mb-6 text-xs sm:text-base">
+                    Unggah logo dan background kelompok Anda
+                </p>
 
-               <!-- Form -->
-               <form action="{{ route('Admin_Kelompok.kelompok.updateLogoBackground', $kelompok->id_kelompok) }}" 
-      method="POST" 
-      enctype="multipart/form-data">
-    @csrf
-                  @method('PUT')
+                <!-- Form -->
+                <form action="{{ route('Admin_Kelompok.kelompok.updateLogoBackground', $kelompok->id_kelompok) }}" 
+                    method="POST" 
+                    enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT')
 
-                  <!-- Flag hapus file -->
-                  <input type="hidden" name="delete_logo" id="deleteLogo" value="0">
-                  <input type="hidden" name="delete_background" id="deleteBackground" value="0">
+                    <!-- Flag hapus file -->
+                    <input type="hidden" name="delete_logo" id="deleteLogo" value="0">
+                    <input type="hidden" name="delete_background" id="deleteBackground" value="0">
 
-                  <!-- Logo -->
-                  <div class="mb-3 sm:mb-4">
-                     <label for="logo" class="block text-gray-700 font-medium mb-1 sm:mb-2">Logo(Opsional)</label>
-                     <input type="file" id="logo" name="logo" accept="image/*"
-                            class="block w-full border rounded-md p-1.5 sm:p-2 text-xs sm:text-sm">
-                     <div id="logoFilePreview" class="mt-1 sm:mt-2 text-xs sm:text-sm text-gray-600 ">
-                        @if($kelompok->logo)
-                           <div class="file-preview">
-                              <span class="file-name cursor-pointer" onclick="previewExistingLogo()">
-                                 {{ $kelompok->logo }}
-                              </span>
-                              <span class="file-remove cursor-pointer text-red-500 ml-1 sm:ml-2"
-                                    onclick="removeLogoFile()">✕</span>
-                           </div>
-                        @else
-                           <p>Tidak ada file yang dipilih.</p>
-                        @endif
-                     </div>
-                  </div>
+                    <!-- Logo -->
+                    <div class="mb-3 sm:mb-4">
+                        <label for="logo" class="block text-gray-700 font-medium mb-1 sm:mb-2">Logo(Opsional)</label>
+                        <input type="file" id="logo" name="logo" accept="image/*"
+                                class="block w-full border rounded-md p-1.5 sm:p-2 text-xs sm:text-sm">
+                        <div id="logoFilePreview" class="mt-1 sm:mt-2 text-xs sm:text-sm text-gray-600 ">
+                            @if($kelompok->logo)
+                            <div class="file-preview">
+                                <span class="file-name cursor-pointer" onclick="previewExistingLogo()">
+                                    {{ $kelompok->logo }}
+                                </span>
+                                <span class="file-remove cursor-pointer text-red-500 ml-1 sm:ml-2"
+                                        onclick="removeLogoFile()">✕</span>
+                            </div>
+                            @else
+                            <p>Tidak ada file yang dipilih.</p>
+                            @endif
+                        </div>
+                    </div>
 
-                  <!-- Background -->
-                  <div class="mb-3 sm:mb-4">
-                     <label for="background" class="block text-gray-700 font-medium mb-1 sm:mb-2">Background(Opsional)</label>
-                     <input type="file" id="background" name="background" accept="image/*"
-                            class="block w-full border rounded-md p-1.5 sm:p-2 text-xs sm:text-sm">
-                     <div id="bgFilePreview" class="mt-1 sm:mt-2 text-xs sm:text-sm text-gray-600">
-                        @if($kelompok->background)
-                           <div class="file-preview">
-                              <span class="file-name cursor-pointer" onclick="previewExistingBackground()">
-                                 {{ $kelompok->background }}
-                              </span>
-                              <span class="file-remove cursor-pointer text-red-500 ml-1 sm:ml-2"
-                                    onclick="removeBackgroundFile()">✕</span>
-                           </div>
-                        @else
-                           <p>Tidak ada file yang dipilih.</p>
-                        @endif
-                     </div>
-                  </div>
+                    <!-- Background -->
+                    <div class="mb-3 sm:mb-4">
+                        <label for="background" class="block text-gray-700 font-medium mb-1 sm:mb-2">Background(Opsional)</label>
+                        <input type="file" id="background" name="background" accept="image/*"
+                                class="block w-full border rounded-md p-1.5 sm:p-2 text-xs sm:text-sm">
+                        <div id="bgFilePreview" class="mt-1 sm:mt-2 text-xs sm:text-sm text-gray-600">
+                            @if($kelompok->background)
+                            <div class="file-preview">
+                                <span class="file-name cursor-pointer" onclick="previewExistingBackground()">
+                                    {{ $kelompok->background }}
+                                </span>
+                                <span class="file-remove cursor-pointer text-red-500 ml-1 sm:ml-2"
+                                        onclick="removeBackgroundFile()">✕</span>
+                            </div>
+                            @else
+                            <p>Tidak ada file yang dipilih.</p>
+                            @endif
+                        </div>
+                    </div>
 
-                  <!-- Tombol -->
-                  <button type="submit"
-                          class="w-full px-2 sm:px-4 py-1.5 sm:py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-xs sm:text-base">
-                     Simpan
-                  </button>
-               </form>
+                    <!-- Tombol -->
+                    <button type="submit"
+                            class="w-full px-2 sm:px-4 py-1.5 sm:py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-xs sm:text-base">
+                        Simpan
+                    </button>
+                </form>
+                </div>
             </div>
-         </div>
-      </div>
+        </div>
 
-      <!-- ✅ Hero Logo di pojok kiri atas -->
-      <div class="absolute top-4 left-4 sm:top-6 sm:left-6 md:top-12 md:left-16 z-10">
-         @if ($kelompok->logo && Storage::disk('public')->exists($kelompok->logo))
-            <img src="{{ asset('storage/' . $kelompok->logo) }}"
-                 alt="Logo {{ $kelompok->getKodeKelompokAttribute() }}"
-                  class="logo-preview object-contain no-context-menu"
-                 draggable="false"
-                 oncontextmenu="return false;"
-                 ondragstart="return false;"
-                 onselectstart="return false;"
-                 onerror="this.src='{{ asset('images/fallback-logo.png') }}'">
-         @else
-            <img src="{{ asset('images/fallback-logo.png') }}" alt=""
-                 class="h-10 sm:h-14 md:h-20 lg:h-24 w-auto object-contain no-context-menu"
-                 draggable="false"
-                 oncontextmenu="return false;"
-                 ondragstart="return false;"
-                 onselectstart="return false;">
-         @endif
-      </div>
+        <!--   Hero Logo di pojok kiri atas -->
+        <div class="absolute top-4 left-4 sm:top-6 sm:left-6 md:top-12 md:left-16 z-10">
+            @if ($kelompok->logo && Storage::disk('public')->exists($kelompok->logo))
+                <img src="{{ asset('storage/' . $kelompok->logo) }}"
+                    alt="Logo {{ $kelompok->getKodeKelompokAttribute() }}"
+                    class="logo-preview object-contain no-context-menu"
+                    draggable="false"
+                    oncontextmenu="return false;"
+                    ondragstart="return false;"
+                    onselectstart="return false;"
+                    onerror="this.src='{{ asset('images/fallback-logo.png') }}'">
+            @else
+                <img src="{{ asset('images/fallback-logo.png') }}" alt=""
+                    class="h-10 sm:h-14 md:h-20 lg:h-24 w-auto object-contain no-context-menu"
+                    draggable="false"
+                    oncontextmenu="return false;"
+                    ondragstart="return false;"
+                    onselectstart="return false;">
+            @endif
+        </div>
 
-      <!-- Hero Content -->
-      <!-- Hero Content -->
- <!-- Hero Content -->
-<!-- Hero Content -->
- <!-- Hero Content -->
-<div class="text-center relative z-10 px-4 flex flex-col items-center justify-start
-            pt-16 sm:pt-20 md:pt-10 h-full"> 
-   <!-- ✅ desktop padding atas kecil -->
+        <!-- Hero Content -->
+        <!-- Hero Content -->
+    <!-- Hero Content -->
+    <!-- Hero Content -->
+    <!-- Hero Content -->
+        <div class="text-center relative z-10 px-4 flex flex-col items-center justify-start
+                    pt-16 sm:pt-20 md:pt-10 h-full"> 
+        <!--   desktop padding atas kecil -->
 
-   <!-- ✅ Nama Kelompok -->
-   <h2 class="hero-title
-              text-xl sm:text-3xl md:text-5xl lg:text-7xl
-              font-bold text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)]
-              mt-6 sm:mt-8 md:mt-10 lg:mt-12
-">
-      Kelompok <br><span class="text-yellow-400">{{ $kelompok->nama }}</span>
-   </h2>
-</div>
-
+        <!--   Nama Kelompok -->
+        <h2 class="hero-title
+                    text-xl sm:text-3xl md:text-5xl lg:text-7xl
+                    font-bold text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)]
+                    mt-6 sm:mt-8 md:mt-10 lg:mt-12
+        ">
+            Kelompok <br><span class="text-yellow-400">{{ $kelompok->nama }}</span>
+        </h2>
+        </div>
 
 
-   </section>
+
+    </section>
 
 
-    <div class="navbar-wrapper">
-    @include('navbar')
-</div>
+        <div class="navbar-wrapper">
+        @include('navbar')
+    </div>
 
 
     <!-- Hero Section -->
      <!-- Perbaikan: Tambahkan wrapper untuk konten utama -->
 
 
- <div class="main-content">
+    <div class="main-content">
 
 
 
-</div>
+    </div>
 
 
 
-<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-<style>
-    .logo-preview {
-  height: 100px; /* sesuaikan tinggi sesuai tampilanmu */
-  width: auto;
-  object-fit: contain;
-  background-color: transparent;
-  border-radius: 0; /* biar gak dipaksa bentuk */
-  box-shadow: none;
-}
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        .logo-preview {
+    height: 100px; /* sesuaikan tinggi sesuai tampilanmu */
+    width: auto;
+    object-fit: contain;
+    background-color: transparent;
+    border-radius: 0; /* biar gak dipaksa bentuk */
+    box-shadow: none;
+    }
 
-</style>
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-  const logoImg = document.querySelector(".logo-preview");
-  if (logoImg) {
-    logoImg.onload = function() {
-      const { naturalWidth, naturalHeight } = logoImg;
-      if (Math.abs(naturalWidth - naturalHeight) < 10) {
-        // kalau hampir persegi, buat bulat
-        logoImg.style.borderRadius = "50%";
-      } else {
-        // kalau bukan persegi, biarkan bentuk asli
-        logoImg.style.borderRadius = "0";
-      }
-    };
-  }
-});
-</script>
+    </style>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+    const logoImg = document.querySelector(".logo-preview");
+    if (logoImg) {
+        logoImg.onload = function() {
+        const { naturalWidth, naturalHeight } = logoImg;
+        if (Math.abs(naturalWidth - naturalHeight) < 10) {
+            // kalau hampir persegi, buat bulat
+            logoImg.style.borderRadius = "50%";
+        } else {
+            // kalau bukan persegi, biarkan bentuk asli
+            logoImg.style.borderRadius = "0";
+        }
+        };
+    }
+    });
+    </script>
 
 
 
 
 <!-- Tambahkan CSS untuk x-cloak -->
  
- <style>
-    /* 🔒 Saat modal terbuka, kunci scroll halaman tapi biarkan posisi layout tetap */
-body.modal-open {
-  overflow: hidden !important; /* cegah halaman di-scroll waktu modal terbuka */
-}
+    <style>
+        /*   Saat modal terbuka, kunci scroll halaman tapi biarkan posisi layout tetap */
+    body.modal-open {
+    overflow: hidden !important; /* cegah halaman di-scroll waktu modal terbuka */
+    }
 
-/* ❌ Hapus aturan yang bikin navbar geser atau ketutup */
-body.modal-open .navbar-wrapper {
-  position: static !important;
-  z-index: auto !important;
-  pointer-events: auto !important;
-}
+    /*   Hapus aturan yang bikin navbar geser atau ketutup */
+    body.modal-open .navbar-wrapper {
+    position: static !important;
+    z-index: auto !important;
+    pointer-events: auto !important;
+    }
 
-/* ✅ Overlay modal harus di atas semua */
-.modal-overlay {
-  z-index: 999999 !important;
-  pointer-events: auto !important;
-}
-.modal-overlay * {
-  pointer-events: auto !important;
-}
+    /*   Overlay modal harus di atas semua */
+    .modal-overlay {
+    z-index: 999999 !important;
+    pointer-events: auto !important;
+    }
+    .modal-overlay * {
+    pointer-events: auto !important;
+    }
 
-/* ✅ Area file-preview & tombol X */
-.file-preview {
-  position: relative !important;
-  z-index: 9999999 !important;
-}
-.file-remove {
-  position: relative !important;
-  z-index: 99999999 !important;
-  pointer-events: all !important;
-  cursor: pointer !important;
-}
+    /*   Area file-preview & tombol X */
+    .file-preview {
+    position: relative !important;
+    z-index: 9999999 !important;
+    }
+    .file-remove {
+    position: relative !important;
+    z-index: 99999999 !important;
+    pointer-events: all !important;
+    cursor: pointer !important;
+    }
 
-/* ✅ Sembunyikan elemen x-cloak */
-[x-cloak] {
-  display: none !important;
-}
+    /*   Sembunyikan elemen x-cloak */
+    [x-cloak] {
+    display: none !important;
+    }
 
- </style>
- 
+    </style>
+    
 
 
    
 
-    <!-- Profil Kelompok Section -->
-<h2 class="profil-title text-4xl font-bold text-blue-600 text-center mb-8 mt-10">
-    Profil Kelompok
-</h2>
-<div class="w-full border-t border-gray-200 pt-4 box-border">
-  <div class="bg-white p-6 max-w-4xl mx-auto">
+        <!-- Profil Kelompok Section -->
+    <h2 class="profil-title text-4xl font-bold text-blue-600 text-center mb-8 mt-10">
+        Profil Kelompok
+    </h2>
+    <div class="w-full border-t border-gray-200 pt-4 box-border">
+    <div class="bg-white p-6 max-w-4xl mx-auto">
 
-    <!-- ✅ Tab Menu -->
-    <div class="profile-tab-wrapper flex rounded-lg bg-gray-200 
-            overflow-x-auto sm:overflow-hidden whitespace-nowrap">
-  <button class="profile-tab-button profil-tabs flex-1 py-3 px-4 font-semibold text-center transition-colors bg-[#0097D4] text-white"
-      onclick="openTab('struktur', 'profile')" aria-label="Lihat Struktur">
-      Struktur
-  </button>
-  <button class="profile-tab-button profil-tabs flex-1 py-3 px-4 font-semibold text-center transition-colors bg-gray-200 text-gray-700"
-      onclick="openTab('sejarah', 'profile')" aria-label="Lihat Sejarah">
-      Sejarah
-  </button>
-  <button class="profile-tab-button profil-tabs flex-1 py-3 px-4 font-semibold text-center transition-colors bg-gray-200 text-gray-700"
-      onclick="openTab('sk-desa', 'profile')" aria-label="Lihat SK Desa">
-      SK Desa
-  </button>
-  <button class="profile-tab-button profil-tabs flex-1 py-3 px-4 font-semibold text-center transition-colors bg-gray-200 text-gray-700"
-      onclick="openTab('kelompok-rentan', 'profile')" aria-label="Lihat Kelompok Rentan">
-      Kelompok Rentan
-  </button>
-  <button class="profile-tab-button profil-tabs flex-1 py-3 px-4 font-semibold text-center transition-colors bg-gray-200 text-gray-700"
-      onclick="openTab('stok-produk', 'profile')" aria-label="Lihat Stok Produk">
-      Stok Produk
-  </button>
-</div>
+        <!--   Tab Menu -->
+        <div class="profile-tab-wrapper flex rounded-lg bg-gray-200 
+                overflow-x-auto sm:overflow-hidden whitespace-nowrap">
+    <button class="profile-tab-button profil-tabs flex-1 py-3 px-4 font-semibold text-center transition-colors bg-[#0097D4] text-white"
+        onclick="openTab('struktur', 'profile')" aria-label="Lihat Struktur">
+        Struktur
+    </button>
+    <button class="profile-tab-button profil-tabs flex-1 py-3 px-4 font-semibold text-center transition-colors bg-gray-200 text-gray-700"
+        onclick="openTab('sejarah', 'profile')" aria-label="Lihat Sejarah">
+        Sejarah
+    </button>
+    <button class="profile-tab-button profil-tabs flex-1 py-3 px-4 font-semibold text-center transition-colors bg-gray-200 text-gray-700"
+        onclick="openTab('sk-desa', 'profile')" aria-label="Lihat SK Desa">
+        SK Desa
+    </button>
+    <button class="profile-tab-button profil-tabs flex-1 py-3 px-4 font-semibold text-center transition-colors bg-gray-200 text-gray-700"
+        onclick="openTab('kelompok-rentan', 'profile')" aria-label="Lihat Kelompok Rentan">
+        Kelompok Rentan
+    </button>
+    <button class="profile-tab-button profil-tabs flex-1 py-3 px-4 font-semibold text-center transition-colors bg-gray-200 text-gray-700"
+        onclick="openTab('stok-produk', 'profile')" aria-label="Lihat Stok Produk">
+        Stok Produk
+    </button>
+    </div>
 
 
 
@@ -978,223 +976,220 @@ body.modal-open .navbar-wrapper {
 
       <!-- STRUKTUR -->
      <div id="struktur" class="profile-tab-content block py-4">
-                <div class="flex justify-end mb-4">
-   {{-- Tambah anggota --}}
-        <button type="button" onclick="openStrukturForm()" 
-            class="tambah-anggota-btn bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
-            <i class="fas fa-plus mr-2"></i> Tambah
-        </button>
-     </div>
- <table class="w-full border-collapse mb-6 border border-gray-200">
-    <thead>
-        <tr class="bg-gray-50">
-            <th class="border border-gray-200 p-3 text-left">Posisi</th>
-            <th class="border border-gray-200 p-3 text-left">Nama</th>
-          
-            <th class="border border-gray-200 p-3 text-center">Aksi</th>
-        </tr>
-    </thead>
-<tbody id="struktur-tbody">
-    @php
-        $jabatanList = ['Ketua', 'Wakil Ketua', 'Sekretaris', 'Bendahara', 'Anggota'];
-        $groupedStruktur = $struktur->groupBy('jabatan');
-    @endphp
-
-    @foreach($jabatanList as $jabatan)
-        @if(isset($groupedStruktur[$jabatan]))
-            @php
-                $items = $groupedStruktur[$jabatan];
-                $rowspan = $items->count();
-            @endphp
-
-            @foreach($items as $index => $item)
-                <tr>
-                    {{-- tampilkan jabatan hanya sekali --}}
-                    @if($index === 0)
-                        <td class="border border-gray-200 p-3 text-left align-top" rowspan="{{ $rowspan }}">
-                            {{ $jabatan }}
-                        </td>
-                    @endif
-
-                    <td class="border border-gray-200 p-3">{{ $item->nama }}</td>
-                    <td class="border border-gray-200 p-3 text-center">
-                       <button type="button" 
-                            onclick="editStruktur(this)" 
-                            data-id="{{ $item->id_struktur }}"
-                            data-rentan="{{ $item->id_rentan }}"
-                            data-jabatan="{{ $jabatan }}"
-                            data-nama="{{ $item->nama }}"
-                            class="text-blue-600 hover:text-blue-800">
-                            <i class="fas fa-edit"></i>
-                        </button>
-
-                      <!-- Tombol hapus -->
-<!-- Tombol hapus -->
-<button type="button"
-    onclick="confirmDeleteUniversal('delete-form-{{ $item->id_struktur }}', 'Yakin ingin menghapus anggota ini?', 'Data anggota akan dihapus!')"
-    class="text-red-600 hover:text-red-800">
-    <i class="fas fa-trash"></i>
-</button>
-
-<form id="delete-form-{{ $item->id_struktur }}"
-      action="{{ route('Admin_Kelompok.deleteStruktur', $item->id_struktur) }}"
-      method="POST" style="display:none;">
-    @csrf
-    @method('DELETE')
-</form>
-
-
-
-
-
-                    </td>
-                </tr>
-            @endforeach
-        @endif
-    @endforeach
-
-    @if($struktur->isEmpty())
-        <tr>
-            <td colspan="3" class="text-center p-4 text-gray-500">
-                Tidak ada data struktur organisasi
-            </td>
-        </tr>
-    @endif
-</tbody>
-
-
- </table>
-
-            </div>
-
-
-<!-- SEJARAH -->
-<div id="sejarah" class="profile-tab-content hidden py-4">
-    <div class="flex justify-end mb-4">
-        <button onclick="openSejarahForm()" 
+        <div class="flex justify-end mb-4">
+             {{-- Tambah anggota --}}
+            <button type="button" onclick="openStrukturForm()" 
                 class="tambah-anggota-btn bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
-            <i class="fas fa-edit mr-2"></i>Edit Sejarah
-        </button>
-    </div>
+                <i class="fas fa-plus mr-2"></i> Tambah
+            </button>
+        </div>
+        <table class="w-full border-collapse mb-6 border border-gray-200">
+            <thead>
+                <tr class="bg-gray-50">
+                    <th class="border border-gray-200 p-3 text-left">Posisi</th>
+                    <th class="border border-gray-200 p-3 text-left">Nama</th>
+                
+                    <th class="border border-gray-200 p-3 text-center">Aksi</th>
+                </tr>
+            </thead>
+            <tbody id="struktur-tbody">
+                @php
+                    $jabatanList = ['Ketua', 'Wakil Ketua', 'Sekretaris', 'Bendahara', 'Anggota'];
+                    $groupedStruktur = $struktur->groupBy('jabatan');
+                @endphp
 
-    <!-- ✅ Konten dengan paragraf per baris -->
- <div id="sejarah-content" class="w-full text-gray-700 leading-relaxed text-justify text-xs md:text-base">
-    @foreach (explode("\n", $kelompok->sejarah ?? 'Belum ada sejarah yang diisi.') as $paragraph)
-        @if (!empty(trim($paragraph)))
-            <p class="indent-8 mb-3 md:mb-4 leading-snug md:leading-relaxed">
-                {{ $paragraph }}
-            </p>
-        @endif
-    @endforeach
-</div>
+                @foreach($jabatanList as $jabatan)
+                    @if(isset($groupedStruktur[$jabatan]))
+                        @php
+                            $items = $groupedStruktur[$jabatan];
+                            $rowspan = $items->count();
+                        @endphp
+
+                        @foreach($items as $index => $item)
+                            <tr>
+                                {{-- tampilkan jabatan hanya sekali --}}
+                                @if($index === 0)
+                                    <td class="border border-gray-200 p-3 text-left align-top" rowspan="{{ $rowspan }}">
+                                        {{ $jabatan }}
+                                    </td>
+                                @endif
+
+                                <td class="border border-gray-200 p-3">{{ $item->nama }}</td>
+                                <td class="border border-gray-200 p-3 text-center">
+                                <button type="button" 
+                                        onclick="editStruktur(this)" 
+                                        data-id="{{ $item->id_struktur }}"
+                                        data-rentan="{{ $item->id_rentan }}"
+                                        data-jabatan="{{ $jabatan }}"
+                                        data-nama="{{ $item->nama }}"
+                                        class="text-blue-600 hover:text-blue-800">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+
+                                <!-- Tombol hapus -->
+            <!-- Tombol hapus -->
+            <button type="button"
+                onclick="confirmDeleteUniversal('delete-form-{{ $item->id_struktur }}', 'Yakin ingin menghapus anggota ini?', 'Data anggota akan dihapus!')"
+                class="text-red-600 hover:text-red-800">
+                <i class="fas fa-trash"></i>
+            </button>
+
+            <form id="delete-form-{{ $item->id_struktur }}"
+                action="{{ route('Admin_Kelompok.deleteStruktur', $item->id_struktur) }}"
+                method="POST" style="display:none;">
+                @csrf
+                @method('DELETE')
+            </form>
 
 
-</div>
 
 
 
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endif
+                @endforeach
+
+                @if($struktur->isEmpty())
+                    <tr>
+                        <td colspan="3" class="text-center p-4 text-gray-500">
+                            Tidak ada data struktur organisasi
+                        </td>
+                    </tr>
+                @endif
+            </tbody>
+        </table>
+
+     </div>
 
 
-    <!-- SK DESA -->
- <div id="sk-desa" class="profile-tab-content hidden py-4">
-
-  <!-- Tombol tambah -->
-  <div class="flex justify-end mb-4">
-    @if(empty($kelompok->sk_desa))
-      <button onclick="openSkDesaForm()" 
-              class=" tambah-anggota-btn  bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
-        <i class="fas fa-plus mr-2"></i>Tambah 
-      </button>
-    @endif
-  </div>
-
-  <!-- tampilkan file -->
-  @if(!empty($kelompok->sk_desa))
-    <div class="sk-desa-item text-center relative">
-
-      @php
-        $ext = strtolower(pathinfo($kelompok->sk_desa, PATHINFO_EXTENSION));
-      @endphp
-
-      @if(in_array($ext, ['jpg','jpeg','png']))
-        {{-- Preview Gambar --}}
-        <div class="relative w-full max-w-[30rem] mx-auto h-60">
-          <img src="{{ asset('storage/' . $kelompok->sk_desa) }}"
-               alt="SK Desa"
-               class="w-full h-60 object-contain rounded-lg shadow-md border border-gray-200 cursor-pointer no-context-menu"
-               draggable="false"
-               oncontextmenu="return false;"
-               onclick="openPreview('{{ asset('storage/' . $kelompok->sk_desa) }}','SK Desa','image')"
-               onerror="this.src='{{ asset('images/placeholder.jpg') }}'">
-
-          <!-- Watermark overlay -->
-          <div class="absolute inset-0 pointer-events-none overflow-hidden">
-            <div class="grid grid-cols-12 w-full h-full">
-              @for ($i = 0; $i < 200; $i++)
-               <span class="flex items-center justify-center text-gray-900 text-[9px] font-semibold opacity-15 -rotate-45 whitespace-nowrap select-none">
-  INNDESA
-</span>
-
-              @endfor
+        <!-- SEJARAH -->
+        <div id="sejarah" class="profile-tab-content hidden py-4">
+            <div class="flex justify-end mb-4">
+                <button onclick="openSejarahForm()" 
+                        class="tambah-anggota-btn bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
+                    <i class="fas fa-edit mr-2"></i>Edit Sejarah
+                </button>
             </div>
-          </div>
+
+            <!-- ✅ Konten dengan paragraf per baris -->
+            <div id="sejarah-content" class="w-full text-gray-700 leading-relaxed text-justify text-xs md:text-base">
+                @foreach (explode("\n", $kelompok->sejarah ?? 'Belum ada sejarah yang diisi.') as $paragraph)
+                    @if (!empty(trim($paragraph)))
+                        <p class="indent-8 mb-3 md:mb-4 leading-snug md:leading-relaxed">
+                            {{ $paragraph }}
+                        </p>
+                    @endif
+                @endforeach
+            </div>
         </div>
 
-      @elseif($ext === 'pdf')
-        {{-- Preview PDF pakai pdf.js --}}
-       <div class="relative w-full max-w-[30rem] mx-auto h-60 border border-gray-200 rounded-lg shadow-md">
-  <div id="pdfSkDesaViewer" 
-       class="w-full h-60 overflow-auto">
-  </div>
-
-  <!-- Overlay hanya di area PDF -->
-  <div class="absolute inset-0 cursor-pointer no-context-menu"
-       onclick="openPreview('{{ asset('storage/' . $kelompok->sk_desa) }}','SK Desa','pdf')"
-       oncontextmenu="return false;">
-  </div>
-</div>
-
-      @endif
-
-      <!-- Tombol Edit/Hapus -->
-      <div class="mt-2">
-        <button type="button" onclick="openSkDesaForm(true)" 
-                class=" btn-action text-blue-600 hover:text-blue-800 mr-2">
-          <i class="fas fa-edit"></i> Edit
-        </button>
-      <!-- Tombol Hapus SK Desa -->
-<button type="button"
-    onclick="confirmDeleteUniversal('delete-skdesa-form-{{ $kelompok->id_kelompok }}', 'Yakin ingin menghapus SK Desa?', 'Data SK Desa akan dihapus!')"
-    class="btn-action text-red-600 hover:text-red-800">
-    <i class="fas fa-trash"></i> Hapus
-</button>
-
-<form id="delete-skdesa-form-{{ $kelompok->id_kelompok }}"
-      action="{{ route('Admin_Kelompok.deleteSkDesa', $kelompok->id_kelompok) }}"
-      method="POST" style="display:none;">
-    @csrf
-    @method('DELETE')
-</form>
 
 
 
-      </div>
+
+        <!-- SK DESA -->
+        <div id="sk-desa" class="profile-tab-content hidden py-4">
+            <!-- Tombol tambah -->
+            <div class="flex justify-end mb-4">
+                @if(empty($kelompok->sk_desa))
+                <button onclick="openSkDesaForm()" 
+                        class=" tambah-anggota-btn  bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
+                    <i class="fas fa-plus mr-2"></i>Tambah 
+                </button>
+                @endif
+            </div>
+               @if(empty($kelompok->sk_desa))
+    <div class="text-center text-gray-500 py-10" id="sk-desa-empty">
+        <p class="text-sm font-arial ">SK Desa tidak tersedia.</p>
     </div>
-  @endif
-</div>
+    @endif
 
-<style>
- /* 🌸 Perbesar watermark hanya di tampilan mobile */
-@media (max-width: 768px) {
-  .sk-desa-item .absolute span {
-    font-size: 5px !important;   /* lebih besar */
-    font-weight: 600 !important;  /* lebih tebal */
-    opacity: 0.25 !important;     /* lebih jelas */
-  }
-}
+        <!-- tampilkan file -->
+            @if(!empty($kelompok->sk_desa))
+                <div class="sk-desa-item text-center relative">
+
+                @php
+                    $ext = strtolower(pathinfo($kelompok->sk_desa, PATHINFO_EXTENSION));
+                @endphp
+
+                @if(in_array($ext, ['jpg','jpeg','png']))
+                    {{-- Preview Gambar --}}
+                    <div class="relative w-full max-w-[30rem] mx-auto h-60">
+                    <img src="{{ asset('storage/' . $kelompok->sk_desa) }}"
+                        alt="SK Desa"
+                        class="w-full h-60 object-contain rounded-lg shadow-md border border-gray-200 cursor-pointer no-context-menu"
+                        draggable="false"
+                        oncontextmenu="return false;"
+                        onclick="openPreview('{{ asset('storage/' . $kelompok->sk_desa) }}','SK Desa','image')"
+                        onerror="this.src='{{ asset('images/placeholder.jpg') }}'">
+
+                    <!-- Watermark overlay -->
+                    <div class="absolute inset-0 pointer-events-none overflow-hidden">
+                        <div class="grid grid-cols-12 w-full h-full">
+                        @for ($i = 0; $i < 200; $i++)
+                        <span class="flex items-center justify-center text-gray-900 text-[9px] font-semibold opacity-15 -rotate-45 whitespace-nowrap select-none"> INNDESA</span>
+                        @endfor
+                        </div>
+                    </div>
+                    </div>
+
+                @elseif($ext === 'pdf')
+                    {{-- Preview PDF pakai pdf.js --}}
+                    <div class="relative w-full max-w-[30rem] mx-auto h-60 border border-gray-200 rounded-lg shadow-md">
+                    <div id="pdfSkDesaViewer" 
+                            class="w-full h-60 overflow-auto">
+                        </div>
+
+                <!-- Overlay hanya di area PDF -->
+                <div class="absolute inset-0 cursor-pointer no-context-menu"
+                    onclick="openPreview('{{ asset('storage/' . $kelompok->sk_desa) }}','SK Desa','pdf')"
+                    oncontextmenu="return false;">
+                </div>
+                    </div>
+
+                @endif
+
+                <!-- Tombol Edit/Hapus -->
+                <div class="mt-2">
+                    <button type="button" onclick="openSkDesaForm(true)" 
+                            class=" btn-action text-blue-600 hover:text-blue-800 mr-2">
+                    <i class="fas fa-edit"></i> Edit
+                    </button>
+                <!-- Tombol Hapus SK Desa -->
+            <button type="button"
+                onclick="confirmDeleteUniversal('delete-skdesa-form-{{ $kelompok->id_kelompok }}', 'Yakin ingin menghapus SK Desa?', 'Data SK Desa akan dihapus!')"
+                class="btn-action text-red-600 hover:text-red-800">
+                <i class="fas fa-trash"></i> Hapus
+            </button>
+
+            <form id="delete-skdesa-form-{{ $kelompok->id_kelompok }}"
+                action="{{ route('Admin_Kelompok.deleteSkDesa', $kelompok->id_kelompok) }}"
+                method="POST" style="display:none;">
+                @csrf
+                @method('DELETE')
+            </form>
 
 
-</style>
+
+                </div>
+                </div>
+            @endif
+        </div>
+
+        <style>
+        /*  Perbesar watermark hanya di tampilan mobile */
+        @media (max-width: 768px) {
+        .sk-desa-item .absolute span {
+            font-size: 5px !important;   /* lebih besar */
+            font-weight: 600 !important;  /* lebih tebal */
+            opacity: 0.25 !important;     /* lebih jelas */
+        }
+        }
+
+
+        </style>
 
 
 
@@ -1220,6 +1215,8 @@ body.modal-open .navbar-wrapper {
         $maxRows = max(array_map('count', $dataRentan));
     @endphp
 
+       @if ($maxRows > 0)
+
     @for ($i = 0; $i < $maxRows; $i++)
         <tr>
             @foreach($rentan as $r)
@@ -1234,10 +1231,18 @@ body.modal-open .navbar-wrapper {
             @endforeach
         </tr>
     @endfor
+     @else
+        <tr>
+            <td colspan="{{ count($rentan) }}" class="text-center text-gray-500 py-4 ">
+                Tidak ada data kelompok rentan
+            </td>
+        </tr>
+    @endif
 </tbody>
  
 
     </table>
+   
   </div>
 </div>
 
@@ -1259,6 +1264,13 @@ body.modal-open .navbar-wrapper {
                         </tr>
                     </thead>
                     <tbody id="stok-produk-tbody">
+                           @if($produk->isEmpty())
+        <tr>
+            <td colspan="3" class="border border-gray-200 p-4 text-center text-gray-500">
+                Tidak ada data stok produk
+            </td>
+        </tr>
+    @else
     @foreach($produk as $p)
         <tr data-id="{{ $p->id_produk }}">
             <td class="border border-gray-200 p-2">{{ $p->nama }}</td>
@@ -1270,6 +1282,7 @@ body.modal-open .navbar-wrapper {
             </td>
         </tr>
     @endforeach
+        @endif
 </tbody>
 
 
@@ -1630,19 +1643,34 @@ function closePreviewKatalog() {
 <script>
 document.addEventListener("DOMContentLoaded", function() {
     const searchInput = document.getElementById("searchProduk");
+    const produkItems = document.querySelectorAll(".produk-item");
+    const emptyMessage = document.getElementById("produk-empty");
 
     if (searchInput) {
         searchInput.addEventListener("input", function() {
-            let value = this.value.toLowerCase();
-            let produkItems = document.querySelectorAll(".produk-item");
+            let keyword = this.value.toLowerCase().trim();
+            let found = false;
 
             produkItems.forEach(item => {
                 let nama = item.dataset.nama.toLowerCase();
-                item.style.display = nama.includes(value) ? "" : "none";
+                if (nama.includes(keyword)) {
+                    item.style.display = "";
+                    found = true;
+                } else {
+                    item.style.display = "none";
+                }
             });
+
+            // munculkan / sembunyikan pesan kosong
+            if (!found) {
+                emptyMessage.classList.remove("hidden");
+            } else {
+                emptyMessage.classList.add("hidden");
+            }
         });
     }
 });
+
 </script>
 
 
@@ -1660,6 +1688,14 @@ document.addEventListener("DOMContentLoaded", function() {
       
 
         <div id="produk-carousel" class="carousel grid grid-cols-2 md:grid-cols-4 gap-4 z-10">
+                @if($produk->isEmpty())
+        <div class="col-span-full text-center text-gray-500 py-10">
+            <!-- <i class="fas fa-box-open text-4xl mb-3"></i> -->
+            <p class="text-sm  font-arial">Tidak ada produk yang tersedia.</p>
+            <!-- <p class="text-sm text-gray-400">Silakan tambahkan produk baru dengan menekan tombol <b>Tambah Produk</b>.</p> -->
+        </div>
+    @else
+
             @foreach($produk as $p)
                 <div class="produk-item" id="produk-{{ $p->id }}" data-nama="{{ $p->nama }}">
     <div 
@@ -1680,7 +1716,10 @@ document.addEventListener("DOMContentLoaded", function() {
                 class="w-full h-40 object-cover rounded-lg border border-gray-200">
         @endif
 
-        <h3 class="mt-3 font-semibold text-lg truncate">{{ $p->nama }}</h3>
+       <h3 class="mt-3 font-semibold text-lg break-words whitespace-normal line-clamp-none">
+  {{ $p->nama }}
+</h3>
+
         <div class="flex items-center justify-between pb-2">
             <p class="text-green-600 font-bold text-lg truncate">
                 Rp. {{ number_format($p->harga, 0, ',', '.') }}
@@ -1764,7 +1803,13 @@ document.addEventListener("DOMContentLoaded", function() {
             @if(count($produk) % 2 != 0)
                 <div class="invisible border rounded-lg shadow-md p-3 w-[200px] min-h-[280px] mx-auto"></div>
             @endif
+                @endif
         </div>
+        
+{{-- tambahkan ini DI LUAR #produk-carousel --}}
+<div id="produk-empty" class="col-span-full text-center text-gray-500 py-10 hidden">
+    <p class="text-sm font-arial italic">Produk tidak tersedia.</p>
+</div>
 
         <div id="produk-nav" class="flex justify-center mt-4 hidden">
     <button class="btn btn-outline mr-2" 
@@ -1801,7 +1846,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
     <div class="relative">
         <!-- 🔥 Grid konsisten kayak Produk -->
+          @if ($kegiatan->count() > 0)
         <div id="kegiatan-carousel" class="carousel grid grid-cols-2 md:grid-cols-4 gap-4">
+               
             @foreach ($kegiatan as $k)
     <div class="kegiatan-item" 
          id="kegiatan-{{ $k->id_kegiatan }}" 
@@ -1872,7 +1919,24 @@ document.addEventListener("DOMContentLoaded", function() {
 </div> 
 </div> 
 @endforeach
+</div>
+   <!-- muncul cuma kalau hasil pencarian kosong -->
+        <div id="kegiatan-empty" class="col-span-4 text-center text-gray-500 py-8 hidden">
+            Kegiatan tidak tersedia
+        </div>
+    @else
+        <!-- muncul cuma kalau database kosong -->
+        <div id="kegiatan-none" class="col-span-4 text-center text-gray-500 py-8">
+            Tidak ada kegiatan yang tersedia
+        </div>
+    @endif
  </div>
+
+ 
+<!-- Tambahin ini -->
+<div id="kegiatan-empty" class="col-span-4 text-center text-gray-500 py-8 hidden">
+    Kegiatan tidak tersedia
+</div>
         <div id="kegiatan-nav" class="flex justify-center mt-4 hidden">
     <button id="kegiatan-prev" 
         class="btn btn-outline mr-2" 
@@ -2002,7 +2066,7 @@ function goToDetailKegiatan(id, event) {
         @endif
     @else
         {{-- Pesan jika kosong --}}
-        <p class="text-gray-500 text-center italic mt-4">
+        <p class="text-gray-500 text-center  mt-4">
             Belum ada inovasi yang ditambahkan.
         </p>
     @endif
@@ -2120,7 +2184,7 @@ $groupedProduk = $produkPertahun
 
           @if($produkPertahun->isEmpty())
             <tr>
-              <td colspan="5" class="text-center p-4 text-gray-500 italic">
+              <td colspan="5" class="text-center p-4 text-gray-500 ">
                 Tidak ada data produk per tahun
               </td>
             </tr>
@@ -2427,7 +2491,7 @@ context.restore();
 
             <div class="mb-2 sm:mb-3">
                 <label for="jabatan" class="block">Jabatan</label>
-                <select id="jabatan" name="jabatan" class="w-full border rounded p-1 sm:p-2" required>
+                <select id="jabatan" name="jabatan" class="w-full border rounded p-1 sm:p-2" required oninvalid="this.setCustomValidity('Silakan pilih jabatan terlebih dahulu , karena field ini wajib diisi.')" oninput="this.setCustomValidity('')">
                     @php
                         $jabatanList = ['Ketua', 'Wakil Ketua', 'Sekretaris', 'Bendahara', 'Anggota'];
                         $usedJabatan = \App\Models\StrukturOrganisasi::where('id_kelompok', $kelompok->id_kelompok)
@@ -2446,12 +2510,12 @@ context.restore();
 
             <div class="mb-2 sm:mb-3">
                 <label class="block">Nama</label>
-                <input type="text" id="nama" name="nama" class="w-full border rounded p-1 sm:p-2" required>
+                <input type="text" id="nama" name="nama" class="w-full border rounded p-1 sm:p-2" placeholder="Contoh : Putri"    required oninvalid="this.setCustomValidity('Silakan isi nama terlebih dahulu, karena  field ini wajib diisi.')" oninput="this.setCustomValidity('')">
             </div>
 
             <div class="mb-2 sm:mb-3">
                 <label for="id_rentan" class="block">Kelompok Rentan</label>
-                <select id="id_rentan" name="id_rentan" class="w-full border rounded p-1 sm:p-2" required>
+                <select id="id_rentan" name="id_rentan" class="w-full border rounded p-1 sm:p-2" required oninvalid="this.setCustomValidity('Silakan pilih kelompok rentan terlebih dahulu, karena  field ini wajib diisi.')" oninput="this.setCustomValidity('')">
                     <option value="">-- Pilih Kelompok Rentan --</option>
                     @foreach($rentan as $r)
                         <option value="{{ $r->id_rentan }}">{{ $r->nama_rentan }}</option>
@@ -2524,7 +2588,7 @@ $(document).ready(function() {
                 @method('PUT')
                 <div class="form-group">
                     <label for="sejarahContent" class="form-label">Isi Sejarah</label>
-                    <textarea id="sejarahContent" name="sejarah" class="form-textarea w-full border rounded p-2" required>{{ $kelompok->sejarah ?? '' }}</textarea>
+                    <textarea id="sejarahContent" name="sejarah" class="form-textarea w-full border rounded p-2" required oninvalid="this.setCustomValidity('Silakan isi sejarah terlebih dahulu, karena  field ini wajib diisi.')" oninput="this.setCustomValidity('')">{{ $kelompok->sejarah ?? '' }}</textarea>
                 </div>
                 <div class="flex justify-end space-x-2">
                     <button type="button" onclick="closeSejarahForm()" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300">Batal</button>
@@ -2583,7 +2647,7 @@ $(document).ready(function() {
               method="POST"
 
               action="{{ route('Admin_Kelompok.storeSkDesa', $kelompok->id_kelompok) }}"
-              enctype="multipart/form-data">
+              enctype="multipart/form-data" >
 
                 @csrf
     @method('PUT')
@@ -2604,8 +2668,9 @@ $(document).ready(function() {
                 <input type="file"
                        id="file"
                        name="file"
-                       class="form-input w-full border rounded px-3 py-2"
-                       accept="image/*,.pdf"
+                       class="form-input w-full border rounded px-3 py-2" required
+                       accept="image/*,.pdf" required  oninvalid="this.setCustomValidity('Silakan pilih file terlebih dahulu, karena ini field ini wajib diisi.')"
+    oninput="this.setCustomValidity('')"
                        >
 
                 <!-- Tempat tampil nama file -->
@@ -2745,7 +2810,7 @@ $(document).ready(function() {
             <div class="mb-2 sm:mb-3">
                 <label for="namaProduk" class="block">Nama Produk</label>
                 <input type="text" id="namaProduk" name="nama"
-                       class="w-full border rounded p-1 sm:p-2" readonly>
+                       class="w-full border rounded p-1 sm:p-2" readonly >
             </div>
 
             <div class="mb-2 sm:mb-3">
@@ -2813,7 +2878,8 @@ $(document).ready(function() {
                        id="katalog"
                        name="katalog"
                        class="w-full border rounded px-2 py-1 sm:px-3 sm:py-2 text-xs sm:text-base"
-                       accept="image/*,.pdf">
+                       accept="image/*,.pdf" required  oninvalid="this.setCustomValidity('Silakan pilih file terlebih dahulu, karena ini field ini wajib diisi.')"
+    oninput="this.setCustomValidity('')">
 
                 <!-- Tempat preview nama file -->
                 <div id="katalogFilePreview" class="mt-1 sm:mt-2 text-xs sm:text-sm text-gray-600">
@@ -2859,31 +2925,37 @@ $(document).ready(function() {
             <input type="hidden" name="removed_sertifikat" id="removedSertifikat" value="">
             <input type="hidden" name="_method" id="produkMethod" value="POST">
             <input type="hidden" name="id_produk" id="id_produk">
+            <input type="hidden" id="replacedSertifikat" name="replaced_sertifikat" value="[]">
+
 
             <div class="form-group mb-2 sm:mb-3">
                 <label for="produkNama" class="form-label">Nama Produk</label>
-                <input type="text" id="produkNama" name="nama" class="form-input p-1 sm:p-2" required>
+                <input type="text" id="produkNama" name="nama" class="form-input p-1 sm:p-2" placeholder="Contoh : Kripik Pisang" required oninvalid="this.setCustomValidity('Silakan isi nama produk terlebih dahulu, karena  field ini wajib diisi.')" oninput="this.setCustomValidity('')">
             </div>
 
             <div class="form-group mb-2 sm:mb-3">
                 <label for="produkHarga" class="form-label">Harga</label>
-                <input type="text" id="produkHarga" name="harga" class="form-input p-1 sm:p-2" required>
+                <input type="text" id="produkHarga" name="harga" class="form-input p-1 sm:p-2" placeholder="Contoh : 12000"  required oninvalid="this.setCustomValidity('Silakan isi harga terlebih dahulu, karena  field ini wajib diisi.')" oninput="this.setCustomValidity('')">
             </div>
 
             <div class="form-group mb-2 sm:mb-3">
                 <label for="produkStok" class="form-label">Stok</label>
-                <input type="number" id="produkStok" name="stok" class="form-input p-1 sm:p-2" required>
+                <input type="number" id="produkStok" name="stok" class="form-input p-1 sm:p-2" placeholder="Contoh : 23"  required oninvalid="this.setCustomValidity('Silakan isi stok terlebih dahulu, karena  field ini wajib diisi.')" oninput="this.setCustomValidity('')">
             </div>
 
             <!-- Foto Produk -->
             <div class="form-group mb-3 sm:mb-4">
                 <label for="produkGambar" class="form-label block mb-1 font-medium">Foto Produk</label>
-                <input 
-                    type="file" 
-                    id="produkGambar" 
-                    name="foto" 
-                    class="form-input w-full border rounded px-2 py-1 sm:px-3 sm:py-2" 
-                    accept="image/*">
+              <input 
+    type="file" 
+    id="produkGambar" 
+    name="foto" 
+    class="form-input w-full border rounded px-2 py-1 sm:px-3 sm:py-2" 
+    accept="image/*"
+    oninvalid="this.setCustomValidity('Silakan pilih file terlebih dahulu, karena ini field ini wajib diisi.')"
+    oninput="this.setCustomValidity('')">
+
+
 
                 <input type="hidden" name="removed_foto" id="removedFoto" value="">
 
@@ -2893,7 +2965,7 @@ $(document).ready(function() {
                 <div id="existingFoto" class="mt-2 text-xs sm:text-sm text-gray-600"></div>
             </div>
 
-            <div class="form-group mb-2 sm:mb-3">
+            <!-- <div class="form-group mb-2 sm:mb-3">
                 <label for="produk_terjual" class="form-label">Produk Terjual</label>
                 <input 
                     type="text" 
@@ -2902,54 +2974,67 @@ $(document).ready(function() {
                     class="form-input bg-gray-200 text-gray-700 cursor-not-allowed p-1 sm:p-2" 
                     value="0" 
                     disabled>
-            </div>
+            </div> -->
 
             <div class="form-group mb-2 sm:mb-3">
                 <label for="deskripsi" class="form-label">Deskripsi</label>
-                <textarea id="deskripsi" name="deskripsi" class="form-input p-1 sm:p-2" rows="3" required></textarea>
+                <textarea id="deskripsi" name="deskripsi" class="form-input p-1 sm:p-2" rows="3" placeholder="Contoh : Makanan ini terbuat dari"  required oninvalid="this.setCustomValidity('Silakan isi deskripsi terlebih dahulu, karena  field ini wajib diisi.')" oninput="this.setCustomValidity('')"></textarea>
             </div>
 
             <!-- Sertifikat -->
-            <div class="form-group mb-3 sm:mb-4">
-                <label for="sertifikat" class="form-label block mb-1 font-medium">Sertifikat</label>
-                <input 
-                    type="file" 
-                    id="sertifikat" 
-                    name="sertifikat[]" 
-                    class="form-input w-full border rounded px-2 py-1 sm:px-3 sm:py-2" 
-                    accept="image/*,.pdf" 
-                    multiple>
-                <div id="sertifikatList" class="mt-2"></div>
+            <!-- Sertifikat -->
+<div class="form-group mb-3 sm:mb-4">
+  <label for="sertifikat" class="form-label block mb-1 font-medium">Sertifikat</label>
 
-                <div id="sertifikatPreview" class="mt-2 text-xs sm:text-sm text-gray-600">
-                    <p>Tidak ada file yang dipilih.</p>
-                </div>
-               <div id="existingSertifikat" class="mt-3 space-y-1">
-     @php
-    // Pastikan $produk adalah satu objek, bukan collection
+  <!-- 🔹 File sertifikat lama (existing) -->
+<!-- 🔹 File sertifikat lama (edit produk) -->
+<div id="existingSertifikat" class="text-sm mt-1">
+  @php
     $sertifikatPaths = (isset($produk) && !($produk instanceof \Illuminate\Support\Collection) && !empty($produk->sertifikat))
         ? explode(',', $produk->sertifikat)
         : [];
-@endphp
+  @endphp
 
-
-    @if (!empty($sertifikatPaths))
-        @foreach ($sertifikatPaths as $path)
-            <a href="{{ asset('storage/' . $path) }}" 
-               target="_blank" 
-               class="block text-blue-600 underline">
-               {{ basename($path) }}
-            </a>
-        @endforeach
-    @else
-        <p class="text-gray-500">Tidak ada data sertifikat yang tersedia.</p>
-    @endif
+  @if (!empty($sertifikatPaths))
+    @foreach ($sertifikatPaths as $index => $path)
+      <div class="file-preview flex items-center gap-2 mb-1">
+        <span class="text-blue-600 hover:underline cursor-pointer flex-1 break-all"
+              onclick="window.open('{{ asset('storage/' . $path) }}', '_blank')">
+          {{ basename($path) }}
+        </span>
+        <button type="button"
+                class="file-remove text-red-500 hover:text-red-700"
+                onclick="removeExistingSertifikat('{{ basename($path) }}')">✕</button>
+      </div>
+    @endforeach
+  @endif
 </div>
 
-            </div>
+
+
+  <!-- 🔹 Input sertifikat baru -->
+  <input 
+      type="file" 
+      id="sertifikat" 
+      name="sertifikat[]" 
+      class="form-input w-full border rounded px-2 py-1 sm:px-3 sm:py-2" 
+      accept="image/*,.pdf" 
+      multiple>
+
+  <!-- 🔹 Preview sertifikat baru -->
+  <div id="sertifikatPreview" class="mt-2 text-xs sm:text-sm text-gray-600">
+      <p>Tidak ada file yang dipilih.</p>
+  </div>
+</div>
+
 
             <div class="flex justify-end space-x-1 sm:space-x-2">
-                <button type="button" onclick="closeProdukForm()" class="px-2 py-1 sm:px-4 sm:py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300">Batal</button>
+               <button type="button" 
+    class="px-2 py-1 sm:px-4 sm:py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300"
+    onclick="resetProdukForm(); document.getElementById('produkGambar').removeAttribute('required'); document.getElementById('produkModal').classList.add('hidden');">
+    Batal
+</button>
+
                 <button type="submit" class="px-2 py-1 sm:px-4 sm:py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Simpan</button>
             </div>
         </form>
@@ -2967,19 +3052,7 @@ Swal.fire({
 @endif
 
 
-<style>#existingSertifikat a,
-#sertifikatPreview a {
-    display: inline-block;
-    margin-bottom: 0.5rem; /* kasih jarak bawah antar file */
-}
 
-#existingSertifikat div,
-#sertifikatPreview div {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-</style>
 
 
 
@@ -3008,17 +3081,17 @@ Swal.fire({
 
             <div class="mb-2 sm:mb-3">
                 <label class="block text-xs sm:text-sm font-medium">Judul</label>
-                <input type="text" name="judul" id="kegiatanJudul" class="border rounded w-full px-2 py-1 sm:px-3 sm:py-2">
+                <input type="text" name="judul" id="kegiatanJudul" class="border rounded w-full px-2 py-1 sm:px-3 sm:py-2" placeholder="Contoh : Menanam padi" required oninvalid="this.setCustomValidity('Silakan isi judul terlebih dahulu, karena  field ini wajib diisi.')" oninput="this.setCustomValidity('')">
             </div>
 
             <div class="mb-2 sm:mb-3">
                 <label class="block text-xs sm:text-sm font-medium">Deskripsi</label>
-                <textarea name="deskripsi" id="kegiatanDeskripsi" class="border rounded w-full px-2 py-1 sm:px-3 sm:py-2"></textarea>
+                <textarea name="deskripsi" id="kegiatanDeskripsi" class="border rounded w-full px-2 py-1 sm:px-3 sm:py-2" placeholder="Contoh : Kegiatan ini dilakukan" required oninvalid="this.setCustomValidity('Silakan isi deskripsi kegiatan terlebih dahulu, karena  field ini wajib diisi.')" oninput="this.setCustomValidity('')"></textarea>
             </div>
 
             <div class="mb-2 sm:mb-3">
                 <label class="block text-xs sm:text-sm font-medium">Tanggal</label>
-                <input type="date" name="tanggal" id="kegiatanTanggal" class="border rounded w-full px-2 py-1 sm:px-3 sm:py-2">
+                <input type="date" name="tanggal" id="kegiatanTanggal" class="border rounded w-full px-2 py-1 sm:px-3 sm:py-2"required oninvalid="this.setCustomValidity('Silakan isi tanggal kegiatan terlebih dahulu, karena  field ini wajib diisi.')" oninput="this.setCustomValidity('')">
             </div>
 
               <!-- 🔹 Ubah input sumber_berita jadi textarea -->
@@ -3032,7 +3105,9 @@ Swal.fire({
 
             <div class="mb-2 sm:mb-3">
                 <label class="block text-xs sm:text-sm font-medium">Foto</label>
-                <input type="file" name="foto" id="kegiatanFoto" class="border rounded w-full px-2 py-1 sm:px-3 sm:py-2" accept="image/*,.pdf">
+                <input type="file" name="foto" id="kegiatanFoto" class="border rounded w-full px-2 py-1 sm:px-3 sm:py-2" accept="image/*" 
+                  oninvalid="this.setCustomValidity('Silakan pilih file terlebih dahulu, karena ini field ini wajib diisi.')"
+    oninput="this.setCustomValidity('')">
                 <input type="hidden" id="croppedKegiatanFile" name="cropped_file">
 
                 <div id="kegiatanFotoPreview" class="mt-2 text-xs sm:text-sm text-gray-600">
@@ -3048,6 +3123,25 @@ Swal.fire({
     </div>
 </div>
 
+<script>
+document.getElementById('kegiatanForm').addEventListener('submit', function(e) {
+    const fileInput = document.getElementById('kegiatanFoto');
+    const deleteFlag = document.getElementById('deleteKegiatanFile').value;
+    const existingFile = existingKegiatanFile;
+    const newFile = fileInput.files.length > 0;
+
+    // Kasus EDIT: file lama dihapus tapi tidak upload baru
+    if (deleteFlag === "1" && !newFile) {
+        e.preventDefault();
+        fileInput.setCustomValidity('Silakan pilih file terlebih dahulu, karena field ini wajib diisi.');
+        fileInput.reportValidity();
+        return false;
+    }
+
+    // Reset validasi custom kalau semua aman
+    fileInput.setCustomValidity('');
+});
+</script>
 
 <!-- Modal Preview File Kegiatan -->
 
@@ -3074,6 +3168,7 @@ Swal.fire({
         <h2 id="inovasiModalTitle" class="text-sm sm:text-lg font-bold mb-3 sm:mb-4">Tambah Inovasi</h2>
 
         <form id="inovasiForm" method="POST" enctype="multipart/form-data"
+
               action="{{ route('Admin_Kelompok.storeInovasi', ['id' => $kelompok->id_kelompok]) }}">
             @csrf
             
@@ -3088,7 +3183,8 @@ Swal.fire({
                 
                 <input type="file" id="inovasiFile" name="foto" 
                        class="w-full border rounded px-2 py-1 sm:px-3 sm:py-2"
-                       accept="image/*,.pdf">
+                       accept="image/*,.pdf" required  oninvalid="this.setCustomValidity('Silakan pilih file terlebih dahulu, karena ini field ini wajib diisi.')"
+    oninput="this.setCustomValidity('')">
                 <input type="hidden" id="croppedInovasiFile" name="cropped_file">
 
                 <div id="inovasiFilePreview" class="mt-2 text-xs sm:text-sm text-gray-600">
@@ -3147,11 +3243,6 @@ document.getElementById("inovasiFile").addEventListener("change", function (e) {
 
 
  
-
-
-
-
-
 
 
 <style>
@@ -3223,7 +3314,7 @@ document.getElementById("inovasiFile").addEventListener("change", function (e) {
             Tambah Produk Per Tahun
         </h2>
 
-        <form id="produkTahunForm" method="POST" action="">
+        <form id="produkTahunForm" method="POST" action="" >
             @csrf
             <input type="hidden" name="_method" id="formMethod" value="POST">
             <input type="hidden" name="id_kelompok" id="id_kelompok" value="{{ $kelompok->id_kelompok }}">
@@ -3232,7 +3323,7 @@ document.getElementById("inovasiFile").addEventListener("change", function (e) {
 <div class="form-group mb-2 sm:mb-3">
     <label for="id_produk" class="block">Nama Produk</label>
     <select name="id_produk" id="id_produk_select" 
-            class="w-full border rounded p-1.5 sm:p-2 text-xs sm:text-sm" required>
+            class="w-full border rounded p-1.5 sm:p-2 text-xs sm:text-sm" required oninvalid="this.setCustomValidity('Silakan pilih nama produk, karena ini field ini wajib diisi.')" oninput="this.setCustomValidity('')">
         <option value="">Pilih Produk</option>
         @foreach ($produk as $p)
             <option value="{{ $p->id_produk }}" data-nama="{{ $p->nama }}">
@@ -3245,7 +3336,7 @@ document.getElementById("inovasiFile").addEventListener("change", function (e) {
 <div class="mb-4">
   <label for="tahun" class="block text-sm font-medium text-gray-700">Tahun</label>
   <select id="tahun" name="tahun"
-      class="select2-tahun mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500 @error('tahun') border-red-500 @enderror">
+      class="select2-tahun mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500 @error('tahun') border-red-500 @enderror" required oninvalid="this.setCustomValidity('Silakan pilih  tahun terlebih dahulu, karena ini field ini wajib diisi.')" oninput="this.setCustomValidity('')">
       <option value="">-- Pilih Tahun --</option>
       @for ($i = 2016; $i <= 2030; $i++)
           <option value="{{ $i }}">{{ $i }}</option>
@@ -3263,7 +3354,8 @@ document.getElementById("inovasiFile").addEventListener("change", function (e) {
             <div class="form-group mb-2 sm:mb-3">
                 <label for="harga" class="block">Harga</label>
                 <input type="number" step="1" name="harga" id="harga" 
-                       class="w-full border rounded p-1.5 sm:p-2 text-xs sm:text-sm" required>
+                       class="w-full border rounded p-1.5 sm:p-2 text-xs sm:text-sm" placeholder="Contoh : 12000" required  oninvalid="this.setCustomValidity('Silakan isi harganya terlebih dahulu, karena ini field ini wajib diisi.')"
+    oninput="this.setCustomValidity('')">
             </div>
 
                 <!-- Produk Terjual -->
@@ -3274,7 +3366,7 @@ document.getElementById("inovasiFile").addEventListener("change", function (e) {
        min="0"  
        name="produk_terjual" 
        id="produk_terjual_tahun" 
-       class="w-full border rounded p-1.5 sm:p-2 text-xs sm:text-sm" 
+       class="w-full border rounded p-1.5 sm:p-2 text-xs sm:text-sm"  placeholder="Contoh : 23"
        required
        oninvalid="this.setCustomValidity('Produk terjual minimal 0, tidak boleh negatif')"
        oninput="this.setCustomValidity('')">
@@ -4097,232 +4189,458 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+    <script>
+    // ====================== PRODUK ======================
+    // Variabel global
+    let produkGambarFile = null;
+    let produkSertifikatFiles = [];
+    let existingProdukFile = null;
+    let removedSertifikat = [];
+    
 
-  <script>
-// ======================= PRODUK =======================
+    // 🔧 Update: fungsi updateProdukGambarPreview sekarang meniru perilaku katalog
+    function updateProdukGambarPreview() {
+        const preview = document.getElementById('produkGambarPreview');
+        preview.innerHTML = ''; // bersihkan dulu
 
-// Variabel global
-let produkGambarFile = null;
-let produkSertifikatFiles = [];
-let existingProdukFile = null;
-let removedSertifikat = [];
+        if (produkGambarFile) {
+            // Tampilkan file baru yang dipilih
+            preview.innerHTML = `
+                <div class="file-preview flex items-center gap-2">
+                    <span class="file-name text-blue-600 cursor-pointer hover:underline" id="produkFileName">
+                        ${produkGambarFile.name}
+                    </span>
+                    <button class="file-remove text-red-500 hover:text-red-700" 
+                            onclick="removeProdukGambarFile()" 
+                            title="Hapus file">✕</button>
+                </div>
+            `;
 
-// ======================= FOTO PRODUK =======================
+            // ✅ Tambah event listener agar bisa re-preview hasil crop/rotasi
+            document.getElementById('produkFileName').addEventListener('click', () => {
+                previewProdukGambarFile(produkGambarFile, true);
+            });
 
-// Update preview foto produk
-function updateProdukGambarPreview() {
-    const preview = document.getElementById('produkGambarPreview');
-    preview.innerHTML = '';
+        } else if (existingProdukFile) {
+            const fileName = existingProdukFile.split('/').pop();
+            preview.innerHTML = `
+                <div class="file-preview flex items-center gap-2">
+                    <span class="file-name text-blue-600 cursor-pointer hover:underline" id="produkFileName">
+                        ${fileName}
+                    </span>
+                    <button class="file-remove text-red-500 hover:text-red-700"
+                            onclick="removeExistingProdukFile()" 
+                            title="Hapus file">✕</button>
+                </div>
+            `;
 
-    if (produkGambarFile) {
-        preview.innerHTML = `
-            <div class="file-preview flex items-center gap-2">
-                <span class="file-name text-blue-600 cursor-pointer hover:underline"
-                      onclick="previewProdukGambarFile(produkGambarFile)">
-                    ${produkGambarFile.name}
-                </span>
-                <button class="file-remove text-blue-600 hover:text-blue-800 font-bold" 
-                        onclick="removeProdukGambarFile()" title="Hapus file">✕</button>
-            </div>
-        `;
-    } else if (existingProdukFile) {
-        const fileName = existingProdukFile.split('/').pop();
-        preview.innerHTML = `
-            <div class="file-preview flex items-center gap-2">
-                <span class="file-name text-blue-600 cursor-pointer hover:underline"
-                      onclick="previewExistingProdukFile()">
-                    ${fileName}
-                </span>
-                <button class="file-remove text-blue-600 hover:text-blue-800 font-bold"
-                        onclick="removeExistingProdukFile()" title="Hapus file">✕</button>
-            </div>
-        `;
-    } else {
-        preview.innerHTML = '<p class="text-gray-500">Tidak ada file yang dipilih.</p>';
+            // ✅ Tambah event listener untuk preview file lama dari URL
+            document.getElementById('produkFileName').addEventListener('click', () => {
+                previewProdukFileFromUrl(existingProdukFile, fileName);
+            });
+
+        } else {
+            preview.innerHTML = '<p class="text-gray-500">Tidak ada file yang dipilih.</p>';
+        }
     }
-}
 
-// Preview foto produk baru (klik nama file)
-function previewProdukGambarFile(file, isRepreview = false) {
-    if (!file) return;
+    // 🔧 Preview file dari URL (file lama)
+    function previewProdukFileFromUrl(url, fileName) {
+        fetch(url)
+            .then(res => res.blob())
+            .then(blob => {
+                const file = new File([blob], fileName, { type: blob.type });
+                openUniversalPreview(file, (processedBlob, processedFile) => {
+                    saveProcessedProdukFoto(processedBlob, processedFile);
+                });
+            })
+            .catch(err => console.error('Gagal fetch file produk:', err));
+    }
 
-    openUniversalPreview(file, (blob, processedFile) => {
-        produkGambarFile = new File([processedFile], processedFile.name || file.name, { type: processedFile.type || file.type });
+    // 🔧 Simpan hasil crop/rotate untuk foto produk
+    function saveProcessedProdukFoto(blob, processedFile) {
+        produkGambarFile = new File([processedFile], processedFile.name, { type: processedFile.type });
 
+        // Sinkronkan ke input file
         const dataTransfer = new DataTransfer();
-        dataTransfer.items.add(processedFile);
+        dataTransfer.items.add(produkGambarFile);
         document.getElementById('produkGambar').files = dataTransfer.files;
 
-        if (!isRepreview) updateProdukGambarPreview();
+        // ✅ Update ulang preview supaya bisa diklik lagi
+        updateProdukGambarPreview();
+    }
 
-        // ✅ Biar bisa klik ulang hasil rotasi/crop-nya
-        const preview = document.getElementById('produkGambarPreview');
-        if (preview) {
-            const fileNameEl = preview.querySelector('.file-name');
-            if (fileNameEl) fileNameEl.onclick = () => previewProdukGambarFile(produkGambarFile, true);
-        }
-    });
-}
+    // 🔧 Fungsi preview gambar produk (baru & hasil edit)
+    function previewProdukGambarFile(file, isRepreview = false) {
+        if (!file) return;
 
-// Preview foto produk lama (dari DB)
-function previewExistingProdukFile() {
-    if (!existingProdukFile) return;
+        openUniversalPreview(file, (blob, processedFile) => {
+            // Simpan hasil crop/rotasi
+            produkGambarFile = new File([processedFile], processedFile.name || file.name, { type: processedFile.type || file.type });
 
-    fetch(existingProdukFile)
-        .then(res => res.blob())
-        .then(blob => {
-            const file = new File([blob], existingProdukFile.split('/').pop(), { type: blob.type });
+            // Update input file agar sinkron
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(produkGambarFile);
+            document.getElementById('produkGambar').files = dataTransfer.files;
 
-            openUniversalPreview(file, (processedBlob, processedFile) => {
-                produkGambarFile = new File([processedFile], processedFile.name || file.name, { type: processedFile.type || file.type });
+            // ✅ Perbarui preview agar bisa diklik ulang
+            updateProdukGambarPreview();
+        });
+    }
 
-                const dataTransfer = new DataTransfer();
-                dataTransfer.items.add(processedFile);
-                document.getElementById('produkGambar').files = dataTransfer.files;
+    // Fungsi untuk menghapus file produk
+    function removeProdukGambarFile() {
+        produkGambarFile = null;
+        document.getElementById('produkGambar').value = '';
+        document.getElementById('removedFoto').value = '1';
+        updateProdukGambarPreview();
+    }
 
-                updateProdukGambarPreview();
-
-                // ✅ Klik ulang aktif juga
-                const preview = document.getElementById('produkGambarPreview');
-                if (preview) {
-                    const fileNameEl = preview.querySelector('.file-name');
-                    if (fileNameEl) fileNameEl.onclick = () => previewProdukGambarFile(produkGambarFile, true);
-                }
-            });
-        })
-        .catch(err => console.error('Gagal fetch foto produk:', err));
-}
-
-// Hapus foto produk
-function removeProdukGambarFile() {
+    function removeExistingProdukFile() {
+        existingProdukFile = null;
+        document.getElementById('produkGambar').value = '';
+        document.getElementById('removedFoto').value = '1';
+        document.getElementById('produkGambarPreview').innerHTML =
+            "<p class='text-red-500 italic'>File akan dihapus setelah disimpan.</p>";
+    }
+    function removeProdukGambarFile() {
     produkGambarFile = null;
     document.getElementById('produkGambar').value = '';
     document.getElementById('removedFoto').value = '1';
     updateProdukGambarPreview();
+
+    // ✅ Tambahan baru: aktifkan kembali "required" kalau foto dihapus
+    document.getElementById('produkGambar').setAttribute('required', true);
 }
 
 function removeExistingProdukFile() {
     existingProdukFile = null;
-    const preview = document.getElementById('produkGambarPreview');
-    preview.innerHTML = "<p class='text-red-500 italic'>File akan dihapus setelah klik Simpan.</p>";
+    document.getElementById('produkGambar').value = '';
     document.getElementById('removedFoto').value = '1';
+    document.getElementById('produkGambarPreview').innerHTML =
+        "<p class='text-red-500 italic'>File akan dihapus setelah disimpan.</p>";
+
+    // ✅ Tambahan baru: aktifkan kembali "required" kalau file lama dihapus
+    document.getElementById('produkGambar').setAttribute('required', true);
 }
 
-// ======================= PRODUK SERTIFIKAT =======================
 
+    // ====================== SERTIFIKAT ======================
+// ====================== SERTIFIKAT ======================
 function updateProdukSertifikatPreview() {
     const preview = document.getElementById('sertifikatPreview');
     preview.innerHTML = '';
 
-    if (produkSertifikatFiles.length > 0) {
-        produkSertifikatFiles.forEach((file, index) => {
-            preview.innerHTML += `
-                <div class="file-preview flex items-center gap-2">
-                    <span class="file-name text-blue-600 cursor-pointer hover:underline"
-                          onclick="previewProdukSertifikatFile(${index})">${file.name}</span>
-                    <button class="file-remove text-blue-600 hover:text-blue-800 font-bold" 
-                            onclick="removeProdukSertifikatFile(${index})" title="Hapus file">✕</button>
-                </div>
-            `;
-        });
-    } else {
+    if (produkSertifikatFiles.length === 0) {
         preview.innerHTML = '<p class="text-gray-500">Tidak ada file yang dipilih.</p>';
+        return;
     }
-}
 
-// Preview sertifikat baru
-function previewProdukSertifikatFile(index, isRepreview = false) {
-    const file = produkSertifikatFiles[index];
-    if (!file) return;
+    produkSertifikatFiles.forEach((file, index) => {
+        const div = document.createElement('div');
+        div.className = 'file-preview flex items-center gap-2 mb-1'; // setiap file di baris baru
+        div.dataset.index = index;
 
-    openUniversalPreview(file, (blob, processedFile) => {
-        produkSertifikatFiles[index] = new File([processedFile], processedFile.name || file.name, { type: processedFile.type || file.type });
+        div.innerHTML = `
+            <span class="text-blue-600 hover:underline cursor-pointer" 
+                  onclick="previewProdukSertifikatFile(${index})">
+                ${index + 1}. ${file.name}
+            </span>
+            <button type="button" 
+                    class="text-blue-700 hover:text-red-700"
+                    onclick="removeProdukSertifikatFile(${index})">
+                ✕
+            </button>
+        `;
 
-        const dataTransfer = new DataTransfer();
-        produkSertifikatFiles.forEach(f => dataTransfer.items.add(f));
-        document.getElementById('sertifikat').files = dataTransfer.files;
-
-        if (!isRepreview) updateProdukSertifikatPreview();
-
-        // ✅ Biar klik ulang nama file bisa buka hasil rotasi/crop
-        const preview = document.getElementById('sertifikatPreview');
-        if (preview) {
-            const fileEls = preview.querySelectorAll('.file-name');
-            if (fileEls[index]) fileEls[index].onclick = () => previewProdukSertifikatFile(index, true);
-        }
+        preview.appendChild(div);
     });
 }
 
 
-// Preview sertifikat lama (dari DB)
-function previewExistingProdukSertifikat(filePath) {
-    if (!filePath) return;
 
-    fetch(filePath)
+
+
+   // 🔧 Preview file sertifikat baru (atau hasil edit ulang)
+function previewProdukSertifikatFile(index) {
+    const file = produkSertifikatFiles[index];
+    if (!file) return;
+
+    openUniversalPreview(file, (blob, processedFile, actionType) => {
+        if (actionType === 'cancel') return;
+
+        // 🔁 Gantikan file lama di memori browser
+        produkSertifikatFiles[index] = new File([processedFile], processedFile.name || file.name, { type: processedFile.type || file.type });
+
+
+        // sinkronkan input file
+        const dataTransfer = new DataTransfer();
+        produkSertifikatFiles.forEach(f => dataTransfer.items.add(f));
+        document.getElementById('sertifikat').files = dataTransfer.files;
+
+        // perbarui tampilan preview
+       // setelah selesai edit
+updateProdukSertifikatPreview();
+setTimeout(() => updateProdukSertifikatPreview(), 0);
+
+    });
+}
+
+    // 🔧 Preview sertifikat lama dari URL (PDF, JPG, PNG, dll)
+  function previewExistingProdukSertifikat(url) {
+    fetch(url)
         .then(res => res.blob())
         .then(blob => {
-            const fileName = filePath.split('/').pop();
-            const file = new File([blob], fileName, { type: blob.type });
+            const fileName = url.split('/').pop();
+            const mime = blob.type || 'application/pdf';
+            const file = new File([blob], fileName, { type: mime });
 
-            openUniversalPreview(file, (blobResult, processedFile) => {
-                // Tambahkan hasil edit ke daftar sertifikat
-                produkSertifikatFiles.push(
-                    new File([processedFile], processedFile.name || fileName, { type: processedFile.type || file.type })
-                );
+            openUniversalPreview(file, (processedBlob, processedFile, actionType) => {
+                // 🟡 Tambahkan pemeriksaan ketat
+                if (actionType === 'cancel' || !processedFile) return;
 
-                // Update input file (agar terkirim saat submit)
+                // 🧹 HAPUS FILE LAMA HANYA JIKA ADA PERUBAHAN
+                const existingContainer = document.getElementById("existingSertifikat");
+                if (existingContainer) {
+                    const item = Array.from(existingContainer.querySelectorAll(".file-preview"))
+                        .find(el => el.textContent.includes(fileName));
+                    if (item) item.remove();
+                }
+
+                // tandai file lama dihapus
+                removedSertifikat.push(`sertifikat_produk/${fileName}`);
+                document.getElementById("removedSertifikat").value = JSON.stringify(removedSertifikat);
+
+                // simpan file hasil edit
+                produkSertifikatFiles.push(processedFile);
+
+                // update input file
                 const dataTransfer = new DataTransfer();
                 produkSertifikatFiles.forEach(f => dataTransfer.items.add(f));
                 document.getElementById('sertifikat').files = dataTransfer.files;
 
-                // Update tampilan preview
                 updateProdukSertifikatPreview();
             });
         })
-        .catch(err => console.error('Gagal fetch file sertifikat:', err));
+        .catch(err => console.error('Gagal memuat file sertifikat lama:', err));
 }
 
-// Hapus sertifikat
+
+
+
+    // 🔧 Hapus file sertifikat baru (belum tersimpan)
 function removeProdukSertifikatFile(index) {
     produkSertifikatFiles.splice(index, 1);
+
     const dataTransfer = new DataTransfer();
     produkSertifikatFiles.forEach(f => dataTransfer.items.add(f));
     document.getElementById('sertifikat').files = dataTransfer.files;
+
     updateProdukSertifikatPreview();
 }
+    function removeSertifikat(file) {
+    removedSertifikat.push(file);
 
-// ======================= EVENT LISTENERS =======================
+    const existingSertifikatContainer = document.getElementById("existingSertifikat");
+    existingSertifikatContainer.querySelectorAll(".file-preview").forEach(item => {
+        if (item.textContent.includes(file.split('/').pop())) {
+            item.remove();
+        }
+    });
+
+    let removedInput = document.getElementById("removedSertifikat");
+    if (!removedInput) {
+        removedInput = document.createElement("input");
+        removedInput.type = "hidden";
+        removedInput.id = "removedSertifikat";
+        removedInput.name = "removedSertifikat";
+        document.getElementById("produkForm").appendChild(removedInput);
+    }
+
+    removedInput.value = JSON.stringify(removedSertifikat);
+}
+
+    // ====================== EVENT LISTENER ======================
+    document.addEventListener('DOMContentLoaded', () => {
+        const produkGambarInput = document.getElementById('produkGambar');
+        const produkSertifikatInput = document.getElementById('sertifikat');
+
+        if (produkGambarInput) {
+            produkGambarInput.addEventListener('change', function(e) {
+                if (e.target.files && e.target.files[0]) {
+                    produkGambarFile = e.target.files[0];
+                    existingProdukFile = null;
+                    document.getElementById('removedFoto').value = '';
+                    updateProdukGambarPreview();
+                }
+            });
+        }
+
+        if (produkSertifikatInput) {
+            produkSertifikatInput.addEventListener('change', function(e) {
+                if (e.target.files && e.target.files.length > 0) {
+                    const newFiles = Array.from(e.target.files);
+                    produkSertifikatFiles = [...produkSertifikatFiles, ...newFiles];
+                    const dataTransfer = new DataTransfer();
+                    produkSertifikatFiles.forEach(f => dataTransfer.items.add(f));
+                    produkSertifikatInput.files = dataTransfer.files;
+                    updateProdukSertifikatPreview();
+                }
+            });
+        }
+    });
+    </script>
+
+    <script>
+        function resetProdukForm() {
+    const form = document.getElementById("produkForm");
+    form.reset();
+
+    // reset preview
+    document.getElementById("produkGambarPreview").innerHTML = "<p>Tidak ada file yang dipilih.</p>";
+    document.getElementById("sertifikatPreview").innerHTML = "<p>Tidak ada file yang dipilih.</p>";
+    document.getElementById("existingFoto").innerHTML = "";
+    document.getElementById("existingSertifikat").innerHTML = "";
+
+    // reset hidden inputs
+    document.getElementById("removedFoto").value = "";
+    const removedSertifikatInput = document.getElementById("removedSertifikat");
+    if (removedSertifikatInput) removedSertifikatInput.value = "";
+
+    // reset variabel global
+    produkGambarFile = null;
+    produkSertifikatFiles = [];
+    existingProdukFile = null;
+    removedSertifikat = [];
+
+    // reset atribut required
+    const fileInput = document.getElementById("produkGambar");
+    if (fileInput) fileInput.removeAttribute("required"); // ✅ tambahkan ini
+
+    // hapus file input
+    const produkGambarInput = document.getElementById("produkGambar");
+    const produkSertifikatInput = document.getElementById("sertifikat");
+    if (produkGambarInput) produkGambarInput.value = "";
+    if (produkSertifikatInput) produkSertifikatInput.value = "";
+}
+
+
+    </script>
+
+  
+
+
+ <style>
+/* 🌸=========================================
+   STYLE UNTUK FITUR TAMBAH (Upload Baru)
+   (#sertifikatPreview)
+  ========================================= */
+
+/* Link nama file */
+#sertifikatPreview a {
+  display: inline-block;
+  margin-bottom: 0.5rem; /* jarak antar file */
+  color: #2563eb;        /* biru seperti link */
+  text-decoration: underline;
+  cursor: pointer;
+  white-space: normal;
+  word-break: break-all;
+}
+
+/* Setiap item file di preview */
+#sertifikatPreview .file-preview {
+  display: flex;               /* sejajarkan teks dan tombol ✕ */
+  align-items: center;
+  justify-content: flex-start; /* biar X nempel setelah teks */
+  gap: 6px;
+  margin-bottom: 4px;
+  flex-wrap: wrap;             /* jaga kalau nama file panjang */
+}
+
+/* Nama file di list tambah */
+#sertifikatPreview .file-preview span {
+  white-space: normal; /* bisa turun baris */
+  word-break: break-all;
+}
+
+/* Tombol ✕ di list tambah */
+#sertifikatPreview .file-remove {
+  color: #2563eb;
+  cursor: pointer;
+  flex-shrink: 0;
+  margin-top: 0;
+}
+
+/* Container utama tambah */
+#sertifikatPreview {
+  display: block; /* tiap file-preview pasti baris baru */
+}
+
+
+
+
+
+
+
+
+
+
+/* ✅ STYLE FITUR EDIT (disamakan dengan fitur tambah) */
+#existingSertifikat {
+  display: block; /* sama seperti fitur tambah */
+}
+
+/* Setiap item file di edit */
+#existingSertifikat .file-preview {
+  display: flex;               /* sejajarkan teks dan tombol ✕ */
+  align-items: center;
+  justify-content: flex-start; /* biar X nempel setelah teks */
+  gap: 6px;
+  margin-bottom: 4px;
+  flex-wrap: wrap;             /* jaga kalau nama file panjang */
+}
+
+/* Nama file di list edit */
+#existingSertifikat .file-preview span,
+#existingSertifikat a {
+  display: inline-block;
+  margin-bottom: 0.5rem;       /* sama seperti di tambah */
+  color: #2563eb;              /* biru seperti link */
+  text-decoration: underline;
+  cursor: pointer;
+  white-space: normal;
+  word-break: break-all;
+}
+
+/* Tombol ✕ di list edit */
+#existingSertifikat .file-remove {
+  color: #2563eb;
+  cursor: pointer;
+  flex-shrink: 0;
+  margin-top: 0;
+}
+
+</style>
+
+
+<script>
+// ✅ Fungsi untuk menambahkan penomoran otomatis pada sertifikat lama
+function reindexExistingSertifikat() {
+    const existingItems = document.querySelectorAll('#existingSertifikat .file-preview span');
+    existingItems.forEach((span, index) => {
+        // Ambil nama file tanpa nomor sebelumnya
+        const text = span.textContent.replace(/^\d+\.\s*/, '');
+        span.textContent = `${index + 1}. ${text}`;
+    });
+}
+
+// ✅ Jalankan saat halaman atau modal produk dibuka
 document.addEventListener('DOMContentLoaded', () => {
-    const produkGambarInput = document.getElementById('produkGambar');
-    const produkSertifikatInput = document.getElementById('sertifikat');
-    
-    if (produkGambarInput) {
-        produkGambarInput.addEventListener('change', function(e) {
-            if (e.target.files && e.target.files[0]) {
-                produkGambarFile = e.target.files[0];
-                existingProdukFile = null;
-                document.getElementById('removedFoto').value = '';
-                updateProdukGambarPreview();
-            }
-        });
-    }
-
-    if (produkSertifikatInput) {
-        produkSertifikatInput.addEventListener('change', function(e) {
-            if (e.target.files && e.target.files.length > 0) {
-                const newFiles = Array.from(e.target.files);
-                produkSertifikatFiles = [...produkSertifikatFiles, ...newFiles];
-
-                const dataTransfer = new DataTransfer();
-                produkSertifikatFiles.forEach(f => dataTransfer.items.add(f));
-                produkSertifikatInput.files = dataTransfer.files;
-
-                updateProdukSertifikatPreview();
-            }
-        });
-    }
+    reindexExistingSertifikat();
 });
 </script>
+
+
 
 
  <script>
@@ -4468,171 +4786,142 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
-
-
-<script>
+ <script>
 let inovasiFile = null;
+let existingInovasiFile = null; // ✅ untuk menyimpan file lama seperti existingKatalogFile
 
 // =================== UPDATE PREVIEW FILE ===================
-function updateInovasiFilePreview(fileName = null) {
+function updateInovasiFilePreview() {
     const preview = document.getElementById('inovasiFilePreview');
+    preview.innerHTML = '';
 
     if (inovasiFile) {
-        // ✅ File baru dipilih atau sudah di-edit
+        // ✅ File baru dipilih / hasil crop / rotasi (disimpan sementara)
         preview.innerHTML = `
-            <div class="file-preview flex items-center">
-                <span class="file-name text-blue-600 cursor-pointer hover:underline"
-                      onclick="previewInovasiFile(inovasiFile)">
+            <div class="file-preview flex items-center gap-2">
+                <span class="file-name text-blue-600 cursor-pointer hover:underline" id="inovasiFileName">
                     ${inovasiFile.name}
                 </span>
-                <button type="button" class="file-remove text-red-500 ml-2"
+                <button type="button" class="file-remove text-red-500 ml-2 hover:text-red-700"
                         onclick="removeInovasiFile()">✕</button>
             </div>
         `;
-    } else if (fileName) {
+
+        // ✅ tambahkan event listener agar bisa klik ulang untuk re-preview
+        document.getElementById('inovasiFileName').addEventListener('click', function() {
+            previewInovasiFile(inovasiFile, true);
+        });
+
+    } else if (existingInovasiFile) {
         // ✅ File lama dari database
         preview.innerHTML = `
-            <div class="file-preview flex items-center">
-                <span class="file-name text-blue-600 cursor-pointer hover:underline"
-                      onclick="previewExistingInovasiFile('${fileName}')">
-                    ${fileName}
+            <div class="file-preview flex items-center gap-2">
+                <span class="file-name text-blue-600 cursor-pointer hover:underline" id="inovasiFileName">
+                    ${existingInovasiFile.split('/').pop()}
                 </span>
-                <button type="button" class="file-remove text-red-500 ml-2"
-                        onclick="removeInovasiFile()">✕</button>
+                <button type="button" class="file-remove text-red-500 ml-2 hover:text-red-700"
+                        onclick="removeExistingInovasiFile()">✕</button>
             </div>
         `;
+
+        document.getElementById('inovasiFileName').addEventListener('click', function() {
+            previewExistingInovasiFile();
+        });
+
     } else {
-        // Tidak ada file
-        preview.innerHTML = '<p>Tidak ada file yang dipilih.</p>';
+        preview.innerHTML = '<p class="text-gray-500">Tidak ada file yang dipilih.</p>';
     }
 }
 
-// =================== PREVIEW FILE LAMA (DARI DB) ===================
-function previewExistingInovasiFile(fileName) {
-    const modal = document.getElementById('inovasiModal');
-    const existingFilePath = modal.dataset.existingFile;
-    if (!existingFilePath) return;
-
-    const fullPath = existingFilePath.startsWith('/storage/')
-        ? existingFilePath
-        : '/storage/' + existingFilePath;
-
-    fetch(fullPath)
-        .then(response => response.blob())
-        .then(blob => {
-            const file = new File([blob], fileName, { type: blob.type });
-
-            document.getElementById('inovasiFileOriginalName').value = fileName;
-
-            // 🔥 Buka crop/rotate universal preview
-            openUniversalPreview(file, (processedBlob, processedFile) => {
-                inovasiFile = processedFile;
-
-                // Update input file agar terkirim ke backend
-                const dataTransfer = new DataTransfer();
-                dataTransfer.items.add(processedFile);
-                document.getElementById('inovasiFile').files = dataTransfer.files;
-
-                // Simpan hasil crop ke hidden input (base64)
-                const reader = new FileReader();
-                reader.onloadend = function() {
-                    document.getElementById('croppedInovasiFile').value = reader.result;
-                };
-                reader.readAsDataURL(processedBlob);
-
-                // ✅ Update preview supaya nama file bisa diklik lagi
-                updateInovasiFilePreview(processedFile.name);
-            });
-        })
-        .catch(err => console.error('Gagal memuat file inovasi:', err));
-}
-
-// =================== PREVIEW FILE BARU ===================
-function previewInovasiFile(file) {
+// =================== PREVIEW FILE BARU (HASIL CROP / ROTASI SEMENTARA) ===================
+function previewInovasiFile(file, isRepreview = false) {
     if (!file) return;
 
     openUniversalPreview(file, (blob, processedFile) => {
-        inovasiFile = processedFile;
+        // ✅ Simpan hasil crop/rotasi ke variabel global (sementara)
+        inovasiFile = new File([processedFile], processedFile.name || file.name, { type: processedFile.type || file.type });
 
+        // ✅ Update input file supaya hasil crop ikut terkirim
         const dataTransfer = new DataTransfer();
         dataTransfer.items.add(processedFile);
         document.getElementById('inovasiFile').files = dataTransfer.files;
 
-        const reader = new FileReader();
-        reader.onloadend = function() {
-            document.getElementById('croppedInovasiFile').value = reader.result;
-        };
-        reader.readAsDataURL(blob);
-
-        updateInovasiFilePreview(processedFile.name);
+        // ✅ update preview agar bisa diklik ulang (lihat hasil edit)
+        updateInovasiFilePreview();
     });
 }
 
-// =================== HAPUS FILE ===================
+// =================== PREVIEW FILE LAMA (DARI DATABASE) ===================
+function previewExistingInovasiFile() {
+    const existingFileName = document.getElementById('inovasiModal').dataset.existingFile;
+    if (!existingFileName) return;
+
+    fetch('/storage/' + existingFileName)
+        .then(response => response.blob())
+        .then(blob => {
+            const file = new File([blob], existingFileName.split('/').pop(), { type: blob.type });
+
+            openUniversalPreview(file, (processedBlob, processedFile) => {
+                // ✅ Simpan hasil edit sementara di variabel inovasiFile
+                inovasiFile = new File([processedFile], processedFile.name || file.name, { type: processedFile.type || file.type });
+
+                // ✅ Update input file
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(processedFile);
+                document.getElementById('inovasiFile').files = dataTransfer.files;
+
+                // ✅ Update preview
+                updateInovasiFilePreview();
+            });
+        })
+        .catch(err => console.error("Gagal fetch file inovasi:", err));
+}
+
+// =================== HAPUS FILE BARU ===================
 function removeInovasiFile() {
     inovasiFile = null;
     document.getElementById('inovasiFile').value = '';
-    document.getElementById('croppedInovasiFile').value = '';
     document.getElementById('deleteInovasiFile').value = "1";
 
     const preview = document.getElementById('inovasiFilePreview');
-    preview.innerHTML = '<p>File akan dihapus setelah klik Simpan.</p>';
+    preview.innerHTML = "<p class='text-red-500 italic'>File akan dihapus setelah klik Simpan.</p>";
 }
 
-// =================== INPUT FILE EVENT ===================
+// =================== HAPUS FILE LAMA DARI DB ===================
+function removeExistingInovasiFile() {
+    existingInovasiFile = null;
+
+    let deleteInput = document.getElementById('deleteInovasiFile');
+    if (!deleteInput) {
+        deleteInput = document.createElement('input');
+        deleteInput.type = 'hidden';
+        deleteInput.name = 'deleteInovasiFile';
+        deleteInput.id = 'deleteInovasiFile';
+        document.getElementById('inovasiForm').appendChild(deleteInput);
+    }
+    deleteInput.value = "1";
+
+    document.getElementById('inovasiFile').value = '';
+
+    const preview = document.getElementById('inovasiFilePreview');
+    preview.innerHTML = "<p class='text-red-500 italic'>File akan dihapus setelah disimpan.</p>";
+}
+
+// =================== EVENT INPUT FILE ===================
 document.addEventListener('DOMContentLoaded', () => {
-    const inovasiFileInput = document.getElementById('inovasiFile');
-    if (inovasiFileInput) {
-        inovasiFileInput.addEventListener('change', function(e) {
+    const inovasiInput = document.getElementById('inovasiFile');
+    if (inovasiInput) {
+        inovasiInput.addEventListener('change', function(e) {
             if (e.target.files && e.target.files[0]) {
                 inovasiFile = e.target.files[0];
-                document.getElementById('inovasiFileOriginalName').value = inovasiFile.name;
+                existingInovasiFile = null; // ✅ reset file lama karena pilih file baru
                 document.getElementById('deleteInovasiFile').value = "0";
-                updateInovasiFilePreview(inovasiFile.name);
+                updateInovasiFilePreview();
             }
         });
     }
 });
 
-// =================== OPEN FORM INOVASI ===================
-function openInovasiForm(idKelompok, editMode = false, id = null, filePath = '') {
-    const modal = document.getElementById('inovasiModal');
-    const form = document.getElementById('inovasiForm');
-    const title = document.getElementById('inovasiModalTitle');
-
-    inovasiFile = null;
-    document.getElementById('deleteInovasiFile').value = "0";
-
-    if (editMode) {
-        title.textContent = 'Edit Inovasi';
-        form.action = `/Admin_Kelompok/inovasi/${id}`;
-
-        let methodInput = form.querySelector('input[name="_method"]');
-        if (!methodInput) {
-            methodInput = document.createElement('input');
-            methodInput.type = 'hidden';
-            methodInput.name = '_method';
-            form.appendChild(methodInput);
-        }
-        methodInput.value = 'PUT';
-
-        if (filePath) {
-            const fileName = filePath.split('/').pop();
-            modal.dataset.existingFile = filePath;
-            updateInovasiFilePreview(fileName);
-        } else {
-            updateInovasiFilePreview();
-        }
-    } else {
-        title.textContent = 'Tambah Inovasi';
-        form.action = `/Admin_Kelompok/inovasi/${idKelompok}`;
-        const methodInput = form.querySelector('input[name="_method"]');
-        if (methodInput) methodInput.value = 'POST';
-        updateInovasiFilePreview();
-    }
-
-    modal.classList.remove('hidden');
-}
 </script>
 
 
@@ -4703,8 +4992,7 @@ function openInovasiForm(idKelompok, editMode = false, id = null, filePath = '')
 </script>
 
 
-
-<script>
+ <script>
 // Variabel global untuk melacak file katalog
 let existingKatalogFile = null;
 let katalogFile = null;
@@ -4721,7 +5009,7 @@ function updateKatalogFilePreview() {
         preview.innerHTML = `
             <div class="file-preview flex items-center gap-2">
                 <span class="file-name text-blue-600 cursor-pointer hover:underline"
-                      onclick="previewKatalogFile(katalogFile)">
+                      id="katalogFileName">
                     ${katalogFile.name}
                 </span>
                 <button type="button" 
@@ -4729,12 +5017,18 @@ function updateKatalogFilePreview() {
                         onclick="removeKatalogFile()">✕</button>
             </div>
         `;
+        
+        // Tambah event listener setelah elemen dibuat
+        document.getElementById('katalogFileName').addEventListener('click', function() {
+            previewKatalogFile(katalogFile, true);
+        });
+        
     } else if (existingKatalogFile) {
         // Tampilkan file yang sudah ada di database
         preview.innerHTML = `
             <div class="file-preview flex items-center gap-2">
                 <span class="file-name text-blue-600 cursor-pointer hover:underline"
-                      onclick="previewExistingKatalogFile()">
+                      id="katalogFileName">
                     ${existingKatalogFile.split('/').pop()}
                 </span>
                 <button type="button" 
@@ -4742,6 +5036,12 @@ function updateKatalogFilePreview() {
                         onclick="removeExistingKatalogFile()">✕</button>
             </div>
         `;
+        
+        // Tambah event listener setelah elemen dibuat
+        document.getElementById('katalogFileName').addEventListener('click', function() {
+            previewExistingKatalogFile();
+        });
+        
     } else {
         // Tidak ada file
         preview.innerHTML = '<p class="text-gray-500">Tidak ada file yang dipilih.</p>';
@@ -4764,15 +5064,8 @@ function previewKatalogFile(file, isRepreview = false) {
         dataTransfer.items.add(processedFile);
         document.getElementById('katalog').files = dataTransfer.files;
 
-        // ✅ Kalau cuma re-preview, jangan update DOM biar event klik tetap aktif
-        if (!isRepreview) updateKatalogFilePreview();
-
-        // ✅ Tambahan — pastikan nama file bisa diklik lagi setelah crop/rotasi
-        const preview = document.getElementById('katalogFilePreview');
-        if (preview) {
-            const fileNameEl = preview.querySelector('.file-name');
-            if (fileNameEl) fileNameEl.onclick = () => previewKatalogFile(katalogFile, true);
-        }
+        // ✅ Selalu update preview tapi dengan cara yang mempertahankan event listener
+        updateKatalogFilePreview();
     });
 }
 
@@ -4794,18 +5087,10 @@ function previewExistingKatalogFile() {
                 document.getElementById('katalog').files = dataTransfer.files;
 
                 updateKatalogFilePreview();
-
-                // ✅ Tambahan biar nama file bisa diklik lagi setelah crop/rotasi
-                const preview = document.getElementById('katalogFilePreview');
-                if (preview) {
-                    const fileNameEl = preview.querySelector('.file-name');
-                    if (fileNameEl) fileNameEl.onclick = () => previewKatalogFile(katalogFile, true);
-                }
             });
         })
         .catch(err => console.error("Gagal fetch file katalog:", err));
 }
-
 
 // Modifikasi fungsi removeKatalogFile
 function removeKatalogFile() {
@@ -4865,8 +5150,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 </script>
-
-
 
 
 <script>
@@ -5159,23 +5442,35 @@ let filteredKegiatan = null;
     const kegiatanInput = document.getElementById('searchKegiatan');
     const kegiatanItems = document.querySelectorAll('#kegiatan-carousel .kegiatan-item');
 
-    function filterKegiatan(keyword) {
-        keyword = keyword.toLowerCase().trim();
-        const allItems = Array.from(kegiatanItems);
+  function filterKegiatan(keyword) {
+    keyword = keyword.toLowerCase().trim();
+    const allItems = Array.from(document.querySelectorAll('#kegiatan-carousel .kegiatan-item'));
+    const emptyMessage = document.getElementById('kegiatan-empty');
+    const noDataMessage = document.getElementById('kegiatan-none'); // 👈 ambil pesan default
+    let filtered = [];
 
-        if (keyword === '') {
-            filteredKegiatan = null; // reset → semua item
+    allItems.forEach(item => {
+        let nama = item.dataset.nama.toLowerCase();
+        if (nama.includes(keyword)) {
+            item.style.display = "";
+            filtered.push(item);
         } else {
-            filteredKegiatan = allItems.filter(item => {
-                let judul = item.getAttribute('data-nama').toLowerCase(); 
-                return judul.includes(keyword);
-            });
+            item.style.display = "none";
         }
+    });
 
-        // reset ke halaman pertama
-        carousels['kegiatan'].current = 0;
-        updateCarousel('kegiatan');
+    // kalau ada hasil
+    if (filtered.length > 0) {
+        emptyMessage.classList.add('hidden');
+        if (noDataMessage) noDataMessage.classList.add('hidden'); // sembunyiin pesan default
+    } 
+    // kalau nggak ada hasil tapi sebelumnya ada data
+    else if (allItems.length > 0) {
+        emptyMessage.classList.remove('hidden');
+        if (noDataMessage) noDataMessage.classList.add('hidden');
     }
+}
+
 
     if (kegiatanInput) {
         kegiatanInput.addEventListener('input', () => filterKegiatan(kegiatanInput.value));
@@ -5186,24 +5481,40 @@ let filteredKegiatan = null;
     const mobileInput  = document.getElementById('searchProdukMobile');
     const produkItems = document.querySelectorAll('#produk-carousel .produk-item');
 
-    function filterProduk(keyword) {
+
+       
+ function filterProduk(keyword) {
     keyword = keyword.toLowerCase().trim();
+    const allItems = Array.from(document.querySelectorAll('#produk-carousel .produk-item'));
+    const emptyMessage = document.getElementById('produk-empty');
+    let filtered = [];
 
-    const allItems = Array.from(produkItems); // ✅ pakai produkItems
+    allItems.forEach(item => {
+        let nama = item.dataset.nama.toLowerCase();
+        if (nama.includes(keyword)) {
+            item.style.display = "";
+            filtered.push(item);
+        } else {
+            item.style.display = "none";
+        }
+    });
 
-    if (keyword === '') {
-        filteredProduk = null; // reset → semua item
+    // tampilkan / sembunyikan pesan
+    if (filtered.length === 0) {
+        emptyMessage.classList.remove('hidden');
     } else {
-        filteredProduk = allItems.filter(item => {
-            let nama = item.getAttribute('data-nama').toLowerCase();
-            return nama.includes(keyword);
-        });
+        emptyMessage.classList.add('hidden');
     }
 
-    // reset ke halaman pertama
-    carousels['produk'].current = 0;
-    updateCarousel('produk');
+    // reset ke halaman pertama (kalau kamu pakai carousel)
+    if (window.carousels && carousels['produk']) {
+        carousels['produk'].current = 0;
+        updateCarousel('produk');
+    }
 }
+ 
+
+
 
     // Sinkronkan input desktop & mobile
     function syncInput(src, dest) {
@@ -5389,6 +5700,19 @@ if ((section === 'produk' && filteredProduk !== null) ||
     section === 'inovasi') {
     Array.from(carousel.children).forEach(el => el.classList.add('hidden'));
 }
+    // 🔹 Tampilkan pesan kalau kosong
+    const emptyMessage = document.getElementById(`${section}-empty`);
+    const visibleItems = Array.from(document.querySelectorAll(`#${section}-carousel .${section}-item`))
+        .filter(i => i.style.display !== 'none');
+
+    if (emptyMessage) {
+        if (visibleItems.length === 0) {
+            emptyMessage.classList.remove('hidden');
+        } else {
+            emptyMessage.classList.add('hidden');
+        }
+    }
+
 
 
     const itemsPerPage = carousels[section].itemsPerPage;
@@ -5579,6 +5903,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const jabatanSelect = document.getElementById('jabatan');
     const namaInput = document.getElementById('nama');
     const rentanSelect = document.getElementById('id_rentan');
+        // 🧹 Reset semua validasi sebelum isi ulang form
+    Array.from(form.querySelectorAll("input, select")).forEach(el => {
+        el.setCustomValidity("");
+        el.reportValidity();
+    });
+    
 
     // Reset dropdown jabatan
     jabatanSelect.innerHTML = '';
@@ -5675,10 +6005,48 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     modal.classList.remove('hidden');
+     // 🧹 Bersihkan validasi setelah modal muncul
+    setTimeout(() => {
+        Array.from(form.querySelectorAll("input, select")).forEach(el => {
+            el.setCustomValidity("");
+            el.reportValidity();
+        });
+    }, 50);
 }
+// ✅ Fungsi Reset Form Struktur (sama konsep dengan produk)
+function resetStrukturForm() {
+    const form = document.getElementById("strukturForm");
+    const jabatanSelect = document.getElementById("jabatan");
+    const namaInput = document.getElementById("nama");
+    const rentanSelect = document.getElementById("id_rentan");
+
+    // Reset semua input
+    form.reset();
+
+    // Reset select2 dropdown
+    $('#jabatan').val('').trigger('change');
+    $('#id_rentan').val('').trigger('change');
+
+    // Aktifkan semua field
+    jabatanSelect.disabled = false;
+    namaInput.disabled = false;
+    rentanSelect.disabled = false;
+
+    // Kembalikan ke mode tambah (POST)
+    document.getElementById("_method").value = "POST";
+    form.action = `/Admin_Kelompok/kelompok/{{ $kelompok->id_kelompok }}/storeStruktur`;
+
+    // 🧹 Bersihkan status validasi
+    Array.from(form.querySelectorAll("input, select")).forEach(el => {
+        el.setCustomValidity("");
+        el.reportValidity();
+    });
+}
+
 
 // Perbaikan juga fungsi closeStrukturForm
 function closeStrukturForm() {
+     resetStrukturForm();
     const modal = document.getElementById('strukturModal');
     const jabatanSelect = document.getElementById('jabatan');
     const namaInput = document.getElementById('nama');
@@ -5804,6 +6172,7 @@ function getKelompokIdFromUrl() {
     const modalTitle = document.getElementById('skDesaModalTitle');
     const form = document.getElementById('skDesaForm');
     const preview = document.getElementById('skFilePreview');
+    const fileInput = document.getElementById('file'); 
 
     if (editMode) {
         modalTitle.textContent = 'Edit SK Desa';
@@ -5817,6 +6186,7 @@ function getKelompokIdFromUrl() {
             methodInput.value = 'PUT';
             form.appendChild(methodInput);
         }
+        fileInput.removeAttribute('required');
 
         // Tampilkan file yang sudah ada di preview
         const existingFileName = modal.dataset.existingFile;
@@ -5838,12 +6208,16 @@ function getKelompokIdFromUrl() {
         const methodInput = form.querySelector('input[name="_method"]');
         if (methodInput) methodInput.remove();
 
+        fileInput.setAttribute('required', true);
         // Reset preview untuk mode tambah
         preview.innerHTML = '<p>Tidak ada file yang dipilih.</p>';
     }
 
     modal.classList.remove('hidden');
 }
+
+
+
 
 function closeSkDesaForm() {
     document.getElementById('skDesaModal').classList.add('hidden');
@@ -6079,6 +6453,7 @@ function openKatalogForm(edit = false, id = null, existingFile = null, existingU
     const modal = document.getElementById('katalogModal');
     const form = document.getElementById('formKatalog');
     const title = document.getElementById('katalogModalTitle');
+     const fileInput = document.getElementById('katalog'); 
 
     // Reset form dan file
     form.reset();
@@ -6098,6 +6473,7 @@ function openKatalogForm(edit = false, id = null, existingFile = null, existingU
             methodInput.value = 'PUT';
             form.appendChild(methodInput);
         }
+          fileInput.removeAttribute('required');
 
         if (existingNama) {
             const namaInput = form.querySelector('[name="nama_katalog"]');
@@ -6123,6 +6499,7 @@ function openKatalogForm(edit = false, id = null, existingFile = null, existingU
 
         const methodInput = form.querySelector('input[name="_method"]');
         if (methodInput) methodInput.remove();
+fileInput.setAttribute('required', true);
 
         // Hapus dataset file yang sudah ada
         delete modal.dataset.existingFile;
@@ -6153,6 +6530,27 @@ function closeKatalogForm() {
 
 function openProdukForm(isEdit = false, button = null) {
     const form = document.getElementById("produkForm");
+// 🧹 Hapus semua status validasi lama sebelum modal dibuka ulang
+Array.from(form.querySelectorAll("input, textarea")).forEach(el => {
+    el.setCustomValidity(""); // hapus custom error
+    el.reportValidity(); // paksa browser reset status validasi
+});
+
+
+
+    // ✅ Tambahan baru: ambil elemen input file
+const fileInput = document.getElementById("produkGambar");
+
+// ✅ Tambahan baru: logika 'required' cuma aktif saat tambah produk
+if (isEdit) {
+    // kalau edit, tidak wajib upload foto baru
+    fileInput.removeAttribute("required");
+} else {
+    // kalau tambah produk baru, wajib upload foto
+    fileInput.setAttribute("required", true);
+}
+
+     reindexExistingSertifikat(); 
 
     // reset preview
     document.getElementById("produkGambarPreview").innerHTML = "<p>Tidak ada file yang dipilih.</p>";
@@ -6160,6 +6558,11 @@ function openProdukForm(isEdit = false, button = null) {
     document.getElementById("existingFoto").innerHTML = "";
     document.getElementById("existingSertifikat").innerHTML = "";
     document.getElementById("removedFoto").value = "";
+
+    produkGambarFile = null;
+    produkSertifikatFiles = [];
+    existingProdukFile = null;
+    removedSertifikat = [];
 
     if (isEdit && button) {
         const id = button.getAttribute("data-id");
@@ -6191,28 +6594,16 @@ function openProdukForm(isEdit = false, button = null) {
         // tampilkan foto lama
          // tampilkan foto lama
 // tampilkan foto lama
+// ✅ tampilkan foto lama dengan event klik untuk preview
 if (foto) {
-    const fileName = foto.split('/').pop();
-    const filePath = `/storage/${foto}`;  // ✅ langsung pakai path lengkap dari DB
-
-    existingProdukFile = filePath;
-
-    document.getElementById("produkGambarPreview").innerHTML = `
-        <div class="file-preview flex items-center gap-2">
-            <span class="file-name text-blue-600 cursor-pointer hover:underline"
-                  onclick="previewExistingProdukFile()">
-                ${fileName}
-            </span>
-            <button type="button"
-                    class="file-remove text-blue-600 hover:text-blue-800 font-bold"
-                    onclick="removeExistingProdukFile()">
-                ✕
-            </button>
-        </div>
-    `;
+    const filePath = `/storage/${foto}`; // path lengkap
+    existingProdukFile = filePath;       // simpan ke variabel global
+    updateProdukGambarPreview();         // otomatis tampil + bisa diklik
 }
 
 
+
+// tampilkan sertifikat lama
 // tampilkan sertifikat lama
 // tampilkan sertifikat lama
 if (sertifikat.length > 0) {
@@ -6223,22 +6614,26 @@ if (sertifikat.length > 0) {
         const fileName = file.split('/').pop();
         const filePath = `/storage/${file}`;
 
-        existingSertifikatContainer.innerHTML += `
-            <div class="file-preview flex items-center gap-1">
-                <span class="file-name text-blue-600 cursor-pointer hover:underline"
-                      onclick="previewExistingProdukSertifikat('${filePath}')">
-                    ${fileName}
-                </span>
-                <button type="button"
-                        class="file-remove text-red-600 hover:text-red-800 font-bold"
-                        style="margin-left:4px;background:none;border:none;line-height:1"
-                        onclick="removeSertifikat('${file}')">
-                    ✕
-                </button>
-            </div>
-        `;
+       existingSertifikatContainer.innerHTML += `
+    <div class="file-preview">
+        <span class="text-blue-600 hover:underline cursor-pointer"
+              onclick="previewExistingProdukSertifikat('${filePath}')">
+            ${fileName}
+        </span>
+        <button type="button"
+                class="file-remove text-red-500 hover:text-red-700"
+                onclick="removeSertifikat('${file}')">
+            ✕
+        </button>
+    </div>
+`;
+
     });
+
+    // 🧠 Tambahkan baris ini agar numbering muncul
+    reindexExistingSertifikat();
 }
+
 
         form.action = `/Admin_Kelompok/kelompok/updateProduk/${id}`;
         document.getElementById("produkMethod").value = "PUT";
@@ -6251,11 +6646,19 @@ if (sertifikat.length > 0) {
     }
 
     document.getElementById("produkModal").classList.remove("hidden");
+    // 🧹 Bersihkan status validasi setelah modal muncul
+setTimeout(() => {
+    Array.from(form.querySelectorAll("input, textarea")).forEach(el => {
+        el.setCustomValidity("");
+        el.reportValidity();
+    });
+}, 50);
 }
 
 
 
     function closeProdukForm() {
+        resetProdukForm();
         document.getElementById("produkModal").classList.add("hidden");
     }
 
@@ -6314,7 +6717,11 @@ if (sertifikat.length > 0) {
                             <img src="https://via.placeholder.com/200x160"
                                 alt="${nama}"
                                 class="w-full h-40 object-cover rounded-lg">
-                            <h3 class="mt-3 font-semibold text-lg truncate">${nama}</h3>
+                           <h3 class="mt-3 font-semibold text-lg break-words whitespace-normal line-clamp-none">
+  ${nama}
+</h3>
+
+
                             <div class="flex items-center justify-between pb-2">
                                 <p class="text-green-600 font-bold text-lg truncate">Rp. ${Number(harga).toLocaleString('id-ID')}</p>
                                 <p class="text-black-500 text-sm truncate">Stok: ${stok}</p>
@@ -6337,6 +6744,48 @@ if (sertifikat.length > 0) {
             initializeCarousel('produk');
             showNotification('Produk berhasil disimpan!');
         }
+function resetProdukForm() {
+    const form = document.getElementById("produkForm");
+
+    // 🔹 Reset semua input form ke keadaan awal
+    form.reset();
+
+    // 🔹 Kosongkan preview dan file lama
+    document.getElementById("produkGambarPreview").innerHTML = "<p>Tidak ada file yang dipilih.</p>";
+    document.getElementById("sertifikatPreview").innerHTML = "<p>Tidak ada file yang dipilih.</p>";
+    document.getElementById("existingFoto").innerHTML = "";
+    document.getElementById("existingSertifikat").innerHTML = "";
+
+    // 🔹 Reset hidden input
+    document.getElementById("removedFoto").value = "";
+    document.getElementById("removedSertifikat").value = "[]";
+    document.getElementById("replacedSertifikat").value = "[]";
+    document.getElementById("id_produk").value = "";
+    document.getElementById("produkMethod").value = "POST";
+
+    // 🔹 Kembalikan action ke "store" (bukan update)
+    form.action = `/Admin_Kelompok/kelompok/{{ $kelompok->id_kelompok }}/storeProduk`;
+
+    // 🔹 Reset variabel global agar gak nyangkut dari edit sebelumnya
+    produkGambarFile = null;
+    produkSertifikatFiles = [];
+    existingProdukFile = null;
+    removedSertifikat = [];
+    editedSertifikatCache = {};
+
+    // 🔹 Tutup modal
+    document.getElementById("produkModal").classList.add("hidden");
+
+    // 🔹 Pastikan field foto kembali wajib diisi (karena ini mode tambah)
+    const fileInput = document.getElementById("produkGambar");
+    fileInput.setAttribute("required", true);
+    // 🧹 Bersihkan status validasi saat form direset
+Array.from(form.querySelectorAll("input, textarea")).forEach(el => {
+    el.setCustomValidity("");
+    el.reportValidity();
+});
+
+}
 
 //  function editProduk(button) {
 //     // ambil data dari tombol edit
@@ -6369,13 +6818,27 @@ if (sertifikat.length > 0) {
 // CRUD Functions for Kegiatan
  const kelompokId = {{ $kelompok->id_kelompok }}; // pastikan ini ada di controller (show)
     const baseKegiatanUrl = "{{ url('Admin_Kelompok/kegiatan') }}"; // => contoh: /Admin_Kelompok/kegiatan
-
-
  function openKegiatanForm(isEdit = false, id = null, judul = '', deskripsi = '', tanggal = '', sumber = '', filePath = '') {
     const modal = document.getElementById('kegiatanModal');
     const form = document.getElementById('kegiatanForm');
     const method = document.getElementById('kegiatanMethod');
     const title = document.getElementById('kegiatanModalTitle');
+    const fileInput = document.getElementById('kegiatanFoto'); // ✅ Tambahan baru
+
+      // 🧹 Bersihkan validasi dulu
+    Array.from(form.querySelectorAll("input, textarea")).forEach(el => {
+        el.setCustomValidity("");
+        el.reportValidity();
+    });
+
+    // ✅ Tambahan baru: logika 'required' cuma aktif saat tambah produk
+if (isEdit) {
+    // kalau edit, tidak wajib upload foto baru
+    fileInput.removeAttribute("required");
+} else {
+    // kalau tambah produk baru, wajib upload foto
+    fileInput.setAttribute("required", true);
+}
 
     if (isEdit && id) {
         form.action = `${baseKegiatanUrl}/${id}`;
@@ -6387,19 +6850,26 @@ if (sertifikat.length > 0) {
         document.getElementById('kegiatanTanggal').value = tanggal;
         document.getElementById('kegiatanSumber').value = sumber;
 
-        // Simpan path file yang sudah ada
+        // ✅ BAGIAN YANG DITAMBAHKAN & DIUBAH
         if (filePath && filePath.trim() !== "") {
             existingKegiatanFile = filePath; // Path lengkap dari database
             kegiatanFile = null;
             document.getElementById('deleteKegiatanFile').value = "0";
             updateKegiatanFilePreview();
+
+            // 🔹 Nonaktifkan 'required' kalau file lama sudah ada
+            fileInput.removeAttribute('required');
         } else {
             existingKegiatanFile = null;
             kegiatanFile = null;
             document.getElementById('deleteKegiatanFile').value = "0";
             document.getElementById('kegiatanFotoPreview').innerHTML = 
                 '<p class="text-gray-500">Tidak ada file yang dipilih.</p>';
+
+            // 🔹 Aktifkan 'required' kalau tidak ada file lama
+            fileInput.setAttribute('required', true);
         }
+        // ✅ SAMPAI SINI bagian yang diubah di dalam blok (isEdit)
     } else {
         // Mode tambah baru
         form.action = `${baseKegiatanUrl}/${kelompokId}`;
@@ -6411,13 +6881,61 @@ if (sertifikat.length > 0) {
         kegiatanFile = null;
         document.getElementById('deleteKegiatanFile').value = "0";
         updateKegiatanFilePreview();
+
+        // ✅ Tambahan: wajib upload file di mode tambah
+        fileInput.setAttribute('required', true);
     }
 
     modal.classList.remove('hidden');
     modal.classList.add('flex');
+    
+       // Bersihkan validasi setelah modal tampil
+    setTimeout(() => {
+        Array.from(form.querySelectorAll("input, textarea")).forEach(el => {
+            el.setCustomValidity("");
+            el.reportValidity();
+        });
+    }, 50);
+}
+
+// ✅ Reset Form (sama kayak produk & struktur)
+function resetKegiatanForm() {
+    const form = document.getElementById('kegiatanForm');
+    const fileInput = document.getElementById('kegiatanFoto');
+    const preview = document.getElementById('kegiatanFotoPreview');
+    const deleteInput = document.getElementById('deleteKegiatanFile');
+
+    // Reset form HTML
+    form.reset();
+
+    // Reset variabel file
+    kegiatanFile = null;
+    existingKegiatanFile = null;
+
+    // Reset hidden input
+    deleteInput.value = "0";
+
+    // Reset preview file
+    preview.innerHTML = "<p class='text-gray-500'>Tidak ada file yang dipilih.</p>";
+
+    // Kembalikan ke mode tambah (POST)
+    document.getElementById('kegiatanMethod').value = "POST";
+    const kelompokId = {{ $kelompok->id_kelompok }};
+    form.action = `/Admin_Kelompok/kegiatan/${kelompokId}`;
+
+    // Aktifkan kembali file input
+    fileInput.removeAttribute("disabled");
+    fileInput.setAttribute("required", true);
+
+    // 🧹 Hapus validasi lama
+    Array.from(form.querySelectorAll("input, textarea")).forEach(el => {
+        el.setCustomValidity("");
+        el.reportValidity();
+    });
 }
 
 function closeKegiatanForm() {
+     resetKegiatanForm();
     const modal = document.getElementById("kegiatanModal");
     modal.classList.add("hidden");
     modal.classList.remove("flex");
@@ -6562,6 +7080,50 @@ function closeKegiatanForm() {
 // }
 
 
+// =================== OPEN FORM INOVASI ===================
+function openInovasiForm(idKelompok, editMode = false, id = null, filePath = '') {
+    const modal = document.getElementById('inovasiModal');
+    const form = document.getElementById('inovasiForm');
+    const title = document.getElementById('inovasiModalTitle');
+    const fileInput = document.getElementById('inovasiFile');
+
+
+    inovasiFile = null;
+    existingInovasiFile = null;
+    document.getElementById('deleteInovasiFile').value = "0";
+
+    if (editMode) {
+    title.textContent = 'Edit Inovasi';
+    form.action = `/Admin_Kelompok/inovasi/${id}`;
+
+    let methodInput = form.querySelector('input[name="_method"]');
+    if (!methodInput) {
+        methodInput = document.createElement('input');
+        methodInput.type = 'hidden';
+        methodInput.name = '_method';
+        form.appendChild(methodInput);
+    }
+    methodInput.value = 'PUT';
+
+    // ✅ Tambahan baru: di mode edit file tidak wajib diisi
+    fileInput.removeAttribute('required');
+
+    if (filePath && filePath.trim() !== "") {
+        // kalau ada file lama, simpan & tampilkan preview
+        existingInovasiFile = filePath;
+        modal.dataset.existingFile = filePath;
+    } else {
+        // kalau tidak ada file lama, tampilkan preview kosong
+        delete modal.dataset.existingFile;
+    }
+
+    // panggil fungsi update preview (biar tampil sesuai kondisi)
+    updateInovasiFilePreview();
+}
+
+
+    modal.classList.remove('hidden');
+}
 
 function closeInovasiForm() {
     const modal = document.getElementById('inovasiModal');
@@ -6753,7 +7315,9 @@ function editInovasi(button) {
 
  // CRUD Functions for Produk Pertahun
 // CRUD Functions for Produk Pertahu
+ let allYearsCache = [];
  function openProdukTahunForm(editMode = false, data = {}) {
+   
     const modal = document.getElementById('produkTahunModal');
     const form = document.getElementById('produkTahunForm');
     const methodInput = document.getElementById('formMethod');
@@ -6764,6 +7328,13 @@ function editInovasi(button) {
 
     // Simpan semua tahun awal
     const allYears = [...selectTahun.options].map(opt => ({value: opt.value, text: opt.text}));
+
+      // 🧹 Bersihkan validasi dulu
+    Array.from(form.querySelectorAll("input, select")).forEach(el => {
+        el.setCustomValidity("");
+        el.reportValidity();
+    });
+
 
     if (editMode && data) {
     title.textContent = "Edit Produk Per Tahun";
@@ -6795,6 +7366,48 @@ function editInovasi(button) {
     }
 
     modal.classList.remove('hidden');
+      // Pastikan validasi bersih setelah modal tampil
+    setTimeout(() => {
+        Array.from(form.querySelectorAll("input, select")).forEach(el => {
+            el.setCustomValidity("");
+            el.reportValidity();
+        });
+    }, 50);
+}
+
+// ✅ Fungsi Reset Form (bersih total)
+function resetProdukTahunForm() {
+    const form = document.getElementById('produkTahunForm');
+    const selectProduk = document.getElementById('id_produk_select');
+    const selectTahun = document.getElementById('tahun');
+    const methodInput = document.getElementById('formMethod');
+
+    // Reset form HTML
+    form.reset();
+
+    // Reset dropdown tahun (pakai cache)
+    if (allYearsCache.length > 0) {
+        selectTahun.innerHTML = '';
+        allYearsCache.forEach(opt => {
+            const option = document.createElement('option');
+            option.value = opt.value;
+            option.textContent = opt.text;
+            selectTahun.appendChild(option);
+        });
+    }
+
+    // Reset method ke POST
+    methodInput.value = "POST";
+
+    // Reset Select2
+    $('#id_produk_select').val('').trigger('change');
+    $('#tahun').val('').trigger('change');
+
+    // Hapus semua validasi lama
+    Array.from(form.querySelectorAll("input, select")).forEach(el => {
+        el.setCustomValidity("");
+        el.reportValidity();
+    });
 }
 
 function filterTahunDropdown(idProduk, currentYear, allYears, selectTahun) {
@@ -6856,6 +7469,7 @@ function filterTahunDropdown(idProduk, currentYear, allYears, selectTahun) {
 }
 
     function closeProdukTahunForm() {
+            resetProdukTahunForm();
     const modal = document.getElementById('produkTahunModal');
     if (modal) {
         modal.classList.add('hidden');
@@ -7385,6 +7999,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 </script>
+ <style>
+/* 🔹 Responsive SweetAlert2 khusus untuk mobile */
+@media (max-width: 640px) {
+  .swal2-popup {
+    width: 75% !important;            /* lebih lebar sedikit biar seimbang */
+    max-width: 320px !important;      /* batas maksimal biar gak terlalu besar */
+    aspect-ratio: 1 / 1 !important;   /* bikin popup jadi kotak (persegi) */
+    font-size: 0.85rem !important;    /* teks sedikit lebih kecil */
+    padding: 1rem !important;         /* ruang dalam cukup */
+    display: flex !important;         /* bantu positioning tengah */
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .swal2-icon {
+    margin: 0 auto 0.5rem auto !important; /* ikon di tengah */
+    transform: scale(0.8); /* ikon agak kecil */
+  }
+
+  .swal2-title {
+    font-size: 1rem !important;
+    margin-bottom: 0.4rem !important;
+    line-height: 1.2 !important;
+  }
+
+  .swal2-html-container {
+    font-size: 0.85rem !important;
+    margin-bottom: 0.8rem !important;
+  }
+
+  .swal2-confirm, .swal2-cancel {
+    font-size: 0.75rem !important;
+    padding: 0.35rem 0.8rem !important;
+    border-radius: 6px !important;
+  }
+}
+</style>
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @if(session('success'))
     <script>
@@ -7426,6 +8078,17 @@ function confirmDeleteUniversal(formId, title, text) {
     });
 }
 </script>
+<style>
+    @keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+</style>
 
 
 

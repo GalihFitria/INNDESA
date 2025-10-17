@@ -1,9 +1,21 @@
 @extends('Admin.sidebar')
-
-@section('title', 'Tambah User - INNDESA')
 <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
 
+@section('title', 'Tambah User - INNDESA')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+    /* Hilangkan icon mata bawaan browser */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+    display: none;
+}
 
+input[type="password"]::-webkit-credentials-auto-fill-button,
+input[type="password"]::-webkit-password-toggle-button {
+    display: none !important;
+}
+
+</style>
 @section('content')
 <h2 class="text-center text-4xl font-bold text-gray-800 mb-6">.::Tambah User::.</h2>
 <div class="bg-white shadow-md p-4 rounded-lg max-w-2xl mx-auto">
@@ -26,16 +38,30 @@
                 placeholder="Masukkan Username" required>
         </div>
 
-        {{-- Password --}}
-        <div>
-            <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-            <input type="password" name="password" id="password"
-                class="mt-1 block w-full border @error('password') border-red-500 @else border-gray-300 @enderror rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="Masukkan Password" required>
-            @error('password')
-            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-            @enderror
-        </div>
+          {{-- Password --}}
+       <div>
+    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+
+    <div class="relative">
+        <input 
+            type="password" 
+            name="password" 
+            id="password"
+            class="mt-1 block w-full border @error('password') border-red-500 @else border-gray-300 @enderror rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500 pr-10"
+            placeholder="Masukkan Password" 
+            required
+        >
+        <i 
+            class="fa-solid fa-eye absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer" 
+            id="togglePassword">
+        </i>
+    </div>
+
+    @error('password')
+        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+    @enderror
+</div>
+
 
 
         {{-- Role (Dropdown) --}}
@@ -72,4 +98,21 @@
         </div>
     </form>
 </div>
+<script>
+    document.getElementById("togglePassword").addEventListener("click", function() {
+        const passwordInput = document.getElementById("password");
+        const icon = this;
+
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            icon.classList.remove("fa-eye");
+            icon.classList.add("fa-eye-slash");
+        } else {
+            passwordInput.type = "password";
+            icon.classList.remove("fa-eye-slash");
+            icon.classList.add("fa-eye");
+        }
+    });
+</script>
+
 @endsection

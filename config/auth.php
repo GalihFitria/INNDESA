@@ -66,12 +66,12 @@ return [
         ],
 
         'admin_kelompok' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\InformasiUser::class,
-        ],
+        'driver' => 'eloquent',
+        'model' => App\Models\InformasiUser::class,
+    ],
 
 
-
+       
 
         // 'users' => [
         //     'driver' => 'database',
@@ -107,17 +107,17 @@ return [
         ],
 
         'admin_kelompok' => [
-            'provider' => 'admin_kelompok',
-            'table' => 'password_reset_tokens', // pastikan tabel ini ada
-            'expire' => 60,
-            'throttle' => 60,
-        ],
-
-
-
+        'provider' => 'admin_kelompok',
+        'table' => 'password_reset_tokens', // pastikan tabel ini ada
+        'expire' => 60,
+        'throttle' => 60,
     ],
 
+        
+       
+    ],
 
+   
 
     /*
     |--------------------------------------------------------------------------

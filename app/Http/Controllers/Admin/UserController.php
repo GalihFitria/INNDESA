@@ -91,12 +91,21 @@ class UserController extends Controller
     }
 
     // Hapus user
-    public function destroy($id)
-    {
-        $user = UserAdmin::findOrFail($id);
-        $user->delete();
+    // Hapus user
+public function destroy($id)
+{
+    $user = UserAdmin::findOrFail($id);
 
+    // 🚫 Tambahan baru → Cegah hapus jika status = 'sudah daftar'
+    if ($user->status === 'sudah daftar') {
         return redirect()->route('Admin.users.index')
-            ->with('success', 'User berhasil dihapus!');
+            ->with('error', 'User sudah didaftarkan, tidak dapat dihapus.');
     }
+
+    $user->delete();
+
+    return redirect()->route('Admin.users.index')
+        ->with('success', 'User berhasil dihapus!');
+}
+
 }

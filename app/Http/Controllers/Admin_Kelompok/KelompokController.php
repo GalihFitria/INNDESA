@@ -133,7 +133,10 @@ public function show(string $id)
     $inovasi = InovasiPenghargaan::where('id_kelompok', $id)->get();
 
 
-    $kegiatan = Kegiatan::where('id_kelompok', $id)->get();
+    $kegiatan = Kegiatan::where('id_kelompok', $id)
+    ->orderBy('tanggal', 'desc') // ⬅️ terbaru duluan
+    ->get();
+
 
      $produkPertahun = DB::table('produk_pertahun')
     ->join('produk', 'produk.id_produk', '=', 'produk_pertahun.id_produk')
@@ -434,15 +437,19 @@ public function updateSkDesa(Request $request, $id)
     }
 
     if ($filePath) {
-        // hapus file lama biar nggak numpuk
-        if (!empty($kelompok->sk_desa) && Storage::disk('public')->exists($kelompok->sk_desa)) {
-            Storage::disk('public')->delete($kelompok->sk_desa);
-        }
-
-        $kelompok->update(['sk_desa' => $filePath]);
+    // 🧹 Hapus file lama kalau ada file baru
+    if (!empty($kelompok->sk_desa) && Storage::disk('public')->exists($kelompok->sk_desa)) {
+        Storage::disk('public')->delete($kelompok->sk_desa);
     }
 
-    return redirect()->back()->with('success', 'SK Desa berhasil diperbarui!');
+    $kelompok->update(['sk_desa' => $filePath]);
+} else {
+    // ⚙️ Tidak ada file baru → biarkan file lama
+    $kelompok->update(['sk_desa' => $kelompok->sk_desa]);
+}
+
+return redirect()->back()->with('success', 'SK Desa berhasil diperbarui!');
+
 }
 
 
@@ -615,45 +622,51 @@ if ($exists) {
 
     $produk->update($data);
 
-        return redirect()->back()->with('success', 'Produk berhasil ditambahkan');
+    return redirect()->back()->with('success', 'Produk berhasil diperbarui');
 }
 
 
 
-// FUNGSI BANTU BUAT NAMA FILE UNIK
-private function uniqueFileName($fileOrBase, $folderOrExt)
-{
-    // Jika parameter pertama adalah UploadedFile (objek file dari form)
-    if (is_object($fileOrBase) && method_exists($fileOrBase, 'getClientOriginalName')) {
-        $file = $fileOrBase;
-        $folder = $folderOrExt;
+    // FUNGSI BANTU BUAT NAMA FILE UNIK
+    private function uniqueFileName($fileOrBase, $folderOrExt)
+    {
+        // Jika parameter pertama adalah UploadedFile (objek file dari form)
+        if (is_object($fileOrBase) && method_exists($fileOrBase, 'getClientOriginalName')) {
+            $file = $fileOrBase;
+            $folder = $folderOrExt;
 
-        $originalName = $file->getClientOriginalName();
-        $baseName = pathinfo($originalName, PATHINFO_FILENAME);
-        $extension = $file->getClientOriginalExtension();
-        $fileName = $originalName;
+            $originalName = $file->getClientOriginalName();
+            $baseName = pathinfo($originalName, PATHINFO_FILENAME);
+            $extension = strtolower($file->getClientOriginalExtension());
+
+            // 🧼 Bersihkan nama file: ganti spasi & karakter aneh jadi underscore
+            $baseName = preg_replace('/[^A-Za-z0-9_-]/', '_', $baseName);
+
+            $fileName = $baseName . '.' . $extension;
+            $counter = 1;
+
+            while (Storage::disk('public')->exists($folder . '/' . $fileName)) {
+                $fileName = $baseName . '_' . $counter . '.' . $extension;
+                $counter++;
+            }
+
+            return $fileName;
+        }
+
+        // Jika parameter pertama berupa string baseName dan kedua extension
+        $baseNameWithFolder = preg_replace('/[^A-Za-z0-9_-]/', '_', $fileOrBase);
+        $extension = strtolower($folderOrExt);
+
+        $fileName = $baseNameWithFolder . '.' . $extension;
         $counter = 1;
 
-        while (Storage::disk('public')->exists($folder . '/' . $fileName)) {
-            $fileName = $baseName . '_' . $counter . '.' . $extension;
+        while (Storage::disk('public')->exists($fileName)) {
+            $fileName = $baseNameWithFolder . '_' . $counter . '.' . $extension;
             $counter++;
         }
 
         return $fileName;
     }
-
-    // Jika parameter pertama berupa string baseName dan kedua extension
-    $baseNameWithFolder = $fileOrBase;
-    $extension = $folderOrExt;
-
-    $fileName = $baseNameWithFolder . '.' . $extension;
-    $counter = 1;
-    while (Storage::disk('public')->exists($fileName)) {
-        $fileName = $baseNameWithFolder . '_' . $counter . '.' . $extension;
-        $counter++;
-    }
-    return $fileName;
-}
 
 
  
@@ -848,14 +861,24 @@ public function updateKegiatan(Request $request, $id)
     $kegiatan->tanggal       = $request->input('tanggal');
     $kegiatan->sumber_berita = $request->input('sumber_berita');
 
-    // Replace dengan upload baru
-     // Saat menyimpan file baru
-if ($request->hasFile('foto')) {
-    $file = $request->file('foto');
-    $fileName = $this->uniqueFileName($file, 'kegiatan');
-    $path = $file->storeAs('kegiatan', $fileName, 'public'); // Simpan di storage/app/public/kegiatan/
-    $kegiatan->foto = $path; // Simpan path lengkap: "kegiatan/nama_file.jpg"
-}
+    // 🔹 Kalau user upload file baru
+    if ($request->hasFile('foto')) {
+        // Hapus file lama kalau ada
+        if ($kegiatan->foto && Storage::disk('public')->exists($kegiatan->foto)) {
+            Storage::disk('public')->delete($kegiatan->foto);
+        }
+
+        $file = $request->file('foto');
+        $fileName = $this->uniqueFileName($file, 'kegiatan');
+        $path = $file->storeAs('kegiatan', $fileName, 'public');
+        $kegiatan->foto = $path;
+    }
+    // 🔹 Kalau tidak upload baru & tidak klik hapus
+    elseif (!$request->hasFile('foto') && $request->input('deleteKegiatanFile') != "1") {
+        // Biarkan $kegiatan->foto tetap berisi file lama
+        // (tidak diubah, tidak di-null-kan)
+    }
+
     $kegiatan->save();
 
     return redirect("/Admin_Kelompok/kelompok/{$kegiatan->id_kelompok}")
@@ -1157,67 +1180,61 @@ public function deleteKatalog($id)
     return view('Admin_Kelompok.edit_logo_background', compact('kelompok'));
 }
 
-// Di controller method updateLogoBackground
-public function updateLogoBackground(Request $request, $id)
-{
-    $kelompok = Kelompok::findOrFail($id);
+    // Di controller method updateLogoBackground
+    public function updateLogoBackground(Request $request, $id)
+    {
+        $kelompok = Kelompok::findOrFail($id);
 
-    // 🧹 Hapus logo kalau diset delete
-    if ($request->delete_logo == 1) {
-        if ($kelompok->logo && Storage::disk('public')->exists($kelompok->logo)) {
-            Storage::disk('public')->delete($kelompok->logo);
-        }
-        $kelompok->logo = null;
-    }
+        // ✅ VALIDASI FILE MAX 4MB
+        $request->validate([
+            'logo' => 'nullable|image|mimes:jpg,jpeg,png|max:4096',
+            'background' => 'nullable|image|mimes:jpg,jpeg,png|max:4096',
+        ], [
+            'logo.max' => 'Ukuran file logo maksimal 4MB.',
+            'background.max' => 'Ukuran file background maksimal 4MB.',
+        ]);
 
-    // 🧹 Hapus background kalau diset delete
-    if ($request->delete_background == 1) {
-        if ($kelompok->background && Storage::disk('public')->exists($kelompok->background)) {
-            Storage::disk('public')->delete($kelompok->background);
-        }
-        $kelompok->background = null;
-    }
-
-    // 🖼️ Upload logo baru (pakai nama asli + auto rename kalau sudah ada)
-    if ($request->hasFile('logo')) {
-        $file = $request->file('logo');
-        $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-        $extension = $file->getClientOriginalExtension();
-        $fileName = $originalName . '.' . $extension;
-        $counter = 1;
-
-        // 🔁 Cek nama unik seperti di storeProduk()
-        while (Storage::disk('public')->exists('logo/' . $fileName)) {
-            $fileName = $originalName . '_' . $counter . '.' . $extension;
-            $counter++;
+        // 🧹 Hapus logo kalau diset delete
+        if ($request->delete_logo == 1) {
+            if ($kelompok->logo && Storage::disk('public')->exists($kelompok->logo)) {
+                Storage::disk('public')->delete($kelompok->logo);
+            }
+            $kelompok->logo = null;
         }
 
-        $path = $file->storeAs('logo', $fileName, 'public');
-        $kelompok->logo = $path;
-    }
-
-    // 🖼️ Upload background baru (pakai nama asli + auto rename kalau sudah ada)
-    if ($request->hasFile('background')) {
-        $file = $request->file('background');
-        $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-        $extension = $file->getClientOriginalExtension();
-        $fileName = $originalName . '.' . $extension;
-        $counter = 1;
-
-        // 🔁 Cek nama unik seperti di storeProduk()
-        while (Storage::disk('public')->exists('background/' . $fileName)) {
-            $fileName = $originalName . '_' . $counter . '.' . $extension;
-            $counter++;
+        // 🧹 Hapus background kalau diset delete
+        if ($request->delete_background == 1) {
+            if ($kelompok->background && Storage::disk('public')->exists($kelompok->background)) {
+                Storage::disk('public')->delete($kelompok->background);
+            }
+            $kelompok->background = null;
         }
 
-        $path = $file->storeAs('background', $fileName, 'public');
-        $kelompok->background = $path;
+        // 🖼 Upload logo baru (pakai uniqueFileName)
+        if ($request->hasFile('logo')) {
+            $file = $request->file('logo');
+            $fileName = $this->uniqueFileName($file, 'logo'); // ✅ pakai fungsi unik kamu
+            $path = $file->storeAs('logo', $fileName, 'public');
+            $kelompok->logo = $path;
+        }
+
+        // 🖼 Upload background baru (pakai uniqueFileName)
+        if ($request->hasFile('background')) {
+            $file = $request->file('background');
+
+            if (!$file->isValid()) {
+                return redirect()->back()->withErrors(['background' => 'File background tidak valid atau rusak.']);
+            }
+
+            $fileName = $this->uniqueFileName($file, 'background'); // ✅ pakai fungsi unik kamu
+            $path = $file->storeAs('background', $fileName, 'public');
+            $kelompok->background = $path;
+        }
+
+        $kelompok->save();
+
+        return redirect()->back()->with('success', 'Logo dan background berhasil diperbarui');
     }
-
-    $kelompok->save();
-
-    return redirect()->back()->with('success', 'Logo dan background berhasil diperbarui');
-}
 
 public function deleteFile($id, Request $request)
 {

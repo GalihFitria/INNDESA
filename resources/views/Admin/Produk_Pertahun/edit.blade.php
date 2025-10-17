@@ -81,9 +81,9 @@
 <script>
     $(function() {
         // Ambil data tahun yang sudah dipakai per produk dari DB
-        const usedYearsRaw = @json(\App\ Models\ ProdukPertahun::all() - > groupBy('id_produk') - > map(function($items) {
-            return $items - > pluck('tahun') - > map(fn($t) => (int) $t) - > toArray();
-        }) - > toArray());
+        const usedYearsRaw = @json(\App\Models\ProdukPertahun::all()->groupBy('id_produk')->map(function($items) {
+            return $items->pluck('tahun')->map(fn($t) => (int) $t)->toArray();
+        })->toArray());
 
         // Normalisasi
         const usedYears = {};

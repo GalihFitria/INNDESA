@@ -7,11 +7,14 @@ use Illuminate\Http\Request;
 
 class Authenticate extends Middleware
 {
-    /**
-     * Get the path the user should be redirected to when they are not authenticated.
-     */
     protected function redirectTo(Request $request): ?string
     {
-        return $request->expectsJson() ? null : route('login');
+        // Jika route diawali "Admin" atau "Admin_Kelompok"
+        if ($request->is('Admin/*') || $request->is('Admin_Kelompok/*')) {
+            return url('admin_login');
+        }
+
+        // default (misalnya user umum)
+        return url('admin_login'); // ubah juga default-nya ke sini biar aman
     }
 }

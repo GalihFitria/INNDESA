@@ -41,34 +41,48 @@ class ProfilKelompokController extends Controller
     }
 
     public function update(Request $request, $id)
-    {
-        $admin_kelompok = InformasiUser::findOrFail($id);
+{
+    $admin_kelompok = InformasiUser::findOrFail($id);
 
-        $field = $request->input('field');
-        $value = $request->input('value');
+    $field = $request->input('field');
+    $value = $request->input('value');
 
-        if (in_array($field, ['password', 'no_telp', 'ig', 'facebook', 'email'])) {
+    if (in_array($field, ['password', 'no_telp', 'ig', 'facebook', 'email'])) {
 
-            // ✅ Hash password kalau field yang diupdate adalah password
-            if ($field === 'password') {
-                $admin_kelompok->$field = Hash::make($value);
-            } else {
-                $admin_kelompok->$field = $value;
+        // 🔹 Kalau field-nya email → cek apakah sudah dipakai user lain
+        if ($field === 'email') {
+            $isExist = InformasiUser::where('email', $value)
+                        ->where('id_admin', '!=', $id) // pastikan bukan diri sendiri
+                        ->exists();
+
+            if ($isExist) {
+                return response()->json([
+                    'message' => 'Email sudah terdaftar, silakan gunakan email lain.'
+                ], 422); // kode validasi gagal
             }
-
-            $admin_kelompok->save();
-
-            return response()->json([
-                'message' => 'Profil berhasil diperbarui',
-                'field'   => $field,
-                'value'   => $field === 'password' ? '***' : $value, // jangan kirim hash ke UI
-            ], 200);
         }
 
+        // 🔹 Kalau password → hash dulu
+        if ($field === 'password') {
+            $admin_kelompok->$field = Hash::make($value);
+        } else {
+            $admin_kelompok->$field = $value;
+        }
+
+        $admin_kelompok->save();
+
         return response()->json([
-            'message' => 'Field tidak diizinkan'
-        ], 400);
+            'message' => 'Profil berhasil diperbarui',
+            'field'   => $field,
+            'value'   => $field === 'password' ? '***' : $value,
+        ], 200);
     }
+
+    return response()->json([
+        'message' => 'Field tidak diizinkan'
+    ], 400);
+}
+
 
 
     public function updatePassword(Request $request, $id)

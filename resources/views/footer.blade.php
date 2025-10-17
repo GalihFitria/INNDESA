@@ -32,7 +32,7 @@
                         </div>
                         <div class="text-left">
                             <h3 class="font-semibold text-sm sm:text-base">Telepon</h3>
-                            <p class="text-xs sm:text-sm opacity-90">+62 8192-7681-300</p>
+                            <p class="text-xs sm:text-sm opacity-90">+62 823-2490-0948</p>
                         </div>
                     </div>
 
@@ -44,17 +44,21 @@
                                     d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
                             </svg>
                         </div>
-                        <div class="text-left">
+                        <div class="text-left flex-1 min-w-0">
                             <h3 class="font-semibold text-sm sm:text-base">Email</h3>
-                            <p class="text-xs sm:text-sm opacity-90 break-all">gmhilmip@gmail.com</p>
+                            <p class="text-xs sm:text-sm opacity-90 whitespace-nowrap overflow-visible">
+                                inndesa.official@gmail.com
+                            </p>
                         </div>
                     </div>
+
+
                 </div>
 
                 <!-- Copyright -->
                 <div class="mt-6 pt-6 border-t border-white/20 text-center">
                     <p class="text-xs sm:text-sm opacity-75">© 2025 INNDESA - Inovasi Nusantara Desa Integratif Pangan</p>
-                    <p class="text-[10px] sm:text-xs opacity-60 mt-1">PT PLN Indonesia Power UBP Jawa Tengah 2 Adipala</p>
+                    <!-- <p class="text-[10px] sm:text-xs opacity-60 mt-1">PT PLN Indonesia Power UBP Jawa Tengah 2 Adipala</p> -->
                 </div>
             </div>
         </div>

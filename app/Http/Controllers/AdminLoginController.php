@@ -64,4 +64,12 @@ class AdminLoginController extends Controller
         Auth::logout();
         return redirect()->route('admin_login.index')->with('success', 'Logout berhasil!');
     }
+
+    public function checkSession()
+{
+    return response()->json([
+        'active' => Auth::check()
+    ]);
+}
+
 }

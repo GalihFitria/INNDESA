@@ -185,6 +185,11 @@ class ProdukController extends Controller
             'sertifikat.*.max' => 'Ukuran sertifikat tidak boleh lebih dari 2MB.',
         ]);
 
+        // Validasi tambahan untuk foto
+        if ($request->input('remove_foto') == '1' && !$request->hasFile('foto')) {
+            return back()->withErrors(['foto' => 'Foto produk tidak boleh kosong. Silakan unggah foto baru.'])->withInput();
+        }
+
         $data = $request->except(['foto', 'sertifikat', 'remove_foto', 'remove_sertifikat', 'existing_sertifikat']);
 
         // Pastikan produk_terjual menggunakan nilai dari database

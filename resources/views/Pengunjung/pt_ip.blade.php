@@ -731,6 +731,94 @@
                 display: none;
             }
         }
+
+        /* SOSMED */
+        /* Tambahkan di bagian CSS yang sudah ada */
+
+        /* Media sosial card styles */
+        .social-card {
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+            border: 1px solid #f3f4f6;
+            overflow: hidden;
+        }
+
+        .social-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .social-card a {
+            display: block;
+            padding: 1.5rem;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .social-card .icon-container {
+            width: 4rem;
+            height: 4rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+        }
+
+        .social-card .icon-container i {
+            font-size: 1.5rem;
+        }
+
+        .social-card h3 {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        /* Mobile responsive styles */
+        @media (max-width: 640px) {
+            .social-card a {
+                padding: 0.75rem;
+            }
+
+            .social-card .icon-container {
+                width: 2.5rem;
+                height: 2.5rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .social-card .icon-container i {
+                font-size: 1.125rem;
+            }
+
+            .social-card h3 {
+                font-size: 0.875rem;
+            }
+
+            .grid-cols-2>div {
+                margin-bottom: 0.5rem;
+            }
+
+            .gap-3 {
+                gap: 0.75rem;
+            }
+
+            /* Tambahan untuk memastikan card tidak terlalu besar di mobile */
+            .grid {
+                gap: 0.75rem;
+            }
+
+            .rounded-xl {
+                border-radius: 0.5rem;
+            }
+
+            /* Mengurangi efek hover di mobile untuk performa yang lebih baik */
+            .social-card:hover {
+                transform: translateY(-2px);
+            }
+        }
     </style>
 </head>
 
@@ -758,14 +846,14 @@
         </div>
 
         <div class="text-center space-y-0 z-10 px-4 mt-[-5px] md:mt-0 md:space-y-4">
-            <h2 class="text-lg sm:text-2xl md:text-5xl lg:text-7xl font-bold 
-               text-[#0097D4] 
-               drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)]">
+            <h2 class="text-2xl sm:text-2xl md:text-5xl lg:text-7xl font-bold 
+       text-[#0097D4] 
+       drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)]">
                 PT. PLN Indonesia Power
             </h2>
-            <h2 class="text-lg sm:text-2xl md:text-5xl lg:text-7xl font-bold 
-               text-[#FFD700] 
-               drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)] leading-tight">
+            <h2 class="text-xl sm:text-2xl md:text-5xl lg:text-7xl font-bold 
+       text-[#FFD700] 
+       drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)] leading-tight">
                 UBP Jawa Tengah 2 Adipala
             </h2>
         </div>
@@ -905,6 +993,56 @@
                             <!-- <img
                                 src="{{ asset('images/lokasi.png') }}"
                                 class="max-w-full h-auto rounded-lg shadow-lg" /> -->
+                        </div>
+                    </div>
+                </section>
+
+                <section class="py-16 bg-white reveal">
+                    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div class="text-center mb-12 section-title">
+                            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-600 mb-6 text-center section-title">Media Sosial Kami</h2>
+                        </div>
+
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
+                            <!-- Instagram -->
+                            <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100 overflow-hidden card-reveal">
+                                <a href="https://www.instagram.com/plnip.ubpadipala/" class="block p-3 md:p-6 text-center">
+                                    <div class="w-10 h-10 md:w-16 md:h-16 mx-auto bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mb-2 md:mb-4">
+                                        <i class="fab fa-instagram text-white text-lg md:text-2xl"></i>
+                                    </div>
+                                    <h3 class="text-sm md:text-lg font-bold text-gray-800">Instagram</h3>
+                                </a>
+                            </div>
+
+                            <!-- WhatsApp -->
+                            <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100 overflow-hidden card-reveal">
+                                <a href="https://wa.me/6282324900948" class="block p-3 md:p-6 text-center">
+                                    <div class="w-10 h-10 md:w-16 md:h-16 mx-auto bg-green-500 rounded-full flex items-center justify-center mb-2 md:mb-4">
+                                        <i class="fab fa-whatsapp text-white text-lg md:text-2xl"></i>
+                                    </div>
+                                    <h3 class="text-sm md:text-lg font-bold text-gray-800">WhatsApp</h3>
+                                </a>
+                            </div>
+
+                            <!-- YouTube -->
+                            <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100 overflow-hidden card-reveal">
+                                <a href="https://www.youtube.com/@plnindonesiapoweradipalaom2886" class="block p-3 md:p-6 text-center">
+                                    <div class="w-10 h-10 md:w-16 md:h-16 mx-auto bg-red-600 rounded-full flex items-center justify-center mb-2 md:mb-4">
+                                        <i class="fab fa-youtube text-white text-lg md:text-2xl"></i>
+                                    </div>
+                                    <h3 class="text-sm md:text-lg font-bold text-gray-800">YouTube</h3>
+                                </a>
+                            </div>
+
+                            <!-- Facebook -->
+                            <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100 overflow-hidden card-reveal">
+                                <a href="https://www.facebook.com/share/1CPD2kxMsm/" target="_blank" class="block p-3 md:p-6 text-center">
+                                    <div class="w-10 h-10 md:w-16 md:h-16 mx-auto bg-blue-700 rounded-full flex items-center justify-center mb-2 md:mb-4">
+                                        <i class="fab fa-facebook-f text-white text-lg md:text-2xl"></i>
+                                    </div>
+                                    <h3 class="text-sm md:text-lg font-bold text-gray-800">Facebook</h3>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </section>

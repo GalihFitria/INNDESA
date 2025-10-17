@@ -3,7 +3,6 @@
 @section('title', 'Edit Produk - INNDESA')
 <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
 
-
 @section('content')
 <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
@@ -60,7 +59,7 @@
         </div>
 
         <div>
-            <label for="foto" class="block text-sm font-medium text-gray-700">Foto Produk</label>
+            <label for="foto" class="block text-sm font-medium text-gray-700">Foto Produk <span class="text-red-500">*</span></label>
             @if ($produk->foto)
             <div class="mb-2" data-file-path="{{ $produk->foto }}">
                 <a href="#" onclick="event.preventDefault(); previewExistingFile('{{ asset('storage/' . $produk->foto) }}', 'image/', 'foto', '{{ $produk->foto }}')" class="text-blue-600 hover:underline">
@@ -237,6 +236,25 @@
 
         // Validasi saat submit form
         document.getElementById('produkForm').addEventListener('submit', function(e) {
+            // Validasi foto produk
+            const removeFoto = document.getElementById('remove_foto').value;
+            const fotoInput = document.getElementById('foto');
+            const hasNewFoto = fotoInput.files.length > 0;
+            const hasExistingFoto = document.querySelector('[data-file-path="{{ $produk->foto }}"]') !== null;
+
+            // Periksa apakah foto dihapus dan tidak ada foto baru
+            if (removeFoto === '1' && !hasNewFoto) {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Validasi Gagal',
+                    text: 'Foto produk tidak boleh kosong. Silakan unggah foto baru.',
+                    confirmButtonText: 'OK'
+                });
+                return false;
+            }
+
+            // Validasi kombinasi nama dan kelompok
             if (!validateCombination()) {
                 e.preventDefault();
                 Swal.fire({

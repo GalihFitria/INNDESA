@@ -181,8 +181,8 @@
         });
 
         // Tampilkan error dari backend jika ada
-        @if($errors - > any())
-        @foreach($errors - > all() as $error)
+        @if($errors -> any())
+        @foreach($errors -> all() as $error)
         Swal.fire({
             icon: 'error',
             title: 'Validasi Gagal',

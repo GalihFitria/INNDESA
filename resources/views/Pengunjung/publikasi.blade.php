@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>INNDESA - Inovasi Nusantara Desa Integratif Pangan</title>
+    <title>INNDESA - Publikasi</title>
     <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
 
     <!-- Open Graph Meta Tags for Social Media -->
@@ -542,49 +542,51 @@
 
         <!-- Hero Section - Diubah untuk Publikasi -->
         <div class="bg-gradient-to-b from-sky-400 to-sky-800 h-64 sm:h-80 md:h-96 flex items-center justify-center px-4 hero-section">
-            <h1 class="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white text-center">Publikasi</h1>
+            <h1 class="text-4xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white text-center">Publikasi</h1>
         </div>
 
         <!-- Share Card - Bagian Baru untuk Publikasi -->
         <section class="relative -mt-16 sm:-mt-20 z-10 pb-8 sm:pb-10">
-            <div class="max-w-6xl mx-auto px-4 sm:px-5">
-                <div class="flex flex-col items-center gap-4 sm:gap-5">
-                    <div class="bg-gray-200 p-4 sm:p-8 rounded-2xl shadow-2xl shadow-gray-500/50 w-full max-w-3xl">
-                        <h2 class="text-lg sm:text-2xl font-medium mb-4 sm:mb-6 text-center">Bagikan laman ini</h2>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
-                            <a href="#" id="facebookShare" target="_blank"
-                                class="flex items-center bg-[#3b5998] hover:bg-[#334d84] text-white py-2 sm:py-3 px-3 sm:px-4 rounded-md shadow-md transition-colors"
-                                aria-label="Bagikan ke Facebook">
-                                <i class="fab fa-facebook-f text-sm sm:text-lg mr-2 sm:mr-3"></i>
-                                <span class="text-sm sm:text-base">Share on Facebook</span>
+            <div class="max-w-5xl mx-auto px-4 sm:px-6">
+                <div class="flex flex-col items-center gap-8">
+                    <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-xl w-full max-w-md sm:max-w-2xl">
+                        <h2 class="text-lg sm:text-2xl font-semibold mb-4 sm:mb-8 text-center text-gray-800">
+                            Ikuti Kami di Media Sosial
+                        </h2>
+
+                        <div class="flex justify-center items-center space-x-8 sm:space-x-12">
+                            <!-- Instagram -->
+                            <a href="https://www.instagram.com/inndesa_official?igsh=aXp1ZTIyeGtpaDB6"
+                                class="flex flex-col items-center group">
+                                <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 flex items-center justify-center shadow-lg transition-all duration-300 group-hover:scale-110 group-hover:shadow-xl">
+                                    <i class="fab fa-instagram text-white text-2xl sm:text-3xl"></i>
+                                </div>
+                                <span class="mt-2 text-sm font-medium text-gray-700 group-hover:text-pink-600 transition-colors">Instagram</span>
                             </a>
 
-                            <a href="#" id="twitterShare" target="_blank"
-                                class="flex items-center bg-[#1DA1F2] hover:bg-[#0d8ddb] text-white py-2 sm:py-3 px-3 sm:px-4 rounded-md shadow-md transition-colors"
-                                aria-label="Bagikan ke Twitter">
-                                <i class="fab fa-twitter text-sm sm:text-lg mr-2 sm:mr-3"></i>
-                                <span class="text-sm sm:text-base">Share on Twitter</span>
+                            <!-- WhatsApp -->
+                            <a href="https://wa.me/6282324900948"
+                                class="flex flex-col items-center group">
+                                <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-green-500 flex items-center justify-center shadow-lg transition-all duration-300 group-hover:scale-110 group-hover:shadow-xl">
+                                    <i class="fab fa-whatsapp text-white text-2xl sm:text-3xl"></i>
+                                </div>
+                                <span class="mt-2 text-sm font-medium text-gray-700 group-hover:text-green-600 transition-colors">WhatsApp</span>
                             </a>
 
-                            <a href="https://www.instagram.com/fijarrfqh_/" target="_blank"
-                                class="flex items-center bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 hover:opacity-90 text-white py-2 sm:py-3 px-3 sm:px-4 rounded-md shadow-md transition-opacity"
-                                aria-label="Kunjungi Instagram kami">
-                                <i class="fab fa-instagram text-sm sm:text-lg mr-2 sm:mr-3"></i>
-                                <span class="text-sm sm:text-base">Visit our Instagram</span>
-                            </a>
-
-                            <a href="https://api.whatsapp.com/send?phone=6289647038212&text=Halo%20saya%20tertarik%20dengan%20produk%20Anda"
-                                target="_blank" rel="noopener noreferrer"
-                                class="flex items-center bg-[#25D366] hover:bg-[#1ebe57] text-white py-2 sm:py-3 px-3 sm:px-4 rounded-md shadow-md transition-colors"
-                                aria-label="Hubungi via WhatsApp">
-                                <i class="fab fa-whatsapp text-sm sm:text-lg mr-2 sm:mr-3"></i>
-                                <span class="text-sm sm:text-base">Chat via WhatsApp</span>
+                            <!-- Facebook -->
+                            <a href="#" id="facebookFollow"
+                                class="flex flex-col items-center group">
+                                <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-blue-600 flex items-center justify-center shadow-lg transition-all duration-300 group-hover:scale-110 group-hover:shadow-xl">
+                                    <i class="fab fa-facebook-f text-white text-2xl sm:text-3xl"></i>
+                                </div>
+                                <span class="mt-2 text-sm font-medium text-gray-700 group-hover:text-blue-600 transition-colors">Facebook</span>
                             </a>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
+
 
         <!-- UPDATE KEGIATAN - Sama persis dengan Index -->
         <section id="update-kegiatan-section" class="py-6 sm:py-12 md:py-10" data-latest-id="{{ $kegiatans->first()->id_kegiatan ?? 0 }}">
@@ -610,7 +612,7 @@
                             <div class="flex flex-col justify-between flex-1">
                                 <div>
                                     <p class="text-xs opacity-75">
-                                        {{ \Carbon\Carbon::parse($kegiatan->tanggal)->translatedFormat('d F Y') }}
+                                        {{ \Carbon\Carbon::parse($kegiatan->tanggal)->locale('id')->translatedFormat('d F Y') }}
                                     </p>
 
                                     {{-- Deskripsi singkat --}}
@@ -620,7 +622,7 @@
                                 </div>
 
                                 {{-- Baca Selengkapnya rata tengah di bawah --}}
-                                <a href="{{ route('update_kegiatan.show', $kegiatan->id_kegiatan) }}"
+                                <a href="{{ url('update_kegiatan/' . \App\Http\Controllers\Update_KegiatanController::createHashUrl($kegiatan->id_kegiatan, $kegiatan->judul)) }}"
                                     class="text-white-600 hover:underline text-xs md:text-sm mt-3 block text-center">
                                     Baca Selengkapnya
                                 </a>
@@ -692,8 +694,8 @@
             <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="bg-white shadow-lg rounded-lg overflow-hidden">
                     <div class="relative aspect-video bg-gray-900 cursor-pointer group"
-                        onclick="openModal('https://www.youtube.com/embed/A4Bc6Z7VyaU?autoplay=1')">
-                        <img src="https://img.youtube.com/vi/A4Bc6Z7VyaU/maxresdefault.jpg"
+                        onclick="openModal('https://www.youtube.com/embed/oSwpCKhvGto?autoplay=1')">
+                        <img src="https://img.youtube.com/vi/oSwpCKhvGto/maxresdefault.jpg"
                             alt="PROGRAM CSR PEMBERDAYAAN MASYARAKAT PT PLN Indonesia Power UBP Jawa Tengah 2 Adipala"
                             class="w-full h-full object-cover">
                         <div
@@ -709,7 +711,7 @@
 
                     <div class="p-4 sm:p-6">
                         <div class="flex flex-col sm:flex-row gap-2 sm:gap-3">
-                            <a href="https://youtu.be/A4Bc6Z7VyaU" target="_blank"
+                            <a href="https://youtu.be/oSwpCKhvGto?si=y6G9y_nzXm_EbT_w"
                                 class="bg-red-600 hover:bg-red-700 text-white px-3 sm:px-4 py-2 rounded-md text-xs sm:text-sm font-medium flex items-center gap-2 justify-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="currentColor"
                                     viewBox="0 0 24 24">
@@ -768,13 +770,15 @@
                     </button>
 
                     <button onclick="copyLink()"
-                        class="flex items-center gap-2 px-3 py-2 hover:bg-gray-100 rounded">
+                        class="flex items-center gap-2 px-3 py-2 hover:bg-gray-100 rounded transition">
                         <svg class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 24 24">
                             <path
                                 d="M15 8a3 3 0 01-3 3H5a3 3 0 110-6h7a3 3 0 013 3zM19 16a3 3 0 01-3 3H5a3 3 0 110-6h11a3 3 0 013 3z" />
                         </svg>
                         Salin Link
                     </button>
+
+                    <span id="copy-status" class="text-sm text-brown-600 mt-1"></span>
                 </div>
                 <button onclick="closeShareModal()" class="mt-3 w-full bg-gray-200 hover:bg-gray-300 py-2 rounded">
                     Tutup
@@ -850,16 +854,12 @@
     const shareText = encodeURIComponent("Check out this page from INNDESA!");
 
     // Update Facebook share link
-    const facebookShare = document.getElementById("facebookShare");
-    facebookShare.href = `https://www.facebook.com/sharer/sharer.php?u=${currentUrl}`;
-
-    // Update Twitter share link
-    const twitterShare = document.getElementById("twitterShare");
-    twitterShare.href = `https://twitter.com/intent/tweet?url=${currentUrl}&text=${shareText}`;
+    const facebookFollow = document.getElementById("facebookFollow");
+    facebookFollow.href = `https://www.facebook.com/sharer/sharer.php?u=${currentUrl}`;
 
     const shareBtn = document.getElementById('shareBtn');
     const shareModal = document.getElementById('shareModal');
-    const videoLink = 'https://youtu.be/A4Bc6Z7VyaU';
+    const videoLink = 'https://youtu.be/oSwpCKhvGto?si=y6G9y_nzXm_EbT_w';
 
     shareBtn.addEventListener('click', () => {
         shareModal.style.display = 'flex'; // tampilkan modal
@@ -870,8 +870,15 @@
     }
 
     function copyLink() {
+        const videoLink = "https://youtu.be/oSwpCKhvGto"; // ganti sesuai link dinamis
         navigator.clipboard.writeText(videoLink).then(() => {
-            alert('Link berhasil disalin!');
+            const status = document.getElementById("copy-status");
+            status.textContent = "Link berhasil disalin!";
+
+            // Hilangkan setelah 2,5 detik
+            setTimeout(() => {
+                status.textContent = "";
+            }, 2500);
         });
     }
 
@@ -884,7 +891,7 @@
     }
 
     function shareTwitter() {
-        window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(videoLink)}`, '_blank');
+        window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(videoLink)}&text=${encodeURIComponent('PROGRAM CSR PEMBERDAYAAN MASYARAKAT PT PLN Indonesia Power UBP Jawa Tengah 2 Adipala')}`, '_blank');
     }
 
     function openModal(url) {

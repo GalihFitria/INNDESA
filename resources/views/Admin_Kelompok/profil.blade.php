@@ -48,17 +48,44 @@
 </head>
 
 <body class="bg-gray-50 min-h-screen flex items-center justify-center">
-   <!-- ✅ PRELOADER -->
+
+    {{-- ✅ Tambahin ini paling atas sebelum preloader --}}
+    @if(session('success'))
+        <input type="hidden" id="success-message" value="{{ session('success') }}">
+    @endif
+
+    <!-- ✅ PRELOADER -->
     <div id="preloader">
         <img src="{{ asset('images/logo.png') }}" alt="Logo Website" class="logo-loading">
     </div>
+
     <script>
-        window.addEventListener("load", function() {
-            let preloader = document.getElementById("preloader");
-            preloader.classList.add("fade-out");
-            setTimeout(() => preloader.style.display = "none", 500);
-        });
+    window.addEventListener("load", function() {
+        let preloader = document.getElementById("preloader");
+        preloader.classList.add("fade-out");
+
+        // Tunggu animasi preloader selesai
+        setTimeout(() => {
+            preloader.style.display = "none";
+
+            // 🔹 Jalankan notifikasi CRUD setelah preloader hilang
+            const successMessageEl = document.getElementById('success-message');
+            if (successMessageEl) {
+                const successMessage = successMessageEl.value || successMessageEl.innerText;
+                if (successMessage) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Sukses!',
+                        text: successMessage,
+                        confirmButtonColor: '#7c3aed'
+                    });
+                }
+            }
+        }, 600); // sedikit tambah delay biar halus
+    });
     </script>
+
+
 
 
 
@@ -482,25 +509,16 @@ if (!response.ok) {
 
         let data = await response.json();
 
-        if (response.ok) {
-            closeModal();
+        if (response.status === 422) {
+    Swal.fire({
+        icon: 'error',
+        title: 'Email sudah digunakan!',
+        text: data.message || 'Silakan gunakan email lain.',
+        confirmButtonColor: '#7c3aed'
+    });
+    return;
+}
 
-            Swal.fire({
-                icon: 'success',
-                title: 'Sukses!',
-                text: data.message || 'Profil berhasil diperbarui',
-                timer: 2000,
-                showConfirmButton: false
-            });
-
-            setTimeout(() => location.reload(), 2000);
-        } else {
-            Swal.fire({
-                icon: 'error',
-                title: 'Gagal!',
-                text: data.message || 'Profil gagal diperbarui',
-            });
-        }
 
     } catch (err) {
         console.error("Terjadi error:", err);
@@ -552,7 +570,43 @@ function closePasswordModal() {
     }
 </script>
 
+ <style>
+/* 🔹 Responsive SweetAlert2 khusus untuk mobile */
+@media (max-width: 640px) {
+  .swal2-popup {
+    width: 75% !important;            /* lebih lebar sedikit biar seimbang */
+    max-width: 320px !important;      /* batas maksimal biar gak terlalu besar */
+    aspect-ratio: 1 / 1 !important;   /* bikin popup jadi kotak (persegi) */
+    font-size: 0.85rem !important;    /* teks sedikit lebih kecil */
+    padding: 1rem !important;         /* ruang dalam cukup */
+    display: flex !important;         /* bantu positioning tengah */
+    flex-direction: column;
+    justify-content: center;
+  }
 
+  .swal2-icon {
+    margin: 0 auto 0.5rem auto !important; /* ikon di tengah */
+    transform: scale(0.8); /* ikon agak kecil */
+  }
+
+  .swal2-title {
+    font-size: 1rem !important;
+    margin-bottom: 0.4rem !important;
+    line-height: 1.2 !important;
+  }
+
+  .swal2-html-container {
+    font-size: 0.85rem !important;
+    margin-bottom: 0.8rem !important;
+  }
+
+  .swal2-confirm, .swal2-cancel {
+    font-size: 0.75rem !important;
+    padding: 0.35rem 0.8rem !important;
+    border-radius: 6px !important;
+  }
+}
+</style>
 
 </body>
 </html>

@@ -753,7 +753,7 @@
                             <div class="flex flex-col justify-between flex-1">
                                 <div>
                                     <p class="text-xs opacity-75">
-                                        {{ \Carbon\Carbon::parse($kegiatan->tanggal)->translatedFormat('d F Y') }}
+                                        {{ \Carbon\Carbon::parse($kegiatan->tanggal)->locale('id')->translatedFormat('d F Y') }}
                                     </p>
 
                                     {{-- Deskripsi singkat --}}
@@ -763,10 +763,11 @@
                                 </div>
 
                                 {{-- Baca Selengkapnya rata tengah di bawah --}}
-                                <a href="{{ route('update_kegiatan.show', $kegiatan->id_kegiatan) }}"
+                                <a href="{{ url('update_kegiatan/' . \App\Http\Controllers\Update_KegiatanController::createHashUrl($kegiatan->id_kegiatan, $kegiatan->judul)) }}"
                                     class="text-white-600 hover:underline text-xs md:text-sm mt-3 block text-center">
                                     Baca Selengkapnya
                                 </a>
+
                             </div>
                         </div>
 
@@ -837,8 +838,8 @@
             <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="bg-white shadow-lg rounded-lg overflow-hidden">
                     <div class="relative aspect-video bg-gray-900 cursor-pointer group"
-                        onclick="openModal('https://www.youtube.com/embed/A4Bc6Z7VyaU?autoplay=1')">
-                        <img src="https://img.youtube.com/vi/A4Bc6Z7VyaU/maxresdefault.jpg"
+                        onclick="openModal('https://www.youtube.com/embed/oSwpCKhvGto?autoplay=1')">
+                        <img src="https://img.youtube.com/vi/oSwpCKhvGto/maxresdefault.jpg"
                             alt="PROGRAM CSR PEMBERDAYAAN MASYARAKAT PT PLN Indonesia Power UBP Jawa Tengah 2 Adipala"
                             class="w-full h-full object-cover">
                         <div
@@ -854,7 +855,7 @@
 
                     <div class="p-4 sm:p-6">
                         <div class="flex flex-col sm:flex-row gap-2 sm:gap-3">
-                            <a href="https://youtu.be/A4Bc6Z7VyaU" target="_blank"
+                            <a href="https://youtu.be/oSwpCKhvGto?si=y6G9y_nzXm_EbT_w"
                                 class="bg-red-600 hover:bg-red-700 text-white px-3 sm:px-4 py-2 rounded-md text-xs sm:text-sm font-medium flex items-center gap-2 justify-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="currentColor"
                                     viewBox="0 0 24 24">
@@ -913,13 +914,15 @@
                     </button>
 
                     <button onclick="copyLink()"
-                        class="flex items-center gap-2 px-3 py-2 hover:bg-gray-100 rounded">
+                        class="flex items-center gap-2 px-3 py-2 hover:bg-gray-100 rounded transition">
                         <svg class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 24 24">
                             <path
                                 d="M15 8a3 3 0 01-3 3H5a3 3 0 110-6h7a3 3 0 013 3zM19 16a3 3 0 01-3 3H5a3 3 0 110-6h11a3 3 0 013 3z" />
                         </svg>
                         Salin Link
                     </button>
+
+                    <span id="copy-status" class="text-sm text-brown-600 mt-1"></span>
                 </div>
                 <button onclick="closeShareModal()" class="mt-3 w-full bg-gray-200 hover:bg-gray-300 py-2 rounded">
                     Tutup
@@ -997,7 +1000,7 @@
 
     const shareBtn = document.getElementById('shareBtn');
     const shareModal = document.getElementById('shareModal');
-    const videoLink = 'https://youtu.be/A4Bc6Z7VyaU';
+    const videoLink = 'https://youtu.be/oSwpCKhvGto';
 
     shareBtn.addEventListener('click', () => {
         shareModal.style.display = 'flex'; // tampilkan modal
@@ -1008,21 +1011,28 @@
     }
 
     function copyLink() {
-        navigator.clipboard.writeText(videoLink).then(() => {
-            alert('Link berhasil disalin!');
+        const videoLink = "https://youtu.be/oSwpCKhvGto"; // ganti sesuai link dinamis
+       navigator.clipboard.writeText(videoLink).then(() => {
+            const status = document.getElementById("copy-status");
+            status.textContent = "Link berhasil disalin!";
+
+            // Hilangkan setelah 2,5 detik
+            setTimeout(() => {
+                status.textContent = "";
+            }, 2500);
         });
-    }
+    } 
 
     function shareWhatsApp() {
-        window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(videoLink)}`, '_blank');
+        window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(videoLink)}`);
     }
 
     function shareFacebook() {
-        window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(videoLink)}`, '_blank');
+        window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(videoLink)}`);
     }
 
     function shareTwitter() {
-        window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(videoLink)}`, '_blank');
+        window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(videoLink)}`);
     }
 
     function openModal(url) {

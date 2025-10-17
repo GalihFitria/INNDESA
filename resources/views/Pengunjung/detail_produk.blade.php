@@ -342,7 +342,7 @@
             .flex.flex-col.border-t.border-gray-300 {
                 padding-top: 1rem;
             }
-            
+
             .flex.flex-col.border-t.border-gray-300 .flex.flex-wrap.items-center.gap-4 {
                 flex-direction: row;
                 align-items: flex-start;
@@ -1436,12 +1436,13 @@
                                 class="hidden absolute top-full mt-2 w-64 max-w-full bg-white border border-gray-200 rounded-lg shadow-lg z-50 sm:w-56">
                                 @if($kontak)
                                 <!-- WhatsApp -->
+
                                 @if($kontak->no_telp)
                                 @php
                                 $pesan = "Halo, saya tertarik dengan produk berikut:\n" .
                                 "Nama Produk : " . $produk->nama . "\n" .
                                 "Harga : Rp. " . number_format($produk->harga, 0, ',', '.') . "\n" .
-                                "Link Produk : " . route('detail_produk.show', $produk->id_produk) . "\n\n" .
+                                "Link Produk : " . url('detail_produk/' . \App\Http\Controllers\DetailProdukController::createHashUrl($produk->id_produk, $produk->nama)) . "\n\n" .
                                 "Apakah produk ini masih tersedia?";
                                 $noWa = preg_replace('/\D/', '', $kontak->no_telp);
                                 if (strpos($noWa, '0') === 0) {
@@ -1498,7 +1499,7 @@
                     ->get();
                     @endphp
                     @forelse ($produk_terkait as $item)
-                    <a href="{{ route('detail_produk.show', $item->id_produk) }}" class="block no-underline produk-item">
+                    <a href="{{ url('detail_produk/' . \App\Http\Controllers\DetailProdukController::createHashUrl($item->id_produk, $item->nama)) }}" class="block no-underline produk-item">
                         <div class="product-card hover:shadow-lg transition-all duration-300">
                             <img src="{{ asset('storage/' . $item->foto) }}"
                                 alt="{{ $item->nama }}"

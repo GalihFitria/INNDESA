@@ -3,7 +3,6 @@
 @section('title', 'Edit Informasi User - INNDESA')
 <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
 
-
 @section('content')
 <h2 class="text-center text-4xl font-bold text-gray-800 mb-6">.::Edit Informasi User::.</h2>
 
@@ -20,22 +19,24 @@
 
         {{-- ID Kelompok dengan Select2 --}}
         <div class="mb-4">
-            <label for="id_kelompok" class="block text-sm font-medium text-gray-700">Nama Kelompok</label>
-            <select name="id_kelompok" id="id_kelompok"
-                class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500 @error('id_kelompok') border-red-500 @enderror select2"
-                style="width: 100%;" required>
-                <option value="">-- Pilih Kelompok --</option>
-                @foreach ($kelompoks as $k)
-                <option value="{{ $k->id_kelompok }}"
-                    {{ old('id_kelompok', $user->id_kelompok ?? '') == $k->id_kelompok ? 'selected' : '' }}>
-                    {{ $k->nama }}
-                </option>
-                @endforeach
-            </select>
-            @error('id_kelompok')
-            <span class="text-red-500 text-sm">{{ $message }}</span>
-            @enderror
-        </div>
+    <label for="id_kelompok" class="block text-sm font-medium text-gray-700">Nama Kelompok</label>
+
+    {{-- Select tampil tapi tidak bisa diubah --}}
+    <select id="id_kelompok_display"
+        class="mt-1 block w-full border border-gray-300 rounded-lg p-2 bg-gray-100 cursor-not-allowed"
+        disabled>
+        @foreach ($kelompoks as $k)
+            <option value="{{ $k->id_kelompok }}"
+                {{ old('id_kelompok', $user->id_kelompok ?? '') == $k->id_kelompok ? 'selected' : '' }}>
+                {{ $k->nama }}
+            </option>
+        @endforeach
+    </select>
+
+    {{-- Hidden input biar nilainya tetap dikirim --}}
+    <input type="hidden" name="id_kelompok" value="{{ $user->id_kelompok }}">
+</div>
+
 
         {{-- ID User --}}
         <div>
@@ -48,32 +49,37 @@
 
         {{-- Username --}}
         <div>
-            <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
-            <input type="text" name="username" id="username" value="{{ $user->username }}"
-                class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="Masukkan Username" required>
-        </div>
+    <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+    <input type="text" name="username" id="username" value="{{ $user->username }}"
+        class="mt-1 block w-full border border-gray-300 rounded-lg p-2 bg-gray-100 cursor-not-allowed"
+        placeholder="Masukkan Username" readonly>
+</div>
 
         {{-- Password - Menampilkan hash yang ada --}}
-        <div>
-            <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-            <input type="password" name="password" id="password"
-                class="mt-1 block w-full border @error('password') border-red-500 @else border-gray-300 @enderror rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="Biarkan kosong jika tidak ingin mengubah password">
+      <div>
+    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+    <input type="password" name="password" id="password"
+        class="mt-1 block w-full border @error('password') border-red-500 @else border-gray-300 @enderror 
+        rounded-lg p-2 bg-gray-100 cursor-not-allowed focus:ring-0 focus:border-gray-300"
+        placeholder="Biarkan kosong jika tidak ingin mengubah password" readonly>
 
-            <small class="text-gray-500">Kosongkan jika tidak ingin mengubah password.</small>
+    <small class="text-gray-500">Kosongkan jika tidak ingin mengubah password.</small>
 
-            @error('password')
-            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-            @enderror
-        </div>
+    @error('password')
+        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+    @enderror
+</div>
 
         {{-- No Telp --}}
         <div>
             <label for="no_telp" class="block text-sm font-medium text-gray-700">No. Telp</label>
-            <input type="text" name="no_telp" id="no_telp" value="{{ $user->no_telp }}"
-                class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="Masukkan Nomor Telepon" required>
+          <input type="text" name="no_telp" id="no_telp" value="{{ $user->no_telp }}"
+    class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500"
+    placeholder="Masukkan Nomor Telepon" required
+    inputmode="numeric"
+    pattern="[0-9]+"
+    oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+
         </div>
 
         {{-- IG --}}
@@ -93,12 +99,19 @@
         </div>
 
         {{-- Email --}}
-        <div>
-            <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-            <input type="email" name="email" id="email" value="{{ $user->email }}"
-                class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="Masukkan Email" required>
-        </div>
+<div>
+    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+    <input type="email" name="email" id="email"
+        value="{{ old('email', $user->email ?? '') }}"
+        class="mt-1 block w-full border @error('email') border-red-500 @else border-gray-300 @enderror 
+               rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500"
+        placeholder="Masukkan Email" required>
+
+    @error('email')
+        <small class="text-red-500">{{ $message }}</small>
+    @enderror
+</div>
+
 
         {{-- Tombol --}}
         <div class="flex justify-end space-x-4 pt-4 border-t border-gray-200">
