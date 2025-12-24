@@ -79,7 +79,7 @@ class KelompokController extends Controller
         $rentanGrouped = $kelompokRentan->groupBy('nama_rentan');
 
         $produk = Produk::where('id_kelompok', $id)
-            ->select('nama', 'stok', 'harga', 'foto', 'id_produk')
+            ->select('nama', 'stok', 'satuan', 'harga', 'foto', 'id_produk')
             ->get();
 
         $katalog = Katalog::where('id_kelompok', $id)->first();

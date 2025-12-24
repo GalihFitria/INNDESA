@@ -14,7 +14,7 @@ class StrukturOrganisasi extends Model
     protected $keyType = 'int';
     public $timestamps = false;
 
-    protected $fillable = ['id_kelompok', 'nama', 'jabatan', 'id_rentan']; // ubah rentan menjadi id_rentan
+    protected $fillable = ['id_kelompok', 'nama', 'jabatan', 'id_rentan']; 
 
     public function kelompok()
     {

@@ -14,7 +14,7 @@ class ProdukPertahun extends Model
     protected $keyType = 'int';
     public $timestamps = false;
 
-    protected $fillable = ['tahun', 'id_produk', 'nama_kelompok', 'nama_produk', 'harga', 'produk_terjual'];
+    protected $fillable = ['tahun', 'id_produk', 'nama_kelompok', 'nama_produk', 'harga', 'produk_terjual', 'satuan'];
 
     public function getKodeTahunAttribute()
     {

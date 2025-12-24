@@ -36,7 +36,8 @@
                     ['label'=>'Judul','sortable'=>false],
                     ['label'=>'Deskripsi','sortable'=>false],
                     ['label'=>'Foto Kegiatan','sortable'=>false],
-                    ['label'=>'Tanggal','sortable'=>true],
+                    ['label'=>'Tanggal Kegiatan','sortable'=>true],
+                    ['label'=>'Tanggal Update','sortable'=>true], // Tambahkan kolom baru
                     ['label'=>'Sumber Berita','sortable'=>false],
                     ['label'=>'Aksi','sortable'=>false],
                     ];
@@ -70,6 +71,7 @@
                         @endif
                     </td>
                     <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $kg->tanggal }}</td>
+                    <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $kg->updated_at ? date('d-m-Y', strtotime($kg->updated_at)) : '-' }}</td>
                     <td class="border border-gray-300 p-3 text-sm text-gray-900 w-1/5">
                         @php
                         $sources = [];
@@ -115,7 +117,7 @@
                 </tr>
                 @empty
                 <tr id="noDataRow">
-                    <td colspan="9" class="border border-gray-300 p-3 text-center text-sm text-gray-900">Tidak ada data ditemukan</td>
+                    <td colspan="10" class="border border-gray-300 p-3 text-center text-sm text-gray-900">Tidak ada data ditemukan</td>
                 </tr>
                 @endforelse
             </tbody>

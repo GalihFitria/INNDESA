@@ -12,7 +12,7 @@ class Update_KegiatanController extends Controller
     public function index()
     {
         //
-        return view ('Pengunjung.update_kegiatan');
+        return view('Pengunjung.update_kegiatan');
     }
 
     public function create()
@@ -35,22 +35,21 @@ class Update_KegiatanController extends Controller
             abort(404);
         }
 
-        $kegiatan = Kegiatan::select('id_kegiatan', 'id_kelompok', 'judul', 'deskripsi', 'foto', 'tanggal', 'sumber_berita')
+        $kegiatan = Kegiatan::select('id_kegiatan', 'id_kelompok', 'judul', 'deskripsi', 'foto', 'tanggal', 'sumber_berita', 'updated_at') // Tambahkan updated_at
             ->with('kelompok')
             ->findOrFail($id);
 
         $sumberBerita = $kegiatan->sumber_berita ? explode(', ', $kegiatan->sumber_berita) : [];
 
-        $kegiatanLainnya = Kegiatan::select('id_kegiatan', 'judul', 'foto', 'tanggal')
+        $kegiatanLainnya = Kegiatan::select('id_kegiatan', 'judul', 'foto', 'tanggal', 'updated_at') // Tambahkan updated_at
             ->where('id_kegiatan', '!=', $id)
             ->latest('tanggal')
-            ->take(12)
             ->get();
 
         return view('Pengunjung.update_kegiatan', compact('kegiatan', 'sumberBerita', 'kegiatanLainnya'));
     }
 
-    
+
     private function findIdFromHash(String $hash)
     {
         // Decode the hash to get the original ID
@@ -67,20 +66,20 @@ class Update_KegiatanController extends Controller
             }
         }
 
-        return null; 
+        return null;
     }
 
     public static function createHashUrl(int $id, string $judul)
     {
         $secretKey = 'INNDESA_SECRET_KEY_2024';
         $hash = substr(md5($id . $secretKey), 0, 8);
-        
+
         // Buat slug dari judul (menggunakan Laravel Str helper)
         $slug = Str::slug($judul, '-');
-        
+
         return $hash . '-' . $slug;
     }
-    
+
     public function edit(string $id)
     {
         //

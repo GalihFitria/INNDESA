@@ -68,6 +68,12 @@
                             Stok <i class="fas fa-sort ml-1"></i>
                         </span>
                     </th>
+                    <th data-column="5"
+                        class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase cursor-pointer">
+                        <span class="flex items-center justify-center">
+                            Satuan <i class="fas fa-sort ml-1"></i>
+                        </span>
+                    </th>
                     <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">
                         Foto Produk
                     </th>
@@ -94,6 +100,7 @@
                     <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $p->nama }}</td>
                     <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ number_format($p->harga, 0, ',', '.') }}</td>
                     <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $p->stok }}</td>
+                    <td class="border border-gray-300 p-3 text-sm text-gray-900">{{ $p->satuan }}</td>
                     <td class="border border-gray-300 p-3 text-sm text-gray-900 text-center">
                         @if ($p->foto)
                         <a href="{{ asset('storage/' . $p->foto) }}" class="text-blue-600 hover:underline">

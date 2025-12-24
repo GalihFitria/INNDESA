@@ -22,9 +22,8 @@ class KategoriKelompok extends Model
         return 'KT' . str_pad($this->id_kategori, 1, STR_PAD_LEFT);
     }
 
-    // App/Models/KategoriKelompok.php
     public function kelompok()
     {
-        return $this->hasMany(Kelompok::class, 'id_kategori', 'id_kategori');
+        return $this->belongsTo(Kelompok::class, 'id_kelompok', 'id_kelompok');
     }
 }

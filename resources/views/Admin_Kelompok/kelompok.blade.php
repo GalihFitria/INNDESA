@@ -13,6 +13,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -683,7 +686,8 @@ html, body {
             <div class="absolute inset-0 bg-black bg-opacity-50 z-0 hidden md:block"></div>
 
             <!-- Tombol Edit -->
-            <div x-data="{ open: false }">
+            <div x-data="editLogoBgModal()">
+
                 <button
         @click="open = true"
         class="absolute bottom-3 right-3 
@@ -700,6 +704,7 @@ html, body {
 
             <!-- Modal Form -->
             <div 
+             id="editLogoBgModal"
                 x-show="open" 
                 x-cloak 
                 x-transition 
@@ -715,8 +720,8 @@ html, body {
                             relative z-[9999] max-h-[80vh] overflow-y-auto">
 
                 <!-- Tombol Close -->
-                <button @click.stop="open = false"
-                    class="absolute top-2 right-2 text-gray-500 hover:text-gray-800 text-lg sm:text-xl z-[99999999] pointer-events-auto">✕</button>
+                 <button @click="closeModal()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-800 text-lg">✕</button>
+
 
 
                 <!-- Logo -->
@@ -1195,103 +1200,149 @@ html, body {
 
 
 <!-- KELOMPOK RENTAN -->
+<!-- KELOMPOK RENTAN -->
 <div id="kelompok-rentan" class="profile-tab-content hidden py-4">
-  <!-- ✅ Wrapper scroll -->
-  <div class="overflow-x-auto">
-    <table class="min-w-[600px] w-full border-collapse mt-4 border border-gray-200 text-xs sm:text-sm">
-       <thead class="bg-gray-100">
-    <tr>
-        @foreach($rentan as $r)
-            @if($r->nama_rentan !== '-')
-                <th class="border border-gray-200 px-2 py-1 sm:px-4 sm:py-2 text-left font-semibold">
-                    {{ ucfirst($r->nama_rentan) }}
-                </th>
-            @endif
-        @endforeach
-    </tr>
-</thead>
-<tbody>
-    @php
-        $maxRows = max(array_map('count', $dataRentan));
-    @endphp
+    <div class="overflow-x-auto">
+        <table class="min-w-[600px] w-full border-collapse mt-4 border border-gray-200 text-xs sm:text-sm">
 
-       @if ($maxRows > 0)
+            @php
+                // === DIUBAH ===
+                // Ambil semua kolom (nama_rentan) kecuali yang '-', tapi jangan hilangkan kolom kosong.
+                $allColumns = [];
+foreach ($rentan as $r) {
+    if ($r->nama_rentan === '-') continue; // skip "-"
+    $allColumns[] = $r->nama_rentan;
+}
 
-    @for ($i = 0; $i < $maxRows; $i++)
-        <tr>
-            @foreach($rentan as $r)
-                @if($r->nama_rentan !== '-')
-                    @php
-                        $val = $dataRentan[$r->nama_rentan][$i] ?? null;
-                    @endphp
-                    <td class="border border-gray-200 px-2 py-1 sm:px-4 sm:py-2">
-                        {{ $val && trim($val) !== '' ? $val : '-' }}
-                    </td>
+                // Cek apakah ada data valid di salah satu kolom (untuk menentukan apakah tampilkan "Tidak ada data..." atau tabel data)
+                $hasAnyData = false;
+                foreach ($allColumns as $col) {
+                    $filtered = array_filter($dataRentan[$col] ?? [], fn($v) =>
+                        trim($v) !== '' && trim($v) !== '-'
+                    );
+                    if (!empty($filtered)) {
+                        $hasAnyData = true;
+                        break;
+                    }
+                }
+                // === END DIUBAH ===
+            @endphp
+
+            @if(count($allColumns) > 0)
+                <thead class="bg-gray-100">
+                    <tr>
+                        @foreach($allColumns as $col)
+                            <th class="border border-gray-200 px-2 py-1 sm:px-4 sm:py-2 text-left font-semibold">
+                                {{ ucfirst($col) }}
+                            </th>
+                        @endforeach
+                    </tr>
+                </thead>
+
+                @php
+                    // Cari jumlah baris terbanyak dari kolom (tetap hitung berdasarkan data yang valid)
+                    $maxRows = 0;
+                    foreach ($allColumns as $col) {
+                        $filtered = array_filter($dataRentan[$col] ?? [], fn($v) =>
+                            trim($v) !== '' && trim($v) !== '-'
+                        );
+                        $maxRows = max($maxRows, count($filtered));
+                    }
+                @endphp
+
+                @if($hasAnyData)
+                    <tbody>
+                        @for($i = 0; $i < $maxRows; $i++)
+                            <tr>
+                                @foreach($allColumns as $col)
+                                    @php
+                                        $filtered = array_filter($dataRentan[$col] ?? [], fn($v) =>
+                                            trim($v) !== '' && trim($v) !== '-'
+                                        );
+                                        $filtered = array_values($filtered);
+                                        $value = $filtered[$i] ?? '-';
+
+                                    @endphp
+                                    <td class="border border-gray-200 px-2 py-1 sm:px-4 sm:py-2">
+                                        {{ $value }}
+                                    </td>
+                                @endforeach
+                            </tr>
+                        @endfor
+                    </tbody>
+                @else
+                    <tbody>
+                        <tr>
+                            <td class="text-center text-gray-500 py-4" colspan="{{ count($allColumns) }}">
+                                Tidak ada data kelompok rentan yang tersedia
+                            </td>
+                        </tr>
+                    </tbody>
                 @endif
-            @endforeach
-        </tr>
-    @endfor
-     @else
-        <tr>
-            <td colspan="{{ count($rentan) }}" class="text-center text-gray-500 py-4 ">
-                Tidak ada data kelompok rentan
-            </td>
-        </tr>
-    @endif
-</tbody>
- 
 
-    </table>
-   
-  </div>
+            @else
+                {{-- Jika tidak ada kolom sama sekali (semua nama_rentan mungkin '-') --}}
+                <tbody>
+                    <tr>
+                        <td class="text-center text-gray-500 py-4">
+                            Tidak ada data kelompok rentan yang tersedia
+                        </td>
+                    </tr>
+                </tbody>
+            @endif
+        </table>
+    </div>
 </div>
 
 
+<!-- STOK PRODUK -->
+<div id="stok-produk" class="profile-tab-content hidden py-4">
+    <!-- <div class="flex justify-end mb-4">
+        <button onclick="openStokProdukForm()" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
+            <i class="fas fa-plus mr-2"></i>Tambah Produk
+        </button>
+    </div> -->
 
-         <!-- STOK PRODUK -->
-         <div id="stok-produk" class="profile-tab-content hidden py-4">
-                <!-- <div class="flex justify-end mb-4">
-                    <button onclick="openStokProdukForm()" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
-                        <i class="fas fa-plus mr-2"></i>Tambah Produk
-                    </button>
-                </div> -->
-                <table class="w-full border-collapse mt-4 border border-gray-200">
-                    <thead>
-                        <tr>
-                            <th class="border border-gray-200 p-2 text-left">Nama Produk</th>
-                            <th class="border border-gray-200 p-2 text-left">Stok</th>
-                            <th class="border border-gray-200 p-2 text-center">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody id="stok-produk-tbody">
-                           @if($produk->isEmpty())
-        <tr>
-            <td colspan="3" class="border border-gray-200 p-4 text-center text-gray-500">
-                Tidak ada data stok produk
-            </td>
-        </tr>
-    @else
-    @foreach($produk as $p)
-        <tr data-id="{{ $p->id_produk }}">
-            <td class="border border-gray-200 p-2">{{ $p->nama }}</td>
-            <td class="border border-gray-200 p-2">{{ $p->stok }} pcs</td>
-            <td class="border border-gray-200 p-2 text-center">
-                <button type="button" onclick="editStokProduk(this)" class="text-blue-600 hover:text-blue-800 mr-2">
-                    <i class="fas fa-edit"></i>
-                </button>
-            </td>
-        </tr>
-    @endforeach
-        @endif
-</tbody>
+    <table class="w-full border-collapse mt-4 border border-gray-200">
+        <thead>
+            <tr>
+                <th class="border border-gray-200 p-2 text-left">Nama Produk</th>
+                <th class="border border-gray-200 p-2 text-left">Stok</th>
+                <th class="border border-gray-200 p-2 text-center">Aksi</th>
+            </tr>
+        </thead>
 
+        <tbody id="stok-produk-tbody">
+            @if($produk->isEmpty())
+                <tr>
+                    <td colspan="3" class="border border-gray-200 p-4 text-center text-gray-500">
+                        Tidak ada data stok produk
+                    </td>
+                </tr>
+            @else
+                @foreach($produk as $p)
+                    <tr data-id="{{ $p->id_produk }}" data-satuan="{{ $p->satuan }}">
+                        <td class="border border-gray-200 p-2">{{ $p->nama }}</td>
+                        <td class="border border-gray-200 p-2">
+    {{ $p->stok }} {{ ucfirst($p->satuan) }}
+</td>
 
-                </table>
-            </div>
-           </div>
+                        <td class="border border-gray-200 p-2 text-center">
+                            <button type="button" 
+                                    onclick="editStokProduk(this)" 
+                                    class="text-blue-600 hover:text-blue-800 mr-2">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </td>
+                    </tr>
+                @endforeach
+            @endif
+        </tbody>
+    </table>
+</div>
+    </div>
          </div>
 
-     
      
      
         <!-- Informasi Section -->
@@ -1346,17 +1397,7 @@ html, body {
 
 
     </style>
-    <script>
-function goToDetailProduk(id, event) {
-    // Jangan trigger redirect kalau yang diklik adalah tombol Edit / Hapus
-    if (event.target.closest('button')) return;
-
-    // Tandai bahwa ini navigasi biasa, bukan hasil CRUD
-    localStorage.setItem('isFromCrud', 'false');
-    
-    window.location.href = `/detail_produk/${id}`;
-}
-</script>
+ 
 
 <meta name="csrf-token" content="{{ csrf_token() }}">
  <div id="produk" class="info-tab-content block py-4">
@@ -1639,17 +1680,29 @@ function closePreviewKatalog() {
                md:px-3 md:py-2 md:text-base"
         aria-label="Cari Produk">
 </div>
+{{-- tambahkan ini DI LUAR #produk-carousel --}}
+<div id="produk-empty" class="col-span-full text-center text-gray-500 py-10 hidden">
+    <p class="text-sm font-arial">Produk tidak tersedia.</p>
+</div>
 
-<script>
+ <script>
 document.addEventListener("DOMContentLoaded", function() {
     const searchInput = document.getElementById("searchProduk");
     const produkItems = document.querySelectorAll(".produk-item");
     const emptyMessage = document.getElementById("produk-empty");
+    const adaProdukAwal = produkItems.length > 0; // ✅ Cek apakah ada produk dari awal
 
     if (searchInput) {
         searchInput.addEventListener("input", function() {
             let keyword = this.value.toLowerCase().trim();
             let found = false;
+
+            // kalau dari awal emang ga ada produk → langsung keluar, gak usah lanjut filter
+            if (!adaProdukAwal) {
+                // pastiin pesan “tidak ada produk yang tersedia” tetap tampil
+                emptyMessage.classList.add("hidden"); // sembunyikan "produk tidak tersedia"
+                return;
+            }
 
             produkItems.forEach(item => {
                 let nama = item.dataset.nama.toLowerCase();
@@ -1661,8 +1714,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             });
 
-            // munculkan / sembunyikan pesan kosong
-            if (!found) {
+            // kalau ada produk tapi hasil cari ga ketemu
+            if (adaProdukAwal && !found) {
                 emptyMessage.classList.remove("hidden");
             } else {
                 emptyMessage.classList.add("hidden");
@@ -1670,8 +1723,8 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 });
-
 </script>
+
 
 
 
@@ -1700,7 +1753,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 <div class="produk-item" id="produk-{{ $p->id }}" data-nama="{{ $p->nama }}">
     <div 
         class="produk-card border rounded-lg shadow-md p-3 w-full h-full min-h-[280px] cursor-pointer flex flex-col"
-        onclick="goToDetailProduk({{ $p->id_produk }}, event)"
+        onclick="goToDetailProduk('{{ \App\Http\Controllers\DetailProdukController::createHashUrl($p->id_produk, $p->nama) }}', event)"
+
     >
         {{-- Foto Produk --}}
         @if(!empty($p->foto))
@@ -1721,7 +1775,7 @@ document.addEventListener("DOMContentLoaded", function() {
 </h3>
 
         <div class="flex items-center justify-between pb-2">
-            <p class="text-green-600 font-bold text-lg truncate">
+            <p class="text-green-600 font-bold text-sm md:text-lg truncate">
                 Rp. {{ number_format($p->harga, 0, ',', '.') }}
             </p>
             <p class="text-black-500 text-sm truncate">Stok: {{ $p->stok }}</p>
@@ -1735,11 +1789,12 @@ document.addEventListener("DOMContentLoaded", function() {
                 data-nama="{{ $p->nama }}"
                 data-harga="{{ $p->harga }}"
                 data-stok="{{ $p->stok }}"
+                  data-satuan="{{ $p->satuan }}"  
                 data-deskripsi="{{ $p->deskripsi }}"
                 data-foto="{{ $p->foto }}"
                 data-sertifikat='@json($p->sertifikat ? explode(",", $p->sertifikat) : [])'
-                class="bg-blue-500 text-white px-3 py-1 rounded">
-                Edit
+                class="text-blue-600 hover:text-blue-800">
+        <i class="fas fa-edit"></i> Edit
             </button>
 
              {{-- ✅ Form Delete Produk --}}
@@ -1806,10 +1861,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 @endif
         </div>
         
-{{-- tambahkan ini DI LUAR #produk-carousel --}}
-<div id="produk-empty" class="col-span-full text-center text-gray-500 py-10 hidden">
-    <p class="text-sm font-arial italic">Produk tidak tersedia.</p>
-</div>
+
 
         <div id="produk-nav" class="flex justify-center mt-4 hidden">
     <button class="btn btn-outline mr-2" 
@@ -1833,16 +1885,22 @@ document.addEventListener("DOMContentLoaded", function() {
 
 <!-- KEGIATAN -->
 <div id="kegiatan" class="info-tab-content hidden py-4">
-    <div class="flex items-center justify-between mb-4">
-        <input type="text" id="searchKegiatan" placeholder="Cari Kegiatan..."
-            class="border rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-sky-500"
-            aria-label="Cari Kegiatan">
+     <div class="flex flex-wrap items-center justify-between mb-4 px-1 sm:px-0">
+    
+    <!-- input pencarian -->
+    <input type="text" id="searchKegiatan" placeholder="Cari Kegiatan..."
+        class="border rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-sky-500
+               w-full sm:w-auto order-1 sm:order-1 mb-2 sm:mb-0"
+        aria-label="Cari Kegiatan">
 
-        <button onclick="openKegiatanForm()" 
-            class=" tambah-anggota-btn bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
-            <i class="fas fa-plus mr-2"></i>Tambah 
-        </button>
-    </div>
+    <!-- tombol tambah -->
+    <button onclick="openKegiatanForm()" 
+        class="tambah-anggota-btn bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition
+               w-fit order-2 sm:order-2 sm:ml-2">
+        <i class="fas fa-plus mr-2"></i>Tambah 
+    </button>
+</div>
+
 
     <div class="relative">
         <!-- 🔥 Grid konsisten kayak Produk -->
@@ -1853,9 +1911,10 @@ document.addEventListener("DOMContentLoaded", function() {
     <div class="kegiatan-item" 
          id="kegiatan-{{ $k->id_kegiatan }}" 
          data-nama="{{ strtolower($k->judul) }}">
-       <div class="border rounded-lg shadow-md p-3 w-full h-full min-h-[300px] cursor-pointer flex flex-col"
-     onclick="goToDetailKegiatan({{ $k->id_kegiatan }}, event)">
-
+        
+    <div class="border rounded-lg shadow-md p-3 w-full h-full min-h-[300px] cursor-pointer flex flex-col"
+         onclick="goToDetailKegiatan('{{ \App\Http\Controllers\Update_KegiatanController::createHashUrl($k->id_kegiatan, $k->judul) }}', event)">
+         
             <div class="h-40">
                 <img src="{{ $k->foto ? asset('storage/'.$k->foto) : 'https://via.placeholder.com/200x160' }}"
                      alt="{{ $k->judul }}"
@@ -1863,7 +1922,7 @@ document.addEventListener("DOMContentLoaded", function() {
             </div>
 
             <h3 class="mt-3 font-semibold text-sm line-clamp-2">{{ $k->judul }}</h3>
-            <p class="text-xs text-gray-600 line-clamp-3 mb-2">{{ $k->deskripsi }}</p>
+            <p class="text-xs text-gray-600 line-clamp-2 mb-2">{{ $k->deskripsi }}</p>
 
             <p class="text-xs text-gray-500 mb-2">
                 {{ \Carbon\Carbon::parse($k->tanggal)->translatedFormat('d F Y') }}
@@ -1954,17 +2013,28 @@ document.addEventListener("DOMContentLoaded", function() {
     </div>
 </div>
 <script>
- 
-function goToDetailKegiatan(id, event) {
-    // kalau yang diklik tombol (Edit/Hapus), jangan redirect
+function goToDetailProduk(hash, event) {
     if (event.target.closest('button')) return;
-    
-    // Tandai bahwa ini navigasi biasa, bukan hasil CRUD
     localStorage.setItem('isFromCrud', 'false');
-    
-    window.location.href = "/update_kegiatan/" + id;
+    window.location.href = `/detail_produk/${hash}`;
 }
 </script>
+ 
+
+<script>
+function goToDetailKegiatan(hash, event) {
+    // biar gak jalan kalau tombol yang diklik
+    if (event.target.closest('button')) return;
+
+    // tandain bukan dari CRUD
+    localStorage.setItem('isFromCrud', 'false');
+
+    // redirect ke halaman detail
+    window.location.href = `/update_kegiatan/${hash}`;
+}
+</script>
+
+
 
 
 
@@ -1975,7 +2045,8 @@ function goToDetailKegiatan(id, event) {
   <!-- INOVASI & PENGHARGAAN -->
  <!-- Menjadi -->
    <div id="inovasi" class="info-tab-content hidden py-4">
-                    <div class="flex justify-end mb-4">
+  <div class="max-w-4xl mx-auto px-4">
+       <div class="flex justify-end mb-4">
     <button type="button" 
     onclick="openInovasiForm({{ $kelompok->id_kelompok }})"
     class="tambah-anggota-btn bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
@@ -2145,7 +2216,10 @@ $groupedProduk = $produkPertahun
 
             <td class="border p-2 w-24">{{ $item->tahun }}</td>
             <td class="border p-2 w-24">{{ number_format($item->harga, 0, ',', '.') }}</td>
-            <td class="border p-2 text-left w-24">{{ $item->produk_terjual }}</td>
+            <td class="border p-2 text-left w-24">
+  {{ $item->produk_terjual }} {{ $item->satuan ?? '' }}
+</td>
+
             <td class="border p-2 text-center w-24">
                 <div class="flex items-center justify-center space-x-3">
                     <!-- Tombol Edit -->
@@ -2156,6 +2230,7 @@ $groupedProduk = $produkPertahun
                         data-nama-produk="{{ $item->nama_produk }}"  
                         data-harga="{{ $item->harga }}"
                         data-terjual="{{ $item->produk_terjual }}"
+                        data-satuan="{{ $item->satuan }}" 
                         data-tahun="{{ $item->tahun }}"
                         data-update-url="{{ route('Admin_Kelompok.updateProdukTahun', $item->id_tahun) }}"
                         class="text-blue-600 hover:text-blue-800">
@@ -2785,54 +2860,97 @@ $(document).ready(function() {
          </div>
 
 
-    <!--MODAL STOK PRODUK-->
-      <div id="stokProdukModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-[9999] modal">
-    <!-- ✅ Versi kecil di mobile, tetap lebar di desktop -->
-   <div class="bg-white rounded-lg p-3 w-11/12 max-w-[250px] text-xs 
-                sm:p-6 sm:w-full sm:max-w-md sm:text-base 
-                shadow-lg relative"> <!-- ✅ tambahkan 'relative' dan shadow -->
+<!-- MODAL STOK PRODUK -->
+<div id="stokProdukModal" 
+     class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-[9999] modal">
 
-        <!-- 🔹 Tombol X di pojok kanan atas -->
-        <button onclick="closeStokProdukForm()" 
-                class="absolute top-2 right-2 text-gray-600 hover:text-gray-800 text-xl font-bold"
-                aria-label="Close modal">
-            &times;
+  <!-- ✅ Versi kecil di mobile, tetap lebar di desktop -->
+  <div class="bg-white rounded-lg p-3 w-11/12 max-w-[250px] text-xs 
+              sm:p-6 sm:w-full sm:max-w-md sm:text-base 
+              shadow-lg relative">
+              
+    <!-- 🔹 Tombol X di pojok kanan atas -->
+    <button onclick="closeStokProdukForm()" 
+            class="absolute top-2 right-2 text-gray-600 hover:text-gray-800 text-xl font-bold"
+            aria-label="Close modal">
+      &times;
+    </button>
+
+    <h2 id="stokProdukModalTitle" 
+        class="text-sm sm:text-lg font-bold mb-3 sm:mb-4">
+      Edit Stok Produk
+    </h2>
+
+    <form id="stokProdukForm" method="POST">
+      @csrf
+      @method('PUT')
+      <input type="hidden" id="produkId" name="id"> <!-- untuk passing id produk -->
+
+      <div class="mb-2 sm:mb-3">
+        <label for="namaProduk" class="block">Nama Produk</label>
+        <input type="text" id="namaProduk" name="nama"
+               class="w-full border rounded p-1 sm:p-2" readonly>
+      </div>
+
+      <!-- Stok dan Satuan sejajar -->
+      <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-2 mb-2 sm:mb-3">
+        
+        <!-- Input Stok -->
+        <div class="w-full sm:w-1/2">
+          <label for="stokProduk" class="block">Stok</label>
+          <input type="number" id="stokProduk" name="stok"
+                 class="w-full border rounded p-1 sm:p-2" required>
+        </div>
+
+        <!-- Dropdown Satuan -->
+        <div class="w-full sm:w-1/2 mt-2 sm:mt-0">
+          <label for="satuanProduk" class="block">Satuan</label>
+          <select id="satuanProduk" name="satuan"
+                  class="select2-satuan w-full border rounded p-1 sm:p-2" required>
+            <option value="">-- Pilih Satuan --</option>
+            <option value="kg">Kg</option>
+            <option value="gram">Gram</option>
+            <option value="ons">Ons</option>
+            <option value="liter">Liter</option>
+            <option value="bungkus">Bungkus</option>
+            <option value="pack">Pack</option>
+            <option value="sachet">Sachet</option>
+            <option value="buah">Buah</option>
+            <option value="ikat">Ikat</option>
+            <option value="butir">Butir</option>
+            <option value="ekor">Ekor</option>
+            <option value="potong">Potong</option>
+            <option value="batang">Batang</option>
+            <option value="pcs">Pcs</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="flex justify-end space-x-1 sm:space-x-2">
+        <button type="button" onclick="closeStokProdukForm()"
+                class="px-2 py-1 sm:px-4 sm:py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300">
+          Batal
         </button>
-        <h2 id="stokProdukModalTitle" class="text-sm sm:text-lg font-bold mb-3 sm:mb-4">
-            Edit Stok Produk
-        </h2>
-
-        <form id="stokProdukForm" method="POST">
-            @csrf
-            @method('PUT')
-            <input type="hidden" id="produkId" name="id"> <!-- untuk passing id produk -->
-
-            <div class="mb-2 sm:mb-3">
-                <label for="namaProduk" class="block">Nama Produk</label>
-                <input type="text" id="namaProduk" name="nama"
-                       class="w-full border rounded p-1 sm:p-2" readonly >
-            </div>
-
-            <div class="mb-2 sm:mb-3">
-                <label for="stokProduk" class="block">Stok</label>
-                <input type="number" id="stokProduk" name="stok"
-                       class="w-full border rounded p-1 sm:p-2" required>
-            </div>
-
-            <div class="flex justify-end space-x-1 sm:space-x-2">
-                <button type="button" onclick="closeStokProdukForm()"
-                        class="px-2 py-1 sm:px-4 sm:py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300">
-                    Batal
-                </button>
-                <button type="submit"
-                        class="px-2 py-1 sm:px-4 sm:py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
-                    Simpan
-                </button>
-            </div>
-        </form>
-    </div>
+        <button type="submit"
+                class="px-2 py-1 sm:px-4 sm:py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+          Simpan
+        </button>
+      </div>
+    </form>
+  </div>
 </div>
-     
+
+<!-- ✅ Inisialisasi Select2 -->
+<script>
+  $(document).ready(function() {
+    $('.select2-satuan').select2({
+      width: '100%',
+      placeholder: '-- Pilih Satuan --',
+      allowClear: true,
+      dropdownParent: $('#stokProdukModal') // biar dropdown tetap di dalam modal
+    });
+  });
+</script>
 
      
 
@@ -2935,12 +3053,62 @@ $(document).ready(function() {
 
             <div class="form-group mb-2 sm:mb-3">
                 <label for="produkHarga" class="form-label">Harga</label>
-                <input type="text" id="produkHarga" name="harga" class="form-input p-1 sm:p-2" placeholder="Contoh : 12000"  required oninvalid="this.setCustomValidity('Silakan isi harga terlebih dahulu, karena  field ini wajib diisi.')" oninput="this.setCustomValidity('')">
+                <input type="number" id="produkHarga" name="harga" class="form-input p-1 sm:p-2" placeholder="Contoh : 12000"  required oninvalid="this.setCustomValidity('Silakan isi harga terlebih dahulu, karena  field ini wajib diisi.')" oninput="this.setCustomValidity('')">
             </div>
 
-            <div class="form-group mb-2 sm:mb-3">
-                <label for="produkStok" class="form-label">Stok</label>
-                <input type="number" id="produkStok" name="stok" class="form-input p-1 sm:p-2" placeholder="Contoh : 23"  required oninvalid="this.setCustomValidity('Silakan isi stok terlebih dahulu, karena  field ini wajib diisi.')" oninput="this.setCustomValidity('')">
+            <!-- Stok dan Satuan dalam satu baris -->
+<div class="flex flex-col sm:flex-row sm:items-center sm:space-x-2 mb-2 sm:mb-3">
+  
+  <!-- Input Stok -->
+  <div class="w-full sm:w-1/2">
+    <label for="produkStok" class="form-label block">Stok</label>
+    <input 
+      type="number" 
+      id="produkStok" 
+      name="stok" 
+      class="form-input w-full p-1 sm:p-2"
+      placeholder="Contoh : 23"  
+      required 
+      oninvalid="this.setCustomValidity('Silakan isi stok terlebih dahulu, karena field ini wajib diisi.')"
+      oninput="this.setCustomValidity('')">
+  </div>
+
+  <!-- Dropdown Satuan -->
+  <div class="w-full sm:w-1/2 mt-2 sm:mt-0">
+    <label for="produkSatuan" class="form-label block">Satuan</label>
+    <select 
+      id="produkSatuan" 
+      name="satuan"
+      class="select2-satuan mt-1 block w-full border border-gray-300 rounded-lg p-2 
+             focus:ring-blue-500 focus:border-blue-500 text-xs sm:text-sm"
+      required
+      oninvalid="this.setCustomValidity('Silakan pilih satuan terlebih dahulu.')"
+      oninput="this.setCustomValidity('')">
+        <option value="">-- Pilih Satuan --</option>
+        <option value="kg">Kg</option>
+        <option value="gram">Gram</option>
+        <option value="ons">Ons</option>
+        <option value="liter">Liter</option>
+        <option value="bungkus">Bungkus</option>
+        <option value="pack">Pack</option>
+        <option value="sachet">Sachet</option>
+        <option value="buah">Buah</option>
+        <option value="ikat">Ikat</option>
+        <option value="butir">Butir</option>
+        <option value="ekor">Ekor</option>
+        <option value="potong">Potong</option>
+        <option value="batang">Batang</option>
+        <option value="pcs">Pcs</option>
+    </select>
+  </div>
+
+</div>
+
+
+
+  <div class="form-group mb-2 sm:mb-3">
+                <label for="deskripsi" class="form-label">Deskripsi</label>
+                <textarea id="deskripsi" name="deskripsi" class="form-input p-1 sm:p-2" rows="3" placeholder="Contoh : Makanan ini terbuat dari"  required oninvalid="this.setCustomValidity('Silakan isi deskripsi terlebih dahulu, karena  field ini wajib diisi.')" oninput="this.setCustomValidity('')"></textarea>
             </div>
 
             <!-- Foto Produk -->
@@ -2976,10 +3144,7 @@ $(document).ready(function() {
                     disabled>
             </div> -->
 
-            <div class="form-group mb-2 sm:mb-3">
-                <label for="deskripsi" class="form-label">Deskripsi</label>
-                <textarea id="deskripsi" name="deskripsi" class="form-input p-1 sm:p-2" rows="3" placeholder="Contoh : Makanan ini terbuat dari"  required oninvalid="this.setCustomValidity('Silakan isi deskripsi terlebih dahulu, karena  field ini wajib diisi.')" oninput="this.setCustomValidity('')"></textarea>
-            </div>
+          
 
             <!-- Sertifikat -->
             <!-- Sertifikat -->
@@ -3052,8 +3217,135 @@ Swal.fire({
 @endif
 
 
+<script>
+// 🔒 Batasi semua input angka agar cuma bisa isi 0-9 (tanpa e, +, -, . , ,)
+document.addEventListener("DOMContentLoaded", function () {
+    const numericSelectors = [
+        "#produkHarga",
+        "#produkStok",
+        "#stokProduk",
+        "#harga",
+        "#produk_terjual_tahun"
+    ];
+
+    // Ambil semua input yang sesuai
+    const numericInputs = document.querySelectorAll(numericSelectors.join(","));
+
+    numericInputs.forEach(input => {
+        // Blok huruf & simbol saat diketik
+        input.addEventListener("keypress", function (e) {
+            if (!/[0-9]/.test(e.key)) {
+                e.preventDefault();
+            }
+        });
+
+        // Blok e, E, +, -, titik, koma, spasi saat diketik
+        input.addEventListener("keydown", function (e) {
+            const forbiddenKeys = ["e", "E", "+", "-", ".", ",", " "];
+            if (forbiddenKeys.includes(e.key)) {
+                e.preventDefault();
+            }
+        });
+
+        // Bersihkan input kalau di-paste teks non-angka
+        input.addEventListener("input", function () {
+            this.value = this.value.replace(/[^0-9]/g, "");
+        });
+    });
+});
+</script>
+<script>
+$(document).ready(function() {
+  // Inisialisasi Select2 cuma sekali
+  $('.select2-satuan').select2({
+    width: '100%',
+    placeholder: '-- Pilih Satuan --',
+    allowClear: true,
+    dropdownParent: $('#produkModal') // biar dropdown-nya tetap di dalam modal
+  });
+});
+</script>
+<style>
+/* 🔹 Samain tinggi dropdown biar proporsional */
+.select2-container--default .select2-selection--single {
+  height: 42px !important;
+  border: 1px solid #d1d5db !important;
+  border-radius: 0.375rem !important;
+  padding: 6px 10px !important;
+  font-size: 0.9rem !important;
+}
+
+/* 🔹 Teks pas di tengah */
+.select2-selection__rendered {
+  line-height: 32px !important;
+}
+
+/* 🔹 Panah dropdown sejajar */
+.select2-selection__arrow {
+  height: 40px !important;
+}
+
+/* 🔹 Perbesar ikon 'x' (clear button) biar seimbang */
+.select2-selection__clear {
+  font-size: 25px !important; /* 🔸 perbesar ukuran X */
+  line-height: 1 !important;
+  margin-right: 15px !important;
+  color: #6b7280 !important; /* abu Tailwind: gray-500 */
+  transition: color 0.2s ease;
+}
+
+.select2-selection__clear:hover {
+  color: #ef4444 !important; /* 🔸 jadi merah pas hover */
+}
+</style>
+
+<style>
+    /* 🔹 Biar stok & satuan sejajar juga di mobile */
+@media (max-width: 640px) { /* sm breakpoint */
+  #produkModal .flex-col {
+    flex-direction: row !important; /* ubah dari kolom ke baris */
+    align-items: center !important;
+    gap: 8px !important; /* kasih jarak dikit */
+  }
+
+  #produkModal .flex-col > div {
+    width: 50% !important; /* biar dua-duanya pas 1 baris */
+    margin-top: 0 !important; /* hilangin jarak atas */
+  }
+
+  /* Label biar rapih dan ga numpuk */
+  #produkModal .flex-col label {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 640px) {
+  /* 🔹 Kecilkan dropdown satuan dan ikon X biar pas sama input stok */
+  .select2-container--default .select2-selection--single {
+    height: 34px !important; /* lebih kecil dari default 38px */
+    padding: 2px 6px !important;
+    font-size: 0.8rem !important;
+  }
+
+  .select2-selection__rendered {
+    line-height: 28px !important; /* biar teks tetap center */
+  }
+
+  .select2-selection__arrow {
+    height: 30px !important;
+    width: 24px !important; /* kecilin ikon panah */
+  }
+
+  .select2-selection__clear {
+    font-size: 0.8rem !important; /* kecilin ikon X */
+    line-height: 0 !important;
+  }
+}
 
 
+</style>
 
 
 
@@ -3358,20 +3650,45 @@ document.getElementById("inovasiFile").addEventListener("change", function (e) {
     oninput="this.setCustomValidity('')">
             </div>
 
-                <!-- Produk Terjual -->
+<!-- Produk Terjual + Satuan -->
+<!-- Produk Terjual + Satuan -->
 <div class="form-group mb-2 sm:mb-3">
-    <label for="produk_terjual_tahun" class="block">Produk Terjual</label>
-     <input type="number" 
-       step="1" 
-       min="0"  
-       name="produk_terjual" 
-       id="produk_terjual_tahun" 
-       class="w-full border rounded p-1.5 sm:p-2 text-xs sm:text-sm"  placeholder="Contoh : 23"
-       required
-       oninvalid="this.setCustomValidity('Produk terjual minimal 0, tidak boleh negatif')"
-       oninput="this.setCustomValidity('')">
+  <div class="flex space-x-2">
+    
+    <!-- Produk Terjual -->
+    <div class="w-[50%]">
+      <label for="produk_terjual_tahun" class="block mb-1">Produk Terjual</label>
+      <input type="number"
+        step="1"
+        min="0"
+        name="produk_terjual"
+        id="produk_terjual_tahun"
+        class="w-full border rounded p-1.5 sm:p-2 text-xs sm:text-sm"
+        placeholder="Contoh : 23"
+        required
+        oninvalid="this.setCustomValidity('Produk terjual minimal 0, tidak boleh negatif')"
+        oninput="this.setCustomValidity('')">
+    </div>
 
+    <!-- Satuan -->
+    <div class="w-[50%]">
+      <label for="satuan_tahun" class="block mb-1">Satuan</label>
+      <select name="satuan_tahun" id="satuan_tahun"
+        class="select2-satuan w-full border rounded py-[2px] px-2 text-xs sm:text-sm"
+        required>
+        <option value="">-- Pilih Satuan --</option>
+        <option value="Kg">Kg</option>
+        <option value="Gram">Gram</option>
+        <option value="Pcs">Pcs</option>
+        <option value="Ikat">Ikat</option>
+        <option value="Liter">Liter</option>
+      </select>
+    </div>
+
+  </div>
 </div>
+
+
 
 
             <!-- Tombol -->
@@ -3404,8 +3721,46 @@ document.getElementById("inovasiFile").addEventListener("change", function (e) {
 .select2-container {
   z-index: 99999 !important;
 }
-</style>
 
+/* Samain tinggi Select2 dengan input biasa */
+.select2-container--default .select2-selection--single {
+  height: 38px !important; /* desktop default */
+  padding: 2px 8px !important;
+  border-radius: 4px !important;
+  border: 1px solid #d1d5db !important;
+}
+
+/* Tengahin teks biar pas */
+.select2-selection__rendered {
+  line-height: 28px !important;
+  font-size: 0.875rem; /* text-sm */
+}
+
+/* Tengahin icon panah */
+.select2-selection__arrow {
+  height: 30px !important;
+}
+
+/* --- Tambahan untuk layar kecil (mobile) --- */
+@media (max-width: 640px) {
+  .select2-container--default .select2-selection--single {
+    height: 29px !important; /* sedikit lebih kecil dari desktop */
+    padding: 1px 6px !important;
+  }
+
+  .select2-selection__rendered {
+    line-height: 24px !important;
+    font-size: 0.75rem !important; /* text-xs */
+  }
+
+  .select2-selection__arrow {
+    height: 26px !important;
+  }
+}
+
+
+
+</style>
 <script>
 $(document).ready(function () {
     const $modal = $('#produkTahunModal');
@@ -3413,7 +3768,10 @@ $(document).ready(function () {
     const $selectTahun = $('#tahun');
 
     // ✅ Simpan semua tahun awal (buat filter tetap jalan)
-    const allYears = [...$selectTahun[0].options].map(opt => ({ value: opt.value, text: opt.text }));
+    const allYears = [...$selectTahun[0].options].map(opt => ({
+        value: opt.value,
+        text: opt.text
+    }));
 
     // ✅ Dropdown produk (scrollable + Select2)
     $selectProduk.select2({
@@ -3430,17 +3788,24 @@ $(document).ready(function () {
         width: "100%"
     });
 
-    // ⚡ Tetep panggil filterTahunDropdown() pas produk berubah
+    // ⚡ Tetap panggil filterTahunDropdown() pas produk berubah
     $selectProduk.on("change", function () {
         const idProduk = $(this).val();
         filterTahunDropdown(idProduk, null, allYears, $selectTahun[0]);
     });
+
+    // ✅ Inisialisasi Select2 untuk dropdown satuan
+    //    (dibuat sedikit delay biar modal kebuka dulu)
+    setTimeout(() => {
+        $('#satuan_tahun').select2({
+            placeholder: "-- Pilih Satuan --",
+            allowClear: true,
+            dropdownParent: $modal,
+            width: '100%'
+        });
+    }, 100);
 });
 </script>
-
-
-
-
 
 
 
@@ -3807,8 +4172,91 @@ universalCropper.getCroppedCanvas({
 let logoFile = null;
 let backgroundFile = null;
 
+// Simpan kondisi awal (saat pertama kali modal dibuka)
+let originalLogoPreview = "";
+let originalBackgroundPreview = "";
+// ✅ Tambahan (nyimpen file lama kayak versi SK Desa)
+let existingLogoFile = null;
+let existingBackgroundFile = null;
+
+document.addEventListener("alpine:init", () => {
+    Alpine.data('editLogoBgModal', () => ({
+        open: false,
+        closeModal() {
+            this.open = false;
+
+            // Reset kondisi form
+            document.getElementById('deleteLogo').value = "0";
+            document.getElementById('deleteBackground').value = "0";
+            document.getElementById('logo').value = "";
+            document.getElementById('background').value = "";
+
+            // Balikkan preview ke data asli
+            document.getElementById('logoFilePreview').innerHTML = `
+                @if($kelompok->logo)
+                    <div class="file-preview">
+                         <span class="file-name cursor-pointer text-blue-600 underline" onclick="previewExistingLogo()">
+    {{ $kelompok->logo }}
+</span>
+
+                        <span class="file-remove text-red-500 ml-2" onclick="removeExistingLogoFile()">✕</span>
+                    </div>
+                @else
+                    <p>Tidak ada file yang dipilih.</p>
+                @endif
+            `;
+            document.getElementById('bgFilePreview').innerHTML = `
+                @if($kelompok->background)
+                    <div class="file-preview">
+                         <span class="file-name cursor-pointer text-blue-600 underline"
+                  onclick="previewExistingBackground()">
+                {{ $kelompok->background }}
+            </span>
+                        <span class="file-remove text-red-500 ml-2" onclick="removeExistingBackgroundFile()">✕</span>
+                    </div>
+                @else
+                    <p>Tidak ada file yang dipilih.</p>
+                @endif
+            `;
+        }
+    }))
+})
+
+ document.getElementById("editLogoBgModal").addEventListener("show.bs.modal", function () {
+    // ✅ Simpan kondisi awal file lama (kayak SK Desa)
+    existingLogoFile = "{{ $kelompok->logo ?? '' }}";
+    existingBackgroundFile = "{{ $kelompok->background ?? '' }}";
+
+    // tampilkan preview dari file lama (kalau ada)
+    updateLogoFilePreview();
+    updateBgFilePreview();
+});
+
+
+// Reset kalau modal ditutup tanpa simpan
+ document.getElementById("editLogoBgModal").addEventListener("hidden.bs.modal", function () {
+    // reset flag dan input file
+    document.getElementById("deleteLogo").value = "0";
+    document.getElementById("deleteBackground").value = "0";
+    document.getElementById("logo").value = "";
+    document.getElementById("background").value = "";
+
+    // reset variabel file baru
+    logoFile = null;
+    backgroundFile = null;
+
+    // ✅ restore preview lama dari existing file (tanpa refresh)
+    updateLogoFilePreview();
+    updateBgFilePreview();
+});
+
+
+
+
+
+
 /* ================== LOGO ================== */
-function updateLogoFilePreview() {
+ function updateLogoFilePreview() {
     const preview = document.getElementById('logoFilePreview');
 
     if (logoFile) {
@@ -3818,27 +4266,26 @@ function updateLogoFilePreview() {
                       onclick="previewLogoFile(logoFile)">
                     ${logoFile.name}
                 </span>
-                <span class="file-remove cursor-pointer text-red-500 ml-2" 
-                      onclick="removeLogoFile()">✕</span>
+                <span class="file-remove cursor-pointer text-red-500 ml-2" onclick="removeLogoFile()">✕</span>
+            </div>
+        `;
+    } else if (existingLogoFile) {
+        // ✅ kalau belum hapus, tampilkan file lama
+        preview.innerHTML = `
+            <div class="file-preview">
+                <span class="file-name text-blue-600 cursor-pointer hover:underline"
+                      onclick="previewExistingLogo()">
+                    ${existingLogoFile.split('/').pop()}
+                </span>
+                <span class="file-remove cursor-pointer text-red-500 ml-2"
+                      onclick="removeExistingLogoFile()">✕</span>
             </div>
         `;
     } else {
-        @if($kelompok->logo)
-            preview.innerHTML = `
-                <div class="file-preview">
-                    <span class="file-name text-blue-600 cursor-pointer hover:underline"
-                          onclick="previewExistingLogo()">
-                        {{ $kelompok->logo }}
-                    </span>
-                    <span class="file-remove cursor-pointer text-red-500 ml-2" 
-                          onclick="removeLogoFile()">✕</span>
-                </div>
-            `;
-        @else
-            preview.innerHTML = `<p class="text-gray-500">Tidak ada logo dipilih.</p>`;
-        @endif
+        preview.innerHTML = `<p class="text-gray-500">Tidak ada logo dipilih.</p>`;
     }
 }
+
 
 function removeLogoFile() {
     // tandai untuk dihapus
@@ -4005,6 +4452,47 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+function removeLogoFile() {
+    document.getElementById("deleteLogo").value = "1";
+
+    // 🔽 Tambahan penting:
+    document.getElementById("logo").value = ""; 
+    logoFile = null;
+
+    const preview = document.getElementById("logoFilePreview");
+    if (preview) preview.innerHTML = "<p>Logo akan dihapus setelah kamu klik Simpan.</p>";
+}
+
+function removeBackgroundFile() {
+    document.getElementById("deleteBackground").value = "1";
+
+    // 🔽 Tambahan penting:
+    document.getElementById("background").value = ""; 
+    backgroundFile = null;
+
+    const preview = document.getElementById("bgFilePreview");
+    if (preview) preview.innerHTML = "<p>Background akan dihapus setelah kamu klik Simpan.</p>";
+}
+
+// ✅ Tambahan: hapus file lama tapi belum disimpan
+function removeExistingLogoFile() {
+    existingLogoFile = null;
+    document.getElementById('deleteLogo').value = "1";
+    document.getElementById('logo').value = '';
+    document.getElementById('logoFilePreview').innerHTML =
+        "<p class='text-red-500 italic'>Logo akan dihapus setelah disimpan.</p>";
+}
+
+function removeExistingBackgroundFile() {
+    existingBackgroundFile = null;
+    document.getElementById('deleteBackground').value = "1";
+    document.getElementById('background').value = '';
+    document.getElementById('bgFilePreview').innerHTML =
+        "<p class='text-red-500 italic'>Background akan dihapus setelah disimpan.</p>";
+}
+
+
 </script>
 
 <style>
@@ -4412,7 +4900,10 @@ setTimeout(() => updateProdukSertifikatPreview(), 0);
                 document.getElementById("removedSertifikat").value = JSON.stringify(removedSertifikat);
 
                 // simpan file hasil edit
-                produkSertifikatFiles.push(processedFile);
+                 // simpan file hasil edit TANPA DUPLIKAT
+produkSertifikatFiles = produkSertifikatFiles.filter(f => f.name !== processedFile.name);
+produkSertifikatFiles.push(processedFile);
+
 
                 // update input file
                 const dataTransfer = new DataTransfer();
@@ -5445,10 +5936,18 @@ let filteredKegiatan = null;
   function filterKegiatan(keyword) {
     keyword = keyword.toLowerCase().trim();
     const allItems = Array.from(document.querySelectorAll('#kegiatan-carousel .kegiatan-item'));
-    const emptyMessage = document.getElementById('kegiatan-empty');
-    const noDataMessage = document.getElementById('kegiatan-none'); // 👈 ambil pesan default
+    const emptyMessage = document.getElementById('kegiatan-empty'); // untuk hasil pencarian kosong
+    const noDataMessage = document.getElementById('kegiatan-none'); // untuk database kosong
     let filtered = [];
 
+    // kalau dari awal database-nya kosong, langsung keluar
+    if (allItems.length === 0) {
+        if (noDataMessage) noDataMessage.classList.remove('hidden');
+        if (emptyMessage) emptyMessage.classList.add('hidden');
+        return;
+    }
+
+    // filter berdasarkan keyword
     allItems.forEach(item => {
         let nama = item.dataset.nama.toLowerCase();
         if (nama.includes(keyword)) {
@@ -5459,15 +5958,13 @@ let filteredKegiatan = null;
         }
     });
 
-    // kalau ada hasil
-    if (filtered.length > 0) {
+    // tampilkan pesan sesuai kondisi
+    if (filtered.length === 0) {
+        emptyMessage.classList.remove('hidden'); // hasil pencarian kosong
+        noDataMessage.classList.add('hidden');
+    } else {
         emptyMessage.classList.add('hidden');
-        if (noDataMessage) noDataMessage.classList.add('hidden'); // sembunyiin pesan default
-    } 
-    // kalau nggak ada hasil tapi sebelumnya ada data
-    else if (allItems.length > 0) {
-        emptyMessage.classList.remove('hidden');
-        if (noDataMessage) noDataMessage.classList.add('hidden');
+        noDataMessage.classList.add('hidden');
     }
 }
 
@@ -6370,32 +6867,48 @@ function deleteSkDesa(button) {
 
         // CRUD Functions for Stok Produk
         // 
-function openStokProdukForm(editMode = false, row = null) {
-    const modal = document.getElementById('stokProdukModal');
-    const form = document.getElementById('stokProdukForm');
-    const modalTitle = document.getElementById('stokProdukModalTitle');
+ function openStokProdukForm(editMode = false, row = null) {
+  const modal = document.getElementById('stokProdukModal');
+  const form = document.getElementById('stokProdukForm');
+  const modalTitle = document.getElementById('stokProdukModalTitle');
 
-    if (editMode && row) {
-        // mode edit
-        const id = row.dataset.id;
-        const nama = row.cells[0].textContent;
-        const stok = row.cells[1].textContent.replace(' pcs', '');
+  if (editMode && row) {
+    const id = row.dataset.id;
+    const nama = row.cells[0].textContent.trim();
+    const stok = row.cells[1].textContent.replace(/[^0-9]/g, '').trim();
+    const satuan = row.dataset.satuan || "";
 
-        document.getElementById('produkId').value = id;
-        document.getElementById('namaProduk').value = nama;
-        document.getElementById('stokProduk').value = stok;
+    document.getElementById('produkId').value = id;
+    document.getElementById('namaProduk').value = nama;
+    document.getElementById('stokProduk').value = stok;
 
-        form.action = `/Admin_Kelompok/produk/${id}`; // sesuai route
-        form.querySelector('input[name="_method"]').value = 'PUT';
-        modalTitle.textContent = 'Edit Stok Produk';
-    } 
+    const satuanSelect = document.getElementById('satuanProduk');
+    satuanSelect.value = satuan;
 
-    modal.classList.remove('hidden');
+    form.action = `/Admin_Kelompok/produk/${id}`;
+    form.querySelector('input[name="_method"]').value = 'PUT';
+    modalTitle.textContent = 'Edit Stok Produk';
+  }
+
+  modal.classList.remove('hidden');
+    // Baru inisialisasi Select2 di sini
+  $('.select2-satuan').select2({
+    width: '100%',
+    placeholder: '-- Pilih Satuan --',
+    allowClear: true,
+    dropdownParent: $('#stokProdukModal')
+  });
+
 }
 
-        function closeStokProdukForm() {
-            document.getElementById('stokProdukModal').classList.add('hidden');
-        }
+function closeStokProdukForm() {
+  document.getElementById('stokProdukModal').classList.add('hidden');
+}
+
+function editStokProduk(button) {
+  const row = button.closest('tr');
+  openStokProdukForm(true, row);
+}
 
         // function saveStokProduk(event) {
         //     event.preventDefault();
@@ -6427,12 +6940,7 @@ function openStokProdukForm(editMode = false, row = null) {
 
         //     closeStokProdukForm();
         //     showNotification('Data berhasil disimpan!');
-        // }
- function editStokProduk(button) {
-    const row = button.closest('tr');
-    openStokProdukForm(true, row);
-    }
-
+ 
         // function deleteStokProduk(button) {
         //     if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
         //         const row = button.closest('tr');
@@ -6569,6 +7077,7 @@ if (isEdit) {
         const nama = button.getAttribute("data-nama");
         const harga = button.getAttribute("data-harga");
         const stok = button.getAttribute("data-stok");
+           const satuan = button.getAttribute("data-satuan");
         const deskripsi = button.getAttribute("data-deskripsi");
         const foto = button.getAttribute("data-foto");
 
@@ -6589,6 +7098,9 @@ if (isEdit) {
         document.getElementById("produkNama").value = nama;
         document.getElementById("produkHarga").value = harga;
         document.getElementById("produkStok").value = stok;
+        // ✅ Set value satuan dan update tampilan Select2
+$('#produkSatuan').val(satuan).trigger('change');
+
         document.getElementById("deskripsi").value = deskripsi;
 
         // tampilkan foto lama
@@ -7349,8 +7861,30 @@ function editInovasi(button) {
     $('#tahun').val(data.tahun).trigger('change');
 
     // Isi field lain
-    document.getElementById('harga').value = data.harga || '';
-    document.getElementById('produk_terjual_tahun').value = data.produk_terjual || '';
+// Isi field lain
+document.getElementById('harga').value = data.harga || '';
+document.getElementById('produk_terjual_tahun').value = data.produk_terjual || '';
+
+// 🧩 Atur satuan (case-insensitive + tambahkan jika belum ada)
+let satuanValue = (data.satuan || '').trim();
+if (!satuanValue) satuanValue = '';
+
+// Cek apakah value sudah ada di dropdown (abaikan besar kecil huruf)
+const optionExists = $('#satuan_tahun option').toArray().some(opt =>
+    opt.value.toLowerCase() === satuanValue.toLowerCase()
+);
+
+if (optionExists) {
+    // Ambil value persis dari opsi yang cocok
+    const matched = $('#satuan_tahun option').filter(function () {
+        return this.value.toLowerCase() === satuanValue.toLowerCase();
+    }).val();
+    $('#satuan_tahun').val(matched).trigger('change');
+} else if (satuanValue) {
+    // Tambah manual kalau belum ada
+    $('#satuan_tahun').append(`<option value="${satuanValue}">${satuanValue}</option>`);
+    $('#satuan_tahun').val(satuanValue).trigger('change');
+}
 
     form.action = data.updateUrl;
     methodInput.value = "PUT";
@@ -7462,6 +7996,7 @@ function filterTahunDropdown(idProduk, currentYear, allYears, selectTahun) {
         harga: button.getAttribute('data-harga'),
         produk_terjual: button.getAttribute('data-terjual'),
         tahun: button.getAttribute('data-tahun'),
+        satuan: (button.getAttribute('data-satuan') || '').trim(),
         updateUrl: button.getAttribute('data-update-url'),
     };
 

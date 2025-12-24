@@ -86,14 +86,7 @@
                         <a href="{{ route('Admin.kelompok_integritas.index') }}"
                             class="menu-item w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition-colors flex items-center {{ Route::is('Admin.kelompok_integritas.index') ? 'bg-blue-100 text-blue-700' : '' }}">
                             <i class="fas fa-users mr-3 text-orange-600"></i>
-                            <span>Kelompok Integrasi</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('Admin.kelompok.index') }}"
-                            class="menu-item w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition-colors flex items-center {{ Route::is('Admin.kelompok.index') ? 'bg-blue-100 text-blue-700' : '' }}">
-                            <i class="fas fa-user-group mr-3 text-green-600"></i>
-                            <span>Kelompok</span>
+                            <span>Kategori Kelompok</span>
                         </a>
                     </li>
                     <li>
@@ -104,6 +97,14 @@
                         </a>
                     </li>
                     <li>
+                        <a href="{{ route('Admin.kelompok.index') }}"
+                            class="menu-item w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition-colors flex items-center {{ Route::is('Admin.kelompok.index') ? 'bg-blue-100 text-blue-700' : '' }}">
+                            <i class="fas fa-user-group mr-3 text-green-600"></i>
+                            <span>Kelompok</span>
+                        </a>
+                    </li>
+
+                    <li>
                         <a href="{{ route('Admin.struktur.index') }}"
                             class="menu-item w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition-colors flex items-center {{ Route::is('Admin.struktur.index') ? 'bg-blue-100 text-blue-700' : '' }}">
                             <i class="fas fa-layer-group mr-3 text-purple-600"></i>
@@ -111,17 +112,17 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('Admin.produk_pertahun.index') }}"
-                            class="menu-item w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition-colors flex items-center {{ Route::is('Admin.produk_pertahun.index') ? 'bg-blue-100 text-blue-700' : '' }}">
-                            <i class="fas fa-box mr-3 text-pink-500"></i>
-                            <span>Rekap Produk</span>
-                        </a>
-                    </li>
-                    <li>
                         <a href="{{ route('Admin.produk.index') }}"
                             class="menu-item w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition-colors flex items-center {{ Route::is('Admin.produk.index') ? 'bg-blue-100 text-blue-700' : '' }}">
                             <i class="fas fa-box mr-3 text-yellow-600"></i>
                             <span>Produk</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('Admin.produk_pertahun.index') }}"
+                            class="menu-item w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition-colors flex items-center {{ Route::is('Admin.produk_pertahun.index') ? 'bg-blue-100 text-blue-700' : '' }}">
+                            <i class="fas fa-box mr-3 text-pink-500"></i>
+                            <span>Rekap Produk</span>
                         </a>
                     </li>
                     <li>

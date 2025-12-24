@@ -47,12 +47,38 @@
             @enderror
         </div>
 
-        <div>
-            <label for="stok" class="block text-sm font-medium text-gray-700">Stok</label>
-            <input type="text" name="stok" id="stok" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Masukkan Stok Produk" required>
-            @error('stok')
-            <span class="text-red-500 text-sm">{{ $message }}</span>
-            @enderror
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <label for="stok" class="block text-sm font-medium text-gray-700">Stok</label>
+                <input type="text" name="stok" id="stok" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Masukkan Stok Produk" required>
+                @error('stok')
+                <span class="text-red-500 text-sm">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <div>
+                <label for="satuan" class="block text-sm font-medium text-gray-700">Satuan</label>
+                <select name="satuan" id="satuan" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500 @error('satuan') border-red-500 @enderror select2" style="width: 100%;" required>
+                    <option value="">-- Pilih Satuan --</option>
+                    <option value="kg">Kg</option>
+                    <option value="gram">Gram</option>
+                    <option value="ons">Ons</option>
+                    <option value="liter">Liter</option>
+                    <option value="bungkus">Bungkus</option>
+                    <option value="pack">Pack</option>
+                    <option value="sachet">Sachet</option>
+                    <option value="buah">Buah</option>
+                    <option value="ikat">Ikat</option>
+                    <option value="butir">Butir</option>
+                    <option value="ekor">Ekor</option>
+                    <option value="potong">Potong</option>
+                    <option value="batang">Batang</option>
+                    <option value="pcs">Pcs</option>
+                </select>
+                @error('satuan')
+                <span class="text-red-500 text-sm">{{ $message }}</span>
+                @enderror
+            </div>
         </div>
 
         <div>
@@ -132,6 +158,12 @@
     $(document).ready(function() {
         $('#id_kelompok').select2({
             placeholder: "-- Pilih Kelompok --",
+            allowClear: true
+        });
+
+        // Inisialisasi Select2 untuk kolom Satuan
+        $('#satuan').select2({
+            placeholder: "-- Pilih Satuan --",
             allowClear: true
         });
 

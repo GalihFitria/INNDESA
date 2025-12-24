@@ -31,6 +31,7 @@ use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\Update_KegiatanController;
 use App\Http\Controllers\TambahPerusahaanController;
 use App\Http\Controllers\Admin_Kelompok\EditLogoBackgroundController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -47,6 +48,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [IndexController::class, 'index'])->name('beranda');
 Route::get('/api/statistik', [App\Http\Controllers\IndexController::class, 'getStatistik']);
+
+
 
 // LOGIN REGISTER
 Route::resource('register', RegisterController::class);
@@ -75,7 +78,7 @@ Route::resource('profile', ProfileController::class);
 
 
 //SUPER ADMIN
-Route::prefix('Admin')->name('Admin.')->group(function () {
+Route::prefix('Admin')->name('Admin.')->middleware(['auth', 'check.session'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
     Route::get('sidebar', [SidebarController::class]);
     Route::resource('produk', AdminProdukController::class);
@@ -95,7 +98,10 @@ Route::prefix('Admin')->name('Admin.')->group(function () {
 });
 
 // ADMIN KELOMPOK
-Route::prefix('Admin_Kelompok')->name('Admin_Kelompok.')->group(function () {
+Route::prefix('Admin_Kelompok')
+    ->name('Admin_Kelompok.')
+    ->middleware(['auth', 'check.session'])
+    ->group(function () {
     Route::get('beranda', [BerandaController::class, 'index'])->name('beranda');
     Route::resource('kelompok', Admin_KelompokKelompokController::class)->except(['update']);
 

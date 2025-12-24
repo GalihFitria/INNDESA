@@ -44,6 +44,7 @@
                     <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase cursor-pointer" data-column="4">Nama Produk <i class="fas fa-sort ml-1"></i></th>
                     <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase cursor-pointer" data-column="5">Harga <i class="fas fa-sort ml-1"></i></th>
                     <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase cursor-pointer" data-column="6">Produk Terjual <i class="fas fa-sort ml-1"></i></th>
+                    <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase cursor-pointer" data-column="6">Satuan<i class="fas fa-sort ml-1"></i></th>
                     <th class="border border-gray-300 p-3 text-center text-xs font-medium text-gray-500 uppercase">Aksi</th>
                 </tr>
             </thead>
@@ -57,6 +58,7 @@
                     <td class="border border-gray-300 p-3 text-center text-sm text-gray-900">{{ $p->nama_produk }}</td>
                     <td class="border border-gray-300 p-3 text-center text-sm text-gray-900" data-value="{{ $p->harga }}">{{ number_format($p->harga, 0, ',', '.') }}</td>
                     <td class="border border-gray-300 p-3 text-center text-sm text-gray-900" data-value="{{ $p->produk_terjual }}">{{ $p->produk_terjual }}</td>
+                    <td class="border border-gray-300 p-3 text-center text-sm text-gray-900" data-value="{{ $p->produk_terjual }}">{{ $p->satuan }}</td>
                     <td class="border border-gray-300 p-3 text-center text-sm text-gray-900">
                         <a href="{{ route('Admin.produk_pertahun.edit', $p->id_tahun) }}" class="text-blue-600 hover:underline mr-2">Edit</a>
                         <form action="{{ route('Admin.produk_pertahun.destroy', $p->id_tahun) }}" method="POST" class="inline-block delete-form">
@@ -323,7 +325,8 @@
                 'Nama Kelompok',
                 'Nama Produk',
                 'Harga',
-                'Produk Terjual'
+                'Produk Terjual',
+                'Satuan'
             ];
 
             // Ambil semua data yang sudah difilter
@@ -355,6 +358,11 @@
                 // Format produk terjual dengan titik sebagai pemisah ribuan
                 const formattedTerjual = new Intl.NumberFormat('en-US').format(terjualValue);
                 rowData.push(formattedTerjual);
+
+                const satuanValue = parseInt(cells[6].getAttribute('data-value')) || 0;
+                // Format produk terjual dengan titik sebagai pemisah ribuan
+                const formattedSatuan = new Intl.NumberFormat('en-US').format(satuanValue);
+                rowData.push(formattedSatuan);
 
                 excelData.push(rowData);
             });

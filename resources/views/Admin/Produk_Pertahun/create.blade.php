@@ -58,6 +58,32 @@
             @enderror
         </div>
 
+        <div>
+            <label for="satuan" class="block text-sm font-medium text-gray-700">Satuan</label>
+            <select name="satuan" id="satuan" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500 @error('satuan') border-red-500 @enderror select2" style="width: 100%;" required>
+                <option value="">-- Pilih Satuan --</option>
+                <option value="kg">Kg</option>
+                <option value="gram">Gram</option>
+                <option value="ons">Ons</option>
+                <option value="liter">Liter</option>
+                <option value="bungkus">Bungkus</option>
+                <option value="botol">Botol</option>
+                <option value="karung">Karung</option>
+                <option value="pack">Pack</option>
+                <option value="sachet">Sachet</option>
+                <option value="buah">Buah</option>
+                <option value="ikat">Ikat</option>
+                <option value="butir">Butir</option>
+                <option value="ekor">Ekor</option>
+                <option value="potong">Potong</option>
+                <option value="batang">Batang</option>
+                <option value="pcs">Pcs</option>
+            </select>
+            @error('satuan')
+            <span class="text-red-500 text-sm">{{ $message }}</span>
+            @enderror
+        </div>
+
         {{-- Tombol --}}
         <div class="flex justify-between mt-6">
             <a href="{{ route('Admin.produk_pertahun.index') }}"
@@ -79,9 +105,9 @@
 <script>
     $(function() {
         // Ambil data tahun yang sudah dipakai per produk dari DB (tanpa controller)
-        const usedYearsRaw = @json(\App\Models\ProdukPertahun::all()->groupBy('id_produk')->map(function($items) {
-            return $items->pluck('tahun')->map(fn($t) => (int) $t)->toArray();
-        })->toArray());
+        const usedYearsRaw = @json(\App\ Models\ ProdukPertahun::all() - > groupBy('id_produk') - > map(function($items) {
+            return $items - > pluck('tahun') - > map(fn($t) => (int) $t) - > toArray();
+        }) - > toArray());
 
         // Normalisasi keys jadi string & values jadi angka
         const usedYears = {};
@@ -107,6 +133,14 @@
             allowClear: true,
             width: '100%'
         });
+
+        // 🔹 Satuan: dropdown searchable juga
+        $('#satuan').select2({
+            placeholder: '-- Pilih Satuan --',
+            allowClear: true,
+            width: '100%'
+        });
+
 
         // Fungsi untuk rebuild option tahun berdasarkan produk yg dipilih
         function renderTahunOptions(idProduk, currentYear = null) {

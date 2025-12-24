@@ -15,7 +15,7 @@ class Produk extends Model
     protected $keyType = 'int';
     public $timestamps = false;
 
-    protected $fillable = ['id_kelompok', 'nama', 'harga', 'stok', 'foto', 'deskripsi', 'sertifikat', 'produk_terjual'];
+    protected $fillable = ['id_kelompok', 'nama', 'harga', 'stok', 'satuan', 'foto', 'deskripsi', 'sertifikat', 'produk_terjual'];
 
     public function kelompok()
     {

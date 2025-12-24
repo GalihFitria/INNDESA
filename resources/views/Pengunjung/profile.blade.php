@@ -238,7 +238,7 @@
 
     <div id="content">
         <!-- Navbar - Sama seperti di halaman lain -->
-        @include('Navbar')
+        @include('navbar')
 
         <!-- Hero Section -->
         <div class="bg-gradient-to-b from-sky-400 to-sky-800 h-64 sm:h-80 md:h-96 flex items-center justify-center px-4 hero-section">
@@ -246,7 +246,7 @@
         </div>
 
         <!-- Profile Section -->
-        <section class="py-12 sm:py-16 bg-gray-50">
+        <section class="py-12 sm:py-16 ">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-12">
                     <h2 class="text-3xl font-bold text-sky-800 mb-4">Tim Kami</h2>
@@ -261,19 +261,12 @@
                                 <img src="{{ asset('images/fijar.jpg') }}" alt="Profile" class="profile-image">
                             </div>
                             <h3 class="text-2xl font-bold text-gray-800 mb-2">Galih Fitria Fijar Rofiqoh</h3>
+                            <p class="text-sm text-gray-600"><i>Tim Teknis</i></p><br>
 
-                            <div class="flex items-center justify-center mb-4 mt-6">
-                                <i class="fas fa-graduation-cap text-sky-600 text-xl mr-3"></i>
-                                <div class="text-left">
-                                    <!-- <p class="text-sm text-gray-500">Pendidikan</p> -->
-                                    <p class="font-medium">Politeknik Negeri Cilacap</p>
-                                    <p class="text-sm text-gray-600">D3 Teknik Informatika</p>
-                                </div>
-                            </div>
 
-                            <p class="text-gray-600 mb-6 text-left">
+                            <!-- <p class="text-gray-600 mb-6 text-left">
                                 Mahasiswa Teknik Informatika dengan minat di bidang pengembangan web dan desain UI/UX. Terampil dalam membangun antarmuka yang interaktif serta memahami alur pengguna untuk menciptakan pengalaman digital yang optimal.
-                            </p>
+                            </p> -->
 
                             <div class="flex justify-center space-x-4">
                                 <a href="https://www.linkedin.com/in/galih-fitria-fijar-rofiqoh-4b6602294/" class="social-icon text-blue-700 hover:text-blue-900">
@@ -296,19 +289,12 @@
                                 <img src="{{ asset('images/windy.jpg') }}" alt="Profile" class="profile-image">
                             </div>
                             <h3 class="text-2xl font-bold text-gray-800 mb-2">Windy Anggita Putri</h3>
+                            <p class="text-sm text-gray-600"><i>Tim Teknis</i></p><br>
 
-                            <div class="flex items-center justify-center mb-4 mt-6">
-                                <i class="fas fa-graduation-cap text-sky-600 text-xl mr-3"></i>
-                                <div class="text-left">
-                                    <!-- <p class="text-sm text-gray-500">Pendidikan</p> -->
-                                    <p class="font-medium">Politeknik Negeri Cilacap</p>
-                                    <p class="text-sm text-gray-600">D3 Teknik Informatika</p>
-                                </div>
-                            </div>
 
-                            <p class="text-gray-600 mb-6 text-left">
+                            <!-- <p class="text-gray-600 mb-6 text-left">
                                 Mahasiswa Teknik Informatika dengan minat di bidang pengembangan web dan desain UI/UX. Terampil dalam membangun antarmuka yang interaktif serta memahami alur pengguna untuk menciptakan pengalaman digital yang optimal.
-                            </p>
+                            </p> -->
 
                             <div class="flex justify-center space-x-4">
                                 <a href="https://www.linkedin.com/in/windyanggitaputri?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" class="social-icon text-blue-700 hover:text-blue-900">
@@ -321,6 +307,114 @@
                                     <i class="fab fa-github text-2xl"></i>
                                 </a>
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- Profile 3 -->
+                    <div class="bg-white rounded-2xl shadow-xl overflow-hidden profile-card fade-in">
+                        <div class="pt-10 pb-6 px-6 text-center">
+                            <div class="flex justify-center mb-6">
+                                <img src="{{ asset('images/ahmad.jpg') }}" alt="Profile" class="profile-image">
+                            </div>
+                            <h3 class="text-2xl font-bold text-gray-800 mb-2">Taufik Hidayanto</h3>
+                            <p class="text-sm text-gray-600"><i>Steering Committee</i></p><br>
+
+                            <!-- <p class="text-gray-600 mb-6 text-left">
+                                Mahasiswa Desain Komunikasi Visual dengan passion dalam menciptakan pengalaman pengguna yang intuitif dan menarik. Memiliki keahlian dalam desain antarmuka dan prototyping.
+                            </p>
+
+                            <div class="flex justify-center space-x-4">
+                                <a href="https://www.linkedin.com/in/ahmad-fauzi/" class="social-icon text-blue-700 hover:text-blue-900">
+                                    <i class="fab fa-linkedin text-2xl"></i>
+                                </a>
+                                <a href="https://www.instagram.com/ahmadfauzi/" class="social-icon text-pink-600 hover:text-pink-800">
+                                    <i class="fab fa-instagram text-2xl"></i>
+                                </a>
+                                <a href="https://dribbble.com/ahmadfauzi" class="social-icon text-pink-500 hover:text-pink-700">
+                                    <i class="fab fa-dribbble text-2xl"></i>
+                                </a>
+                            </div> -->
+                        </div>
+                    </div>
+
+                    <!-- Profile 4 -->
+                    <div class="bg-white rounded-2xl shadow-xl overflow-hidden profile-card fade-in">
+                        <div class="pt-10 pb-6 px-6 text-center">
+                            <div class="flex justify-center mb-6">
+                                <img src="{{ asset('images/siti.jpg') }}" alt="Profile" class="profile-image">
+                            </div>
+                            <h3 class="text-2xl font-bold text-gray-800 mb-2">Galih Eka Purnomo</h3>
+                            <p class="text-sm text-gray-600"><i>Tim Analis Desain dan Program</i></p><br>
+
+                            <!-- <p class="text-gray-600 mb-6 text-left">
+                                Mahasiswa Statistika yang fokus pada analisis data dan visualisasi. Terampil dalam mengolah data menjadi informasi yang berguna untuk pengambilan keputusan.
+                            </p>
+
+                            <div class="flex justify-center space-x-4">
+                                <a href="https://www.linkedin.com/in/siti-nurhaliza/" class="social-icon text-blue-700 hover:text-blue-900">
+                                    <i class="fab fa-linkedin text-2xl"></i>
+                                </a>
+                                <a href="https://www.instagram.com/sitinurhaliza/" class="social-icon text-pink-600 hover:text-pink-800">
+                                    <i class="fab fa-instagram text-2xl"></i>
+                                </a>
+                                <a href="https://github.com/sitinurhaliza" class="social-icon text-gray-800 hover:text-black">
+                                    <i class="fab fa-github text-2xl"></i>
+                                </a>
+                            </div> -->
+                        </div>
+                    </div>
+
+                    <!-- Profile 5 -->
+                    <div class="bg-white rounded-2xl shadow-xl overflow-hidden profile-card fade-in">
+                        <div class="pt-10 pb-6 px-6 text-center">
+                            <div class="flex justify-center mb-6">
+                                <img src="{{ asset('images/budi.jpg') }}" alt="Profile" class="profile-image">
+                            </div>
+                            <h3 class="text-2xl font-bold text-gray-800 mb-2">Ayu Widyaningrum</h3>
+                            <p class="text-sm text-gray-600"><i>Tim CDO</i></p><br>
+
+                            <!-- <p class="text-gray-600 mb-6 text-left">
+                                Profesional dengan pengalaman dalam manajemen proyek teknologi. Memiliki kemampuan dalam mengkoordinasikan tim dan memastikan proyek berjalan sesuai rencana.
+                            </p>
+
+                            <div class="flex justify-center space-x-4">
+                                <a href="https://www.linkedin.com/in/budi-santoso/" class="social-icon text-blue-700 hover:text-blue-900">
+                                    <i class="fab fa-linkedin text-2xl"></i>
+                                </a>
+                                <a href="https://www.instagram.com/budisantoso/" class="social-icon text-pink-600 hover:text-pink-800">
+                                    <i class="fab fa-instagram text-2xl"></i>
+                                </a>
+                                <a href="https://twitter.com/budisantoso" class="social-icon text-blue-400 hover:text-blue-600">
+                                    <i class="fab fa-twitter text-2xl"></i>
+                                </a>
+                            </div> -->
+                        </div>
+                    </div>
+
+                    <!-- Profile 6 -->
+                    <div class="bg-white rounded-2xl shadow-xl overflow-hidden profile-card fade-in">
+                        <div class="pt-10 pb-6 px-6 text-center">
+                            <div class="flex justify-center mb-6">
+                                <img src="{{ asset('images/dewi.jpg') }}" alt="Profile" class="profile-image">
+                            </div>
+                            <h3 class="text-2xl font-bold text-gray-800 mb-2">Adinda Aulia Nur Afifah</h3>
+                            <p class="text-sm text-gray-600"><i>Tim CDO</i></p><br>
+
+                            <!-- <p class="text-gray-600 mb-6 text-left">
+                                Ahli pemasaran digital dengan pengalaman dalam membangun strategi pemasaran untuk produk teknologi. Fokus pada pertumbuhan pengguna dan engagement.
+                            </p>
+
+                            <div class="flex justify-center space-x-4">
+                                <a href="https://www.linkedin.com/in/dewi-lestari/" class="social-icon text-blue-700 hover:text-blue-900">
+                                    <i class="fab fa-linkedin text-2xl"></i>
+                                </a>
+                                <a href="https://www.instagram.com/dewilestari/" class="social-icon text-pink-600 hover:text-pink-800">
+                                    <i class="fab fa-instagram text-2xl"></i>
+                                </a>
+                                <a href="https://dewilestari.com" class="social-icon text-purple-600 hover:text-purple-800">
+                                    <i class="fas fa-globe text-2xl"></i>
+                                </a>
+                            </div> -->
                         </div>
                     </div>
                 </div>

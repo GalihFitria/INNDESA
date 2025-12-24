@@ -60,6 +60,35 @@
             @enderror
         </div>
 
+        <div>
+            <label for="satuan" class="block text-sm font-medium text-gray-700">Satuan</label>
+            <select name="satuan" id="satuan"
+                class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500 @error('satuan') border-red-500 @enderror select2"
+                style="width: 100%;" required>
+                <option value="">-- Pilih Satuan --</option>
+                <option value="kg" {{ old('satuan', $produk_pertahun->satuan ?? '') == 'kg' ? 'selected' : '' }}>Kg</option>
+                <option value="gram" {{ old('satuan', $produk_pertahun->satuan ?? '') == 'gram' ? 'selected' : '' }}>Gram</option>
+                <option value="ons" {{ old('satuan', $produk_pertahun->satuan ?? '') == 'ons' ? 'selected' : '' }}>Ons</option>
+                <option value="liter" {{ old('satuan', $produk_pertahun->satuan ?? '') == 'liter' ? 'selected' : '' }}>Liter</option>
+                <option value="bungkus" {{ old('satuan', $produk_pertahun->satuan ?? '') == 'bungkus' ? 'selected' : '' }}>Bungkus</option>
+                <option value="botol" {{ old('satuan', $produk_pertahun->satuan ?? '') == 'botol' ? 'selected' : '' }}>Botol</option>
+                <option value="karung" {{ old('satuan', $produk_pertahun->satuan ?? '') == 'karung' ? 'selected' : '' }}>Karung</option>
+                <option value="pack" {{ old('satuan', $produk_pertahun->satuan ?? '') == 'pack' ? 'selected' : '' }}>Pack</option>
+                <option value="sachet" {{ old('satuan', $produk_pertahun->satuan ?? '') == 'sachet' ? 'selected' : '' }}>Sachet</option>
+                <option value="buah" {{ old('satuan', $produk_pertahun->satuan ?? '') == 'buah' ? 'selected' : '' }}>Buah</option>
+                <option value="ikat" {{ old('satuan', $produk_pertahun->satuan ?? '') == 'ikat' ? 'selected' : '' }}>Ikat</option>
+                <option value="butir" {{ old('satuan', $produk_pertahun->satuan ?? '') == 'butir' ? 'selected' : '' }}>Butir</option>
+                <option value="ekor" {{ old('satuan', $produk_pertahun->satuan ?? '') == 'ekor' ? 'selected' : '' }}>Ekor</option>
+                <option value="potong" {{ old('satuan', $produk_pertahun->satuan ?? '') == 'potong' ? 'selected' : '' }}>Potong</option>
+                <option value="batang" {{ old('satuan', $produk_pertahun->satuan ?? '') == 'batang' ? 'selected' : '' }}>Batang</option>
+                <option value="pcs" {{ old('satuan', $produk_pertahun->satuan ?? '') == 'pcs' ? 'selected' : '' }}>Pcs</option>
+            </select>
+
+            @error('satuan')
+            <span class="text-red-500 text-sm">{{ $message }}</span>
+            @enderror
+        </div>
+
         {{-- Tombol --}}
         <div class="flex justify-between mt-6">
             <a href="{{ route('Admin.produk_pertahun.index') }}"
@@ -81,9 +110,9 @@
 <script>
     $(function() {
         // Ambil data tahun yang sudah dipakai per produk dari DB
-        const usedYearsRaw = @json(\App\Models\ProdukPertahun::all()->groupBy('id_produk')->map(function($items) {
-            return $items->pluck('tahun')->map(fn($t) => (int) $t)->toArray();
-        })->toArray());
+        const usedYearsRaw = @json(\App\ Models\ ProdukPertahun::all() - > groupBy('id_produk') - > map(function($items) {
+            return $items - > pluck('tahun') - > map(fn($t) => (int) $t) - > toArray();
+        }) - > toArray());
 
         // Normalisasi
         const usedYears = {};
@@ -104,11 +133,18 @@
         });
 
         // Init select2 untuk produk
-        $selectProduk.select2({
-            placeholder: $selectProduk.data('placeholder') || '-- Pilih Produk --',
+        // Jika produk berubah → filter ulang tahun
+        $selectProduk.on('change', function() {
+            renderTahunOptions($(this).val(), "{{ $produk_pertahun->tahun }}");
+        });
+
+        // 🔹 Tambahkan ini supaya dropdown satuan juga bisa dicari
+        $('#satuan').select2({
+            placeholder: '-- Pilih Satuan --',
             allowClear: true,
             width: '100%'
         });
+
 
         function renderTahunOptions(idProduk, currentYear = null) {
             if ($selectTahun.hasClass('select2-hidden-accessible')) {

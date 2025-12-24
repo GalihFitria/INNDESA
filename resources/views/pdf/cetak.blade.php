@@ -19,17 +19,13 @@
             box-sizing: border-box;
         }
 
-        /* Semua blok utama agar center */
         .header,
         .header-line,
         .content,
         .signature {
             width: 80%;
-            /* lebar konten */
             max-width: 180mm;
-            /* batasi biar proporsional di A4 */
             margin: 0 auto;
-            /* selalu center */
         }
 
         .header {
@@ -81,6 +77,12 @@
             text-transform: uppercase;
         }
 
+        /* 👉 Kolom harga dibuat lebih lebar */
+        th:nth-child(5),
+        td:nth-child(5) {
+            width: 15%;
+        }
+
         .signature {
             border: none;
             margin-top: 15mm;
@@ -113,11 +115,12 @@
             }
         }
     </style>
+
 </head>
 
 <body>
     <div class="header">
-        <img src="{{ public_path('images/LOGO INNDESA.png') }}" alt="Logo INNDESA">
+        <img src="{{ public_path('images/LOGO INNDESA.jpg') }}" alt="Logo INNDESA">
     </div>
 
     <div class="header-line"></div>
@@ -134,6 +137,7 @@
                     <th>Nama Produk</th>
                     <th>Harga</th>
                     <th>Produk Terjual</th>
+                    <th>Satuan</th>
                 </tr>
             </thead>
             <tbody>
@@ -145,6 +149,7 @@
                     <td>{{ $produk->nama_produk }}</td>
                     <td>Rp {{ number_format($produk->harga, 0, ',', '.') }}</td>
                     <td>{{ $produk->produk_terjual }}</td>
+                    <td>{{ $produk->satuan }}</td>
                 </tr>
                 @empty
                 <tr>

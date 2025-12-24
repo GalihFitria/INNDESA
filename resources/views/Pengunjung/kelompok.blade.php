@@ -1582,7 +1582,7 @@
                                         {{ $item->nama }}
                                     </td>
                                     <td class="border border-gray-200 px-1 py-0.5 md:px-3 md:py-2 text-[10px] md:text-base">
-                                        {{ $item->stok }} pcs
+                                        {{ $item->stok }} {{ $item->satuan }}
                                     </td>
                                 </tr>
                                 @endforeach
@@ -2125,7 +2125,6 @@
             }
 
             // Fungsi pencarian
-            // Ganti fungsi searchItems dengan versi yang diperbaiki
             function searchItems(section, searchInputId, itemClass, dataAttr, noResultsId) {
                 const searchInput = document.getElementById(searchInputId);
                 const noResults = document.getElementById(noResultsId);
@@ -2140,6 +2139,9 @@
                         const searchTerm = searchInput.value.toLowerCase().trim();
                         const items = document.querySelectorAll(`.${itemClass}`);
                         let hasResults = false;
+
+                        // Cek apakah ada data di database
+                        const hasData = items.length > 0;
 
                         // Jika input kosong, sembunyikan pesan "tidak ada hasil" dan tampilkan semua item
                         if (!searchTerm) {
@@ -2173,8 +2175,13 @@
                             }
                         });
 
-                        // Tampilkan pesan jika tidak ada hasil
-                        noResults.classList.toggle('hidden', hasResults);
+                        // Tampilkan pesan jika tidak ada hasil dan ada data di database
+                        if (hasData) {
+                            noResults.classList.toggle('hidden', hasResults);
+                        } else {
+                            // Jika tidak ada data di database, sembunyikan pesan pencarian
+                            noResults.classList.add('hidden');
+                        }
 
                         // Handle pagination
                         if (searchTerm) {

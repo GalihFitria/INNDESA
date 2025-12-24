@@ -50,12 +50,38 @@
             @enderror
         </div>
 
-        <div>
-            <label for="stok" class="block text-sm font-medium text-gray-700">Stok</label>
-            <input type="text" name="stok" id="stok" value="{{ old('stok', $produk->stok) }}" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500" required>
-            @error('stok')
-            <span class="text-red-500 text-sm">{{ $message }}</span>
-            @enderror
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <label for="stok" class="block text-sm font-medium text-gray-700">Stok</label>
+                <input type="text" name="stok" id="stok" value="{{ old('stok', $produk->stok) }}" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500" required>
+                @error('stok')
+                <span class="text-red-500 text-sm">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <div>
+                <label for="satuan" class="block text-sm font-medium text-gray-700">Satuan</label>
+                <select name="satuan" id="satuan" class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500 @error('satuan') border-red-500 @enderror select2" style="width: 100%;" required>
+                    <option value="">-- Pilih Satuan --</option>
+                    <option value="kg" {{ old('satuan', $produk->satuan ?? '') == 'kg' ? 'selected' : '' }}>Kg</option>
+                    <option value="gram" {{ old('satuan', $produk->satuan ?? '') == 'gram' ? 'selected' : '' }}>Gram</option>
+                    <option value="ons" {{ old('satuan', $produk->satuan ?? '') == 'ons' ? 'selected' : '' }}>Ons</option>
+                    <option value="liter" {{ old('satuan', $produk->satuan ?? '') == 'liter' ? 'selected' : '' }}>Liter</option>
+                    <option value="bungkus" {{ old('satuan', $produk->satuan ?? '') == 'bungkus' ? 'selected' : '' }}>Bungkus</option>
+                    <option value="pack" {{ old('satuan', $produk->satuan ?? '') == 'pack' ? 'selected' : '' }}>Pack</option>
+                    <option value="sachet" {{ old('satuan', $produk->satuan ?? '') == 'sachet' ? 'selected' : '' }}>Sachet</option>
+                    <option value="buah" {{ old('satuan', $produk->satuan ?? '') == 'buah' ? 'selected' : '' }}>Buah</option>
+                    <option value="ikat" {{ old('satuan', $produk->satuan ?? '') == 'ikat' ? 'selected' : '' }}>Ikat</option>
+                    <option value="butir" {{ old('satuan', $produk->satuan ?? '') == 'butir' ? 'selected' : '' }}>Butir</option>
+                    <option value="ekor" {{ old('satuan', $produk->satuan ?? '') == 'ekor' ? 'selected' : '' }}>Ekor</option>
+                    <option value="potong" {{ old('satuan', $produk->satuan ?? '') == 'potong' ? 'selected' : '' }}>Potong</option>
+                    <option value="batang" {{ old('satuan', $produk->satuan ?? '') == 'batang' ? 'selected' : '' }}>Batang</option>
+                    <option value="pcs" {{ old('satuan', $produk->satuan ?? '') == 'pcs' ? 'selected' : '' }}>Pcs</option>
+                </select>
+                @error('satuan')
+                <span class="text-red-500 text-sm">{{ $message }}</span>
+                @enderror
+            </div>
         </div>
 
         <div>
@@ -179,21 +205,22 @@
             allowClear: true
         });
 
-        // Validasi untuk nama produk
+        $('#satuan').select2({
+            placeholder: "-- Pilih Satuan --",
+            allowClear: true
+        });
+
         const namaInput = document.getElementById('nama');
         const kelompokSelect = document.getElementById('id_kelompok');
         const warningElement = document.getElementById('namaWarning');
         const originalNama = namaInput.getAttribute('data-original-value');
         const originalKelompok = kelompokSelect.getAttribute('data-original-value');
 
-        // Fungsi untuk validasi kombinasi nama dan kelompok
         function validateCombination() {
             const currentName = namaInput.value.trim();
             const currentKelompok = kelompokSelect.value;
 
-            // Hanya validasi jika nama atau kelompok diubah
             if ((currentName !== originalNama || currentKelompok !== originalKelompok) && currentName && currentKelompok) {
-                // Simulasi pengecekan (ganti dengan API call jika perlu)
                 const sampleData = [{
                         nama: 'Produk A',
                         kelompok: '1'
@@ -228,22 +255,16 @@
             }
         }
 
-        // Event listener untuk perubahan nama
         namaInput.addEventListener('input', validateCombination);
-
-        // Event listener untuk perubahan kelompok
         kelompokSelect.addEventListener('change', validateCombination);
 
-        // Validasi saat submit form
         document.getElementById('produkForm').addEventListener('submit', function(e) {
-            // Validasi foto produk
             const removeFoto = document.getElementById('remove_foto').value;
             const fotoInput = document.getElementById('foto');
             const hasNewFoto = fotoInput.files.length > 0;
             const hasExistingFoto = document.querySelector('[data-file-path="{{ $produk->foto }}"]') !== null;
 
-            // Periksa apakah foto dihapus dan tidak ada foto baru
-            if (removeFoto === '1' && !hasNewFoto) {
+            if (removeFoto === '1' && !hasNewFoto && !hasExistingFoto) {
                 e.preventDefault();
                 Swal.fire({
                     icon: 'error',
@@ -254,7 +275,6 @@
                 return false;
             }
 
-            // Validasi kombinasi nama dan kelompok
             if (!validateCombination()) {
                 e.preventDefault();
                 Swal.fire({
@@ -266,7 +286,6 @@
             }
         });
 
-        // Tampilkan error dari backend jika ada
         const errorMessage = "{{ $errors->first('nama') }}";
         if (errorMessage) {
             Swal.fire({
@@ -278,6 +297,7 @@
         }
     });
 
+    // Variabel global
     let fotoFile = null;
     let sertifikatFiles = [];
     let currentPreview = {
@@ -291,30 +311,76 @@
     let rotatedImageUrl = null;
     let isCropping = false;
     let originalFile = null;
+    let lastEditedFile = null; // Untuk melacak file terakhir yang diedit
 
-    document.getElementById('foto').addEventListener('change', e => {
-        fotoFile = e.target.files[0] || null;
+    // Event listeners
+    document.getElementById('foto').addEventListener('change', handleFotoChange);
+    document.getElementById('sertifikat').addEventListener('change', handleSertifikatChange);
+
+    function handleFotoChange(e) {
+        const file = e.target.files[0] || null;
+        if (file) {
+            setFotoFile(file);
+        }
+    }
+
+    function handleSertifikatChange(e) {
+        Array.from(e.target.files).forEach(file => {
+            if (!sertifikatFiles.some(f => f.name === file.name)) {
+                sertifikatFiles.push(file);
+            }
+        });
+        updateSertifikatPreview();
+    }
+
+    function setFotoFile(file) {
+        // Clean up previous URL if exists
+        if (rotatedImageUrl) {
+            URL.revokeObjectURL(rotatedImageUrl);
+            rotatedImageUrl = null;
+        }
+
+        fotoFile = file;
+        originalFile = file;
+        lastEditedFile = file;
         document.getElementById('remove_foto').value = '0';
         updateFotoPreview();
-    });
+    }
 
     function updateFotoPreview() {
         const previewDiv = document.getElementById('foto_filename');
-        previewDiv.innerHTML = fotoFile ?
-            `<div class="flex items-center gap-2 mb-2">
+        previewDiv.innerHTML = '';
+
+        if (fotoFile) {
+            const div = document.createElement('div');
+            div.className = 'flex items-center gap-2 mb-2';
+            div.innerHTML = `
                 <a href="#" class="text-blue-500 hover:underline" onclick="event.preventDefault(); previewFile(fotoFile, 'foto', 0)">${fotoFile.name}</a>
                 <button type="button" onclick="removeFotoFile()" class="text-red-500 hover:text-red-700 ml-2">×</button>
-            </div>` :
-            '<p>Tidak ada file baru yang dipilih.</p>';
+            `;
+            previewDiv.appendChild(div);
+        } else {
+            previewDiv.innerHTML = '<p>Tidak ada file baru yang dipilih.</p>';
+        }
 
+        // Update file input
         const dt = new DataTransfer();
         if (fotoFile) dt.items.add(fotoFile);
         document.getElementById('foto').files = dt.files;
     }
 
     function removeFotoFile() {
+        // Clean up URL
+        if (rotatedImageUrl) {
+            URL.revokeObjectURL(rotatedImageUrl);
+            rotatedImageUrl = null;
+        }
+
         fotoFile = null;
+        originalFile = null;
+        lastEditedFile = null;
         document.getElementById('remove_foto').value = '1';
+
         if (cropper) {
             cropper.destroy();
             cropper = null;
@@ -328,28 +394,25 @@
         document.getElementById('remove_foto').value = '1';
     }
 
-    document.getElementById('sertifikat').addEventListener('change', e => {
-        Array.from(e.target.files).forEach(file => {
-            if (!sertifikatFiles.some(f => f.name === file.name)) {
-                sertifikatFiles.push(file);
-            }
-        });
-        updateSertifikatPreview();
-    });
-
     function updateSertifikatPreview() {
         const previewDiv = document.getElementById('sertifikat_filename');
         previewDiv.innerHTML = '';
+
         sertifikatFiles.forEach((file, i) => {
             const div = document.createElement('div');
             div.className = 'flex items-center gap-2 mb-2';
-            div.innerHTML = `<a href="#" class="text-blue-500 hover:underline" onclick="event.preventDefault(); previewFile(sertifikatFiles[${i}], 'sertifikat', ${i})">${i+1}. ${file.name}</a>
-                             <button type="button" onclick="removeSertifikatFile(${i})" class="text-red-500 hover:text-red-700 ml-2">×</button>`;
+            div.innerHTML = `
+                <a href="#" class="text-blue-500 hover:underline" onclick="event.preventDefault(); previewFile(sertifikatFiles[${i}], 'sertifikat', ${i})">${i+1}. ${file.name}</a>
+                <button type="button" onclick="removeSertifikatFile(${i})" class="text-red-500 hover:text-red-700 ml-2">×</button>
+            `;
             previewDiv.appendChild(div);
         });
+
         if (!sertifikatFiles.length) {
             previewDiv.innerHTML = '<p>Tidak ada file baru yang dipilih.</p>';
         }
+
+        // Update file input
         const dt = new DataTransfer();
         sertifikatFiles.forEach(f => dt.items.add(f));
         document.getElementById('sertifikat').files = dt.files;
@@ -377,6 +440,9 @@
     }
 
     function previewFile(file, previewType, index) {
+        // Clean up previous URLs
+        cleanupPreviewResources();
+
         currentPreview = {
             type: previewType,
             index,
@@ -385,6 +451,7 @@
             file
         };
         originalFile = file;
+        lastEditedFile = file;
         rotatedImageUrl = URL.createObjectURL(file);
         showPreview(rotatedImageUrl, file.type);
     }
@@ -397,7 +464,12 @@
                 const file = new File([blob], fileName, {
                     type: blob.type
                 });
+
+                // Clean up previous URLs
+                cleanupPreviewResources();
+
                 originalFile = file;
+                lastEditedFile = file;
                 rotatedImageUrl = URL.createObjectURL(file);
                 currentPreview = {
                     type: previewType,
@@ -411,13 +483,29 @@
             .catch(error => console.error('Error fetching file:', error));
     }
 
+    function cleanupPreviewResources() {
+        if (rotatedImageUrl) {
+            URL.revokeObjectURL(rotatedImageUrl);
+            rotatedImageUrl = null;
+        }
+
+        if (cropper) {
+            cropper.destroy();
+            cropper = null;
+        }
+
+        isCropping = false;
+    }
+
     function showPreview(url, type) {
         const modal = document.getElementById('previewModal');
         const img = document.getElementById('previewImage');
         const frame = document.getElementById('previewFrame');
+
         img.classList.add('hidden');
         frame.classList.add('hidden');
         document.getElementById('cropperControls').classList.add('hidden');
+
         if (type.startsWith('image/')) {
             img.src = url;
             img.classList.remove('hidden');
@@ -427,6 +515,7 @@
             frame.classList.remove('hidden');
             document.getElementById('previewControls').classList.add('hidden');
         }
+
         modal.classList.remove('hidden');
     }
 
@@ -436,7 +525,9 @@
             isCropping = true;
             document.getElementById('previewControls').classList.add('hidden');
             document.getElementById('cropperControls').classList.remove('hidden');
+
             if (cropper) cropper.destroy();
+
             cropper = new Cropper(previewImage, {
                 aspectRatio: NaN,
                 viewMode: 1,
@@ -451,11 +542,17 @@
             cropper.rotate(degree);
             return;
         }
+
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
         const img = new Image();
-        img.src = rotatedImageUrl;
+
+        // Store current URL for cleanup
+        const currentImageUrl = rotatedImageUrl;
+
+        img.src = currentImageUrl;
         img.onload = () => {
+            // Set canvas dimensions based on rotation
             if (degree === 90 || degree === -270) {
                 canvas.width = img.height;
                 canvas.height = img.width;
@@ -469,17 +566,30 @@
                 canvas.width = img.width;
                 canvas.height = img.height;
             }
+
+            // Apply rotation
             ctx.translate(canvas.width / 2, canvas.height / 2);
             ctx.rotate((degree * Math.PI) / 180);
             ctx.drawImage(img, -img.width / 2, -img.height / 2);
-            rotatedImageUrl = canvas.toDataURL('image/jpeg');
-            previewImage.src = rotatedImageUrl;
+
             canvas.toBlob((blob) => {
                 if (blob) {
+                    // Clean up old URL
+                    if (currentImageUrl) {
+                        URL.revokeObjectURL(currentImageUrl);
+                    }
+
+                    // Create new URL
+                    rotatedImageUrl = URL.createObjectURL(blob);
+                    previewImage.src = rotatedImageUrl;
+
+                    // Create new file
                     const newFile = new File([blob], currentPreview.file.name, {
                         type: 'image/jpeg'
                     });
-                    updateCurrentFile(newFile);
+
+                    // Update current file
+                    lastEditedFile = newFile;
                 }
             }, 'image/jpeg');
         };
@@ -489,10 +599,23 @@
         if (cropper) {
             cropper.getCroppedCanvas().toBlob((blob) => {
                 if (blob) {
+                    // Clean up old URL
+                    if (rotatedImageUrl) {
+                        URL.revokeObjectURL(rotatedImageUrl);
+                    }
+
+                    // Create new URL
+                    rotatedImageUrl = URL.createObjectURL(blob);
+
+                    // Create new file
                     const newFile = new File([blob], currentPreview.file.name, {
                         type: 'image/jpeg'
                     });
-                    updateCurrentFile(newFile);
+
+                    // Update current file
+                    lastEditedFile = newFile;
+
+                    // Close preview
                     closePreview();
                 }
             }, 'image/jpeg');
@@ -501,49 +624,74 @@
 
     function updateCurrentFile(newFile) {
         if (currentPreview.type === 'foto') {
+            // Update foto file
             fotoFile = newFile;
+
             if (currentPreview.isExisting) {
                 document.getElementById('remove_foto').value = '1';
-                document.querySelector(`[data-file-path="${currentPreview.path}"]`)?.remove();
+                const existingElement = document.querySelector(`[data-file-path="${currentPreview.path}"]`);
+                if (existingElement) {
+                    existingElement.remove();
+                }
             }
+
             updateFotoPreview();
         } else if (currentPreview.type === 'sertifikat') {
             if (currentPreview.isExisting) {
                 addRemovedSertifikat(currentPreview.path);
                 sertifikatFiles.push(newFile);
-                document.querySelector(`[data-file-path="${currentPreview.path}"]`)?.remove();
+                const existingElement = document.querySelector(`[data-file-path="${currentPreview.path}"]`);
+                if (existingElement) {
+                    existingElement.remove();
+                }
             } else {
                 sertifikatFiles[currentPreview.index] = newFile;
             }
             updateSertifikatPreview();
         }
+
+        // Update original and last edited file
+        originalFile = newFile;
+        lastEditedFile = newFile;
     }
 
     function cancelCrop() {
         if (cropper) {
             cropper.destroy();
             cropper = null;
-            isCropping = false;
         }
+
+        isCropping = false;
         document.getElementById('cropperControls').classList.add('hidden');
         document.getElementById('previewControls').classList.remove('hidden');
+
         const previewImage = document.getElementById('previewImage');
-        previewImage.src = URL.createObjectURL(originalFile);
-        rotatedImageUrl = URL.createObjectURL(originalFile);
+
+        // Clean up current URL
+        if (rotatedImageUrl) {
+            URL.revokeObjectURL(rotatedImageUrl);
+        }
+
+        // Restore to last edited file
+        rotatedImageUrl = URL.createObjectURL(lastEditedFile);
+        previewImage.src = rotatedImageUrl;
     }
 
     function closePreview() {
-        document.getElementById('previewModal').classList.add('hidden');
-        if (cropper) {
-            cropper.destroy();
-            cropper = null;
-            isCropping = false;
+        // If we have a last edited file, update the current file
+        if (lastEditedFile && lastEditedFile !== originalFile) {
+            updateCurrentFile(lastEditedFile);
         }
+
+        // Clean up resources
+        cleanupPreviewResources();
+
+        // Reset variables
         originalFile = null;
-        if (rotatedImageUrl) {
-            URL.revokeObjectURL(rotatedImageUrl);
-            rotatedImageUrl = null;
-        }
+        lastEditedFile = null;
+
+        // Hide modal
+        document.getElementById('previewModal').classList.add('hidden');
     }
 </script>
 @endsection

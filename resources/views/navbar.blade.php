@@ -82,6 +82,89 @@
             /* sky-700 */
         }
 
+        /* PERBAIKAN BARU: CSS untuk kotak notifikasi admin */
+        .admin-notification {
+            position: relative;
+            display: inline-block;
+        }
+
+        .admin-notification-bubble {
+            position: absolute;
+            bottom: -50px;
+            /* PERBAIKAN: Posisikan di BAWAH tombol untuk desktop */
+            right: 0;
+            background-color: white;
+            border: 2px solid #0284c7;
+            border-radius: 8px;
+            padding: 8px 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            min-width: 180px;
+            text-align: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #0284c7;
+            animation: fadeInOut 2s infinite;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .admin-notification-bubble:after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            /* PERBAIKAN: Posisikan panah di ATAS bubble */
+            right: 20px;
+            border-width: 0 10px 10px;
+            /* PERBAIKAN: Buat segitiga menunjuk ke BAWAH */
+            border-style: solid;
+            border-color: #0284c7 transparent;
+            display: block;
+            width: 0;
+        }
+
+        .admin-notification-bubble:before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            /* PERBAIKAN: Posisikan panah di ATAS bubble */
+            right: 21px;
+            border-width: 0 9px 9px;
+            /* PERBAIKAN: Buat segitiga menunjuk ke BAWAH */
+            border-style: solid;
+            border-color: white transparent;
+            display: block;
+            width: 0;
+        }
+
+        @keyframes fadeInOut {
+            0% {
+                opacity: 0;
+            }
+
+            20% {
+                opacity: 1;
+            }
+
+            80% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+
+        /* Untuk mobile, posisikan bubble di BAWAH tombol */
+        @media (max-width: 767px) {
+            .admin-notification-bubble {
+                bottom: -50px;
+                /* Pindahkan ke bawah */
+                right: -10px;
+                min-width: 150px;
+            }
+        }
+
         /* Perbaikan: Ukuran font yang konsisten untuk mobile */
         .mobile-menu-item {
             font-size: 1rem;
@@ -774,10 +857,13 @@
                 <!-- PERBAIKAN: Struktur HTML untuk bagian kanan navbar -->
                 <div class="nav-right-container ml-auto flex items-center">
                     @guest('web')
-                    <div class="nav-login-wrapper">
+                    <div class="nav-login-wrapper admin-notification">
                         <a href="{{ route('admin_login.index') }}" class="nav-login-btn">
                             Masuk
                         </a>
+                        <div class="admin-notification-bubble">
+                            (hanya untuk admin)
+                        </div>
                     </div>
                     @endguest
 

@@ -12,7 +12,7 @@ class AdminLoginController extends Controller
 {
     public function index()
     {
-        return view('pengunjung.admin_login');
+        return view('Pengunjung.admin_login');
     }
 
     public function store(Request $request)

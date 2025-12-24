@@ -8,6 +8,7 @@ use App\Models\Kelompok;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 class KegiatanController extends Controller
 {
@@ -45,7 +46,7 @@ class KegiatanController extends Controller
         ]);
 
         $data = $request->except('foto');
-        
+
         if ($request->hasFile('foto')) {
             $originalName = $request->file('foto')->getClientOriginalName();
             $baseName = pathinfo($originalName, PATHINFO_FILENAME);
@@ -62,6 +63,11 @@ class KegiatanController extends Controller
             Log::info('Stored foto file: ' . $path);
             $data['foto'] = $path;
         }
+
+        // Gunakan Carbon::today() dengan timezone Jakarta untuk mendapatkan tanggal tanpa jam
+        $today = Carbon::today('Asia/Jakarta');
+        $data['created_at'] = $today;
+        $data['updated_at'] = $today;
 
         Kegiatan::create($data);
 
@@ -109,6 +115,9 @@ class KegiatanController extends Controller
             Log::info('Updated foto file: ' . $path);
             $data['foto'] = $path;
         }
+
+        // Gunakan Carbon::today() dengan timezone Jakarta untuk mendapatkan tanggal tanpa jam
+        $data['updated_at'] = Carbon::today('Asia/Jakarta');
 
         $kegiatan->update($data);
 

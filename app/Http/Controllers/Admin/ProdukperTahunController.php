@@ -56,6 +56,7 @@ class ProdukperTahunController extends Controller
             'id_produk' => 'required|exists:produk,id_produk',
             'harga' => 'required|numeric|min:0',
             'jumlah_terjual' => 'required|numeric|min:0',
+            'satuan' => 'required|string|max:255',
         ]);
 
         try {
@@ -67,6 +68,7 @@ class ProdukperTahunController extends Controller
                 'nama_produk' => $produk->nama,
                 'harga' => $validated['harga'],
                 'produk_terjual' => $validated['jumlah_terjual'],
+                'satuan' => $validated['satuan'],
             ]);
 
             return redirect()->route('Admin.produk_pertahun.index')->with('success', 'Data produk berhasil disimpan!');
@@ -93,6 +95,7 @@ class ProdukperTahunController extends Controller
             'id_produk' => 'required|exists:produk,id_produk',
             'harga' => 'required|numeric|min:0',
             'jumlah_terjual' => 'required|numeric|min:0',
+            'satuan' => 'required|string|max:255',
         ]);
 
         try {
@@ -106,6 +109,7 @@ class ProdukperTahunController extends Controller
                 'nama_produk' => $produk->nama,
                 'harga' => $validated['harga'],
                 'produk_terjual' => $validated['jumlah_terjual'],
+                'satuan' => $validated['satuan'],
             ]);
 
             return redirect()->route('Admin.produk_pertahun.index')->with('success', 'Data produk berhasil diperbarui!');

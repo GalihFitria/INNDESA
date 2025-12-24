@@ -21,6 +21,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Tambahkan PDF.js library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
     <style>
         /* CSS styles tetap sama seperti sebelumnya */
         #preloader {
@@ -529,6 +531,340 @@
                 display: none;
             }
         }
+
+        /* PDF Preview Styles */
+        .pdf-container {
+            position: relative;
+            width: 100%;
+            height: 12rem;
+            background-color: #f9fafb;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pdf-canvas-container {
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: #ffffff;
+            border-radius: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .pdf-page-canvas {
+            max-width: 100%;
+            max-height: 100%;
+            height: auto;
+            object-fit: contain;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1rem;
+        }
+
+        .pdf-loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #4b5563;
+        }
+
+        .pdf-loading-spinner {
+            border: 4px solid #f3f4f6;
+            border-top: 4px solid #3b82f6;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @media (min-width: 1024px) {
+            .pdf-container {
+                height: 15rem;
+            }
+        }
+
+        /* ================= MODAL PREVIEW ================= */
+        .preview-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .preview-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .preview-content {
+            background: white;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 900px;
+            max-height: 90vh;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .preview-modal.active .preview-content {
+            transform: scale(1);
+        }
+
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+            background: #ffffff;
+            z-index: 10;
+            position: relative;
+        }
+
+        .preview-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin: 0;
+        }
+
+        .preview-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #64748b;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+        }
+
+        .preview-close:hover {
+            background: #f1f5f9;
+            color: #1e293b;
+            transform: rotate(90deg);
+        }
+
+        .preview-body {
+            position: relative;
+            width: 100%;
+            height: calc(90vh - 70px);
+            overflow: hidden;
+            background: #f8fafc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .preview-pdf {
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+            padding: 1rem;
+            background: #ffffff;
+            border-radius: 8px;
+        }
+
+        .preview-pdf canvas {
+            display: block;
+            width: 100% !important;
+            height: auto !important;
+            margin: 0 auto 1rem auto;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+        }
+
+        .preview-pdf iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 8px;
+        }
+
+        /* Tambahkan class untuk navbar tetap terlihat saat modal aktif */
+        body.modal-active {
+            overflow: hidden;
+        }
+
+        body.modal-active .navbar {
+            z-index: 10000;
+        }
+
+        /* Responsive untuk modal */
+        @media (max-width: 768px) {
+            .preview-modal {
+                padding: 0.5rem;
+            }
+
+            .preview-content {
+                max-width: 95%;
+                max-height: 85vh;
+                /* Dikurangi dari 95vh menjadi 85vh */
+            }
+
+            .preview-header {
+                padding: 0.75rem;
+            }
+
+            .preview-title {
+                font-size: 1rem;
+            }
+
+            .preview-close {
+                width: 32px;
+                height: 32px;
+                font-size: 1.2rem;
+            }
+
+            .preview-body {
+                height: calc(85vh - 60px);
+                /* Disesuaikan dengan max-height */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .preview-modal {
+                padding: 0.25rem;
+            }
+
+            .preview-content {
+                max-width: 98%;
+                max-height: 80vh;
+                /* Lebih kecil untuk layar sangat kecil */
+            }
+
+            .preview-header {
+                padding: 0.5rem;
+            }
+
+            .preview-title {
+                font-size: 0.9rem;
+            }
+
+            .preview-close {
+                width: 28px;
+                height: 28px;
+                font-size: 1rem;
+            }
+
+            .preview-body {
+                height: calc(80vh - 50px);
+                /* Disesuaikan dengan max-height */
+            }
+
+            /* Untuk PDF di layar sangat kecil */
+            .preview-pdf {
+                padding: 0.5rem;
+            }
+
+            .preview-pdf canvas {
+                margin-bottom: 0.5rem;
+            }
+        }
+
+        /* Styling untuk teks "Lihat file" */
+        .modul-item .absolute.inset-0.flex span {
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .modul-item:hover .absolute.inset-0.flex span {
+            transform: scale(1.05);
+            background-color: #2563eb;
+            /* Warna biru lebih gelap saat hover */
+        }
+
+        /* Responsif untuk teks "Lihat file" */
+        @media (max-width: 767px) {
+            .modul-item .absolute.inset-0.flex {
+                background-color: rgba(0, 0, 0, 0.3);
+                border-radius: 0.5rem;
+            }
+
+            .modul-item .absolute.inset-0.flex span {
+                background-color: #0097D4;
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Teks "Lihat File" */
+        .preview-overlay-text {
+            position: absolute;
+            background-color: rgba(59, 130, 246, 0.9);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-weight: 600;
+            font-size: 0.875rem;
+            z-index: 10;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .preview-overlay-text:hover {
+            background-color: rgba(37, 99, 235, 0.95);
+            transform: scale(1.05);
+        }
+
+        .preview-overlay-text i {
+            font-size: 1rem;
+        }
+
+        /* Posisi untuk mobile */
+        @media (max-width: 768px) {
+            .preview-overlay-text {
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+        }
+
+        /* Posisi untuk desktop */
+        @media (min-width: 769px) {
+            .preview-overlay-text {
+                top: 1rem;
+                right: 1rem;
+                transform: none;
+            }
+        }
     </style>
 </head>
 
@@ -587,6 +923,66 @@
             </div>
         </section>
 
+        <!-- MODUL PEMBELAJARAN - Dipindahkan ke atas -->
+        <section class="py-12 sm:py-16 bg-white-50">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-10 sm:mb-12">
+                    <h2 class="text-xl sm:text-3xl md:text-4xl font-bold text-blue-600 mb-4 sm:mb-6 md:mb-8">Modul Pembelajaran</h2>
+                </div>
+
+                <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+                    <div class="relative w-full h-48 md:h-60 block modul-item">
+                        <div class="pdf-container relative w-full h-full rounded-lg shadow-md border border-gray-200 overflow-hidden">
+                            <div id="pdf-modul-js" class="pdf-canvas-container w-full h-full">
+                                <div class="pdf-loading">
+                                    <div class="pdf-loading-spinner"></div>
+                                    <p>Memuat PDF...</p>
+                                </div>
+                            </div>
+                            <iframe
+                                id="pdf-modul"
+                                src="{{ asset('images/Modul Pembelajaran INNDESA.pdf') }}#toolbar=0&navpanes=0&statusbar=0&scrollbar=0&view=FitH"
+                                class="w-full h-full rounded-lg"
+                                title="Modul Pembelajaran INNDESA"
+                                oncontextmenu="return false;"
+                                ondragstart="return false;"
+                                onselectstart="return false;"
+                                onload="this.contentWindow.focus(); checkPdfLoad(this, 'modul', '0', '{{ asset('images/Modul Pembelajaran INNDESA.pdf') }}');">
+                            </iframe>
+
+                            <div class="absolute inset-0 cursor-pointer"
+                                onclick="openPreviewModal('{{ asset('images/Modul Pembelajaran INNDESA.pdf') }}', 'Modul Pembelajaran INNDESA', 'pdf')"
+                                oncontextmenu="return false;"
+                                ondragstart="return false;"
+                                onselectstart="return false;">
+                            </div>
+
+                            <!-- Teks "Lihat File" -->
+                            <div class="preview-overlay-text" onclick="openPreviewModal('{{ asset('images/Modul Pembelajaran INNDESA.pdf') }}', 'Modul Pembelajaran INNDESA', 'pdf')">
+                                <i class="fas fa-eye"></i>
+                                <span>Lihat File</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-4 sm:p-6">
+                        <h3 class="text-lg sm:text-xl font-semibold text-gray-800 mb-2">Modul Pembelajaran INNDESA</h3>
+                        <div class="flex flex-col sm:flex-row gap-2 sm:gap-3">
+                            <button onclick="openPreviewModal('{{ asset('images/Modul Pembelajaran INNDESA.pdf') }}', 'Modul Pembelajaran INNDESA', 'pdf')"
+                                class="bg-blue-600 hover:bg-blue-700 text-white px-3 sm:px-4 py-2 rounded-md text-xs sm:text-sm font-medium flex items-center gap-2 justify-center">
+                                <i class="fas fa-file-pdf"></i>
+                                Baca Modul
+                            </button>
+                            <a href="{{ asset('images/Modul Pembelajaran INNDESA.pdf') }}" download
+                                class="bg-green-600 hover:bg-green-700 text-white px-3 sm:px-4 py-2 rounded-md text-xs sm:text-sm font-medium flex items-center gap-2 justify-center">
+                                <i class="fas fa-download"></i>
+                                Unduh PDF
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
         <!-- UPDATE KEGIATAN - Sama persis dengan Index -->
         <section id="update-kegiatan-section" class="py-6 sm:py-12 md:py-10" data-latest-id="{{ $kegiatans->first()->id_kegiatan ?? 0 }}">
@@ -786,6 +1182,23 @@
             </div>
         </div>
 
+        <!-- Modal Preview untuk PDF -->
+        <div id="previewModal" class="preview-modal">
+            <div class="preview-content">
+                <div class="preview-header">
+                    <h3 id="previewTitle" class="preview-title"></h3>
+                    <button onclick="closePreviewModal()" class="preview-close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <div class="preview-body">
+                    <!-- PDF preview -->
+                    <div id="previewPdf" class="preview-pdf hidden"></div>
+                </div>
+            </div>
+        </div>
+
         <div class="mt-16 sm:mt-20">
             @include('footer')
         </div>
@@ -798,6 +1211,9 @@
     </div>
 </body>
 <script>
+    // Set worker untuk PDF.js
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+
     // Check if Font Awesome is loaded
     function checkFontAwesome() {
         const icon = document.createElement('i');
@@ -1180,6 +1596,296 @@
 
             // Cek update pertama kali setelah 10 detik
             setTimeout(checkActivityUpdates, 10000);
+        }
+
+        // Inisialisasi PDF.js untuk inline preview
+        initializeInlinePdfs();
+    });
+
+    function initializeInlinePdfs() {
+        // Inisialisasi PDF untuk modul pembelajaran
+        const modulJsContainer = document.getElementById('pdf-modul-js');
+        const modulIframe = document.getElementById('pdf-modul');
+
+        if (modulJsContainer && modulIframe) {
+            const pdfUrl = modulIframe.src.split('#')[0];
+
+            // Reset state
+            modulJsContainer.style.display = '';
+            modulIframe.style.display = '';
+
+            // Untuk mobile, prioritaskan PDF.js
+            if (window.innerWidth <= 768) {
+                // Tampilkan loading
+                const loadingDiv = modulJsContainer.querySelector('.pdf-loading');
+                if (loadingDiv) loadingDiv.style.display = 'flex';
+
+                // Coba render dengan PDF.js
+                renderPdfWithJs(pdfUrl, 'pdf-modul-js').then(success => {
+                    if (success) {
+                        // Sembunyikan iframe jika PDF.js berhasil
+                        modulIframe.style.display = 'none';
+                    } else {
+                        // Tampilkan iframe jika PDF.js gagal
+                        modulJsContainer.style.display = 'none';
+                        modulIframe.style.display = 'block';
+                    }
+                }).catch(error => {
+                    console.error('Error rendering PDF:', error);
+                    // Fallback ke iframe jika terjadi error
+                    modulJsContainer.style.display = 'none';
+                    modulIframe.style.display = 'block';
+                });
+            } else {
+                // Untuk desktop, sembunyikan PDF.js dan tampilkan iframe
+                modulJsContainer.style.display = 'none';
+                modulIframe.style.display = 'block';
+            }
+        }
+    }
+
+    async function checkPdfLoad(iframe, type, index, pdfUrl) {
+        // Tunggu beberapa saat untuk memastikan PDF telah dimuat
+        setTimeout(async () => {
+            try {
+                // Cek apakah iframe memiliki konten
+                if (iframe.contentDocument && iframe.contentDocument.body) {
+                    // Jika body kosong, PDF gagal dimuat
+                    if (iframe.contentDocument.body.innerHTML.trim() === '') {
+                        const jsContainer = document.getElementById(`pdf-${type}-js-${index}`);
+                        if (jsContainer) {
+                            // Tampilkan container PDF.js
+                            jsContainer.style.display = 'block';
+
+                            // Coba render dengan PDF.js
+                            const success = await renderPdfWithJs(pdfUrl, `pdf-${type}-js-${index}`);
+
+                            if (success) {
+                                // Sembunyikan iframe jika PDF.js berhasil
+                                iframe.style.display = 'none';
+                            } else {
+                                // Tampilkan iframe jika PDF.js gagal
+                                jsContainer.style.display = 'none';
+                                iframe.style.display = 'block';
+                            }
+                        }
+                    }
+                }
+            } catch (e) {
+                // Jika terjadi error (biasanya karena cross-origin), coba dengan PDF.js
+                const jsContainer = document.getElementById(`pdf-${type}-js-${index}`);
+                if (jsContainer) {
+                    // Tampilkan container PDF.js
+                    jsContainer.style.display = 'block';
+
+                    // Coba render dengan PDF.js
+                    renderPdfWithJs(pdfUrl, `pdf-${type}-js-${index}`).then(success => {
+                        if (!success) {
+                            // Tampilkan iframe jika PDF.js gagal
+                            jsContainer.style.display = 'none';
+                            iframe.style.display = 'block';
+                        } else {
+                            // Sembunyikan iframe jika PDF.js berhasil
+                            iframe.style.display = 'none';
+                        }
+                    });
+                } else {
+                    // Jika tidak ada container PDF.js, pastikan iframe ditampilkan
+                    iframe.style.display = 'block';
+                }
+            }
+        }, 2000); // Kurangi waktu tunggu dari 3000ms menjadi 2000ms
+    }
+
+    // Fungsi untuk render PDF dengan PDF.js
+    async function renderPdfWithJs(pdfUrl, containerId) {
+        try {
+            const container = document.getElementById(containerId);
+            if (!container) return false;
+
+            // Tampilkan loading
+            const loadingDiv = container.querySelector('.pdf-loading');
+            if (loadingDiv) loadingDiv.style.display = 'flex';
+
+            // Load PDF
+            const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
+            const numPages = pdf.numPages;
+
+            // Sembunyikan loading
+            if (loadingDiv) loadingDiv.style.display = 'none';
+
+            // Hapus canvas yang ada
+            const canvases = container.querySelectorAll('.pdf-page-canvas');
+            canvases.forEach(canvas => canvas.remove());
+
+            // Render each page
+            for (let pageNum = 1; pageNum <= numPages; pageNum++) {
+                const page = await pdf.getPage(pageNum);
+
+                // Hitung skala yang sesuai dengan container
+                const containerWidth = container.clientWidth;
+                const containerHeight = container.clientHeight;
+                const viewport = page.getViewport({
+                    scale: 1.0
+                });
+
+                // Hitung skala agar PDF muat dalam container
+                const scaleX = containerWidth / viewport.width;
+                const scaleY = containerHeight / viewport.height;
+                const scale = Math.min(scaleX, scaleY, 1.5); // Batas maksimal skala 1.5
+
+                const scaledViewport = page.getViewport({
+                    scale: scale
+                });
+
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                canvas.height = scaledViewport.height;
+                canvas.width = scaledViewport.width;
+                canvas.className = 'pdf-page-canvas';
+
+                const renderContext = {
+                    canvasContext: context,
+                    viewport: scaledViewport
+                };
+
+                await page.render(renderContext).promise;
+                container.appendChild(canvas);
+            }
+
+            // Set scroll position ke atas setelah render selesai
+            container.scrollTop = 0;
+
+            return true;
+        } catch (error) {
+            console.error('Error rendering PDF with PDF.js:', error);
+
+            // Tampilkan pesan error di container
+            const container = document.getElementById(containerId);
+            if (container) {
+                container.innerHTML = `
+                    <div class="flex flex-col items-center justify-center h-full p-4 text-center">
+                        <div class="text-red-500 mb-2">
+                            <i class="fas fa-exclamation-triangle text-2xl"></i>
+                        </div>
+                        <p class="text-sm text-gray-600">PDF tidak dapat ditampilkan.</p>
+                    </div>
+                `;
+            }
+
+            return false;
+        }
+    }
+
+    // Fungsi untuk membuka modal preview
+    function openPreviewModal(fileSrc, title, type = 'image', isKatalog = false) {
+        const modal = document.getElementById('previewModal');
+        const previewPdf = document.getElementById('previewPdf');
+        const previewTitle = document.getElementById('previewTitle');
+
+        previewTitle.textContent = title;
+
+        if (type === 'pdf') {
+            // Render PDF tanpa watermark
+            renderPdfInModal(fileSrc, 'previewPdf');
+        }
+
+        // Tampilkan modal dengan animasi
+        modal.classList.add('active');
+
+        // Tambahkan class untuk body agar navbar tetap terlihat
+        document.body.classList.add('modal-active');
+
+        // Fokus ke modal untuk accessibility
+        modal.focus();
+    }
+
+    // Fungsi untuk menutup modal preview
+    function closePreviewModal() {
+        const modal = document.getElementById('previewModal');
+
+        // Hapus class active untuk animasi
+        modal.classList.remove('active');
+
+        // Hapus class modal-active dari body
+        document.body.classList.remove('modal-active');
+
+        // Reset konten setelah animasi selesai
+        setTimeout(() => {
+            const previewPdf = document.getElementById('previewPdf');
+            previewPdf.innerHTML = '';
+        }, 300);
+    }
+
+    // Fungsi untuk render PDF di modal
+    async function renderPdfInModal(pdfUrl, containerId) {
+        try {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            // Tampilkan loading
+            container.innerHTML = '<div class="pdf-loading"><div class="pdf-loading-spinner"></div><p>Memuat PDF...</p></div>';
+            container.classList.remove('hidden');
+
+            // Load PDF
+            const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
+            const numPages = pdf.numPages;
+
+            // Clear loading
+            container.innerHTML = '';
+
+            // Render each page
+            for (let pageNum = 1; pageNum <= numPages; pageNum++) {
+                const page = await pdf.getPage(pageNum);
+
+                // Calculate scale to fit container width
+                const containerWidth = container.clientWidth - 32; // Kurangi padding
+                const viewport = page.getViewport({
+                    scale: 1.0
+                });
+                const scale = containerWidth / viewport.width;
+                const scaledViewport = page.getViewport({
+                    scale: scale
+                });
+
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                canvas.height = scaledViewport.height;
+                canvas.width = scaledViewport.width;
+
+                const renderContext = {
+                    canvasContext: context,
+                    viewport: scaledViewport
+                };
+
+                await page.render(renderContext).promise;
+                container.appendChild(canvas);
+            }
+        } catch (error) {
+            console.error('Error rendering PDF:', error);
+            const container = document.getElementById(containerId);
+            if (container) {
+                container.innerHTML = '<div class="pdf-error text-center p-4"><p class="text-red-500 mb-2">PDF tidak dapat ditampilkan.</p><p class="text-sm text-gray-600">Silakan coba lagi atau hubungi administrator.</p></div>';
+            }
+        }
+    }
+
+    // Event listener untuk menutup modal dengan klik di luar
+    document.getElementById('previewModal').addEventListener('click', (e) => {
+        if (e.target.id === 'previewModal') {
+            closePreviewModal();
+        }
+    });
+
+    // Event listener untuk tombol close
+    document.querySelectorAll('.preview-close').forEach(btn => {
+        btn.addEventListener('click', closePreviewModal);
+    });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closePreviewModal();
         }
     });
 </script>
